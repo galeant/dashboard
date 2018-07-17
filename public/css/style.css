@@ -1831,6 +1831,7 @@
   text-decoration: overline; }
 
 .block-header {
+  margin-top:15px;
   margin-bottom: 15px; }
   .block-header h2 {
     margin: 0 !important;

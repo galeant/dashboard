@@ -19,5 +19,19 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	});
+	Route::group(['prefix' => 'master'],function(){
+
+		Route::get('country/any-data', 'CountryController@anyData');
+		Route::resource('country', 'CountryController');
+		Route::resource('language', 'LanguageController');
+		Route::resource('province', 'ProvinceController');
+		Route::resource('city', 'CityController');
+		Route::resource('district', 'DistrictController');
+		Route::resource('village', 'VillageController');
+		Route::resource('tour-guide-service', 'TourGuideServiceController');
+	});
+	Route::group(['prefix' => 'product'],function(){
+		Route::resource('tour-guide', 'TourGuideController');
+	});
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
