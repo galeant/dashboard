@@ -213,7 +213,7 @@
 		                </ul>
 		            </li>
 		            <li>
-		                <a href="{{ URL('/admin/logout') }}">
+		                <a href="{{ URL('/logout') }}">
 		                    <i class="material-icons">exit_to_app</i>
 		                    <span>Logout</span>
 		                </a>

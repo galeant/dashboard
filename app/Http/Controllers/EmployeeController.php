@@ -12,7 +12,8 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+
+    public function authenticate(Request $request)
     {
         $remember = $request->remember_me;
         if(Auth::guard('web')->attempt([
@@ -26,9 +27,15 @@ class EmployeeController extends Controller
             ],
             $remember
         )){
-            return redirect()->intended('dashboard');
+            return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/login');
     }
 
     public function index()

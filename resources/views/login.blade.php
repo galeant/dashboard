@@ -7,7 +7,7 @@
 	    </div>
 	    <div class="card">
 	        <div class="body">
-	            {{ Form::open(['action' => 'EmployeeController@login','id'=>'sign_in','method'=>'POST']) }}
+	            {{ Form::open(['action' => 'EmployeeController@authenticate','id'=>'sign_in','method'=>'POST']) }}
 	                <div class="msg">Sign in to start your session</div>
 	                @if(Session::has('error'))
 		            <div class="alert alert-danger alert-dismissible" role="alert">
