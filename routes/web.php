@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
+});
+Route::post('/login', ['as' => 'auth', 'uses' => 'EmployeeController@login']);
+Route::get('/dashboard', function () {
+    return view('layouts.app');
 });
