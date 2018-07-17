@@ -14,7 +14,6 @@ class EmployeeController extends Controller
      */
     public function login(Request $request)
     {
-        $data = Employee::where('username','admin')->first();
         $remember = $request->remember_me;
         if(Auth::guard('web')->attempt([
                 'email' => $request->email,
