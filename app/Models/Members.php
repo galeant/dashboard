@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class City extends Model {
+class Members extends Model {
     /**
      * The attributes that should be mutated to dates.
      *
@@ -14,11 +14,6 @@ class City extends Model {
      *
      * @var stringA
      */
-    protected $table = 'cities';
-    protected $fillable = ['province_id','name'];
-
-    public function province()
-    {
-        return $this->hasOne('App\Models\Province','id','province_id');
-    }
+    protected $table = 'users';
+    protected $fillable = ['id','email'];
 }

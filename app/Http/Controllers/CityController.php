@@ -30,7 +30,7 @@ class CityController extends Controller
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
-            ->make(true);        
+            ->make(true);
         }
         return view('city.index');
     }

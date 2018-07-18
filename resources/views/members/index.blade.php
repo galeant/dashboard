@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Country List
-                    <small>Master Data / Country</small>
+                    Members List
+                    <small>Admin Data / Members</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,23 +17,28 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Country
+                                All Members
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li >
-                                    <a href="/master/country/create" class="btn bg-teal btn-block waves-effect">Add Country</a>
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Code</th>
                                             <th>Name</th>
-                                            <th>Area Code</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -42,10 +47,14 @@
                                 </table>
 
                             </div>
+                            <br>
+                            <a href="{{url('admin/members/add')}}" class="btn btn-info">Add</a>
+
                         </div>
                     </div>
                 </div>
             </div>
+
 @stop
 @section('head-js')
 @parent
@@ -63,15 +72,13 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/country',
+	        ajax: '/admin/members',
 	        columns: [
-	            {data: 'id'},
-	            {data: 'code'},
-	            {data: 'name'},
-	            {data: 'area_code'},
-	            {data: 'created_at'},
-	            {data: 'updated_at'},
-	            {data: 'action'}
+              {data: 'id'},
+              {data: 'firstname'},
+              {data: 'created_at'},
+              {data: 'updated_at'},
+              {data: 'action'}
 	        ]
 	    });
     </script>
