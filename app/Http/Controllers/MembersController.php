@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\City;
+use App\Models\Members;
 use Datatables;
 
-class CityController extends Controller
+class MembersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,20 +18,20 @@ class CityController extends Controller
         //
         if($request->ajax())
         {
-            $model = City::query();
+            $model = Members::query();
             return Datatables::eloquent($model)
-            ->addColumn('action', function(City $data) {
-                return '<a href="/master/city/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+            ->addColumn('action', function(Members $data) {
+                return '<a href="/admin/members/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/city/delete/'.$data->id.'" class="btn-xs btn-danger  waves-effect waves-circle waves-float">
+                    <a href="/admin/members/delete/'.$data->id.'" class="btn-xs btn-danger  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
         }
-        return view('city.index');
+        return view('members.index');
     }
 
     /**
@@ -41,7 +41,11 @@ class CityController extends Controller
      */
     public function create()
     {
-        //
+      return view('members.form');
+      if(Input::post())
+        {
+          dd(Input::post());
+        }
     }
 
     /**

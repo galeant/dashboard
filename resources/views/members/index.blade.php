@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Country List
-                    <small>Master Data / Country</small>
+                    Members List
+                    <small>Admin Data / Members</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,7 +17,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Country
+                                All Members
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
@@ -47,10 +47,14 @@
                                 </table>
 
                             </div>
+                            <br>
+                            <a href="{{url('admin/members/add')}}" class="btn btn-info">Add</a>
+
                         </div>
                     </div>
                 </div>
             </div>
+
 @stop
 @section('head-js')
 @parent
@@ -68,13 +72,13 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/country',
+	        ajax: '/admin/members',
 	        columns: [
-	            {data: 'id'},
-	            {data: 'name'},
-	            {data: 'created_at'},
-	            {data: 'updated_at'},
-	            {data: 'action'}
+              {data: 'id'},
+              {data: 'firstname'},
+              {data: 'created_at'},
+              {data: 'updated_at'},
+              {data: 'action'}
 	        ]
 	    });
     </script>

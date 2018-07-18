@@ -33,5 +33,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
 	});
+
+	Route::group(['prefix' => 'admin/members'],function(){
+		Route::get('/', 'MembersController@index');
+		Route::get('/add', 'MembersController@create');
+	});
+
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
