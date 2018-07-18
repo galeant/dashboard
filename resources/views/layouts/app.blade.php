@@ -23,9 +23,6 @@
     <!-- Animation Css -->
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
-    <!-- Bootstrap Select Css -->
-    <link href="{{asset('plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
-
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
@@ -281,10 +278,6 @@
 <!-- Bootstrap Core Js -->
 <script src="{{asset('plugins/bootstrap/js/bootstrap.js')}}"></script>
 
-<script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
-<!-- Select Plugin Js -->
-<script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script>
 
 <!-- Slimscroll Plugin Js -->
 <script src="{{asset('plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>

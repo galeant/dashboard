@@ -15,6 +15,11 @@ class Village extends Model {
      * @var stringA
      */
     protected $table = 'villages';
-    protected $fillable = ['country_id','name'];
+    protected $fillable = ['district_id','name'];
+
+    public function district()
+    {
+        return $this->hasOne('App\Models\District','id','district_id');
+    }
 }
 

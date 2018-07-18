@@ -456,3 +456,28 @@ $(function () {
 
     setTimeout(function () { $('.page-loader-wrapper').fadeOut(); }, 50);
 });
+$(function(){
+    $( ".table-modif" ).delegate( ".btn-delete", "click", function(e) {
+        e.preventDefault();
+        action = $(this).attr('data-action');
+        var r = confirm("Are you sure want to delete from database ?");
+        if (r == true) {
+            id = $(this).attr('data-id');
+            $.ajax({
+              type:"DELETE",
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+              url:action,
+              dataType: "json",
+              data:{id:id},
+            }).done(function($resp){
+                if($resp.code === 200){
+                    $('#data-'+id).parents().parents('tr').remove();
+                }else{
+                    alert($resp.message);
+                }
+            });
+        }
+    });
+});

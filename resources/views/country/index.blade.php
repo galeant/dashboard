@@ -20,25 +20,20 @@
                                 All Country
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
+                                <li >
+                                    <a href="/master/country/create" class="btn bg-teal btn-block waves-effect">Add Country</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                                 <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Code</th>
                                             <th>Name</th>
+                                            <th>Area Code</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -71,7 +66,9 @@
 	        ajax: '/master/country',
 	        columns: [
 	            {data: 'id'},
+	            {data: 'code'},
 	            {data: 'name'},
+	            {data: 'area_code'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}
