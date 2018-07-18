@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Country;
-use Yajra\DataTables\Facades\Datatables;
+use Datatables;
 class CountryController extends Controller
 {
     /**
@@ -19,7 +19,7 @@ class CountryController extends Controller
         if($request->ajax())
         {
             $model = Country::query();
-            return DataTables::eloquent($model)
+            return Datatables::eloquent($model)
             ->addColumn('action', function(Country $country) {
                 return '<a href="/master/country/'.$country->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>

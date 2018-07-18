@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Language;
-use Yajra\DataTables\Facades\Datatables;
+use Datatables;
 
 class LanguageController extends Controller
 {
@@ -19,7 +19,7 @@ class LanguageController extends Controller
         if($request->ajax())
         {
             $model = Language::query();
-            return DataTables::eloquent($model)
+            return Datatables::eloquent($model)
             ->addColumn('action', function(Language $data) {
                 return '<a href="/master/language/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\District;
-use Yajra\DataTables\Facades\Datatables;
+use Datatables;
 
 class DistrictController extends Controller
 {
@@ -18,7 +18,7 @@ class DistrictController extends Controller
         if($request->ajax())
         {
             $model = District::query();
-            return DataTables::eloquent($model)
+            return Datatables::eloquent($model)
             ->addColumn('action', function(District $data) {
                 return '<a href="/master/district/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
