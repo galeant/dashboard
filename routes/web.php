@@ -21,7 +21,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('company', 'CompanyController');
-		Route::resource('tour', 'TourController');
+		Route::resource('product', 'TourController');
 		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');

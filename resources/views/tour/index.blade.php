@@ -25,7 +25,7 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="{{ url('master/tour/create') }}">NEW</a></li>
+                                        <li><a href="{{ url('master/product/create') }}">NEW</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -66,7 +66,7 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/tour',
+	        ajax: '/master/product',
 	        columns: [
 	            {data: 'id'},
 	            {data: 'product_name'},

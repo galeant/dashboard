@@ -191,8 +191,8 @@
 		                            <span>Company</span>
 		                        </a>
 		                    </li>
-							<li {{{ (Request::is('master/tour*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/tour') }}" class=" waves-effect waves-block">
+							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
 		                            <span>Tour</span>
 		                        </a>
 		                    </li>
