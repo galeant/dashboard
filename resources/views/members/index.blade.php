@@ -27,7 +27,7 @@
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                <table class="table table-modif table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
                                 <thead>
                                         <tr>
                                             <th>ID</th>
