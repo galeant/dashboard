@@ -441,7 +441,7 @@
     <script>
         $(document).ready(function(){
             $("select[name='province_id']").find("option[value='{{$destination->province_id}}']").attr('selected', 'selected')
-            $("select[name='province_id']").find("option[value='{{$destination->destination_type_id}}']").attr('selected', 'selected')
+            $("select[name='destination_type_id']").find("option[value='{{$destination->destination_type_id}}']").attr('selected', 'selected')
             $("select[name='city_id']").empty();
             $("select[name='district_id']").empty();
             $("select[name='village_id']").empty();
