@@ -15,5 +15,5 @@ class Members extends Model {
      * @var stringA
      */
     protected $table = 'users';
-    protected $fillable = ['id','email'];
+    protected $fillable = ['gendre','firstname','lastname','username','email','phone','status'];
 }

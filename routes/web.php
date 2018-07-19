@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		});
 		//Destination
 		Route::resource('destination', 'DestinationController');
-		
+
 		//DestinationType
 		Route::resource('destination-type', 'DestinationTypeController');
 
@@ -59,9 +59,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-guide', 'TourGuideController');
 	});
 
-	Route::group(['prefix' => 'admin/members'],function(){
-		Route::get('/', 'MembersController@index');
-		Route::get('/add', 'MembersController@create');
+	Route::group(['prefix' => 'admin'],function(){
+		Route::resource('members', 'MembersController');
 	});
 
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Members;
+use Validator;
 use Datatables;
+use DB;
 
 class MembersController extends Controller
 {
@@ -41,12 +43,9 @@ class MembersController extends Controller
      */
     public function create()
     {
-      return view('members.form');
-      if(Input::post())
-        {
-          dd(Input::post());
-        }
+      return view('members.form_create');
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -56,7 +55,43 @@ class MembersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validation //
+        $validation = Validator::make($request->all(), [
+            "gendre" => "required",
+            "firstname" => "required",
+            "lastname" => "required",
+            "username" => "required",
+            "email" => "required",
+            "phone" => "required",
+            "status" => "required"
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        DB::beginTransaction();
+        try{
+            $data = new Members();
+            $data->salutation = $request->input('gendre');
+            $data->firstname = $request->input('firstname');
+            $data->lastname = $request->input('lastname');
+            $data->username = $request->input('username');
+            $data->email = $request->input('email');
+            $data->phone = $request->input('phone');
+            $data->status = $request->input('status');
+            $data->password = md5($data->email);
+            if($data->save()){
+                DB::commit();
+                return redirect("admin/members/".$data->id."/show")->with('message', 'Successfully saved Province');
+            }else{
+                return redirect("admin/members/create")->with('message', 'Error Database;');
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect("admin/members/create")->with('message', $exception->getMessage());
+        }
     }
 
     /**
@@ -67,7 +102,8 @@ class MembersController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('members.form_show');
+
     }
 
     /**
@@ -78,7 +114,7 @@ class MembersController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('members.form_edit');
     }
 
     /**

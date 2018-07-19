@@ -69,7 +69,7 @@
     	</div>
     </div>
     <!-- #END# Advanced Validation -->
-	
+
 @stop
 @section('head-js')
 @parent
@@ -111,7 +111,7 @@
 		              minimumInputLength: 1,
 		              templateResult: formatRepo, // omitted for brevity, see the source of this page
 		              templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-		        }); 
+		        });
 		        function formatRepo (repo) {
 		              if (repo.loading) return repo.text;
 
