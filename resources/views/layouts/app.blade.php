@@ -203,31 +203,40 @@
 		                            <span>Language</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
-		                            <span>Country</span>
-		                        </a>
-		                    </li>
-		                    <li {{{ (Request::is('master/province*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/province') }}" class=" waves-effect waves-block">
-		                            <span>Province</span>
-		                        </a>
-		                    </li>
-		                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
-		                            <span>City</span>
-		                        </a>
-		                    </li>
-		                    <li {{{ (Request::is('master/district*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/master/district') }}" class=" waves-effect waves-block">
-		                            <span>District</span>
-		                        </a>
-		                    </li>
-		                    <li {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/village') }}" class=" waves-effect waves-block">
-		                            <span>Village</span>
-		                        </a>
-		                    </li>
+		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
+		                    {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
+			                    <a href="javascript:void(0);" class="menu-toggle">
+	                                <span>Location</span>
+	                            </a>
+	                            <ul class="ml-menu">
+	                            	<li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
+				                            <span>Country</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/province*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/province') }}" class=" waves-effect waves-block">
+				                            <span>Province</span>
+				                        </a>
+				                    </li>
+				                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
+				                            <span>City</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/district*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('/master/district') }}" class=" waves-effect waves-block">
+				                            <span>District</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/village') }}" class=" waves-effect waves-block">
+				                            <span>Village</span>
+				                        </a>
+				                    </li>
+	                            </ul>
+                            </li>
+		                    
 		                    <li {{{ (Request::is('master/tour-guide-service*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/tour-guide-service') }}" class=" waves-effect waves-block">
 		                            <span>Tour Guide Service</span>

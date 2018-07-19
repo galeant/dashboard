@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('district', 'DistrictController');
 		Route::resource('village', 'VillageController');
 		Route::resource('tour-guide-service', 'TourGuideServiceController');
+		Route::resource('tour-guide', 'TourGuideServiceController');
 
 		Route::group(['prefix' => 'destination'],function($id){
 			Route::post('deletePhoto','DestinationTypeController@deletePhoto');
