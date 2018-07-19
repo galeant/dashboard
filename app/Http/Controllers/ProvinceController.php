@@ -185,4 +185,5 @@ class ProvinceController extends Controller
         $data = $data->select('id','name')->get()->toArray();
         return $this->sendResponse($data, "Province retrieved successfully", 200);
     }
+    
 }

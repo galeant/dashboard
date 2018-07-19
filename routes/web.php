@@ -20,6 +20,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	    return view('layouts.app');
 	});
 	Route::group(['prefix' => 'master'],function(){
+		Route::resource('company', 'CompanyController');
+		Route::resource('tour', 'TourController');
 		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
@@ -47,3 +49,5 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
+
+Route::get('cities','CityController@cities');

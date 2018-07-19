@@ -186,6 +186,16 @@
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							<li {{{ (Request::is('master/company*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/company') }}" class=" waves-effect waves-block">
+		                            <span>Company</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('master/tour*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/tour') }}" class=" waves-effect waves-block">
+		                            <span>Tour</span>
+		                        </a>
+		                    </li>
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
 		                            <span>Language</span>
