@@ -1,9 +1,9 @@
-<?php 
+<?php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Village extends Model {
+class Members extends Model {
     /**
      * The attributes that should be mutated to dates.
      *
@@ -14,12 +14,6 @@ class Village extends Model {
      *
      * @var stringA
      */
-    protected $table = 'villages';
-    protected $fillable = ['district_id','name'];
-
-    public function district()
-    {
-        return $this->hasOne('App\Models\District','id','district_id');
-    }
+    protected $table = 'users';
+    protected $fillable = ['id','email'];
 }
-

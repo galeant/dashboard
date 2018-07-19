@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Country List
-                    <small>Master Data / Country</small>
+                    Tour Guide Service List
+                    <small>Master Data / Tour Guide Service</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,11 +17,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Country
+                                All Tour Guide Service
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/master/country/create" class="btn bg-teal btn-block waves-effect">Add Country</a>
+                                    <a href="/master/tour-guide-service/create" class="btn bg-teal btn-block waves-effect">Add Service</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,9 +31,7 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Code</th>
                                             <th>Name</th>
-                                            <th>Area Code</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -63,12 +61,10 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/country',
+	        ajax: '/master/tour-guide-service',
 	        columns: [
 	            {data: 'id'},
-	            {data: 'code'},
 	            {data: 'name'},
-	            {data: 'area_code'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}

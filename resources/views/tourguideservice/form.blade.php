@@ -9,8 +9,8 @@
 @section('main-content')
 	<div class="block-header">
         <h2>
-            Country
-            <small>Country Create</a></small>
+            Tour Guide Service
+            <small>Tour Guide Service Create</a></small>
         </h2>
     </div>
 
@@ -18,7 +18,7 @@
         <div class="col-md-12">
 		    <div class="card">
 		        <div class="header">
-		            <h2>Create Country</h2>
+		            <h2>Create Tour Guide Service</h2>
 		            <ul class="header-dropdown m-r--5">
 		                <li class="dropdown">
 		                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -37,21 +37,13 @@
 			        <div class="row clearfix">
  						<div class="col-lg-8 m-l-30">
 					        @if(isset($data))
-						        {{ Form::model($data, ['route' => ['country.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
+						        {{ Form::model($data, ['route' => ['tour-guide-service.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
 						    @else
-						        {{ Form::open(['route'=>'country.store', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
+						        {{ Form::open(['route'=>'tour-guide-service.store', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
 						    @endif
-						    	<div class="form-group m-b-20">
-					                <label>Code</label>
-					                 {{ Form::text('code', null, ['class' => 'form-control','placeholder'=>'Please Enter Code','id'=>'code','required'=>'required']) }}
-					            </div>
 					            <div class="form-group m-b-20">
 					                <label>Name</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
-					            </div>
-					            <div class="form-group m-b-20">
-					                <label>Area Code</label>
-					                 {{ Form::text('area_code', null, ['class' => 'form-control','placeholder'=>'Please Enter Area Code','id'=>'area_code','required'=>'required']) }}
 					            </div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-3 col-lg-offset-9">

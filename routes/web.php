@@ -20,7 +20,6 @@ Route::group(['middleware' => ['auth:web']], function () {
 	    return view('layouts.app');
 	});
 	Route::group(['prefix' => 'master'],function(){
-		Route::get('country/any-data', 'CountryController@anyData');
 		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
@@ -46,8 +45,22 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('/findDistrict/{id}','DistrictController@findDistrict');
 		Route::get('/findVillage/{id}','VillageController@findVillage');
 	});
+	Route::group(['prefix' => 'json'], function(){
+		Route::get('country','CountryController@json');
+		Route::get('language','LanguageController@json');
+		Route::get('province','ProvinceController@json');
+		Route::get('city','CityController@json');
+		Route::get('district','DistrictController@json');
+		Route::get('village','VillageController@json');
+	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
 	});
+
+	Route::group(['prefix' => 'admin/members'],function(){
+		Route::get('/', 'MembersController@index');
+		Route::get('/add', 'MembersController@create');
+	});
+
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });

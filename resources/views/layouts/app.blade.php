@@ -228,8 +228,8 @@
 		                            <span>Place Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/master/destination-type/*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/master/destination-type') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('master/destination-type/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/destination-type') }}" class=" waves-effect waves-block">
 		                            <span>Place Type Management</span>
 		                        </a>
 		                    </li>

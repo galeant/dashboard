@@ -20,24 +20,18 @@
                                 All Language
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
+                                <li >
+                                    <a href="/master/language/create" class="btn bg-teal btn-block waves-effect">Add Language</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                                 <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Code</th>
                                             <th>Name</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
@@ -71,6 +65,7 @@
 	        ajax: '/master/language',
 	        columns: [
 	            {data: 'id'},
+                {data: 'code'},
 	            {data: 'name'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
