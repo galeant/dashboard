@@ -29,13 +29,15 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('village', 'VillageController');
 		Route::resource('tour-guide-service', 'TourGuideServiceController');
 
-		//Destination
-		Route::resource('destination', 'DestinationController');
-		
 		Route::group(['prefix' => 'destination'],function($id){
+			Route::post('deletePhoto','DestinationTypeController@deletePhoto');
+			Route::get('find', 'DestinationController@find');
 			Route::get('status/active/{id}', 'DestinationController@active');
 			Route::get('status/disabled/{id}', 'DestinationController@disabled');
 		});
+		//Destination
+		Route::resource('destination', 'DestinationController');
+		
 		//DestinationType
 		Route::resource('destination-type', 'DestinationTypeController');
 

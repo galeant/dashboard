@@ -17,29 +17,29 @@
                     </div>
                     <div class="body" style="padding-left:20px">
                         <div class="row">
-                            <div class="col-md-3">Place Type *</div>
+                            <div class="col-md-3">Destination Type *</div>
                             <div class="col-md-3">Province *</div>
                             <div class="col-md-6">City *</div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <select class="form-control" name="placeType" id="placeType">
+                                <select class="form-control" name="destination_type_id" id="destination_type_id">
                                     <option value="">-Select Type-</option>
                                     @foreach($destination_type as $dt)
-                                    <option value="{{$dt->name_EN}}">{{$dt->name_EN}}</option>
+                                    <option value="{{$dt->name}}">{{$dt->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" name="province" id="province">
+                                <select class="form-control" name="province_id" id="province_id">
                                     <option value="">-Select Province-</option>
                                     @foreach($province as $p)
-                                    <option value="{{$p->id}}">{{$p->name}}</option>
+                                    <option value="{{$p->name}}" data="{{$p->id}}">{{$p->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select name="city" id="city"  class="form-control" required>
+                                <select name="city_id" id="city_id"  class="form-control" required>
                                     <option value="">--Select City--</option>
                                 </select>
                             </div>
@@ -62,9 +62,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="row clearfix" id="data_product">
-                    
-                </div>  
             </div>
         </div>
     </div>
@@ -109,9 +106,7 @@
                                 <a href="{{url('/master/destination/'.$d->id.'/edit')}}">
                                     View Detail
                                 </a>
-                                
                             </td>
-
                         </tr>   
                     @endforeach
                          
@@ -138,43 +133,6 @@
     <script src="{{ asset('js/admin.js') }}"></script>
     <script src="{{ asset('js/pages/tables/jquery-datatable.js') }}"></script>
     <script src="{{ asset('js/demo.js') }}"></script>
-    <script type="text/javascript">
-    	$(document).ready(function(){
-            $("input[name='placeScheduleType']:radio").change(function () {
-                var choose = $(this).val();
-                if(choose=="yes"){
-                    $("#placeSchedule").show();
-                }
-                else{
-                    $("#placeSchedule").hide();
-                }
-            });
-            $("select[name='placeActivity[]']").select2({
-                tags:true,
-                placeholder: "Start type here."
-            });
-
-            $("select.type").change(function(){
-                var value = $(this).val();
-                if(value=="Close"){
-                    $(this).closest(".row").find(".time").hide();
-                    $(this).closest(".row").find(".checkbox").hide();
-                }
-                else{
-
-                    $(this).closest(".row").find(".time").show();
-                    $(this).closest(".row").find(".checkbox").show();
-                }
-            });
-        });
-        $("ul.list a").click(function(){
-            $(this).closest("ul").find(".active").removeAttr("class");
-            $(this).closest("li").addClass("active")
-            var a = $(this).attr("href");
-            console.log(a);
-        });
-        $("title").text("Super Admin Pigijo");
-    </script>
     <script>
         $(document).ready(function(){
             var table = $('.dataTable').DataTable({
@@ -182,44 +140,44 @@
                 responsive: true,
                 order: [[4, "desc"]]
             });
-            $("#placeType, #province, #city").change(function(){
+            $("#destination_type_id, #province_id, #city_id").change(function(){
                 var table = $('.dataTable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     searching: false,
                     ajax: {
-                        url: "{{url('admin/master/place/find')}}",
+                        url: "{{url('master/destination/find')}}",
                         data: { 
-                            place_type : $("#placeType").val(),
-                            province : $("#province").val(),
-                            city : $("#city").val(),
+                            destination_type_id : $("#destination_type_id").val(),
+                            province_id : $("#province_id").val(),
+                            city_id : $("#city_id").val(),
                             keyword : $("#keyword").val(),
                         },
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'placeTypeNameEN' },
-                        { data: 'destination' },
-                        { data: 'province', name: 'province' },
-                        { data: 'city', name: 'city' },
-                        { data: 'updated', name: 'updated' },
+                        { data: 'destination_types.name' },
+                        { data: 'destination_name' },
+                        { data: 'provinces.name', name: 'province' },
+                        { data: 'cities.name', name: 'city' },
+                        { data: 'updated_at', name: 'updated' },
                         { 
                             data: null, 
                             name: 'status',
                             "render": function ( data, type, full, meta ) {
                                 var statusPlace = "status"+data.destinationId;
                                 if(data.status=="active"){
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')" checked><span class="lever"></span></label></div>';
+                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')" checked><span class="lever"></span></label></div>';
                                 }
                                 else{
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')"><span class="lever"></span></label></div>';
+                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')"><span class="lever"></span></label></div>';
                                 }
                             }
                         },
                         { 
                             data: 'action', 
-                            name: 'destinationId',
+                            name: 'id',
                         }
                     ]
                 });
@@ -231,94 +189,96 @@
                     serverSide: true,
                     searching: false,
                     ajax: {
-                        url: "{{url('admin/master/place/find')}}",
+                        url: "{{url('master/destination/find')}}",
                         data: { 
-                            place_type : $("#placeType").val(),
-                            province : $("#province").val(),
-                            city : $("#city").val(),
+                            destination_type_id : $("#destination_type_id").val(),
+                            province_id : $("#province_id").val(),
+                            city_id : $("#city_id").val(),
                             keyword : $("#keyword").val(),
                         },
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'placeTypeNameEN' },
-                        { data: 'destination' },
-                        { data: 'province', name: 'province' },
-                        { data: 'city', name: 'city' },
-                        { data: 'updated', name: 'updated' },
+                        { data: 'destination_types.name' },
+                        { data: 'destination_name' },
+                        { data: 'provinces.name', name: 'province' },
+                        { data: 'cities.name', name: 'city' },
+                        { data: 'updated_at', name: 'updated' },
                         { 
                             data: null, 
                             name: 'status',
                             "render": function ( data, type, full, meta ) {
                                 var statusPlace = "status"+data.destinationId;
                                 if(data.status=="active"){
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')" checked><span class="lever"></span></label></div>';
+                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')" checked><span class="lever"></span></label></div>';
                                 }
                                 else{
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')"><span class="lever"></span></label></div>';
+                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')"><span class="lever"></span></label></div>';
                                 }
                             }
                         },
                         { 
                             data: 'action', 
-                            name: 'destinationId',
+                            name: 'id',
                         }
                     ]
                 });
             });
-            $("select[name='province']").change(function(){
-                var idProvince = $(this).val();
-                $("select[name='city']").empty();
+            $("select[name='province_id']").change(function(){
+                var idProvince =  $('option:selected', this).attr('data');
+                $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/admin/dataapi/findCity') }}"+"/"+idProvince
+                    url: "{{ url('/master/findCity') }}"+"/"+idProvince
                 }).done(function(response) {
-                    $("select[name='city']").append("<option value=''>-Select City-</option>");
+                    $("select[name='city_id']").append("<option value=''>-Select City-</option>");
+                    console.log(response)
                     $.each(response, function (index, value) {
-                        $("select[name='city']").append(
-                            "<option value="+value.id+">"+value.name+"</option>"
+                        console.log(value.name)
+                        $("select[name='city_id']").append(
+                            "<option value='"+value.name+"'>"+value.name+"</option>"
                         );
                     });
                     var table = $('.dataTable').DataTable({
-                    destroy: true,
-                    processing: true,
-                    serverSide: true,
-                    searching: false,
-                    ajax: {
-                        url: "{{url('admin/master/place/find')}}",
-                        data: { 
-                            place_type : $("#placeType").val(),
-                            province : $("#province").val(),
-                            city : $("#city").val(),
-                            keyword : $("#keyword").val(),
+                        destroy: true,
+                        processing: true,
+                        serverSide: true,
+                        searching: false,
+                        ajax: {
+                            url: "{{url('master/destination/find')}}",
+                            data: { 
+                                destination_type_id : $("#destination_type_id").val(),
+                                province_id : $("#province_id").val(),
+                                city_id : $("#city_id").val(),
+                                keyword : $("#keyword").val(),
+                            },
+                            type: 'GET'
                         },
-                        type: 'GET'
-                    },
-                    columns: [
-                        { data: 'placeTypeNameEN' },
-                        { data: 'destination' },
-                        { data: 'province', name: 'province' },
-                        { data: 'city', name: 'city' },
-                        { data: 'updated', name: 'updated' },
-                        { 
-                            data: null, 
-                            name: 'status',
-                            "render": function ( data, type, full, meta ) {
-                                var statusPlace = "status"+data.destinationId;
-                                if(data.status=="active"){
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')" checked><span class="lever"></span></label></div>';
+                        columns: [
+                            { data: 'destination_types.name' },
+                            { data: 'destination_name' },
+                            { data: 'provinces.name', name: 'province' },
+                            { data: 'cities.name', name: 'city' },
+                            { data: 'updated_at', name: 'updated' },
+                            { 
+                                data: null, 
+                                name: 'status',
+                                "render": function ( data, type, full, meta ) {
+                                    var statusPlace = "status"+data.destinationId;
+                                    if(data.status=="active"){
+                                        return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')" checked><span class="lever"></span></label></div>';
+                                    }
+                                    else{
+                                        return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')"><span class="lever"></span></label></div>';
+                                    }
                                 }
-                                else{
-                                    return '<div class="switch"><label><input type="checkbox" id="status'+data.destinationId+'" onchange="updatestatus('+data.destinationId+')"><span class="lever"></span></label></div>';
-                                }
+                            },
+                            { 
+                                data: 'action', 
+                                name: 'id',
                             }
-                        },
-                        { 
-                            data: 'action', 
-                            name: 'destinationId',
-                        }
-                    ]
-                });
+                        ]
+                    });
                 });
             });
             
@@ -327,15 +287,14 @@
     <script>
         function updatestatus(id){
             if($("#status"+id).prop("checked")){
-                alert()
                 $.ajax({
-                    url: "{{url('destination/status/active')}}/"+id,
+                    url: "{{url('master/destination/status/active')}}/"+id,
                     type: "GET"
                 });
             }
             else{
                 $.ajax({
-                    url: "{{url('destination/status/disabled')}}/"+id,
+                    url: "{{url('master/destination/status/disabled')}}/"+id,
                     type: "GET"
                 });
             }

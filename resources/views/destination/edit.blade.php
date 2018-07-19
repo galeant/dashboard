@@ -4,6 +4,7 @@
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
     <link href="{{ asset('plugins/telformat/css/intlTelInput.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/bootstrap-file-input/css/fileinput.css') }}" rel="stylesheet">
 @stop
 @section('main-content')
 
@@ -18,9 +19,7 @@
                 </h2>
             </div>
             <div class="body">
-                <form action="{{ route('destination.update') }}" method="PUT" enctype="multipart/form-data">
-                @csrf
-                    <input type="hidden" name="destinationId" value="{{$destination->id}}">
+                {{ Form::model($destination, ['route' => ['destination.update', $destination->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
                     <div class="row container">
                         <div class="col-md-12">
                         <h5 for="destination_type_id">Destination Type</h5>
@@ -36,7 +35,7 @@
                             <h5 for="destination_name">Destination Name* :</h5>
                         </div>
                         <div class="col-md-6">
-                            <input type="text" name="destination_name" class="form-control" required>
+                            <input type="text" name="destination_name" class="form-control" value="{{$destination->destination_name}}" required>
                         </div>
                     </div>
                     <div class="row container">
@@ -73,11 +72,11 @@
                     <div class="row container">
                         <div class="col-md-3">
                             <h5>Latitude* :</h5>
-                            <input type="text" name="latitude" class="form-control" required> 
+                            <input type="text" name="latitude" class="form-control" value="{{$destination->latitude}}" required> 
                         </div>
                         <div class="col-md-3">
                             <h5>Longitude* :</h5>
-                            <input type="text" name="longitude" class="form-control" required>
+                            <input type="text" name="longitude" class="form-control" value="{{$destination->longitude}}" required>
                         </div>
                     </div>
                     <div class="row container">
@@ -86,7 +85,7 @@
                             <h5>Phone Number if any:</h5>
                         </div>
                         <div class="col-md-6">
-                            <input type="tel" class="form-control" name="phone_number" style="width:100%;">
+                            <input type="tel" class="form-control" name="phone_number" value="{{$destination->phone_number}}"  style="width:100%;">
                         </div>
                     </div>
                     <div class="row container">
@@ -94,7 +93,7 @@
                             <h5>Address if any:</h5>
                         </div>
                         <div class="col-md-6">
-                            <textarea name="address" rows="3" class="form-control"></textarea>
+                            <textarea name="address" rows="3" class="form-control">{{$destination->address}}</textarea>
                         </div>
                     </div>
                     <div class="row container">
@@ -125,14 +124,15 @@
                         <div class="col-md-10">
                             <h5>Open Schedule</h5>
                             <div class="row">
+                                {{ Form::hidden('destination_schedule[0][DestinationScheduleId]', '') }}
                                 <input type="hidden" name="destination_schedule[0][ScheduleDay]" value="Monday">
                                 <div class="col-md-2">
                                     <h5>Monday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[0][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time" id="scheduleTimeMon">
@@ -148,14 +148,15 @@
                             </div>
                             
                             <div class="row">
+                                {{ Form::hidden('destination_schedule[1][DestinationScheduleId]', '') }}
                                 <input type="hidden" name="destination_schedule[1][ScheduleDay]" value="Tuesday">
                                 <div class="col-md-2">
                                     <h5>Tuesday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[1][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time" id="scheduleTimeTue">
@@ -169,16 +170,16 @@
                                     <label for="destination_schedule_tue">Open 24 Hours</label>
                                 </div>
                             </div>
-                            
                             <div class="row">
+                                {{ Form::hidden('destination_schedule[2][DestinationScheduleId]', '') }}
                                 <input type="hidden" name="destination_schedule[2][ScheduleDay]" value="Wednesday">
                                 <div class="col-md-2">
                                     <h5>Wednesday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[2][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time"  id="scheduleTimeWed">
@@ -194,14 +195,15 @@
                             </div>
                             
                             <div class="row">
-                                    <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
+                                {{ Form::hidden('destination_schedule[3][DestinationScheduleId]', '') }}
+                                <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
                                 <div class="col-md-2">
                                     <h5>Thursday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[3][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time"  id="scheduleTimeThu">
@@ -217,14 +219,15 @@
                             </div>
                             
                             <div class="row">
-                                    <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
+                                {{ Form::hidden('destination_schedule[4][DestinationScheduleId]', '') }}
+                                <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
                                 <div class="col-md-2">
                                     <h5>Friday</h5>
                                 </div>
                                 <div class="col-md-2 ">
                                     <select name="destination_schedule[4][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time"  id="scheduleTimeFri">
@@ -240,14 +243,15 @@
                             </div>
                             
                             <div class="row">
-                                    <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
+                                {{ Form::hidden('destination_schedule[5][DestinationScheduleId]', '') }}
+                                <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
                                 <div class="col-md-2">
                                     <h5>Saturday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[5][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time"  id="scheduleTimeSat">
@@ -263,14 +267,15 @@
                             </div>
                             
                             <div class="row">
-                                    <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
+                                {{ Form::hidden('destination_schedule[6][DestinationScheduleId]', '') }}
+                                <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
                                 <div class="col-md-2">
                                     <h5>Sunday</h5>
                                 </div>
                                 <div class="col-md-2">
                                     <select name="destination_schedule[6][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
+                                        <option value="Open">Open</option>
+                                        <option value="Close">Close</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4 time" id="scheduleTimeSun">
@@ -294,31 +299,31 @@
                         <div class="col-md-6">
                             <div class="col-md-3">
                                 <select name="visit_hours" id="" class="form-control" required>
-                                    <option value="">0</option>
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                    <option>16</option>
-                                    <option>17</option>
-                                    <option>18</option>
-                                    <option>19</option>
-                                    <option>20</option>
-                                    <option>21</option>
-                                    <option>22</option>
-                                    <option>23</option>
-                                    <option>24</option>
+                                        <option value="">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                        <option value="21">21</option>
+                                        <option value="22">22</option>
+                                        <option value="23">23</option>
+                                        <option value="24">24</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -326,8 +331,8 @@
                             </div>
                             <div class="col-md-3">
                                 <select name="visit_minutes" id="" class="form-control" required>
-                                    <option>0</option>
-                                    <option>30</option>
+                                    <option value="0">0</option>
+                                    <option value="30">30</option>
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -345,16 +350,16 @@
                     </div>
                     <div class="row container">
                         <div class="col-md-12">
-                            <h5>Main Image* :</h5>
+                            <h4>Main Image* :</h4>
                         </div>
                         <div class="col-md-6">
                             <input type="file" name="cover_image">
-                            <img src="" alt="">
+                            <img src="{{asset($destination->cover_image)}}" alt="">
                         </div>
                     </div>
                     <div class="row form-group container">
                         <div class="col-md-6" id="file_destination_photo">
-                            <h5>Destination Photo</h5>
+                            <h4>Destination Photo</h4>
                             <div class="file-loading">
                                 <input type="file" name="destination_photo[]" id="destination_photo" multiple>
                             </div>
@@ -362,9 +367,10 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12" style="margin-left:10px;">
-                            <h5>Travel tips. Give some travel tips for this destination.</h5>
+                            <h5>Traveasl tips. Give some travel tips for this destination.</h5>
                             <h5>Enter each tips in separate input field. You can add more input field.</h5>
                         </div>
+                        @foreach($destination->destination_tips as $key=>$ddt)
                         <div class="row" id="destination_tips">
                             <div class="col-md-6" style="margin:0; padding:0;">
                                 <br>
@@ -374,30 +380,34 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-11">
-                                    <select name="destination_tips[0][question_id]" id="questionId" class="form-control">
+                                    <select name="destination_tips[{{$key}}][question_id]" class="form-control">
                                         @foreach($destination_tips_question as $dtq)
+                                            @if($dtq->id == $ddt->pivot->question_id)
+                                                <option value="{{$dtq->id}}" selected>{{$dtq->question}}</option>
+                                            @else
                                             <option value="{{$dtq->id}}">{{$dtq->question}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-11 col-md-offset-1">
-                                    <textarea name="destination_tips[0][answer]" id="" class="form-control" id="destination_tips" rows="5"></textarea>
+                                    <textarea name="destination_tips[{{$key}}][answer]" id="" class="form-control" rows="5">{{$ddt->pivot->answer}}</textarea>
                                 </div>
                             </div>
                             <div class="col-md-6 delete_tips">
                                 <br>
                             </div>
                         </div>
-                        
+                        @endforeach
                     </div>
                     <div class="row">
-                        <div id="clone_destination_tips"></div>
+                        <div id="destination_tips_clone"></div>
                     </div>
                     <br>
                     <div class="row"  style="margin-left:10px;" >
                         <div class="col-md-6">
                             <div class=" col-md-6 pull-right">
-                                <input type="button" class="form-control btn bg-amber waves-effect" id="add_more_tips" value="Add More Tips">
+                                <button type="button" class="btn" id="add_more_tips" value="">Add More Tips</button>
                             </div>
                         </div>
                     </div>
@@ -413,8 +423,8 @@
         </div>  
     </div>
 @endsection
-
-@section('footer')
+@section('head-js')
+@parent
     <!-- Jquery Core Js -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
@@ -455,60 +465,59 @@
                     );
                 });
                 $("select[name='city']").find("option[value='{{$destination->city}}']").attr('selected', 'selected');
-            });
-            $.ajax({
-                method: "GET",
-                url: "{{ url('/master/findDistrict') }}"+"/"+{{$destination->city}}
-            }).done(function(response) {
-                $.each(response, function (index, value) {
-                    $("select[name='district_id']").append(
-                        "<option value="+value.id+">"+value.name+"</option>"
-                    );
+                $.ajax({
+                    method: "GET",
+                    url: "{{ url('/master/findDistrict') }}"+"/"+{{$destination->city_id}}
+                }).done(function(response) {
+                    $.each(response, function (index, value) {
+                        $("select[name='district_id']").append(
+                            "<option value="+value.id+">"+value.name+"</option>"
+                        );
+                    });
+                    $("select[name='district_id']").find("option[value='{{$destination->district}}']").attr('selected', 'selected');
+                    
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ url('/master/findVillage') }}"+"/"+{{$destination->district_id}}
+                    }).done(function(response) {
+                        $.each(response, function (index, value) {
+                            $("select[name='village_id']").append(
+                                "<option value="+value.id+">"+value.name+"</option>"
+                            );
+                        });
+                        $("select[name='village_id']").find("option[value='{{$destination->village}}']").attr('selected', 'selected');
+                    });
                 });
-                $("select[name='district_id']").find("option[value='{{$destination->district}}']").attr('selected', 'selected');
-            });
-            $.ajax({
-                method: "GET",
-                url: "{{ url('/master/findVillage') }}"+"/"+{{$destination->district}}
-            }).done(function(response) {
-                $.each(response, function (index, value) {
-                    $("select[name='village_id']").append(
-                        "<option value="+value.id+">"+value.name+"</option>"
-                    );
-                });
-                $("select[name='village_id']").find("option[value='{{$destination->village}}']").attr('selected', 'selected');
             });
 
         });
     </script>
     <script type="text/javascript">
-    
-    var listPlacePhoto = [];
-        $(document).ready(function(){ 
-            var i = "{{count($destination->destination_tips)}}";
-            $("#addMoreTips").click(function (){ 
-                $("#destination_tips_clone").clone().appendTo("#clone").addClass("cloneTips"+i);
-                $(".cloneTips"+i).attr("id","destination_tips");
-                $(".cloneTips"+i).show();
-                $(".cloneTips"+i+" #questionId").attr("name","destination_tips["+i+"][questionId]");
-                $(".cloneTips"+i+" textarea[name='destination_tips[][answer]']").attr("name","destination_tips["+i+"][answer]").val("");
+    var i = "{{count($destination->destination_tips)}}";
+            $("#add_more_tips").click(function (){
+                $("#destination_tips").clone().appendTo("#destination_tips_clone").addClass("cloneTips"+i);
+                $(".cloneTips"+i+" select[name='destination_tips[0][question_id]']").attr("name","destination_tips["+i+"][question_id]");
+                $(".cloneTips"+i+" textarea[name='destination_tips[0][answer]']").attr("name","destination_tips["+i+"][answer]").val("");
                 $(".cloneTips"+i+" .delete").append('<div class="col-md-6"><button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button></div>');
                 i++;
             });
+    var listPlacePhoto = [];
+        $(document).ready(function(){ 
+            
             var phoneNumber = "{{$destination->phone_number}}";
             var codePhoneNumber = phoneNumber.split("-");
             console.log(codePhoneNumber);
-            $("input[name='phone']").val(codePhoneNumber[0]).intlTelInput({
+            $("input[name='phone_number']").val(codePhoneNumber[0]).intlTelInput({
                 separateDialCode: true,
             });
             $("input[name='format']").val(codePhoneNumber[0]);
-            var pn = phoneNumber.replace(codePhoneNumber[0]);
-            $("input[name='phone']").val(pn);
+            var pn = phoneNumber.replace(codePhoneNumber[0]+'-', '');
+            $("input[name='phone_number']").val(pn);
             $(".country").click(function(){
                 $("input[name='format']").val("+"+$(this).attr( "data-dial-code" ));
             });
             $(".input-time").mask('00:00');
-		    $("input[name='phone']").mask('000-0000-0000');
+		    $("input[name='phone_number']").mask('000-0000-0000');
 		    $("input[name='destination_schedule[][StartHour]']").mask('00:00');
             $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
@@ -553,51 +562,44 @@
                     });
                 });
             });
-            var array = [];
-            $("select[name='destination_activities[]']").select2({
-                data: array
-            });
-
-            
             var activity_tag = [];
             @foreach($activity_tag as $at)
                 var data_activity_tag = [];
                 data_activity_tag["id"] = "{{$at->id}}";
                 data_activity_tag["text"] = "{{$at->name}}";
                 @foreach($destination->destination_activities as $da)
-                    @if($da->activity_tag_id == $at->id)
+                    @if($da->pivot->activity_tag_id == $at->id)
                         data_activity_tag["selected"] = true;
                     @endif
-                @
-                activity_tag.push(data_activity_tag);
                 @endforeach
+                activity_tag.push(data_activity_tag);
             @endforeach
             $("select[name='destination_activities[][activity_tag_id]']").select2({
                 placeholder: "Start type here.",
-                data: activity_tag,
+                data: activity_tag  
             });
-
             @if($destination->schedule_type=="1")
-                $("input[name='schedule_type'][value='yes']:radio").attr('checked', 'checked');
+                $("input[name='schedule_type'][value='1']:radio").attr('checked', 'checked');
                 $("#destination_schedule").show();
                 $("#destination_schedule").find("input[type='text']").attr("required", "");
             @else
-                $("input[name='schedule_type'][value='no']:radio").attr('checked', 'checked');
+                $("input[name='schedule_type'][value='0']:radio").attr('checked', 'checked');
                 $("#destination_schedule").hide();
                 $("#destination_schedule").find("input[type='text']").removeAttr("required"); 
             @endif
             $("input[name='schedule_type']:radio").change(function () {
                 var choose = $(this).val();
-                if(choose=="yes"){
+                if(choose=="1"){
                     $("#destination_schedule").show();
                 }
                 else{
                     $("#destination_schedule").hide();
                 }
             });
-            @for($i=0; $i<count($destination->destination_schedule); $i++)
-                $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").find("option[value='{{$destination->destination_schedule[$i]['destination_schedule_condition']}}']").attr('selected', 'selected')
-                if("{{$destination->destination_schedule[$i]['destination_schedule_condition']}}" == "Close"){
+            
+            @for($i=0; $i<count($destination->destination_schedules); $i++)
+                $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").find("option[value='{{$destination->destination_schedules[$i]['destination_schedule_condition']}}']").attr('selected', 'selected')
+                if("{{$destination->destination_schedules[$i]['destination_schedule_condition']}}" == "Close"){
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find(".time").hide();
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find(".checkbox").hide();
                 }
@@ -605,13 +607,14 @@
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find(".time").show();
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find(".checkbox").show();
                 }
-                if("{{$destination->destination_schedule[$i]['destination_schedule_start_hours']}}" == "00:00:00" && "{{$destination->destination_schedule[$i]['destination_schedule_end_hours']}}"=="23:59:59"){
+                if("{{$destination->destination_schedules[$i]['destination_schedule_start_hours']}}" == "00:00:00" && "{{$destination->destination_schedules[$i]['destination_schedule_end_hours']}}"=="23:59:59"){
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find("input.input-time").attr('disabled','disabled');
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find("input:checkbox").removeAttr('disabled');
                     $("select[name='destination_schedule[{{$i}}][ScheduleCondition]']").closest(".row").find("input:checkbox").attr('checked','');
                 }
-                $("input[name='destination_schedule[{{$i}}][StartHour]']").val("{{date('H:i',strtotime($destination->destination_schedule[$i]['placeScheduleStartHour']))}}");
-                $("input[name='destination_schedule[{{$i}}][EndHour]']").val("{{date('H:i',strtotime($destination->destination_schedule[$i]['placeScheduleEndHour']))}}"); 
+                $("input[name='destination_schedule[{{$i}}][DestinationScheduleId]']").val("{{$destination->destination_schedules[$i]['id']}}");
+                $("input[name='destination_schedule[{{$i}}][StartHour]']").val("{{date('H:i',strtotime($destination->destination_schedules[$i]['destination_schedule_start_hours']))}}");
+                $("input[name='destination_schedule[{{$i}}][EndHour]']").val("{{date('H:i',strtotime($destination->destination_schedules[$i]['destination_schedule_end_hours']))}}"); 
             @endfor
             @if($destination->visit_hours == "0")
                 $("select[name='visit_hours']").removeAttr("required"); 
@@ -619,7 +622,6 @@
             $("select[name='visit_hours']").find("option[value='{{$destination->visit_hours}}']").attr('selected', 'selected')
             $("select[name='visit_minutes']").find("option[value='{{$destination->visit_minutes}}']").attr('selected', 'selected')
             $("textarea[name='description']").val("{{$destination->description}}")
-            
             $("select.type").change(function(){
                 var value = $(this).val();
                 if(value=="Close"){
@@ -744,20 +746,11 @@
                 extra: function() { 
                     $("#filePlacePhoto").find(".kv-file-upload").remove();;
                 },
-            });
-            
-
-
+            })
         });
-        $("ul.list a").click(function(){
-            $(this).closest("ul").find(".active").removeAttr("class");
-            $(this).closest("li").addClass("active")
-            var a = $(this).attr("href");
-            console.log(a);
-        });
-        $("title").text("Super Admin Pigijo");
         $(document).on("click", "#deleteTips", function() {
             $(this).closest(".row").remove();
         });
+        
     </script>
-@endsection
+@stop
