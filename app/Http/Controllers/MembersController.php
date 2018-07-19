@@ -83,7 +83,7 @@ class MembersController extends Controller
             $data->password = md5($data->email);
             if($data->save()){
                 DB::commit();
-                return redirect("admin/members/".$data->id."/show")->with('message', 'Successfully saved Members');
+                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
             }else{
                 return redirect("admin/members/create")->with('message', 'Error Database;');
             }
