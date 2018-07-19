@@ -94,7 +94,7 @@
                               <br>
                               <br>
                               <br>
-                              <button type="submit" class="btn btn-info center">Save</button>
+                              <button type="submit" class="btn btn-success center">Save</button>
                             </form>
 
                         </div>

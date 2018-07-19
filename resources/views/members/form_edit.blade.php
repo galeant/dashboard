@@ -19,23 +19,11 @@
                             <h2>
                                 Edit New Members
                             </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
                           @include('errors.error_notification')
                           <br>
-                            {{ Form::open(['route'=>'members.store', 'method'=>'POST', 'class'=>'','id'=>'form_advanced_validation']) }}
+                            {{ Form::open(['route'=> ['members.update',$data->id], 'method'=>'PUT', 'class'=>'','id'=>'form_advanced_validation']) }}
                               @csrf
                               <div class="row clearfix">
                                   <div class="col-sm-12">
@@ -44,49 +32,49 @@
                                             <h2 class="card-inside-title">Gendre</h2>
                                             <select name="gendre" class="form-control show-tick">
                                                 <option value="">-- Please select --</option>
-                                                <option value="Mr">Mr</option>
-                                                <option value="Ms">Ms</option>
-                                                <option value="Mrs">Mrs</option>
+                                                <option value="Mr" @if($data->salutation == "Mr") { selected } @endif >Mr</option>
+                                                <option value="Ms" @if($data->salutation == "Ms") { selected } @endif >Ms</option>
+                                                <option value="Mrs" @if($data->salutation == "Mrs") { selected } @endif >Mrs</option>
                                             </select>
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">First Name</h2>
                                           <div class="form-line">
-                                              <input name="firstname" type="text" class="form-control" placeholder="Firstname" />
+                                              <input value="{{$data->firstname}}" name="firstname" type="text" class="form-control" placeholder="Firstname" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Last Name</h2>
                                           <div class="form-line">
-                                              <input name="lastname" type="text" class="form-control" placeholder="Lastname" />
+                                              <input value="{{$data->lastname}}" name="lastname" type="text" class="form-control" placeholder="Lastname" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">User Name</h2>
                                           <div class="form-line">
-                                              <input name="username" type="text" class="form-control" placeholder="Username" />
+                                              <input value="{{$data->username}}" name="username" type="text" class="form-control" placeholder="Username" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">E-Mail</h2>
                                           <div class="form-line">
-                                              <input name="email" type="email" class="form-control" placeholder="Email" />
+                                              <input value="{{$data->email}}" name="email" type="email" class="form-control" placeholder="Email" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Phone</h2>
                                           <div class="form-line">
-                                              <input type="text" name="phone" class="form-control" placeholder="Phone" />
+                                              <input value="{{$data->phone}}" type="text" name="phone" class="form-control" placeholder="Phone" />
                                           </div>
                                       </div>
                                       <div class="demo-radio-button">
                                         <h2 class="card-inside-title">Status</h2>
-                                          <input name="status" type="radio" id="radio_7" class="radio-col-purple" value="1" checked />
+                                          <input @if($data->status == 1){ checked } @endif name="status" type="radio" id="radio_7" class="radio-col-purple" value="1" checked />
                                           <label for="radio_7">Active</label>
-                                          <input name="status" type="radio" id="radio_8" class="radio-col-yellow" value="2" />
+                                          <input @if($data->status == 2){ checked } @endif name="status" type="radio" id="radio_8" class="radio-col-yellow" value="2" />
                                           <label for="radio_8">Non Active</label>
-                                          <input name="status" type="radio" id="radio_9" class="radio-col-red" value="3" />
+                                          <input @if($data->status == 3){ checked } @endif name="status" type="radio" id="radio_9" class="radio-col-red" value="3" />
                                           <label for="radio_9">Banned</label>
                                       </div>
                                   </div>
@@ -94,7 +82,7 @@
                               <br>
                               <br>
                               <br>
-                              <button type="submit" class="btn btn-info center">Save</button>
+                              <button type="submit" class="btn btn-success center">Save</button>
                             </form>
 
                         </div>
