@@ -29,9 +29,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('district', 'DistrictController');
 		Route::resource('village', 'VillageController');
 		Route::resource('tour-guide-service', 'TourGuideServiceController');
+		Route::resource('company', 'CompanyController');
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
 	});
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
+
+// FOR AJAX
+Route::get('cities','CityController@cities');

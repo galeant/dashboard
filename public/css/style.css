@@ -5126,7 +5126,8 @@ section.content {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-  background-color: transparent; }
+  /* background-color: transparent;  */
+}
 
 /* Color Picker ================================ */
 .colorpicker {

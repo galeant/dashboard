@@ -99,4 +99,10 @@ class CityController extends Controller
     {
         //
     }
+    
+    // FOR AJAX
+    public function cities(Request $request){
+        $cities = City::where('province_id',$request->id)->get();
+        return response()->json($cities,200);
+    }
 }

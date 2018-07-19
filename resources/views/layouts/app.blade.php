@@ -24,7 +24,7 @@
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
     <!-- Bootstrap Select Css -->
-    <link href="{{asset('plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
+    <!-- <link href="{{asset('plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" /> -->
 
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
@@ -189,6 +189,11 @@
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							<li {{{ (Request::is('master/company*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/company') }}" class=" waves-effect waves-block">
+		                            <span>Company</span>
+		                        </a>
+		                    </li>
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
 		                            <span>Language</span>
@@ -284,7 +289,7 @@
 <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
 
 <!-- Select Plugin Js -->
-<script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script>
+<!-- <script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script> -->
 
 <!-- Slimscroll Plugin Js -->
 <script src="{{asset('plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
