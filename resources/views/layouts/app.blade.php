@@ -23,8 +23,7 @@
     <!-- Animation Css -->
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
-    <!-- Bootstrap Select Css -->
-    <link href="{{asset('plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" />
+	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" /> 
 
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
@@ -224,13 +223,13 @@
 		                            <span>Tour Guide Service</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/place/*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/place') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('master/destination/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/destination') }}" class=" waves-effect waves-block">
 		                            <span>Place Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/master/place-type/*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/master/place-type/index') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('admin/master/destination-type/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/admin/master/destination-type') }}" class=" waves-effect waves-block">
 		                            <span>Place Type Management</span>
 		                        </a>
 		                    </li>
@@ -282,9 +281,6 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.js')}}"></script>
 
 <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
-<!-- Select Plugin Js -->
-<script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script>
 
 <!-- Slimscroll Plugin Js -->
 <script src="{{asset('plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>

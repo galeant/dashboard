@@ -20,7 +20,6 @@ Route::group(['middleware' => ['auth:web']], function () {
 	    return view('layouts.app');
 	});
 	Route::group(['prefix' => 'master'],function(){
-
 		Route::get('country/any-data', 'CountryController@anyData');
 		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
@@ -29,6 +28,21 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('district', 'DistrictController');
 		Route::resource('village', 'VillageController');
 		Route::resource('tour-guide-service', 'TourGuideServiceController');
+
+		//Destination
+		Route::resource('destination', 'DestinationController');
+		
+		Route::group(['prefix' => 'destination'],function($id){
+			Route::get('status/active/{id}', 'DestinationController@active');
+			Route::get('status/disabled/{id}', 'DestinationController@disabled');
+		});
+		//DestinationType
+		Route::resource('destination-type', 'DestinationTypeController');
+
+		//API
+		Route::get('/findCity/{id}','CityController@findCity');
+		Route::get('/findDistrict/{id}','DistrictController@findDistrict');
+		Route::get('/findVillage/{id}','VillageController@findVillage');
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');

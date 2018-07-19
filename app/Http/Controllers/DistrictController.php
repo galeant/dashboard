@@ -98,4 +98,10 @@ class DistrictController extends Controller
     {
         //
     }
+
+    
+    public function findDistrict($id){
+        $districts = District::where('city_id',$id)->get();
+        return response()->json($districts,200);
+    }
 }

@@ -99,4 +99,9 @@ class VillageController extends Controller
     {
         //
     }
+    
+    public function findVillage($id){
+        $villages = Village::where('district_id',$id)->get();
+        return response()->json($villages,200);
+    }
 }
