@@ -33,56 +33,64 @@ class Tour extends Model
         'company_id'
     ];
 
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company', 'company_id','id');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany('App\Models\Schedule', 'product_id','id');
+    }
+
+    public function destinations()
+    {
+        return $this->hasMany('App\Models\ProductDestination','product_id','id');
+    }
+
+    public function activities()
+    {
+        return $this->belongsToMany('App\Models\ActivityTag', 'product_activity','product_id', 'activity_id');
+    }
+
+    public function itineraries()
+    {
+        return $this->hasMany('App\Models\Itinerary', 'product_id','id');
+    }
+
+    public function includes()
+    {
+        return $this->hasMany('App\Models\Includes', 'product_id','id');
+    }
+
+    public function excludes()
+    {
+        return $this->hasMany('App\Models\Excludes', 'product_id','id');
+    }
+
     public function prices()
     {
-        return $this->hasMany('App\Model\Price', 'product_id','id');
+        return $this->hasMany('App\Models\Price', 'product_id','id');
     }
+    // 
     public function image_destination()
     {
-        return $this->hasMany('App\Model\ImageDestination', 'product_id','id');
+        return $this->hasMany('App\Models\ImageDestination', 'product_id','id');
     }
     public function image_activity()
     {
-        return $this->hasMany('App\Model\ImageActivity', 'product_id','id');
+        return $this->hasMany('App\Models\ImageActivity', 'product_id','id');
     }
     public function image_accommodation()
     {
-        return $this->hasMany('App\Model\ImageAccommodation', 'product_id','id');
+        return $this->hasMany('App\Models\ImageAccommodation', 'product_id','id');
     }
     public function image_other()
     {
-        return $this->hasMany('App\Model\ImageOther','product_id','id');
+        return $this->hasMany('App\Models\ImageOther','product_id','id');
     }
     public function videos()
     {
-        return $this->hasMany('App\Model\Videos', 'product_id','id');
-    }
-    public function itineraries()
-    {
-        return $this->hasMany('App\Model\Itinerary', 'product_id','id');
-    }
-    public function schedules()
-    {
-        return $this->hasMany('App\Model\Schedule', 'product_id','id');
-    }
-    public function includes()
-    {
-        return $this->hasMany('App\Model\Include', 'product_id','id');
-    }
-    public function excludes()
-    {
-        return $this->hasMany('App\Model\Exclude', 'product_id','id');
-    }
-    public function destinations()
-    {
-        return $this->hasMany('App\Model\ProductDestination','product_id','id');
-    }
-    public function activities()
-    {
-        return $this->belongsToMany('App\Model\ActivityTag', 'product_activity','productId', 'activityId');
-    }
-    public function company()
-    {
-        return $this->belongsTo('App\Model\Company', 'company_id','id');
+        return $this->hasMany('App\Models\Videos', 'product_id','id');
     }
 }
