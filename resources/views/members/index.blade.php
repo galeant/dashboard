@@ -20,21 +20,14 @@
                                 All Members
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
-                                    </ul>
+                                <li>
+                                    <a href="/admin/members/create" class="btn bg-teal btn-block waves-effect">Add Member</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                <table class="table table-modif table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
                                 <thead>
                                         <tr>
                                             <th>ID</th>
@@ -47,8 +40,6 @@
                                 </table>
 
                             </div>
-                            <br>
-                            <a href="{{url('admin/members/add')}}" class="btn btn-info">Add</a>
 
                         </div>
                     </div>

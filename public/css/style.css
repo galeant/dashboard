@@ -7589,7 +7589,10 @@ fieldset[disabled] .form-control {
         -webkit-transition: all 0.3s;
         transition: all 0.3s; }
       .sidebar .menu .list .menu-toggle:before {
-        content: '-';
+        font-family: 'Glyphicons Halflings';
+        content: "\e252";
+        margin-top: 6px;
+        font-size: 10px;
         color: white;
         -moz-transform: scale(1);
         -ms-transform: scale(1);
@@ -7597,7 +7600,10 @@ fieldset[disabled] .form-control {
         -webkit-transform: scale(1);
         transform: scale(1); }
       .sidebar .menu .list .menu-toggle:after {
-        content: '+';
+        font-family: 'Glyphicons Halflings';
+        content: "\e252";
+        margin-top: 6px;
+        font-size: 10px;
         color: white;
         -moz-transform: scale(0);
         -ms-transform: scale(0);
@@ -7651,12 +7657,13 @@ fieldset[disabled] .form-control {
           font-weight: 600;
           margin-left: 5px; }
           .sidebar .menu .list .ml-menu li.active a.toggled:not(.menu-toggle):before {
+            color: white;
             content: '\E315';
             font-family: 'Material Icons';
             position: relative;
-            font-size: 21px;
+            font-size: 18px;
             height: 20px;
-            top: -5px;
+            top: 0px;
             right: 0px; }
         .sidebar .menu .list .ml-menu li .ml-menu li a {
           padding-left: 80px; }

@@ -184,4 +184,10 @@ class DistrictController extends Controller
         $data = $data->select('id','name')->get()->toArray();
         return $this->sendResponse($data, "District retrieved successfully", 200);
     }
+
+    
+    public function findDistrict($id){
+        $districts = District::where('city_id',$id)->get();
+        return response()->json($districts,200);
+    }
 }

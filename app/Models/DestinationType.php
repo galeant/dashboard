@@ -4,12 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ActivityTag extends Model
+class DestinationType extends Model
 {
-    protected $table = 'activity_tags';
-    protected $hidden = 'id';
+    protected $table = 'destination_type';
     protected $fillable = [
         'name',
-        'description'
+        'name_EN'
     ];
 }

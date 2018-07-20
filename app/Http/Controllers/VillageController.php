@@ -185,4 +185,9 @@ class VillageController extends Controller
         $data = $data->select('id','name')->get()->toArray();
         return $this->sendResponse($data, "Village retrieved successfully", 200);
     }
+    
+    public function findVillage($id){
+        $villages = Village::where('district_id',$id)->get();
+        return response()->json($villages,200);
+    }
 }
