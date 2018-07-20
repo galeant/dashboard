@@ -270,6 +270,13 @@
 		                    
 		                </ul>
 		            </li>
+		            
+		            <li>
+		                <a href="{{ URL('/master/supplier') }}">
+		                    <i class="material-icons">person</i>
+		                    <span>Supplier</span>
+		                </a>
+		            </li>
 		            <li>
 		                <a href="{{ URL('/logout') }}">
 		                    <i class="material-icons">exit_to_app</i>
