@@ -71,7 +71,7 @@
                 <h2>All Place / Destination</h2>
             </div>
             <div class="body table-responsive">
-                <table class="table table-bordered table-striped table-hover dataTable">
+                <table class="table table-bordered table-striped table-hover dataTable" id="data-tables">
                     <thead>
                         <tr>
                             <th>Destination Type</th>
@@ -83,33 +83,6 @@
                             <th>Action</th>
                         </tr>
                     </thead> 
-                    <tbody id="listPlace">
-                    @foreach($destination as $d)
-                        <tr>
-                            <td>{{$d->destination_types->name}}</td>
-                            <td>{{$d->destination_name}}</td>
-                            <td>{{$d->provinces->name}}</td>
-                            <td>{{$d->cities->name}}</td>
-                            <td>{{$d->updated_at}}</td>
-                            <td>
-                                @if($d->status == "active")
-                                <div class="switch">
-                                    <label><input type="checkbox" id="status{{$d->id}}" onchange="updatestatus({{$d->id}})" checked><span class="lever"></span></label>
-                                </div>
-                                @else
-                                <div class="switch">
-                                    <label><input type="checkbox" id="status{{$d->id}}" onchange="updatestatus({{$d->id}})"><span class="lever"></span></label>
-                                </div>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{url('/master/destination/'.$d->id.'/edit')}}">
-                                    View Detail
-                                </a>
-                            </td>
-                        </tr>   
-                    @endforeach
-                         
                 </tbody>
                 </table>
                 
@@ -135,11 +108,35 @@
     <script src="{{ asset('js/demo.js') }}"></script>
     <script>
         $(document).ready(function(){
-            var table = $('.dataTable').DataTable({
+            $(document).ready(function(){ 
+            $('#data-tables').DataTable({
+                processing: true,
+                serverSide: true,
                 searching: false,
-                responsive: true,
-                order: [[4, "desc"]]
+                ajax: '/master/destination',
+                columns: [
+                    {data: 'destination_types.name'},
+                    {data: 'destination_name'},
+                    {data: 'provinces.name'},
+                    {data: 'cities.name'},
+                    {data: 'updated_at'},
+                    { 
+                        data: null, 
+                        name: 'status',
+                        "render": function ( data, type, full, meta ) {
+                            var statusPlace = "status"+data.id;
+                            if(data.status=="active"){
+                                return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')" checked><span class="lever"></span></label></div>';
+                            }
+                            else{
+                                return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')"><span class="lever"></span></label></div>';
+                            }
+                        }
+                    },
+                    {data: 'action'}
+                ]
             });
+        });
             $("#destination_type_id, #province_id, #city_id").change(function(){
                 var table = $('.dataTable').DataTable({
                     destroy: true,

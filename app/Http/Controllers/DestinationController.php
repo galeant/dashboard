@@ -22,17 +22,26 @@ class DestinationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $destination_type = DestinationType::all();
         $province = Province::all();
-        $destination = Destination::with('provinces', 'cities', 'destination_types')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        if($request->ajax())
+        {
+            $model = Destination::with('provinces', 'cities','destination_types')->get();
+            return Datatables::of($model)
+                // ->addColumn('status', function(Destination $data) {
+                //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
+                // })
+                ->addColumn('action', function(Destination $data) {
+                    return '<a href="destination/'.$data->id.'/edit"> View Detail </a>';
+                })
+            ->make(true);        
+        }
+        
         return view('destination.index', [
             'province' => $province,
-            'destination_type' => $destination_type,
-            'destination' => $destination
+            'destination_type' => $destination_type
         ]);
     }
 

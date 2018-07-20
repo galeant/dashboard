@@ -47,6 +47,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('/findCity/{id}','CityController@findCity');
 		Route::get('/findDistrict/{id}','DistrictController@findDistrict');
 		Route::get('/findVillage/{id}','VillageController@findVillage');
+
+		//Activity Tag
+		Route::resource('activity-tag', 'ActivityTagController');
+
+		//Supplier
+		Route::resource('supplier', 'SupplierController');
+
 	});
 	Route::group(['prefix' => 'json'], function(){
 		Route::get('country','CountryController@json');

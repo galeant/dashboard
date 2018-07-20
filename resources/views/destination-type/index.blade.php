@@ -40,7 +40,7 @@
                 <br><br>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <a href="/master/destination-type/create" class="btn bg-teal btn-block waves-effect">Add Country</a>
+                        <a href="/master/destination-type/create" class="btn bg-teal btn-block waves-effect">Add Destination Type</a>
                     </div>
                 </div>
                 <br>

@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Company List
-                    <small>Master Data / Company</small>
+                    Activity Tag List
+                    <small>Master Data / Activity Tag</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,16 +17,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Company
+                                All Activity Tag
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="{{ url('master/company/create') }}">NEW</a></li>
-                                    </ul>
+                                <li >
+                                    <a href="/master/activity-tag/create" class="btn bg-teal btn-block waves-effect">Add Activity Tag</a>
                                 </li>
                             </ul>
                         </div>
@@ -37,6 +32,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Description</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -52,26 +48,25 @@
 @stop
 @section('head-js')
 @parent
-<!-- Jquery Core Js -->
-
-<script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
-<!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
+    <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
     <script type="text/javascript">
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/company',
+	        ajax: '/master/activity-tag',
 	        columns: [
 	            {data: 'id'},
-	            {data: 'company_name'},
+	            {data: 'name'},
+	            {data: 'description'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}
