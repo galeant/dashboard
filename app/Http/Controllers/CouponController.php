@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Members;
+use App\Models\coupons;
 use Validator;
 use Datatables;
 use DB;
 
-class MembersController extends Controller
+class CouponController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,20 +20,20 @@ class MembersController extends Controller
         //
         if($request->ajax())
         {
-            $model = Members::query();
+            $model = Coupons::query();
             return Datatables::eloquent($model)
-            ->addColumn('action', function(Members $data) {
-                return '<a href="/members/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+            ->addColumn('action', function(coupons $data) {
+                return '<a href="coupon/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/members/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="coupon/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/admin/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
         }
-        return view('members.index');
+        return view('coupon.index');
     }
 
     /**
@@ -43,7 +43,7 @@ class MembersController extends Controller
      */
     public function create()
     {
-      return view('members.form_create');
+      return view('coupon.form_create');
     }
 
 
@@ -83,14 +83,14 @@ class MembersController extends Controller
             $data->password = md5($data->email);
             if($data->save()){
                 DB::commit();
-                return redirect("members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
             }else{
-                return redirect("members/create")->with('message', 'Error Database;');
+                return redirect("admin/members/create")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("members/create")->with('message', $exception->getMessage());
+            return redirect("admin/members/create")->with('message', $exception->getMessage());
         }
     }
 
@@ -156,14 +156,14 @@ class MembersController extends Controller
 
              if($data->save()){
                 DB::commit();
-                return redirect("members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
             }else{
-                return redirect("members/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("admin/members/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("members/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("admin/members/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 

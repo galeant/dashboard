@@ -60,9 +60,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-guide', 'TourGuideController');
 	});
 
-	Route::group(['prefix' => 'admin'],function(){
-		Route::resource('members', 'MembersController');
-	});
+ 	Route::resource('members', 'MembersController');
+	Route::resource('coupon', 'CouponController');
 
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
