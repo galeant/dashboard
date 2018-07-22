@@ -62,7 +62,7 @@ class CompanyController extends Controller
         // }
         $company = Company::create([
             'company_name'=> $request->company_name,
-            'full_name'=> $request->full_name,
+            'fullname'=> $request->full_name,
             'phone'=> $request->format.'-'.$request->phone,
             'email'=> $request->email,
             'password'=> (new BcryptHasher)->make('admin'),
@@ -130,7 +130,7 @@ class CompanyController extends Controller
         $company = Company::where('id',$id)
         ->update([
             'company_name'=> $request->company_name,
-            'full_name'=> $request->full_name,
+            'fullname'=> $request->full_name,
             'phone'=> $request->format.'-'.$request->phone,
             'email'=> $request->email,
             'password'=> (new BcryptHasher)->make('admin'),
