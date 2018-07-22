@@ -68,9 +68,9 @@
 	        columns: [
 	            {data: 'id'},
                 {data: 'name'},
-                {data: 'district.name'},
-                {data: 'district.city_name'},
-	            {data: 'district.postal_code'},
+                {data: 'district_name'},
+                {data: 'city_name'},
+	            {data: 'postal_code'},
 	            {data: 'created_at'},
 	            {data: 'action'}
 	        ]

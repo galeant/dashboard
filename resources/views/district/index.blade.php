@@ -35,7 +35,6 @@
                                             <th>District Name</th>
                                             <th>City Name</th>
                                             <th>City Type</th>
-                                            <th>Postal Code</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,7 +69,6 @@
                 {data: 'name'},
                 {data: 'city_name'},
                 {data: 'city_type'},
-	            {data: 'postal_code'},
 	            {data: 'created_at'},
 	            {data: 'action'}
 	        ]

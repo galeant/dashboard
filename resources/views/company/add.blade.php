@@ -44,7 +44,7 @@
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" name="full_name" required>
+                                <input type="text" class="form-control" name="fullname" required>
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
@@ -145,7 +145,7 @@
                                     <label for="1bo">Yes</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input name="bookingSystem" type="radio" id="2bo" class="radio-col-deep-orange" value="2" checked/>
+                                    <input name="bookingSystem" type="radio" id="2bo" class="radio-col-deep-orange" value="0" checked/>
                                     <label for="2bo">No</label>
                                 </div>
                             </div>
@@ -180,10 +180,10 @@
                         <div class="row" style="margin:0px">
                             <div class="col-md-3 col-sm-3 col-xs-5 valid-info">
                                 <h5>Title*:</h5>
-                                <select class="form-control" name="bank_account_holder_title" required>
-                                    <option>Mr</option>
-                                    <option>Mrs</option>
-                                    <option>Miss</option>
+                                <select class="form-control" name="salutation" required>
+                                    @foreach(Helpers::salutation() as $index => $value)
+                                        <option value="{{$index}}">{{$value}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-7 col-sm-7 col-xs-12">

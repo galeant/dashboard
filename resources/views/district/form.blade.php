@@ -55,10 +55,6 @@
 					                <label>Name</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
 					            </div>
-						    	<div class="form-group m-b-20">
-					                <label>Postal Code</label>
-					                 {{ Form::text('postal_code', null, ['class' => 'form-control','placeholder'=>'Please Enter Postal Code','id'=>'postal_code','required'=>'required']) }}
-					            </div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-3 col-lg-offset-9">
 					            		<button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>

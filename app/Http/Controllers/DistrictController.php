@@ -57,8 +57,7 @@ class DistrictController extends Controller
         // dd($request->all());
         $validation = Validator::make($request->all(), [
             'city_id' => 'required|numeric',
-            'name' => 'required',
-            'postal_code' => 'required|numeric'
+            'name' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -73,7 +72,6 @@ class DistrictController extends Controller
             $data->name = $request->input('name');
             $data->city_name = $city->name;
             $data->city_type = $city->type;
-            $data->postal_code = $request->input('postal_code');
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');
@@ -95,7 +93,7 @@ class DistrictController extends Controller
      */
     public function show($id)
     {
-        //
+
     }
     /**
      * Show the form for editing the specified resource.
@@ -124,8 +122,7 @@ class DistrictController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'city_id' => 'required|numeric',
-            'name' => 'required',
-            'postal_code' => 'required|numeric'
+            'name' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -140,7 +137,6 @@ class DistrictController extends Controller
             $data->name = $request->input('name');
             $data->city_name = $city->name;
             $data->city_type = $city->type;
-            $data->postal_code = $request->input('postal_code');
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');

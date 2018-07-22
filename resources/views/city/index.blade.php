@@ -34,7 +34,6 @@
                                             <th>Name</th>
                                             <th>Type</th>
                                             <th>Created At</th>
-                                            <th>Updated At</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -68,7 +67,6 @@
                 {data: 'name'},
 	            {data: 'type'},
 	            {data: 'created_at'},
-	            {data: 'updated_at'},
 	            {data: 'action'}
 	        ]
 	    });

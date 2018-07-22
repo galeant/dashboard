@@ -65,7 +65,6 @@ class CompanyController extends Controller
             'fullname'=> $request->full_name,
             'phone'=> $request->format.'-'.$request->phone,
             'email'=> $request->email,
-            'password'=> (new BcryptHasher)->make('admin'),
             'role'=> $request->role,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
             'company_email'=> $request->company_email,
