@@ -133,9 +133,9 @@ class MembersController extends Controller
             "gendre" => "required",
             "firstname" => "required",
             "lastname" => "required",
-            "username" => "required",
-            "email" => "required",
-            "phone" => "required",
+            "username" => "required|unique:users",
+            "email" => "required|unique:users",
+            "phone" => "required|unique:users",
             "status" => "required"
         ]);
         // Check if it fails //
