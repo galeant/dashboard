@@ -1,7 +1,13 @@
 <?php
 
 return [
-
+    'cdn' => array(
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => "css|js|eot|woff|woff2|ttf|jpg|jpeg|png|gif|svg|mp4|bmp",
+        "s3-ap-southeast-1.amazonaws.com/".env('AWS_BUCKET','kaizen-application') => "css|js|eot|woff|ttf",
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => "jpg|jpeg|png|gif|svg",
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => ""
+            
+    ),
     /*
     |--------------------------------------------------------------------------
     | Application Name

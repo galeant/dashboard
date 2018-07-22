@@ -211,7 +211,7 @@
                             @if($company->bank_account_scan_path != null || $company->bank_account_scan_path != '')
                             <div class="col-md-8" id="value" cat="bank">
                                 <div class="thumbnail">
-                                    <img src="{{$company->bank_account_scan_path}}">
+                                    <img src="{{cdn($company->bank_account_scan_path)}}">
                                     <div class="caption">
                                         <button type="button" class="btn bg-red waves-effect" id="change">
                                             <i class="material-icons">replay</i>
@@ -264,7 +264,7 @@
                                 @if($company->akta_path != null || $company->akta_path != '')
                                 <div class="col-md-6" id="value" cat="akta">
                                     <div class="thumbnail">
-                                        <img src="{{$company->akta_path}}">
+                                        <img src="{{cdn($company->akta_path)}}">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -300,7 +300,7 @@
                                 @if($company->siup_path != null || $company->siup_path != '')
                                 <div class="col-md-6" id="value" cat="siup">
                                     <div class="thumbnail">
-                                        <img src="{{$company->siup_path}}">
+                                        <img src="{{cdn($company->siup_path)}}">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -336,7 +336,7 @@
                                 @if($company->npwp_path != null || $company->npwp_path != '')
                                 <div class="col-md-6" id="value" cat="npwp">
                                     <div class="thumbnail">
-                                        <img src="{{$company->npwp_path}}">
+                                        <img src="{{cdn($company->npwp_path)}}">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -372,7 +372,7 @@
                                 @if($company->ktp_path != null || $company->ktp_path != '')
                                 <div class="col-md-6" id="value" cat="ktp">
                                     <div class="thumbnail">
-                                        <img src="{{$company->ktp_path}}">
+                                        <img src="{{cdn($company->ktp_path)}}">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -408,7 +408,7 @@
                                 @if($company->evidance_path != null || $company->evidance_path != '')
                                 <div class="col-md-6" id="value" cat="evi">
                                     <div class="thumbnail">
-                                        <img src="{{$company->evidance_path }}">
+                                        <img src="{{cdn($company->evidance_path) }}">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>

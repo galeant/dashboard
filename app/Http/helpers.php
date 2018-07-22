@@ -10,6 +10,9 @@ class helpers{
 	public static function salutation(){
 		return ['Mr'=> 'Mr.','Mrs'=>'Mrs.','Ms'=>'Ms.'];
 	}
+	public static function bankName(){
+		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB'];
+	}
 	public static function typeCity(){
 		return ['Kota'=> 'Kota','Kabupaten'=>'Kabupaten'];
 	}
@@ -114,7 +117,8 @@ class helpers{
 			        		'extension' => $extension,
 			        		'size' => $sizeimg,
 			        		'content_type' => $mime,
-			        		'filename' => $filename
+			        		'filename' => $filename,
+			        		'path_full' => $path.'/'.$filename
 		        	    ];
         	}
         } catch (Exception $e) {
