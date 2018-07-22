@@ -15,7 +15,7 @@ class City extends Model {
      * @var stringA
      */
     protected $table = 'cities';
-    protected $fillable = ['province_id','name'];
+    protected $fillable = ['province_id','name','type'];
 
     public function province()
     {

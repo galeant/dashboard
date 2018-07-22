@@ -1,0 +1,41 @@
+.dd-avatar{
+	width: 100%;
+	min-height: 250px;
+	/*background-color: red;*/
+	/*margin-bottom: 15px;*/
+	border: 1px solid #ddd;
+}
+.dd-b-line{
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 20px !important;
+}
+.dd-title{
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #ddd;
+}
+.label-desc p{
+	text-align: right;
+}
+.label-desc label{
+	margin-top: 0px !important; 
+	margin-bottom: 0px;
+	text-align: right;
+}
+.m-b-10-i{
+	margin-bottom: 10px !important;
+}
+.m-b-15-i{
+	margin-bottom: 15px !important;
+}
+.m-b-20-i{
+	margin-bottom: 20px !important;
+}
+#c_p_picture{
+	/*text-decoration: none;
+	font-size: 1em;
+	color: #e47514;
+	float:right;
+	margin-top: -5px;*/
+}
