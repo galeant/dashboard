@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Members List
-                    <small>Admin Data / Members</small>
+                    Coupon List
+                    <small>Admin Data / Coupon</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,11 +17,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Members
+                                All Coupon
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li>
-                                    <a href="/members/create" class="btn bg-teal btn-block waves-effect">Add Member</a>
+                                    <a href="/coupon/create" class="btn bg-teal btn-block waves-effect">Add Coupon</a>
                                 </li>
                             </ul>
                         </div>
@@ -32,8 +32,10 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Created At</th>
-                                            <th>Updated At</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -63,12 +65,14 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/members',
+	        ajax: '/coupon',
 	        columns: [
               {data: 'id'},
-              {data: 'firstname'},
-              {data: 'created_at'},
-              {data: 'updated_at'},
+              {data: 'name'},
+              {data: 'type'},
+              {data: 'discount_value'},
+              {data: 'start_date'},
+              {data: 'end_date'},
               {data: 'action'}
 	        ]
 	    });

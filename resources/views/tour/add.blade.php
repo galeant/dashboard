@@ -65,7 +65,7 @@
                     <h2>Add Tour</h2>
                 </div>
                 <div class="body">
-                <form method="POST" action="{{ url('master/tour') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('master/product') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row" id="wizard">
                         <div class="col-md-12" id="general_information">
@@ -76,6 +76,16 @@
                                     </div>
                                     <div class="body">
                                         <div class="row" style="margin: 0px 3px 0px 3px;">
+                                            <div class="col-md-6 valid-info" >
+                                                <h5>Company</h5>
+                                                <select name="company" class="form-control">
+                                                    @foreach($companies as $company)
+                                                    <option value="{{$company->id}}">{{$company->company_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin: 0px 3px 0px 3px;">
                                             <div class="col-md-3 valid-info" >
                                                 <h5>Product Category</h5>
                                                 <select name="productCategory" class="form-control">
@@ -85,8 +95,8 @@
                                             <div class="col-md-3 valid-info">
                                                 <h5>Type</h5>
                                                 <select name="productType" id="productType" class="form-control">
-                                                    <option >Open Group</option>
-                                                    <option >Private Group</option>
+                                                    <option value="open">Open Group</option>
+                                                    <option value="private">Private Group</option>
                                                 </select>
                                             </div>
                                             <div class="col-md-6" style="" id="productTypeOpen">
@@ -301,7 +311,11 @@
                                         <div class="row">
                                             <div class="col-md-6 valid-info">
                                                 <h5>How would you describe the activities in this product?</h5>
-                                                <select class="form-control" name="activityTag[]" multiple="multiple" style="width: 100%" required></select>
+                                                <select class="form-control" name="activityTag[]" multiple="multiple" style="width: 100%" required>
+                                                    @foreach($activities as $activity)
+                                                    <option value="{{$activity->id}}">{{$activity->name}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -380,7 +394,7 @@
                                     </div>
                                     <div class="body">
                                         <div class="row">
-                                            <div class="col-md-6" id="price_list" style="display: none">
+                                            <div class="col-md-12" id="price_list" style="display: none">
                                                 <div class="row">
                                                     <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
                                                         <h5><i class="material-icons">person</i></h5>
@@ -510,6 +524,72 @@
 @stop
 @section('head-js')
 @parent
+<!-- GMAP -->
+    <script>
+		var lat,lng,address,city,marker;
+		function initAutocomplete() {
+			
+			var input = document.getElementById('pac-input');
+			var searchBox = new google.maps.places.SearchBox(input);
+			
+			searchBox.addListener('places_changed', function() {
+				var places = searchBox.getPlaces();
+				console.log(places)
+				lat = places[0]["geometry"]["viewport"]["f"]["f"];
+				lng = places[0]["geometry"]["viewport"]["b"]["f"];
+				address = places[0]["formatted_address"];
+				city = places[0]["address_components"][5]["long_name"];
+				var url =  places[0]["url"]
+				document.getElementById('geo-lat').value = lat;
+				document.getElementById('geo-long').value = lng;
+				if (places.length == 0) {
+					return;
+				}
+				var bounds = new google.maps.LatLngBounds();
+				places.forEach(function(place) {
+				if (!place.geometry) {
+					console.log("Returned place contains no geometry");
+					return;
+				}
+				var icon = {
+					url: place.icon,
+					size: new google.maps.Size(71, 71),
+					origin: new google.maps.Point(0, 0),
+					anchor: new google.maps.Point(17, 34),
+					scaledSize: new google.maps.Size(25, 25)
+				};
+				
+				marker = new google.maps.Marker({
+					map: map,
+					icon: icon,
+					title: place.name,
+					draggable:true,
+					position: place.geometry.location
+				});
+				google.maps.event.addListener(map, 'click', function(event) {
+					lat = event.latLng.lat();
+					lng = event.latLng.lng();
+					placeMarker(event.latLng);
+				});
+				if (place.geometry.viewport) {
+					bounds.union(place.geometry.viewport);
+				} else {
+					bounds.extend(place.geometry.location);
+				}
+				});
+				map.fitBounds(bounds);
+			});   
+		}
+		function getLatLng(){
+			document.getElementById('geo-lat').value = lat;
+			document.getElementById('geo-long').value = lng;
+			document.getElementById('geo-address').value = address;
+			document.getElementById('geo-city').value = address;
+			$('#mapModal').modal('toggle');
+		}
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXELYNJkxo43slp8y_FFng0KL4YXSsOo4&libraries=places&callback=initAutocomplete" async defer></script>
+
     <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
@@ -684,18 +764,18 @@
         // SCHEDULE
             $("select[name='day']").change(function(){
                 day = $(this).val();
-                $("#dinamic_schedule input").val(null);
+                $("#dinamic_schedule input:not(#scheduleField6)").val(null);
                 $("#clone_dinamic_schedule").empty();
             });
 
             $("select[name='hours']").change(function(){
                 hours = $(this).val();
-                $("#dinamic_schedule input").val(null);
+                $("#dinamic_schedule input:not(#scheduleField6)").val(null);
                 $("#clone_dinamic_schedule").empty();
             });
             $("select[name='minutes']").change(function(){
                 minutes = $(this).val();
-                $("#dinamic_schedule input").val(null);
+                $("#dinamic_schedule input:not(#scheduleField6)").val(null);
                 $("#clone_dinamic_schedule").empty();
             });
             $("#dinamic_schedule").find("#scheduleField3").change(function(){
@@ -1007,72 +1087,34 @@
                 $(this).closest("#dinamic_destination").remove();
             });
         // ACTIVITY TAG
-            $('select[name="activityTag[]"]').select2({
-				placeholder: 'Cari...',
-				ajax: {
-				url: "{{ url('/activity')}}",
-				dataType: 'json',
-				delay: 0,
-				processResults: function (data) {
-					console.log(data)
-					return {
-						results:  $.map(data, function (item) {
-						return {
-							text: item.name,
-							id: item.activityId
-							}
-						})
-					};
-				},
-				cache: true
-				}
-			});
+            $('select[name="activityTag[]"]').select2();
         // GENERATE ITINERARY
             $("#nav").find("#next").click(function(){
 				$("#itineraryGenerate").empty();
 				$("#itinerary_list").show();
-				var val = $("input[name='scheduleType']:radio").attr("sel");
-				console.log(val);
-				if(val == 1){
-					$("#itineraryGenerate").empty();
-					$("#itinerary_list").show();
-					var days = $("select[name='day']").val();
-					console.log(days);
-					var j = 0;
-					var i;
-					for(i=0;i<days;i++)
-					{ 
-						$("#itinerary_list").clone().appendTo("#itineraryGenerate").addClass("body itinerary_list"+i);   
-						$(".itinerary_list"+i+" h5:first").append("<b>Days "+(i+1)+"</b>"); 
-						$(".itinerary_list"+i+" #field_itinerary_input1").attr("name","itinerary["+i+"][day]").val((i+1));
-						$(".itinerary_list"+i+" #field_itinerary_input2").attr("name","itinerary["+i+"][list][0][startTime]").mask('00:00:00');
-						$(".itinerary_list"+i+" #field_itinerary_input3").attr("name","itinerary["+i+"][list][0][endTime]").mask("00:00:00");
-						$(".itinerary_list"+i+" #field_itinerary_input7").attr("name","itinerary["+i+"][list][0][description]");
-						$(".itinerary_list"+i+" .row .col-md-3 button").attr("onclick","addItineraryRow("+i+")");
-					}
-					$("#itinerary_list").hide();
-				}else{
-					var days = 1;
-					var j = 0;
-					var i;
-					for(i=0;i<days;i++)
-					{ 
-						$("#itinerary_list").clone().appendTo("#itineraryGenerate").addClass("body itinerary_list"+i);   
-						$(".itinerary_list"+i+" h5:first").append("<b>Days "+(i+1)+"</b>"); 
-						$(".itinerary_list"+i+" #field_itinerary_input1").attr("name","itinerary["+i+"][day]").val((i+1));
-						$(".itinerary_list"+i+" #field_itinerary_input2").attr("name","itinerary["+i+"][list][0][startTime]").mask('00:00:00');
-						$(".itinerary_list"+i+" #field_itinerary_input3").attr("name","itinerary["+i+"][list][0][endTime]").mask('00:00:00');
-						$(".itinerary_list"+i+" #field_itinerary_input7").attr("name","itinerary["+i+"][list][0][description]");
-						$(".itinerary_list"+i+" .row .col-md-3 button").attr("onclick","addItineraryRow("+i+")");
-					}
-				}
-				$("#itinerary_list").hide();
+				var scheType = $("input[name='scheduleType']:radio").attr("sel");
+                var days, itic;
+				if(scheType == 1){
+                    days = $("select[name='day']").val();
+                }else{
+                    days = 1;
+                }
+                for(itic=0;itic<days;itic++){ 
+                    $("#itinerary_list").clone().appendTo("#itineraryGenerate").addClass("body itinerary_list"+itic);   
+                    $(".itinerary_list"+itic+" h5:first").append("<b>Days "+(itic+1)+"</b>"); 
+                    $(".itinerary_list"+itic+" #field_itinerary_input1").attr("name","itinerary["+itic+"][day]").val((itic+1));
+                    $(".itinerary_list"+itic+" #field_itinerary_input2").attr("name","itinerary["+itic+"][startTime]").mask('00:00:00');
+                    $(".itinerary_list"+itic+" #field_itinerary_input3").attr("name","itinerary["+itic+"][endTime]").mask("00:00:00");
+                    $(".itinerary_list"+itic+" #field_itinerary_input7").attr("name","itinerary["+itic+"][description]");
+                    $(".itinerary_list"+itic+" .row .col-md-3 button").attr("onclick","addItineraryRow("+itic+")");
+                }
+                $("#itinerary_list").hide();			
 			});
         // PRICE
             $("input[name='priceKurs']:radio").change(function () {
+                var priceKurs = $(this).val();
                 $("#price_row").show();
-                var val = this.value;
-                if(val == 1){
+                if(priceKurs == 1){
                     $("#price_usd, #price_list_container #price_usd").hide();
                     $("#price_usd input, #price_list_container #price_usd input").val(null);
                 }else{
@@ -1082,43 +1124,41 @@
             $("#price_type").change(function () {
             	var maxPerson = $("input[name='maxPerson']:text").val();
                 var dif = Math.round(maxPerson/2)-1;
-                var val = $(this).val();
-                if(val == 1)
-                {
+                var prictType = $(this).val();
+                if(prictType == 1){
                     $("#price_fix").show();
                     $("#price_table_container").hide();
                     $("#price_list_container_left,#price_list_container_right").empty();
                 }else{
                     $("#price_fix").hide();
                     $("#price_table_container, #price_list").show();    
-                    for(var i=0;i<=dif;i++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_left").attr("id","price_list"+i);
-                        $("#price_list"+i+" .col-md-1 h5").append((i+1));
-                        $("#price_list"+i+" #price_list_field1").val((i+1));
-                        $("#price_list"+i+" #price_list_field1").attr("name","price["+i+"][people]");
-                        $("#price_list"+i+" #price_list_field2").attr("name","price["+i+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+i+" #price_list_field3").attr("name","price["+i+"][USD]").mask('0.000.000.000', {reverse: true});
+                    for(var pric=0;pric<=dif;pric++){ 
+                        $("#price_list").clone().appendTo("#price_list_container_left").attr("id","price_list"+pric);
+                        $("#price_list"+pric+" .col-md-1 h5").append((pric+1));
+                        $("#price_list"+pric+" #price_list_field1").val((pric+1));
+                        $("#price_list"+pric+" #price_list_field1").attr("name","price["+pric+"][people]");
+                        $("#price_list"+pric+" #price_list_field2").attr("name","price["+pric+"][IDR]").mask('0.000.000.000', {reverse: true});
+                        $("#price_list"+pric+" #price_list_field3").attr("name","price["+pric+"][USD]").mask('0.000.000.000', {reverse: true});
                     }
 
-                    for(var i=(dif+1);i<maxPerson;i++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_right").attr("id","price_list"+i);
-                        $("#price_list"+i+" .col-md-1 h5").append((i+1));
-                        $("#price_list"+i+" #price_list_field1").val((i+1));
-                        $("#price_list"+i+" #price_list_field1").attr("name","price["+i+"][people]");
-                        $("#price_list"+i+" #price_list_field2").attr("name","price["+i+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+i+" #price_list_field3").attr("name","price["+i+"][USD]").mask('0.000.000.000', {reverse: true});
+                    for(var prik=(dif+1);prik<maxPerson;prik++){ 
+                        $("#price_list").clone().appendTo("#price_list_container_right").attr("id","price_list"+prik);
+                        $("#price_list"+prik+" .col-md-1 h5").append((prik+1));
+                        $("#price_list"+prik+" #price_list_field1").val((prik+1));
+                        $("#price_list"+prik+" #price_list_field1").attr("name","price["+prik+"][people]");
+                        $("#price_list"+prik+" #price_list_field2").attr("name","price["+prik+"][IDR]").mask('0.000.000.000', {reverse: true});
+                        $("#price_list"+prik+" #price_list_field3").attr("name","price["+prik+"][USD]").mask('0.000.000.000', {reverse: true});
                     }
                     $("#price_list").hide();
                 }
             });
             $("input[name='cancellationType']:radio").change(function () {
-            var val = this.value;
-            if(val == 3)
-            {
-                $("#cancel_policy").show(100);
-            }else{
-                $("#cancel_policy").hide(100);
-            }
+                var cancelType = $(this).val();
+                if(cancelType == 3){
+                    $("#cancel_policy").show();
+                }else{
+                    $("#cancel_policy").hide();
+                }
             });
             $("select[name='priceIncludes[]']").select2({
                 tags:true

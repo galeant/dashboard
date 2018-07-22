@@ -23,7 +23,7 @@
     <!-- Animation Css -->
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
-	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" /> 
+	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
 
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
@@ -84,7 +84,7 @@
 		                </a>
 		            </li>
 		            <li>
-		                <a href="{{ URL('/admin/members') }}">
+		                <a href="{{ URL('/members') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Members</span>
 		                </a>
@@ -115,10 +115,10 @@
 		                            <span>Registration - Car Rental (0)</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
-		            
+
 		            <li {{{ (Request::is('product*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">people</i>
@@ -135,10 +135,10 @@
 		                            <span>TourGuide</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
-		            
+
 		            <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">person</i>
@@ -193,6 +193,11 @@
 		                            <span>Company</span>
 		                        </a>
 		                    </li>
+							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
+														<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
+																<span>Coupon</span>
+														</a>
+												</li>
 							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
 		                            <span>Tour</span>
@@ -236,7 +241,7 @@
 				                    </li>
 	                            </ul>
                             </li>
-		                    
+
 		                    <li {{{ (Request::is('master/tour-guide-service*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/tour-guide-service') }}" class=" waves-effect waves-block">
 		                            <span>Tour Guide Service</span>
@@ -267,7 +272,7 @@
 		                            <span>Pigijo Company Setting</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
 		            <li>
