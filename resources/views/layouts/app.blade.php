@@ -30,6 +30,7 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{asset('css/themes/all-themes.css')}}" rel="stylesheet" />
+		<link href="{{asset('plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}" rel="stylesheet" />
     @show
 </head>
 <body class="{{{ isset($class_body) ? $class_body : 'theme-red' }}}">
