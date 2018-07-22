@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\District;
+use App\Models\City;
 use Datatables;
 use Validator;
 use DB;
@@ -56,7 +57,8 @@ class DistrictController extends Controller
         // dd($request->all());
         $validation = Validator::make($request->all(), [
             'city_id' => 'required|numeric',
-            'name' => 'required'
+            'name' => 'required',
+            'postal_code' => 'required|numeric'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -65,9 +67,13 @@ class DistrictController extends Controller
         }
         DB::beginTransaction();
         try{
+            $city = City::find($request->input('city_id'));
             $data = new District();
             $data->city_id = $request->input('city_id');
             $data->name = $request->input('name');
+            $data->city_name = $city->name;
+            $data->city_type = $city->type;
+            $data->postal_code = $request->input('postal_code');
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');
@@ -118,7 +124,8 @@ class DistrictController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'city_id' => 'required|numeric',
-            'name' => 'required'
+            'name' => 'required',
+            'postal_code' => 'required|numeric'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -127,9 +134,13 @@ class DistrictController extends Controller
         }
         DB::beginTransaction();
         try{
+            $city = City::find($request->input('city_id'));
             $data = District::find($id);
             $data->city_id = $request->input('city_id');
             $data->name = $request->input('name');
+            $data->city_name = $city->name;
+            $data->city_type = $city->type;
+            $data->postal_code = $request->input('postal_code');
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');

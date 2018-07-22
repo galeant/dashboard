@@ -32,9 +32,11 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
+                                            <th>District Name</th>
+                                            <th>City Name</th>
+                                            <th>City Type</th>
+                                            <th>Postal Code</th>
                                             <th>Created At</th>
-                                            <th>Updated At</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -65,9 +67,11 @@
 	        ajax: '/master/district',
 	        columns: [
 	            {data: 'id'},
-	            {data: 'name'},
+                {data: 'name'},
+                {data: 'city_name'},
+                {data: 'city_type'},
+	            {data: 'postal_code'},
 	            {data: 'created_at'},
-	            {data: 'updated_at'},
 	            {data: 'action'}
 	        ]
 	    });

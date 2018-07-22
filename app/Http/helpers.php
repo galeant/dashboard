@@ -10,6 +10,9 @@ class helpers{
 	public static function salutation(){
 		return ['Mr'=> 'Mr.','Mrs'=>'Mrs.','Ms'=>'Ms.'];
 	}
+	public static function typeCity(){
+		return ['Kota'=> 'Kota','Kabupaten'=>'Kabupaten'];
+	}
 	public static function encodeSpecialChar($string)
 	{
 	    $replace  = str_replace(' ', '-', $string);

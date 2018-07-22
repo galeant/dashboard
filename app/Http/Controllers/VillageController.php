@@ -19,7 +19,7 @@ class VillageController extends Controller
         //
         if($request->ajax())
         {
-            $model = Village::query();
+            $model = Village::with('district')->select('villages.*');
             return Datatables::eloquent($model)
             ->addColumn('action', function(Village $data) {
                 return '<a href="/master/village/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
