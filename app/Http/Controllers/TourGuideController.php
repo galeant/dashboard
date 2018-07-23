@@ -163,7 +163,7 @@ class TourGuideController extends Controller
             TourGuideServicePrice::updateOrCreate(['tour_guide_id'=>$save->id,'tour_guide_service_id' =>$serviceId],['service_name' =>$service->name,'rate_per_day' => $request->input('rate_per_day_'.$serviceId),'rate_per_day2' => $request->input('rate_per_day2_'.$serviceId)]);
         }
         DB::commit();
-        return redirect("product/tour-guide/".$save->id."/edit")->with('message', 'Successfully Created Tour Guide');
+        return redirect("product/tour-guide")->with('message', 'Successfully Created Tour Guide');
         } catch (Exception $e) {
             DB::rollBack();
             \Log::info($exception->getMessage());
@@ -315,5 +315,19 @@ class TourGuideController extends Controller
     public function destroy($id)
     {
         //
+        DB::beginTransaction();
+        try{
+            $data = TourGuide::find($id);
+            if($data->delete()){
+                DB::commit();
+                return $this->sendResponse($data, "Delete TourGuide ".$data->name." successfully", 200);
+            }else{
+                return $this->sendResponse($data, "Error Database;", 200);
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return $this->sendResponse($data, $exception->getMessage() , 200);
+        }
     }
 }
