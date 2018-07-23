@@ -16,5 +16,10 @@ class Province extends Model {
      */
     protected $table = 'provinces';
     protected $fillable = ['country_id','name'];
+
+    public function country()
+    {
+        return $this->hasOne('App\Models\Country','id','country_id');
+    }
 }
 

@@ -16,5 +16,10 @@ class District extends Model {
      */
     protected $table = 'districts';
     protected $fillable = ['city_id','name'];
+    
+    public function city()
+    {
+        return $this->hasOne('App\Models\City','id','city_id');
+    }
 }
 

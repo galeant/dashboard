@@ -23,9 +23,7 @@
     <!-- Animation Css -->
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
-    <!-- Bootstrap Select Css -->
-    <!-- <link href="{{asset('plugins/bootstrap-select/css/bootstrap-select.css')}}" rel="stylesheet" /> -->
-
+	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
@@ -85,7 +83,7 @@
 		                </a>
 		            </li>
 		            <li>
-		                <a href="{{ URL('/admin/members') }}">
+		                <a href="{{ URL('/members') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Members</span>
 		                </a>
@@ -116,10 +114,10 @@
 		                            <span>Registration - Car Rental (0)</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
-		            
+
 		            <li {{{ (Request::is('product*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">people</i>
@@ -136,10 +134,10 @@
 		                            <span>TourGuide</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
-		            
+
 		            <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">person</i>
@@ -204,38 +202,67 @@
 		                            <span>Country</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/province*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/province') }}" class=" waves-effect waves-block">
-		                            <span>Province</span>
+							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
+								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
+										<span>Coupon</span>
+								</a>
+							</li>
+							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
+		                            <span>Tour</span>
 		                        </a>
 		                    </li>
-		                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
-		                            <span>City</span>
+		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
+		                            <span>Language</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/district*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/master/district') }}" class=" waves-effect waves-block">
-		                            <span>District</span>
-		                        </a>
-		                    </li>
-		                    <li {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/village') }}" class=" waves-effect waves-block">
-		                            <span>Village</span>
-		                        </a>
-		                    </li>
+		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
+		                    {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
+			                    <a href="javascript:void(0);" class="menu-toggle">
+	                                <span>Location</span>
+	                            </a>
+	                            <ul class="ml-menu">
+	                            	<li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
+				                            <span>Country</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/province*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/province') }}" class=" waves-effect waves-block">
+				                            <span>Province</span>
+				                        </a>
+				                    </li>
+				                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
+				                            <span>City</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/district*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('/master/district') }}" class=" waves-effect waves-block">
+				                            <span>District</span>
+				                        </a>
+				                    </li>
+				                    <li {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/village') }}" class=" waves-effect waves-block">
+				                            <span>Village</span>
+				                        </a>
+				                    </li>
+	                            </ul>
+                            </li>
+
 		                    <li {{{ (Request::is('master/tour-guide-service*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/tour-guide-service') }}" class=" waves-effect waves-block">
 		                            <span>Tour Guide Service</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/place/*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/place') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('master/destination/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/destination') }}" class=" waves-effect waves-block">
 		                            <span>Place Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/master/place-type/*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/master/place-type/index') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('master/destination-type/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/destination-type') }}" class=" waves-effect waves-block">
 		                            <span>Place Type Management</span>
 		                        </a>
 		                    </li>
@@ -254,7 +281,7 @@
 		                            <span>Pigijo Company Setting</span>
 		                        </a>
 		                    </li>
-		                    
+
 		                </ul>
 		            </li>
 		            <li>

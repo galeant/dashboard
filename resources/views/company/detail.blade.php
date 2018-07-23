@@ -34,14 +34,11 @@
                 <div class="header">
                     <div class="row">
                         <div class="col-md-3" style="margin-top:10px">
-                            <h2>Company Detail</h2>
+                            <h2>Detail Company</h2>
                         </div>
                         <div class="col-md-1 col-md-offset-8">
-                            <button type="button" class="btn bg-deep-orange waves-effect" id="edit">
+                            <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
                                 <i class="material-icons">settings</i>
-                            </button>
-                            <button type="button" class="btn bg-teal waves-effect" id="back" style="display: none">
-                                <i class="material-icons">replay</i>
                             </button>
                         </div>
                     </div>
@@ -53,13 +50,13 @@
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" value="{{$company->full_name}}" name="full_name">
+                                <input type="text" class="form-control" name="full_name" value="{{$company->full_name}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                <input type="text" class="form-control" value="{{$company->email}}" name="email">
+                                <input type="email" class="form-control" name="email" value="{{$company->email}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
@@ -85,7 +82,7 @@
                         <div class="col-md-10 mg-top-10px" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Company / Business Name*:</h5>
-                                <input type="text" class="form-control" value="{{$company->company_name}}" name="company_name">
+                                <input type="text" class="form-control" name="company_name" value="{{$company->company_name}}">
                             </div>
                         </div>
                         <div class="row" style="margin:0px">
@@ -95,7 +92,7 @@
                                     <div class="row" style="margin: 0px">
                                         <div class="col-md-9" style="margin: 0px;padding: 0px;width:100%">
                                             <input type="hidden" class="form-control" name="format_company" id="telformat">	
-                                            <input type="tel" class="form-control" name="company_phone" required>	
+                                            <input type="text" class="form-control" name="company_phone" required>	
                                         </div>
                                     </div>
                                 </div>
@@ -103,7 +100,7 @@
                             <div class="col-md-5" style="margin-top:10px;">
                                 <div class="valid-info">
                                     <h5>Company Email Address:</h5>
-                                    <input type="email" class="form-control" value="{{$company->company_email}}" name="company_email">
+                                    <input type="email" class="form-control" name="company_email" value="{{$company->company_email}}">
                                 </div>
                             </div>
                         </div>
@@ -208,9 +205,34 @@
                                 <li>Provide your proof of your bank account number by uploading the scan / picture of the first page of your saving book or your e-banking</li>
                                 <li>Bank account holder name must be the same with the company's owner name</li>
                             </ul>
-                            <div class="col-md-12 valid-info" id="bank">
+                            <div class="col-md-12 valid-info" id="input" hidden>
                                 <input id="bankPic" type="file" name="bank_pic">	
                             </div>
+                            @if($company->bank_account_scan_path != null || $company->bank_account_scan_path != '')
+                            <div class="col-md-8" id="value" cat="bank">
+                                <div class="thumbnail">
+                                    <img src="{{$company->bank_account_scan_path}}">
+                                    <div class="caption">
+                                        <button type="button" class="btn bg-red waves-effect" id="change">
+                                            <i class="material-icons">replay</i>
+                                            <span>Change</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @else
+                            <div class="col-md-8" id="value" cat="bank">
+                                <div class="thumbnail">
+                                    <img src="http://placehold.it/500x300" class="img-responsive">
+                                    <div class="caption">
+                                        <button type="button" class="btn bg-red waves-effect" id="change">
+                                            <i class="material-icons">replay</i>
+                                            <span>Change</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                     <div class="row">
@@ -220,11 +242,11 @@
                                 <p>What is your business ownership type?</p>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="1o" class="radio-col-deep-orange" value="Company"/>
+                                <input name="onwershipType" type="radio" id="1o" class="radio-col-deep-orange" value="Company" required/>
                                 <label for="1o">Corporate</label>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="2o" class="radio-col-deep-orange" value="Personal"/>
+                                <input name="onwershipType" type="radio" id="2o" class="radio-col-deep-orange" value="Personal" required checked/>
                                 <label for="2o">Personal</label>
                             </div>
                         </div>
@@ -236,12 +258,34 @@
                                     <li>Company Article of Association</li>
                                     <p>Akta Pendirian Usaha</p>		
                                 </div>
-                                <div class="col-md-6" id="input">
+                                <div class="col-md-6" id="input" hidden>
                                     <input id="aktaPic" type="file" name="akta_pic" />		
                                 </div>
-                                <div class="col-md-6" id="value">
-
+                                @if($company->akta_path != null || $company->akta_path != '')
+                                <div class="col-md-6" id="value" cat="akta">
+                                    <div class="thumbnail">
+                                        <img src="{{$company->akta_path}}">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+                                @else
+                                <div class="col-md-6" id="value" cat="akta">
+                                    <div class="thumbnail">
+                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12" id="siup" style="display: none;margin:10px 15px 0px 15px;">
@@ -250,17 +294,34 @@
                                     <li>SIUP/TDP</li>
                                     <p>Surat Izin Usaha Perdagangan/Tanda Daftar Perusahaan</p>
                                 </div>
-                                <div class="col-md-6" id="input">
+                                <div class="col-md-6" id="input" hidden>
                                     <input id="SIUPPic" type="file" name="siup_pic" />
                                 </div>
-                                <div class="col-sm-6 col-md-3" id="value">
+                                @if($company->siup_path != null || $company->siup_path != '')
+                                <div class="col-md-6" id="value" cat="siup">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300">
+                                        <img src="{{$company->siup_path}}">
                                         <div class="caption">
-                                            <h3>Bank</h3>
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
+                                @else
+                                <div class="col-md-6" id="value" cat="siup">
+                                    <div class="thumbnail">
+                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12" id="npwp" style="margin:10px 15px 0px 15px;">
@@ -269,12 +330,34 @@
                                     <li id="npwp">Tax Number</li>
                                     <p id="npwp">NPWP</p>
                                 </div>
-                                <div class="col-md-6" id="input">
+                                <div class="col-md-6" id="input" hidden>
                                     <input id="NPWPPic" type="file" name="npwp_pic" />
                                 </div>
-                                <div class="col-md-6" id="value">
-
+                                @if($company->npwp_path != null || $company->npwp_path != '')
+                                <div class="col-md-6" id="value" cat="npwp">
+                                    <div class="thumbnail">
+                                        <img src="{{$company->npwp_path}}">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+                                @else
+                                <div class="col-md-6" id="value" cat="npwp">
+                                    <div class="thumbnail">
+                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12" id="ktp" style="margin:10px 15px 0px 15px;">
@@ -283,12 +366,34 @@
                                     <li id="ktp">Identity Card</li>
                                     <p id="ktp">KTP</p>
                                 </div>
-                                <div class="col-md-6" id="input">
+                                <div class="col-md-6" id="input" hidden>
                                     <input id="KTPPic" type="file" name="ktp_pic">
                                 </div>
-                                <div class="col-md-6" id="value">
-
+                                @if($company->ktp_path != null || $company->ktp_path != '')
+                                <div class="col-md-6" id="value" cat="ktp">
+                                    <div class="thumbnail">
+                                        <img src="{{$company->ktp_path}}">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+                                @else
+                                <div class="col-md-6" id="value" cat="ktp">
+                                    <div class="thumbnail">
+                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12" id="evi" style="display: none; margin:10px 15px 0px 15px;">
@@ -297,12 +402,34 @@
                                     <li>Evidence you have a product</li>
                                     <p>Contoh product/info product</p>
                                 </div>
-                                <div class="col-md-6" id="input">
+                                <div class="col-md-6" id="input" cat="evi" hidden>
                                     <input id="eviPic" type="file" name="evi_pic" >
                                 </div>
-                                <div class="col-md-6" id="value">
-
+                                @if($company->evidance_path != null || $company->evidance_path != '')
+                                <div class="col-md-6" id="value" cat="evi">
+                                    <div class="thumbnail">
+                                        <img src="{{$company->evidance_path }}">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+                                @else
+                                <div class="col-md-6" id="value" cat="evi">
+                                    <div class="thumbnail">
+                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <div class="caption">
+                                            <button type="button" class="btn bg-red waves-effect" id="change">
+                                                <i class="material-icons">replay</i>
+                                                <span>Change</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -341,16 +468,17 @@
     <script>
         $(document).ready(function () {
         // DISABLE ALL INPUT, SELECT, TEXTAREA
-            $("input").attr("disabled","disabled");
+            $("input[type='text'],input[type='email'],input[type='radio'],input[type='url']").attr("disabled","disabled");
             $("select").attr("disabled","disabled");
             $("textarea").attr("disabled","disabled");
+            $("button#change").closest(".caption").hide();
         // BOOKING SYSTEM CHOICE
             $("input[name='bookingSystem']").change(function(){
                 var val = $(this).val();
                 if(val == 1){
                     $("#booking_system_name").show();
                 }else{
-                    $("input[name='bookingSystemName']:text").val(null);
+                    $("input[name='book_system']").val(null);
                     $("#booking_system_name").hide();
                 }
             });
@@ -485,26 +613,21 @@
                 $("input[name='company_phone']").val(dbCompanyformat[1]+'-'+dbCompanyformat[2]+'-'+dbCompanyformat[3]).intlTelInput({
                     separateDialCode: true,
                 });
-
                 $(".country").click(function(){
                     $(this).closest(".valid-info").find("#telformat").val("+"+$(this).attr("data-dial-code"));
                 });
-            // BUTTON EDIT ACTION
+            // CHANGE PIC BUTTON
+                $("button#change").click(function(){
+                    $(this).closest("div#value").hide().siblings("div#input").show();
+                })
+            // EDIT BUTTON
                 $("button#edit").click(function(){
-                    $(this).hide();_
+                    $(this).hide()
                     $("#submit").show();
                     $("input").removeAttr("disabled");
                     $("select").removeAttr("disabled");
-                    $("textarea").removeAttr("disabled");   
-                });
-            // BUTTON CANCEL ACTION
-                $("button#back").click(function(){
-                    $(this).hide();
-                    $("#submit").hide();
-                    // $("button#edit").show();
-                    $("input").attr("disabled","disabled");
-                    $("select").attr("disabled","disabled");
-                    $("textarea").attr("disabled","disabled");
+                    $("textarea").removeAttr("disabled");
+                    $("button#change").closest(".caption").show();
                 });
         });
     </script>
