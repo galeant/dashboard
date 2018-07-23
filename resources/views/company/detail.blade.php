@@ -45,7 +45,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                {{ Form::open(['route'=>['company.update', $company->id], 'enctype'=> 'multipart/form-data','method'=>'PUT']) }}
+                {{ Form::open(['route'=>['company.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">

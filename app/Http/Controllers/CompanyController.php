@@ -231,6 +231,7 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
         try {
+            // dd($request->all());
         $dataSave = [
             'company_name'=> $request->company_name,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
