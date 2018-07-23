@@ -22,7 +22,7 @@ class DistrictController extends Controller
             $model = District::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(District $data) {
-                return '<a href="/master/district/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/master/district/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
                     <a href="/master/district/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/district/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
