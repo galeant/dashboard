@@ -15,10 +15,14 @@ class City extends Model {
      * @var stringA
      */
     protected $table = 'cities';
-    protected $fillable = ['province_id','name'];
+    protected $fillable = ['province_id','name','type'];
 
     public function province()
     {
         return $this->hasOne('App\Models\Province','id','province_id');
+    }
+    public function tourguide()
+    {
+        return $this->belongsToMany('App\Models\TourGuide','tour_guide_coverages','city_id','tour_guide_id');
     }
 }

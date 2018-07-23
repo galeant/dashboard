@@ -19,16 +19,9 @@ class TourGuideCoverage extends Model {
      * @var stringA
      */
     protected $table = 'tour_guide_coverages';
-    protected $fillable = ['province_id','province_name','city_id','city_name','tour_guide_id'];
+    protected $fillable = ['city_id','tour_guide_id'];
 
-    public function city()
-    {
-        return $this->hasOne('App\Models\City','id','city_id');
-    }
-    public function province()
-    {
-        return $this->hasOne('App\Models\Province','id','province_id');
-    }
+    
 
 }
 

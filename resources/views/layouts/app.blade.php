@@ -29,6 +29,7 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{asset('css/themes/all-themes.css')}}" rel="stylesheet" />
+		<link href="{{asset('plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css')}}" rel="stylesheet" />
     @show
 </head>
 <body class="{{{ isset($class_body) ? $class_body : 'theme-red' }}}">
@@ -210,11 +211,6 @@
 							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
 		                            <span>Tour</span>
-		                        </a>
-		                    </li>
-		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
-		                            <span>Language</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}

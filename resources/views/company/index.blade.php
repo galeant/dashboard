@@ -20,13 +20,8 @@
                                 All Company
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="{{ url('master/company/create') }}">NEW</a></li>
-                                    </ul>
+                                <li >
+                                    <a href="{{ url('master/company/create') }}" class="btn bg-teal btn-block waves-effect">Add Company</a>
                                 </li>
                             </ul>
                         </div>
@@ -37,6 +32,9 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Company Email</th>
+                                            <th>Company Phone</th>
+                                            <th>Company Address</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -69,7 +67,10 @@
 	        ajax: '/master/company',
 	        columns: [
 	            {data: 'id'},
-	            {data: 'company_name'},
+                {data: 'company_name'},
+                {data: 'company_email'},
+                {data: 'company_phone'},
+	            {data: 'company_address'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}

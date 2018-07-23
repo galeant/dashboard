@@ -21,11 +21,6 @@ class Company extends Model {
     protected $table = 'companies';
     protected $fillable = [
         'company_name',
-        'full_name',
-        'phone',
-        'email',
-        'password',
-        'role',
         'company_phone',
         'company_email',
         'company_web',
@@ -47,5 +42,9 @@ class Company extends Model {
         'province_id',
         'city_id'
     ];
+
+    public function suppliers(){
+        return $this->hasMany('App\Models\Supplier');
+    }
 }
 

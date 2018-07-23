@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\coupons;
+use App\Models\Coupons;
 use Validator;
 use Datatables;
 use DB;
@@ -26,7 +26,7 @@ class CouponController extends Controller
                 return '<a href="coupon/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="coupon/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/admin/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="coupon/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/coupon/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
@@ -57,13 +57,16 @@ class CouponController extends Controller
     {
         // Validation //
         $validation = Validator::make($request->all(), [
-            "gendre" => "required",
-            "firstname" => "required",
-            "lastname" => "required",
-            "username" => "required",
-            "email" => "required",
-            "phone" => "required",
-            "status" => "required"
+          "quantity" => "required",
+          "quantity_per_use" => "required",
+          "type" => "required",
+          "name" => "required",
+          "code" => "required|unique:coupons",
+          "start_date" => "required",
+          "end_date" => "required",
+          "discount_value" => "required",
+          "discount_value" => "required",
+          "max_discount" => "required"
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -72,25 +75,28 @@ class CouponController extends Controller
         }
         DB::beginTransaction();
         try{
-            $data = new Members();
-            $data->salutation = $request->input('gendre');
-            $data->firstname = $request->input('firstname');
-            $data->lastname = $request->input('lastname');
-            $data->username = $request->input('username');
-            $data->email = $request->input('email');
-            $data->phone = $request->input('phone');
-            $data->status = $request->input('status');
-            $data->password = md5($data->email);
+            $data = new Coupons();
+            $data->quantity = $request->input('quantity');
+            $data->quantity_per_use = $request->input('quantity_per_use');
+            $data->type = $request->input('type');
+            $data->name = $request->input('name');
+            $data->code = $request->input('code');
+            $data->start_date = $request->input('start_date');
+            $data->end_date = $request->input('end_date');
+            $data->discount_value = $request->input('discount_value');
+            $data->discount_value = $request->input('discount_value');
+            $data->max_discount = $request->input('max_discount');
+            $data->description = $request->input('description');
             if($data->save()){
                 DB::commit();
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("coupon/".$data->id."/edit")->with('message', 'Successfully saved Coupon');
             }else{
-                return redirect("admin/members/create")->with('message', 'Error Database;');
+                return redirect("coupon/create")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("admin/members/create")->with('message', $exception->getMessage());
+            return redirect("coupon/create")->with('message', $exception->getMessage());
         }
     }
 
@@ -113,8 +119,8 @@ class CouponController extends Controller
      */
     public function edit($id)
     {
-      $data = Members::find($id);
-      return view('members.form_edit')->with([
+      $data = Coupons::find($id);
+      return view('coupon.form_edit')->with([
           'data'=> $data
       ]);
     }
@@ -130,13 +136,16 @@ class CouponController extends Controller
     {
         // Validation //
         $validation = Validator::make($request->all(), [
-            "gendre" => "required",
-            "firstname" => "required",
-            "lastname" => "required",
-            "username" => "required",
-            "email" => "required",
-            "phone" => "required",
-            "status" => "required"
+          "quantity" => "required",
+          "quantity_per_use" => "required",
+          "type" => "required",
+          "name" => "required",
+          "code" => "required",
+          "start_date" => "required",
+          "end_date" => "required",
+          "discount_value" => "required",
+          "discount_value" => "required",
+          "max_discount" => "required"
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -145,25 +154,28 @@ class CouponController extends Controller
         }
         DB::beginTransaction();
         try{
-          $data = Members::find($id);
-          $data->salutation = $request->input('gendre');
-          $data->firstname = $request->input('firstname');
-          $data->lastname = $request->input('lastname');
-          $data->username = $request->input('username');
-          $data->email = $request->input('email');
-          $data->phone = $request->input('phone');
-          $data->status = $request->input('status');
-
+              $data = Coupons::find($id);
+              $data->quantity = $request->input('quantity');
+              $data->quantity_per_use = $request->input('quantity_per_use');
+              $data->type = $request->input('type');
+              $data->name = $request->input('name');
+              $data->code = $request->input('code');
+              $data->start_date = $request->input('start_date');
+              $data->end_date = $request->input('end_date');
+              $data->discount_value = $request->input('discount_value');
+              $data->discount_value = $request->input('discount_value');
+              $data->max_discount = $request->input('max_discount');
+              $data->description = $request->input('description');
              if($data->save()){
                 DB::commit();
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("coupon/".$data->id."/edit")->with('message', 'Successfully edit Coupon');
             }else{
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("coupon/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("admin/members/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("coupon/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 
@@ -177,10 +189,10 @@ class CouponController extends Controller
     {
       DB::beginTransaction();
       try{
-          $data = Members::find($id);
+          $data = Coupons::find($id);
           if($data->delete()){
               DB::commit();
-              return $this->sendResponse($data, "Delete Members ".$data->name." successfully", 200);
+              return $this->sendResponse($data, "Delete Coupons ".$data->name." successfully", 200);
           }else{
               return $this->sendResponse($data, "Error Database;", 200);
           }

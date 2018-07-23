@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Village List
-                    <small>Master Data / Village</small>
+                    Tour Guide List
+                    <small>Product / Tour Guide</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,31 +17,30 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Village
+                                All Tour Guides
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                                <li>
-                                    <a href="/master/village/create" class="btn bg-teal btn-block waves-effect">Add Village</a>
+                                <li >
+                                    <a href="/product/tour-guide/create" class="btn bg-teal btn-block waves-effect">Add Tour Guide</a>
                                 </li>
-
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
-                                <thead>
+                                    <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>District Name</th>
-                                            <th>City Name</th>
-                                            <th>Postal Code</th>
-                                            <th>Created At</th>
+                                            <th>Company</th>
+                                            <th>Gender</th>
+                                            <th>Fullname</th>
+                                            <th>Experience</th>
+                                            <th>Language</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -64,14 +63,15 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/village',
+	        ajax: '/product/tour-guide',
 	        columns: [
 	            {data: 'id'},
-                {data: 'name'},
-                {data: 'district_name'},
-                {data: 'city_name'},
-	            {data: 'postal_code'},
-	            {data: 'created_at'},
+                {data: 'company.company_name'},
+	            {data: 'salutation'},
+	            {data: 'fullname'},
+	            {data: 'experience_year'},
+                {data: 'language'},
+	            {data: 'status'},
 	            {data: 'action'}
 	        ]
 	    });
