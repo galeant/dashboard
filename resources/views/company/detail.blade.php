@@ -44,19 +44,20 @@
                     </div>
                 </div>
                 <div class="body">
+                @include('errors.error_notification')
                 {{ Form::open(['route'=>['company.update', $company->id], 'method'=>'PUT']) }}
                     <div class="row">
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" name="full_name" value="{{$company->full_name}}">
+                                <input type="text" class="form-control" name="full_name" value="{{$company->suppliers[0]->fullname}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                <input type="email" class="form-control" name="email" value="{{$company->email}}">
+                                <input type="email" class="form-control" name="email" value="{{$company->suppliers[0]->email}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
@@ -549,7 +550,7 @@
 			});
 		// DETAIL
             // PHONE
-                var dbphone = "{{$company->phone}}";
+                var dbphone = "{{$company->suppliers[0]->phone}}";
                 var dbformat = dbphone.split("-");
                 var dbCompanyPhone = "{{$company->company_phone}}";
                 var dbCompanyformat = dbCompanyPhone.split("-");
@@ -559,8 +560,8 @@
                 $("select[name='company_province']").find("option[value='"+province+"']").attr("selected","selected");
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('cities') }}",
-                    data: { id: province  }
+                    url: "{{ url('json/findCity') }}",
+                    data: { province_id: province  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
                         $("select[name='company_city']").append(
@@ -569,7 +570,7 @@
                     });
                 });
             // ROLE
-                var dbRole = '{{$company->role}}'
+                var dbRole = '{{$company->suppliers[0]->role_id}}'
                 $("select[name='role']").find("option[value='"+dbRole+"']").attr("selected","selected");
             // BOOK SYS
                 var dbBookSys = '{{$company->book_system}}';

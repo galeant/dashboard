@@ -95,7 +95,7 @@
                             <div class="col-md-5" style="margin-top:10px;">
                                 <div class="valid-info">
                                     <h5>Company Email Address:</h5>
-                                    {{ Form::text('company_email', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','required'=>'required']) }}
+                                    {{ Form::text('company_email', null, ['class' => 'form-control','placeholder'=>'Please Enter Email Address','required'=>'required']) }}
                                 </div>
                             </div>
                         </div>
@@ -164,7 +164,7 @@
                         <div class="col-md-3">
                             <div class="valid-info">
                                 <h5>Bank Name*:</h5>
-                                {{ Form::select('bank_account_name', Helpers::bankName(), null ,['class' => 'form-control','id'=>'bank_account_name']) }}
+                                {{ Form::select('bank_name', Helpers::bankName(), null ,['class' => 'form-control','id'=>'bank_account_name']) }}
                             </div>
                         </div>
                         <div class="col-md-7">
@@ -181,8 +181,7 @@
                             <div class="col-md-7 col-sm-7 col-xs-12">
                                 <div class="valid-info">
                                     <h5>Account Holder Name*:</h5>
-                                    {{ Form::text('bank_account_holder_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required','pattern' => '^[A-Za-z -]+$']) }}
-                                    
+                                    {{ Form::text('bank_account_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required','pattern' => '^[A-Za-z -]+$']) }}
                                 </div>
                             </div>
                         </div>
@@ -326,7 +325,7 @@
                 allowedFileExtensions: ["jpg", "png", "gif","pdf","doc","docs","xls"]
             });
         // OWNERSHIP ELEMENT
-            $("input[name='onwershipType']").change(function(){
+            $("input[name='company_ownership']").change(function(){
                 var val = $(this).val();
                 if(val == "Company"){
                     $("#akta,#siup,#npwp,#ktp,#evi").show();
@@ -349,10 +348,10 @@
                 $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('json/city') }}",
+                    url: "{{ url('json/findCity') }}",
                     data: { province_id: idProvince  }
                 }).done(function(response) {
-                    $.each(response.data, function (index, value) {
+                    $.each(response, function (index, value) {
                         $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );

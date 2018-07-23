@@ -52,10 +52,14 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('country','CountryController@json');
 		Route::get('language','LanguageController@json');
 		Route::get('province','ProvinceController@json');
+		// 
 		Route::get('city','CityController@json');
+		Route::get('findCity','CityController@findCity');
+		// 
 		Route::get('district','DistrictController@json');
 		Route::get('village','VillageController@json');
 		Route::get('company','CompanyController@json');
+		
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
@@ -67,4 +71,4 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
 
-Route::get('cities','CityController@cities');
+
