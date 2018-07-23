@@ -21,4 +21,8 @@ class City extends Model {
     {
         return $this->hasOne('App\Models\Province','id','province_id');
     }
+    public function tourguide()
+    {
+        return $this->belongsToMany('App\Models\TourGuide','tour_guide_coverages','city_id','tour_guide_id');
+    }
 }

@@ -21,11 +21,6 @@ class Company extends Model {
     protected $table = 'companies';
     protected $fillable = [
         'company_name',
-        'fullname',
-        'phone',
-        'email',
-        'password',
-        'role',
         'company_phone',
         'company_email',
         'company_web',

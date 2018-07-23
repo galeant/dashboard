@@ -19,11 +19,11 @@ class TourGuide extends Model {
      * @var stringA
      */
     protected $table = 'tour_guides';
-    protected $fillable = ['company_id','country_id','tour_guide_service_id','fullname','age','salutation','nationality','email','phone','avatar','experience_year','language','guide_license','guide_assosciation','status'];
+    protected $fillable = ['company_id','country_id','fullname','age','salutation','nationality','email','phone','avatar','experience_year','language','guide_license','guide_association','status'];
 
     public function coverage()
     {
-        return $this->hasMany('App\Models\TourGuideCoverage','tour_guide_id','id');
+        return $this->belongsToMany('App\Models\City','tour_guide_coverages','tour_guide_id','city_id');
     }
     public function company()
     {

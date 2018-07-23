@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('city','CityController@json');
 		Route::get('district','DistrictController@json');
 		Route::get('village','VillageController@json');
+		Route::get('company','CompanyController@json');
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
