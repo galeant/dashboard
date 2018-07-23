@@ -290,6 +290,7 @@ class TourGuideController extends Controller
                 $save->avatar = $avatar;
             }
         $save->save();
+        $save->coverage()->sync($request->input('coverage'));
         TourGuideServicePrice::where('tour_guide_id',$save->id)->forceDelete();
         foreach($request->input('services') as $serviceId){
             $service = TourGuideService::find($serviceId);
