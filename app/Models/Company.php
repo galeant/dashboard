@@ -42,5 +42,9 @@ class Company extends Model {
         'province_id',
         'city_id'
     ];
+
+    public function suppliers(){
+        return $this->hasMany('App\Models\Supplier');
+    }
 }
 

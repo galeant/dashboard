@@ -192,12 +192,8 @@ class CityController extends Controller
     }
 
     
-    public function findCity($id){
-        $cities = City::where('province_id',$id)->get();
+    public function findCity(Request $req){
+        $cities = City::where('province_id',$req->province_id)->get();
         return response()->json($cities,200);
-    }
-    public function cities(Request $request){
-        $data = City::where('province_id',$request->id)->get();
-        return response()->json($data,200);
     }
 }

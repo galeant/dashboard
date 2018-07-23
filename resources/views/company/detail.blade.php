@@ -44,19 +44,20 @@
                     </div>
                 </div>
                 <div class="body">
-                {{ Form::open(['route'=>['company.update', $company->id], 'method'=>'PUT']) }}
+                @include('errors.error_notification')
+                {{ Form::open(['route'=>['company.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" name="full_name" value="{{$company->full_name}}">
+                                <input type="text" class="form-control" name="fullname" value="{{$company->suppliers[0]->fullname}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                <input type="email" class="form-control" name="email" value="{{$company->email}}">
+                                <input type="email" class="form-control" name="email" value="{{$company->suppliers[0]->email}}">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
@@ -69,7 +70,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
-                                <select class="form-control" name="role" required>
+                                <select class="form-control" name="role" value="{{$company->suppliers[0]->role_id}}" required >
                                     <option value="owner">Business Owner</option>
                                     <option value="staff">Staff</option>
                                     <option value="aggregator">Aggregator</option>
@@ -107,7 +108,7 @@
                         <div class="col-md-5" style="margin-top:10px">
                             <div class="valid-info">
                                 <h5>Province*:</h5>
-                                <select class="form-control" name="company_province" required>
+                                <select class="form-control" name="province_id" required>
                                     <option value="" selected>-- Select Province --</option>
                                     @foreach($provinces as $province)
                                         <option value="{{$province->id}}">{{$province->name}}</option>
@@ -118,7 +119,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>City / Regency*:</h5>
-                                <select class="form-control" name="company_city" required>
+                                <select class="form-control" name="city_id" required>
                                     <option value="">-- Select City --</option>
                                 </select>
                             </div>
@@ -168,7 +169,7 @@
                         <div class="col-md-3">
                             <div class="valid-info">
                                 <h5>Bank Name*:</h5>
-                                <select class="form-control" name="bank_name">
+                                <select class="form-control" name="bank_name" value="{{$company->bank_name}}">
                                     <option>BRI</option>
                                     <option>BCA</option>
                                     <option>BNI</option>
@@ -186,16 +187,16 @@
                         <div class="row" style="margin:0px">
                             <div class="col-md-3 col-sm-3 col-xs-5 valid-info">
                                 <h5>Title*:</h5>
-                                <select class="form-control" name="bank_account_holder_title" required>
-                                    <option>Mr</option>
-                                    <option>Mrs</option>
-                                    <option>Miss</option>
+                                <select class="form-control" name="bank_account_title" required>
+                                    <option value="Mr">Mr</option>
+                                    <option value="Mrs">Mrs</option>
+                                    <option value="Ms">Miss</option>
                                 </select>
                             </div>
                             <div class="col-md-7 col-sm-7 col-xs-12">
                                 <div class="valid-info">
                                     <h5>Account Holder Name*:</h5>
-                                    <input type="text" class="form-control" name="bank_account_holder_name" pattern="^[A-Za-z -]+$" value="{{$company->bank_account_name}}" >
+                                    <input type="text" class="form-control" name="bank_account_name" pattern="^[A-Za-z -]+$" value="{{$company->bank_account_name}}" >
                                 </div>
                             </div>
                         </div>
@@ -242,11 +243,11 @@
                                 <p>What is your business ownership type?</p>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="1o" class="radio-col-deep-orange" value="Company" required/>
+                                <input name="company_ownership" type="radio" id="1o" class="radio-col-deep-orange" value="Company" required/>
                                 <label for="1o">Corporate</label>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="2o" class="radio-col-deep-orange" value="Personal" required checked/>
+                                <input name="company_ownership" type="radio" id="2o" class="radio-col-deep-orange" value="Personal" required checked/>
                                 <label for="2o">Personal</label>
                             </div>
                         </div>
@@ -493,7 +494,7 @@
                 allowedFileExtensions: ["jpg", "png", "gif","pdf","doc","docs","xls"]
             });
         // OWNERSHIP ELEMENT
-            $("input[name='onwershipType']").change(function(){
+            $("input[name='company_ownership']").change(function(){
                 var val = $(this).val();
                 if(val == "Company"){
                     $("#akta,#siup,#npwp,#ktp,#evi").show();
@@ -511,16 +512,16 @@
                 }
             });
         // CITY
-            $("select[name='company_province']").change(function(){
+        $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
-                $("select[name='company_city']").empty();
+                $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('cities') }}",
-                    data: { id: idProvince  }
+                    url: "{{ url('json/findCity') }}",
+                    data: { province_id: idProvince  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
-                        $("select[name='company_city']").append(
+                        $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
                     });
@@ -549,27 +550,27 @@
 			});
 		// DETAIL
             // PHONE
-                var dbphone = "{{$company->phone}}";
+                var dbphone = "{{$company->suppliers[0]->phone}}";
                 var dbformat = dbphone.split("-");
                 var dbCompanyPhone = "{{$company->company_phone}}";
                 var dbCompanyformat = dbCompanyPhone.split("-");
             // PROVINCE
                 var province = '{{$company->province_id}}';
                 var city = '{{$company->city_id}}';
-                $("select[name='company_province']").find("option[value='"+province+"']").attr("selected","selected");
+                $("select[name='province_id']").find("option[value='"+province+"']").attr("selected","selected");
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('cities') }}",
-                    data: { id: province  }
+                    url: "{{ url('json/findCity') }}",
+                    data: { province_id: province  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
-                        $("select[name='company_city']").append(
+                        $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         ).find("option[value='"+city+"']").attr("selected","selected");
                     });
                 });
             // ROLE
-                var dbRole = '{{$company->role}}'
+                var dbRole = '{{$company->suppliers[0]->role_id}}'
                 $("select[name='role']").find("option[value='"+dbRole+"']").attr("selected","selected");
             // BOOK SYS
                 var dbBookSys = '{{$company->book_system}}';

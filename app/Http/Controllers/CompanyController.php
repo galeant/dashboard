@@ -66,6 +66,7 @@ class CompanyController extends Controller
             'company_address' => 'required',
             'company_postal' => 'required|numeric',
             'company_email' => 'required',
+            'bank_name' => 'required',
             'bank_account_name' => 'required',
             'bank_account_number' => 'required',
             'bank_account_title' => 'required',
@@ -90,9 +91,10 @@ class CompanyController extends Controller
             'company_address'=> $request->company_address,
             'company_postal'=> $request->company_postal,
             'book_system'=> $request->book_system,
+            'bank_name'=> $request->bank_name,
             'bank_account_number'=> $request->bank_account_number,
             'bank_account_title'=> $request->bank_account_title,
-            'bank_account_name'=> $request->bank_account_name,
+            'bank_account_name' => $request->bank_account_name,
             'company_ownership' => $request->company_ownership,
             'status'=> 1,
             // 
@@ -172,7 +174,13 @@ class CompanyController extends Controller
      */
     public function show($id)
     {   
-        //
+        $province = Province::all();
+        $company = Company::with(['suppliers' =>  function($query) use($id){
+                $query->where(['company_id' => $id,'role_id' => 1]);
+            }
+        ])->where('id',$id)->first();
+        // dd($company);
+        return view('company.detail',['company'=>$company,'provinces'=>$province]);
     }
 
     /**
@@ -198,14 +206,36 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         // dd($request->all());
-        $company = Company::where('id',$id)
-        ->update([
+        $validation = Validator::make($request->all(), [
+            'company_name' => 'required',
+            'fullname' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'company_phone' => 'required',
+            'role' => 'required',
+            'company_address' => 'required',
+            'company_postal' => 'required|numeric',
+            'company_email' => 'required',
+            'bank_name' => 'required',
+            'bank_account_name' => 'required',
+            'bank_account_number' => 'required',
+            'bank_account_title' => 'required',
+            'bank_account_name' => 'required',
+            'company_ownership' => 'required',
+            'province_id' => 'required',
+            'city_id' => 'required'
+        ]);
+        // dd($request->all());
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        DB::beginTransaction();
+        try {
+            // dd($request->all());
+        $dataSave = [
             'company_name'=> $request->company_name,
-            'fullname'=> $request->full_name,
-            'phone'=> $request->format.'-'.$request->phone,
-            'email'=> $request->email,
-            'password'=> (new BcryptHasher)->make('admin'),
-            'role'=> $request->role,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
             'company_email'=> $request->company_email,
             'company_web'=> $request->company_web,
@@ -214,19 +244,77 @@ class CompanyController extends Controller
             'book_system'=> $request->book_system,
             'bank_name'=> $request->bank_name,
             'bank_account_number'=> $request->bank_account_number,
-            'bank_account_title'=> $request->bank_account_holder_title,
-            'bank_account_name'=> $request->bank_account_holder_name,
-            'bank_account_scan_path'=> $request->bank_name,
-            'company_ownership' => $request->onwershipType,
-            'akta_path'=> 'path',
-            'siup_path'=> 'path',
-            'npwp_path'=> 'path',
-            'ktp_path'=> 'path',
-            'evidance_path'=> 'path',
-            'status'=> '0',
-            'province_id'=> $request->company_province,
-            'city_id'=> $request->company_city
-        ]);
+            'bank_account_title'=> $request->bank_account_title,
+            'bank_account_name' => $request->bank_account_name,
+            'company_ownership' => $request->company_ownership,
+            'status'=> 1,
+            // 
+            'province_id'=> $request->province_id,
+            'city_id'=> $request->city_id
+            ];
+        if(!empty($request->bank_pic)){
+            $bankPic = Helpers::saveImage($request->bank_pic,'company'/*Location*/);
+            if($bankPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['bank_account_scan_path'] = $bankPic['path_full'];
+        }
+        if(!empty($request->ktp_pic)){
+            $ktpPic = Helpers::saveImage($request->ktp_pic,'company'/*Location*/);
+            if($ktpPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['ktp_path'] = $ktpPic['path_full'];
+        }
+        if(!empty($request->npwp_pic)){
+            $npwpPic = Helpers::saveImage($request->npwp_pic,'company'/*Location*/);
+            if($npwpPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['npwp_path'] = $npwpPic['path_full'];
+        }
+        if(!empty($request->akta_pic)){
+            $aktaPic = Helpers::saveImage($request->akta_pic,'company'/*Location*/);
+            if($aktaPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['akta_path'] = $aktaPic['path_full'];
+        }
+        if(!empty($request->siup_pic)){
+            $siupPic = Helpers::saveImage($request->siup_pic,'company'/*Location*/);
+            if($siupPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['siup_path'] = $npwpPic['path_full'];
+        }
+        if(!empty($request->evi_pic)){
+            $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
+            if($eviPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['evidance_path'] = $eviPic['path_full'];
+        }
+        $company = Company::where('id',$id)
+                ->update($dataSave);
+        $supplier = Supplier::where(['company_id' => $id, 'role_id'=>1])
+                ->update([
+                    'fullname'=> $request->fullname,
+                    'phone'=> $request->format.'-'.$request->phone,
+                    'email'=> $request->email,
+                    'password' => '-']);
+
+        DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect("master/company/create")->with('message', $exception->getMessage());
+        }
         return redirect('master/company');
     }
 
