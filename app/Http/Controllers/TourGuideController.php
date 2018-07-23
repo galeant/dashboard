@@ -103,10 +103,10 @@ class TourGuideController extends Controller
         if(!empty($request->services)){
             foreach($request->services as $value)
             {
-                $validate['price_per_day_'.$value] ='required|numeric';
-                $validate['price_per_day2_'.$value] ='required|numeric';
-                $messages['price_day_day_'.$value.'.required'] = 'Service Price must be fill !';
-                $messages['price_day_day2_'.$value.'.required'] = 'Service Price must be fill !';
+                $validate['rate_per_day_'.$value] ='required|numeric';
+                $validate['rate_per_day2_'.$value] ='required|numeric';
+                $messages['rate_day_day_'.$value.'.required'] = 'Service Price must be fill !';
+                $messages['rate_day_day2_'.$value.'.required'] = 'Service Price must be fill !';
             }
         }
         $validation = Validator::make($request->all(), $validate,$messages);

@@ -170,6 +170,7 @@
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
 		                                        <select id="coverage" name="coverage[]" multiple="multiple" style="width: 100%">
+		                                        @if(!empty($data))
 					                                @if(!empty($data->coverage))
 						                                @foreach($data->coverage as $coverage)
 										                <option value="{{$coverage->id}}" selected="selected">{{$coverage->name}}</option>
@@ -177,6 +178,9 @@
 									                @else
 									                <option value="">--Select Coverage--</option>
 									                @endif
+									            @else
+									            	 <option value="">--Select Coverage--</option>
+									            @endif
 					                            </select>
 		                                    </div>
 		                                </div>
@@ -190,13 +194,13 @@
 
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
-		                                        <input name="license" type="radio" value="yes" id="license_yes" @if(!empty($data->guide_license))
+		                                        <input name="license" type="radio" value="yes" id="license_yes" @if(!empty($data)) @if(!empty($data->guide_license))
 		                                        	checked=""
-		                                        @endif>
+		                                        @endif @else checked="" @endif>
 		                                        <label for="license_yes">Yes</label>
-		                                        <input name="license" type="radio" id="license_no" value="no" @if(empty($data->guide_license))
+		                                        <input name="license" type="radio" id="license_no" value="no" @if(!empty($data))@if(empty($data->guide_license))
 		                                        	checked=""
-		                                        @endif>
+		                                        @endif  @endif>
 		                                        <label for="license_no">No License</label>
 		                                    </div>
 		                                    <div class="form-group" id="parent_license" >
@@ -212,13 +216,13 @@
 		                                </div>
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
-		                                        <input name="association" type="radio" id="association_yes" value="yes" @if(!empty($data->guide_association))
+		                                        <input name="association" type="radio" id="association_yes" value="yes" @if(!empty($data)) @if(!empty($data->guide_association))
 		                                        	checked=""
-		                                        @endif>
+		                                        @endif @else checked="" @endif>
 		                                        <label for="association_yes">Yes</label>
-		                                        <input name="association" type="radio" id="association_no" value="no" @if(empty($data->guide_association))
+		                                        <input name="association" type="radio" id="association_no" value="no" @if(!empty($data))@if(empty($data->guide_association))
 		                                        	checked=""
-		                                        @endif>
+		                                        @endif @endif>
 		                                        <label for="association_no">No License</label>
 		                                    </div>
 		                                    <div class="form-group" id="parent_association">
@@ -227,6 +231,7 @@
 		                                </div>
 		                        	</div>
                             	</div>
+
                             	<div class="row clearfix">
 							    	<div class="col-md-12 m-b-10-i">
 		                                <div class="col-md-3 form-control-label">
@@ -235,7 +240,7 @@
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
 		                                        <div class="switch" style="margin-top:7px">
-				                                    <label>{{Form::checkbox('status',(!empty($data->status && $data->status == 1 ? 1 : 0)),(empty($data->status) || $data->status === 0  ? false : true))}}<span class="lever"></span></label>
+				                                    <label>{{Form::checkbox('status',(!empty($data) ? (!empty($data->status) ? 1 : 0 ) : 0),(!empty($data) ? (!empty($data->status) ? true : false) : (empty($data->status) ? true : false)))}}<span class="lever"></span></label>
 				                                </div>
 		                                    </div>
 		                                </div>
