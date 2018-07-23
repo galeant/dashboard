@@ -37,6 +37,9 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Company Email</th>
+                                            <th>Company Phone</th>
+                                            <th>Company Address</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -71,7 +74,10 @@
 	        ajax: '/master/company',
 	        columns: [
 	            {data: 'id'},
-	            {data: 'company_name'},
+                {data: 'company_name'},
+                {data: 'company_email'},
+                {data: 'company_phone'},
+	            {data: 'company_address'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}

@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li>
-                                    <a href="/admin/members/create" class="btn bg-teal btn-block waves-effect">Add Member</a>
+                                    <a href="/members/create" class="btn bg-teal btn-block waves-effect">Add Member</a>
                                 </li>
                             </ul>
                         </div>
@@ -63,7 +63,7 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/admin/members',
+	        ajax: '/members',
 	        columns: [
               {data: 'id'},
               {data: 'firstname'},

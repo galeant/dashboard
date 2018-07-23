@@ -179,6 +179,7 @@ class LanguageController extends Controller
             $data = $data->whereRaw('(name LIKE "%'.$name.'%" )');
         }
         $data = $data->select('id','name')->get()->toArray();
+        
         return $this->sendResponse($data, "Language retrieved successfully", 200);
     }
 }

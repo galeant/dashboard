@@ -1,5 +1,6 @@
 ﻿/* Navbar ====================================== */
 @import url(materialize.css);
+@import url(dd-style.css);
 .navbar {
   font-family: "Roboto", sans-serif;
   -webkit-border-radius: 0;
@@ -8045,3 +8046,11 @@ html.ie11 .dropdown-menu ul.menu li a {
 
 html.ie11 .bs-searchbox .form-control {
   width: 90%; }
+.srvcs-delete{
+  color:white;
+  font-size: 24px;
+  position: absolute;
+  font-weight: bold;
+  /*top:5px;*/
+  right: 30px;
+}

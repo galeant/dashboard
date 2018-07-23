@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Village;
+use App\Models\District;
 use Datatables;
 use Validator;
 use DB;
@@ -57,7 +58,8 @@ class VillageController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'district_id' => 'required',
-            'name' => 'required'
+            'name' => 'required',
+            'postal_code' => 'required|numeric'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -66,9 +68,14 @@ class VillageController extends Controller
         }
         DB::beginTransaction();
         try{
+            $district = District::find($request->input('district_id'));
             $data = new Village();
             $data->district_id = $request->input('district_id');
             $data->name = $request->input('name');
+            $data->postal_code = $request->input('postal_code');
+            $data->district_name = $district->name;
+            $data->city_name = $district->city_name;
+            $data->city_type = $district->city_type;
             if($data->save()){
                 DB::commit();
                 return redirect("master/village/".$data->id."/edit")->with('message', 'Successfully saved Village');
@@ -120,7 +127,8 @@ class VillageController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'district_id' => 'required',
-            'name' => 'required'
+            'name' => 'required',
+            'postal_code' => 'required|numeric'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -129,9 +137,14 @@ class VillageController extends Controller
         }
         DB::beginTransaction();
         try{
+            $district = District::find($request->input('district_id'));
             $data = Village::find($id);
             $data->district_id = $request->input('district_id');
             $data->name = $request->input('name');
+            $data->postal_code = $request->input('postal_code');
+            $data->district_name = $district->name;
+            $data->city_name = $district->city_name;
+            $data->city_type = $district->city_type;
             if($data->save()){
                 DB::commit();
                 return redirect("master/village/".$data->id."/edit")->with('message', 'Successfully saved Province');

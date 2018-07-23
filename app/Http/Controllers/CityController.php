@@ -57,7 +57,8 @@ class CityController extends Controller
          // Validation //
         $validation = Validator::make($request->all(), [
             'province_id' => 'required|numeric',
-            'name' => 'required'
+            'name' => 'required',
+            'type' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -69,6 +70,7 @@ class CityController extends Controller
             $data = new City();
             $data->province_id = $request->input('province_id');
             $data->name = $request->input('name');
+            $data->type = $request->input('type');
             if($data->save()){
                 DB::commit();
                 return redirect("master/city/".$data->id."/edit")->with('message', 'Successfully saved City');
@@ -120,7 +122,8 @@ class CityController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'province_id' => 'required|numeric',
-            'name' => 'required'
+            'name' => 'required',
+            'type' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -132,6 +135,7 @@ class CityController extends Controller
             $data = City::find($id);
             $data->province_id = $request->input('province_id');
             $data->name = $request->input('name');
+            $data->type = $request->input('type');
             if($data->save()){
                 DB::commit();
                 return redirect("master/city/".$data->id."/edit")->with('message', 'Successfully saved City');
@@ -183,7 +187,7 @@ class CityController extends Controller
         {
             $data = $data->whereRaw('(name LIKE "%'.$name.'%" )');
         }
-        $data = $data->select('id','name')->get()->toArray();
+        $data = $data->select('id',DB::raw("CONCAT(`type`,' ',`name`) as name"))->get()->toArray();
         return $this->sendResponse($data, "City retrieved successfully", 200);
     }
 

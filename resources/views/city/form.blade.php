@@ -51,7 +51,10 @@
 						                @endif
 		                            </select>
 					            </div>
-
+					            <div class="form-group m-b-20">
+					                <label>Type</label>
+					                 {!! Form::select('type',Helpers::typeCity(),null,['class' => 'form-control show-tick']) !!}
+					            </div>
 						    	<div class="form-group m-b-20">
 					                <label>Name</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}

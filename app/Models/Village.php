@@ -15,7 +15,7 @@ class Village extends Model {
      * @var stringA
      */
     protected $table = 'villages';
-    protected $fillable = ['district_id','name'];
+    protected $fillable = ['district_id','name','district_name','city_name','city_type','postal_code'];
 
     public function district()
     {

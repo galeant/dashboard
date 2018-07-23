@@ -62,9 +62,9 @@
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
                                 <select class="form-control" name="role" required>
-                                    <option value="owner">Business Owner</option>
-                                    <option value="staff">Staff</option>
-                                    <option value="aggregator">Aggregator</option>
+                                    <option value="0">Business Owner</option>
+                                    <option value="1">Staff</option>
+                                    <option value="2">Aggregator</option>
                                 </select>
                             </div>
                         </div>

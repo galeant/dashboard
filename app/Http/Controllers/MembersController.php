@@ -23,10 +23,10 @@ class MembersController extends Controller
             $model = Members::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(Members $data) {
-                return '<a href="/admin/members/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/members/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/admin/members/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/admin/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/members/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
@@ -83,14 +83,14 @@ class MembersController extends Controller
             $data->password = md5($data->email);
             if($data->save()){
                 DB::commit();
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("members/".$data->id."/edit")->with('message', 'Successfully saved Members');
             }else{
-                return redirect("admin/members/create")->with('message', 'Error Database;');
+                return redirect("members/create")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("admin/members/create")->with('message', $exception->getMessage());
+            return redirect("members/create")->with('message', $exception->getMessage());
         }
     }
 
@@ -133,9 +133,9 @@ class MembersController extends Controller
             "gendre" => "required",
             "firstname" => "required",
             "lastname" => "required",
-            "username" => "required",
-            "email" => "required",
-            "phone" => "required",
+            "username" => "required|unique:users",
+            "email" => "required|unique:users",
+            "phone" => "required|unique:users",
             "status" => "required"
         ]);
         // Check if it fails //
@@ -156,14 +156,14 @@ class MembersController extends Controller
 
              if($data->save()){
                 DB::commit();
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Successfully saved Members');
+                return redirect("members/".$data->id."/edit")->with('message', 'Successfully saved Members');
             }else{
-                return redirect("admin/members/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("members/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("admin/members/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("members/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 

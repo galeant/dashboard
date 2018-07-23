@@ -57,11 +57,11 @@ return [
 
         's3' => [
             'driver' => 's3',
-            'key' => env('AWS_ACCESS_KEY_ID'),
-            'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            'region' => env('AWS_DEFAULT_REGION'),
-            'bucket' => env('AWS_BUCKET'),
-            'url' => env('AWS_URL'),
+            'key' => env('AWS_ACCESS_KEY_ID','AKIAIMLI2O5KOHD6ZXFQ'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY','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'),
+            'region' => env('AWS_DEFAULT_REGION','ap-southeast-1'),
+            'bucket' => env('AWS_BUCKET','pigijo'),
+            'url' => env('AWS_URL','https://s3.ap-southeast-1.amazonaws.com'),
         ],
 
     ],

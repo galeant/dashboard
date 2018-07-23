@@ -1,7 +1,13 @@
 <?php
 
 return [
-
+    'cdn' => array(
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => "css|js|eot|woff|woff2|ttf|jpg|jpeg|png|gif|svg|mp4|bmp",
+        "s3-ap-southeast-1.amazonaws.com/".env('AWS_BUCKET','pigijo') => "css|js|eot|woff|ttf",
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => "jpg|jpeg|png|gif|svg",
+        's3-'.env('AWS_REGION','ap-southeast-1').'.amazonaws.com/'.env('AWS_BUCKET','pigijo') => ""
+            
+    ),
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -156,6 +162,7 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
@@ -214,6 +221,7 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Datatables' => Yajra\DataTables\Facades\DataTables::class,
+        'Helpers' => App\Http\helpers::class,
     ],
 
 ];

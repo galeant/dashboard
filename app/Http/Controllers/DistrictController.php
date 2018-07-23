@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\District;
+use App\Models\City;
 use Datatables;
 use Validator;
 use DB;
@@ -21,7 +22,7 @@ class DistrictController extends Controller
             $model = District::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(District $data) {
-                return '<a href="/master/district/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/master/district/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
                     <a href="/master/district/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/district/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
@@ -65,9 +66,12 @@ class DistrictController extends Controller
         }
         DB::beginTransaction();
         try{
+            $city = City::find($request->input('city_id'));
             $data = new District();
             $data->city_id = $request->input('city_id');
             $data->name = $request->input('name');
+            $data->city_name = $city->name;
+            $data->city_type = $city->type;
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');
@@ -89,9 +93,8 @@ class DistrictController extends Controller
      */
     public function show($id)
     {
-        //
-    }
 
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -128,9 +131,12 @@ class DistrictController extends Controller
         }
         DB::beginTransaction();
         try{
+            $city = City::find($request->input('city_id'));
             $data = District::find($id);
             $data->city_id = $request->input('city_id');
             $data->name = $request->input('name');
+            $data->city_name = $city->name;
+            $data->city_type = $city->type;
             if($data->save()){
                 DB::commit();
                 return redirect("master/district/".$data->id."/edit")->with('message', 'Successfully saved District');

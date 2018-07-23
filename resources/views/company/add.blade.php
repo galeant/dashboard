@@ -37,36 +37,37 @@
                     </h2>
                 </div>
                 <div class="body">
+                @include('errors.error_notification')
                 <form method="POST" action="{{ url('master/company') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row">
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
-                                <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" name="full_name" required>
+                                <h5>Fullname* :</h5>
+                                {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter FullName','id'=>'name','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                <input type="text" class="form-control" name="email" required>
+                                {{ Form::text('email', null, ['class' => 'form-control','placeholder'=>'Please Enter Email','id'=>'email','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>Phone Number* :</h5>
                                 <input type="hidden" class="form-control" name="format">
-                                <input type="text" class="form-control" name="phone" required>
+                                {{ Form::text('phone', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','id'=>'phone','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
                                 <select class="form-control" name="role" required>
-                                    <option value="owner">Business Owner</option>
-                                    <option value="staff">Staff</option>
-                                    <option value="aggregator">Aggregator</option>
+                                    <option value="1">Business Owner</option>
+                                    <option value="2">Staff</option>
+                                    <option value="3">Aggregator</option>
                                 </select>
                             </div>
                         </div>
@@ -76,7 +77,7 @@
                         <div class="col-md-10 mg-top-10px" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Company / Business Name*:</h5>
-                                <input type="text" class="form-control" name="company_name" required>
+                               {{ Form::text('company_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Company Name','id'=>'company_name','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="row" style="margin:0px">
@@ -94,14 +95,14 @@
                             <div class="col-md-5" style="margin-top:10px;">
                                 <div class="valid-info">
                                     <h5>Company Email Address:</h5>
-                                    <input type="email" class="form-control" name="company_email" >
+                                    {{ Form::text('company_email', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','required'=>'required']) }}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:10px">
                             <div class="valid-info">
                                 <h5>Province*:</h5>
-                                <select class="form-control" name="company_province" required>
+                                <select class="form-control" name="province_id" required>
                                     <option value="" selected>-- Select Province --</option>
                                     @foreach($provinces as $province)
                                         <option value="{{$province->id}}">{{$province->name}}</option>
@@ -112,7 +113,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>City / Regency*:</h5>
-                                <select class="form-control" name="company_city" required>
+                                <select class="form-control" name="city_id" required>
                                     <option value="" selected>-- Select City --</option>
                                 </select>
                             </div>
@@ -120,13 +121,14 @@
                         <div class="col-md-10" style="margin-top:10px">
                             <div class="valid-info">
                                 <h5>Address*:</h5>
-                                <textarea rows="5" name="company_address" class="form-control no-resize" required></textarea>
+                                {{ Form::textArea('company_address', null, ['class' => 'form-control no-resize','rows'=>5,'placeholder'=>'Please Enter Company Address','required'=>'required']) }}
+                                
                             </div>
                         </div>
                         <div class="col-md-10" style="margin-top:10px;">
                             <div class="valid-info">
                                 <h5>Postal Code*:</h5>
-                                <input type="text" class="form-control" name="company_postal" required>
+                                {{ Form::text('company_postal', null, ['class' => 'form-control','placeholder'=>'Please Enter Company Postal Code','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-10" style="margin-top:10px;">
@@ -145,7 +147,7 @@
                                     <label for="1bo">Yes</label>
                                 </div>
                                 <div class="col-md-2">
-                                    <input name="bookingSystem" type="radio" id="2bo" class="radio-col-deep-orange" value="2" checked/>
+                                    <input name="bookingSystem" type="radio" id="2bo" class="radio-col-deep-orange" value="0" checked/>
                                     <label for="2bo">No</label>
                                 </div>
                             </div>
@@ -162,34 +164,25 @@
                         <div class="col-md-3">
                             <div class="valid-info">
                                 <h5>Bank Name*:</h5>
-                                <select class="form-control" name="bank_name" required>
-                                    <option>BRI</option>
-                                    <option>BCA</option>
-                                    <option>BNI</option>
-                                    <option>Mandiri</option>
-                                    <option>CIMB</option>
-                                </select>
+                                {{ Form::select('bank_account_name', Helpers::bankName(), null ,['class' => 'form-control','id'=>'bank_account_name']) }}
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="valid-info">
                                 <h5>Bank Account Number*:</h5>
-                                <input type="text" class="form-control" name="bank_account_number" required>
+                                {{ Form::text('bank_account_number', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="row" style="margin:0px">
                             <div class="col-md-3 col-sm-3 col-xs-5 valid-info">
                                 <h5>Title*:</h5>
-                                <select class="form-control" name="bank_account_holder_title" required>
-                                    <option>Mr</option>
-                                    <option>Mrs</option>
-                                    <option>Miss</option>
-                                </select>
+                                {{ Form::select('bank_account_title', Helpers::salutation(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
                             </div>
                             <div class="col-md-7 col-sm-7 col-xs-12">
                                 <div class="valid-info">
                                     <h5>Account Holder Name*:</h5>
-                                    <input type="text" class="form-control" name="bank_account_holder_name" pattern="^[A-Za-z -]+$" required>
+                                    {{ Form::text('bank_account_holder_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required','pattern' => '^[A-Za-z -]+$']) }}
+                                    
                                 </div>
                             </div>
                         </div>
@@ -211,11 +204,11 @@
                                 <p>What is your business ownership type?</p>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="1o" class="radio-col-deep-orange" value="Company" required/>
+                                <input name="company_ownership" type="radio" id="1o" class="radio-col-deep-orange" value="Company" required/>
                                 <label for="1o">Corporate</label>
                             </div>
                             <div class="col-md-3">
-                                <input name="onwershipType" type="radio" id="2o" class="radio-col-deep-orange" value="Personal" required checked/>
+                                <input name="company_ownership" type="radio" id="2o" class="radio-col-deep-orange" value="Personal" required checked/>
                                 <label for="2o">Personal</label>
                             </div>
                         </div>
@@ -351,16 +344,16 @@
                 }
             });
         // CITY
-            $("select[name='company_province']").change(function(){
+            $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
-                $("select[name='company_city']").empty();
+                $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('cities') }}",
-                    data: { id: idProvince  }
+                    url: "{{ url('json/city') }}",
+                    data: { province_id: idProvince  }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
-                        $("select[name='company_city']").append(
+                    $.each(response.data, function (index, value) {
+                        $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
                     });
