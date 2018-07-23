@@ -23,6 +23,11 @@
         <div class="card" id="listPlaceType">
             <div class="header">
                 <h2>All Place Type</h2>
+                <ul class="header-dropdown m-r--5">
+                    <li >
+                        <a href="/master/destination-type/create" class="btn bg-teal btn-block waves-effect">Add Destination Type</a>
+                    </li>
+                </ul>
             </div>
             <div class="body form-group">
                 <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
@@ -37,80 +42,7 @@
                         </tr>
                     </thead>
                 </table>
-                <br><br>
-                <div class="form-group">
-                    <div class="col-md-12">
-                        <a href="/master/destination-type/create" class="btn bg-teal btn-block waves-effect">Add Destination Type</a>
-                    </div>
-                </div>
-                <br>
             </div>
-            
-        </div>
-        <div class="card" id="addPlaceType" hidden>
-                @include('errors.error_notification')
-            <form action="{{ url('/master/destination-type/') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-                <div class="header">
-                    <h2>Add New Place Type</h2>
-                </div>
-                <div class="body">
-                    <div class="row form-group form-line">
-                        <div class="col-md-6">
-                            <h5>(EN) Place Type* :</h5>
-                            <input type="text" name="name" class="form-control" required>
-                            
-                        </div>
-                        <div class="col-md-6">
-                            <h5>(ID) Place Type* :</h5>
-                            <input type="text" name="name_EN" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <input type="submit" class="form-control btn bg-orange waves-effect" value="Add New Place Type">
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <input type="button" class="form-control btn waves-effect" value="Cancel" id="cancelAddPlaceType">
-                        </div>
-                    </div>
-
-                </div>
-            </form>
-        </div>  
-        <div class="card" id="editPlaceType" hidden>
-            <form action="{{ url('/admin/master/place-type/edit') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-                <div class="header">
-                    <h2>Edit Place Type</h2>
-                </div>
-                <div class="body">
-                    <div class="row form-group form-line">
-                        <input type="hidden" name="editPlaceTypeId">
-                        <div class="col-md-6">
-                            <h5>(EN) Place Type* :</h5>
-                            <input type="text" name="editPlaceTypeNameEN" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <h5>(ID) Place Type* :</h5>
-                            <input type="text" name="editPlaceTypeNameID" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <input type="submit" class="form-control btn bg-orange waves-effect" value="Edit Place Type">
-                        </div>
-                    </div>
-                    
-                    <div class="row form-group">
-                        <div class="col-md-12">
-                            <input type="button" class="form-control btn waves-effect" value="Cancel" id="cancelEditPlaceType">
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>  
     </div>
 @stop

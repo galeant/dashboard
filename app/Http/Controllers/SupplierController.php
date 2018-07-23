@@ -70,7 +70,8 @@ class SupplierController extends Controller
             'username' => 'required',
             'fullname' => 'required',
             'phone' => 'required|min:10',
-            'company_id' => 'required'
+            'company_id' => 'required',
+            'role_id' => 'required',
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -87,6 +88,7 @@ class SupplierController extends Controller
             $data->phone = $request->input('phone');
             $data->password = (new BcryptHasher)->make(str_random(20));
             $data->company_id = $request->input('company_id');
+            $data->role_id = $request->input('role_id');
             $data->token = str_random(100);
             if($data->save()){
                 Mail::to($request->input('email'))->send(new PasswordResetMail($data));
