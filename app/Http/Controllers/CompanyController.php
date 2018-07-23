@@ -101,6 +101,7 @@ class CompanyController extends Controller
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
             ];
+            dd($request->bank_pic);
         if(!empty($request->bank_pic)){
             $bankPic = Helpers::saveImage($request->bank_pic,'company'/*Location*/);
             if($bankPic instanceof  MessageBag){
@@ -205,7 +206,7 @@ class CompanyController extends Controller
     {
         // dd($request->all());
         $validation = Validator::make($request->all(), [
-            'company_name' => 'required|unique:companies',
+            'company_name' => 'required',
             'fullname' => 'required',
             'email' => 'required',
             'phone' => 'required',
@@ -223,6 +224,7 @@ class CompanyController extends Controller
             'province_id' => 'required',
             'city_id' => 'required'
         ]);
+        // dd($request->all());
         // Check if it fails //
         if( $validation->fails() ){
             return redirect()->back()->withInput()
@@ -296,19 +298,14 @@ class CompanyController extends Controller
             }
             $dataSave['evidance_path'] = $eviPic['path_full'];
         }
-        $company = Company::where('company_id',$id)
-            ->with(['suppliers', function($query) use ($id){
-                $query->where('role_id',1)
-                    ->update([
-                        'fullname'=> $request->fullname,
-                        'phone'=> $request->format.'-'.$request->phone,
-                        'email'=> $request->email,
-                        'role_id'=> $request->role,
-                        'company_id' => $id,
-                        'password' => '-'
-                    ]);
-            }])
-            ->update($dataSave);
+        $company = Company::where('id',$id)
+                ->update($dataSave);
+        $supplier = Supplier::where(['company_id' => $id, 'role_id'=>1])
+                ->update([
+                    'fullname'=> $request->fullname,
+                    'phone'=> $request->format.'-'.$request->phone,
+                    'email'=> $request->email,
+                    'password' => '-']);
 
         DB::commit();
         } catch (Exception $e) {

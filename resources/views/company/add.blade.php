@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        All Company
+                        Add New Company
                     </h2>
                 </div>
                 <div class="body">
@@ -41,24 +41,24 @@
                 <form method="POST" action="{{ url('master/company') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row">
-                        <h4>Personal Information</h4>
+                        <h4>Company PIC Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Fullname* :</h5>
-                                {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter FullName','id'=>'name','required'=>'required']) }}
+                                {{ Form::text('fullname', null, ['class' => 'form-control','id'=>'name','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                {{ Form::text('email', null, ['class' => 'form-control','placeholder'=>'Please Enter Email','id'=>'email','required'=>'required']) }}
+                                {{ Form::text('email', null, ['class' => 'form-control','id'=>'email','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>Phone Number* :</h5>
                                 <input type="hidden" class="form-control" name="format">
-                                {{ Form::text('phone', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','id'=>'phone','required'=>'required']) }}
+                                {{ Form::text('phone', null, ['class' => 'form-control','id'=>'phone','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
@@ -77,7 +77,7 @@
                         <div class="col-md-10 mg-top-10px" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Company / Business Name*:</h5>
-                               {{ Form::text('company_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Company Name','id'=>'company_name','required'=>'required']) }}
+                               {{ Form::text('company_name', null, ['class' => 'form-control','id'=>'company_name','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="row" style="margin:0px">
@@ -95,7 +95,7 @@
                             <div class="col-md-5" style="margin-top:10px;">
                                 <div class="valid-info">
                                     <h5>Company Email Address:</h5>
-                                    {{ Form::text('company_email', null, ['class' => 'form-control','placeholder'=>'Please Enter Email Address','required'=>'required']) }}
+                                    {{ Form::text('company_email', null, ['class' => 'form-control']) }}
                                 </div>
                             </div>
                         </div>
@@ -121,14 +121,14 @@
                         <div class="col-md-10" style="margin-top:10px">
                             <div class="valid-info">
                                 <h5>Address*:</h5>
-                                {{ Form::textArea('company_address', null, ['class' => 'form-control no-resize','rows'=>5,'placeholder'=>'Please Enter Company Address','required'=>'required']) }}
+                                {{ Form::textArea('company_address', null, ['class' => 'form-control no-resize','rows'=>5,'required'=>'required']) }}
                                 
                             </div>
                         </div>
                         <div class="col-md-10" style="margin-top:10px;">
                             <div class="valid-info">
                                 <h5>Postal Code*:</h5>
-                                {{ Form::text('company_postal', null, ['class' => 'form-control','placeholder'=>'Please Enter Company Postal Code','required'=>'required']) }}
+                                {{ Form::text('company_postal', null, ['class' => 'form-control','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="col-md-10" style="margin-top:10px;">
@@ -170,7 +170,7 @@
                         <div class="col-md-7">
                             <div class="valid-info">
                                 <h5>Bank Account Number*:</h5>
-                                {{ Form::text('bank_account_number', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required']) }}
+                                {{ Form::text('bank_account_number', null, ['class' => 'form-control','required'=>'required']) }}
                             </div>
                         </div>
                         <div class="row" style="margin:0px">
@@ -181,7 +181,7 @@
                             <div class="col-md-7 col-sm-7 col-xs-12">
                                 <div class="valid-info">
                                     <h5>Account Holder Name*:</h5>
-                                    {{ Form::text('bank_account_name', null, ['class' => 'form-control','placeholder'=>'Please Enter Bank Account Number','required'=>'required','pattern' => '^[A-Za-z -]+$']) }}
+                                    {{ Form::text('bank_account_name', null, ['class' => 'form-control','required'=>'required','pattern' => '^[A-Za-z -]+$']) }}
                                 </div>
                             </div>
                         </div>
