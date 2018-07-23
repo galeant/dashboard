@@ -190,8 +190,6 @@ class CityController extends Controller
         $data = $data->select('id',DB::raw("CONCAT(`type`,' ',`name`) as name"))->get()->toArray();
         return $this->sendResponse($data, "City retrieved successfully", 200);
     }
-
-    
     public function findCity(Request $req){
         $cities = City::where('province_id',$req->province_id)->get();
         return response()->json($cities,200);

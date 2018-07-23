@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="{{ url('master/product/create') }}" class="btn bg-teal btn-block waves-effect">Add Company</a>
+                                    <a href="{{ url('master/product/create') }}" class="btn bg-teal btn-block waves-effect">Add Tour</a>
                                 </li>
                             </ul>
                         </div>

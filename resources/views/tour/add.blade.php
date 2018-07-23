@@ -187,7 +187,7 @@
                                                 <div class="col-md-2 valid-info">
                                                     <h5>Day?* :</h5>
                                                     <select class="form-control" id="day" name="day"  required>
-                                                        <option values="">-- Days --</option>
+                                                        <option values="" selected>-- Days --</option>
                                                         @for($i=1;$i<24;$i++)
                                                         <option values="{{$i}}">{{$i}}</option>
                                                         @endfor
@@ -198,7 +198,7 @@
                                                 <div class="col-md-2 valid-info">
                                                     <h5>Hours?* :</h5>
                                                     <select class="form-control" id="hours" name="hours" required>
-                                                        <option values="">-- Minutes --</option>
+                                                        <option values="" selected>-- Minutes --</option>
                                                         @for($i=1;$i<12;$i++)
                                                         <option values="{{$i}}">{{$i}}</option>
                                                         @endfor
@@ -207,7 +207,7 @@
                                                 <div class="col-md-2 valid-info">
                                                     <h5>Minutes?* :</h5>
                                                     <select class="form-control" id="minutes" name="minutes" required>
-                                                        <option values="">-- Hours --</option>
+                                                        <option values="" selected>-- Hours --</option>
                                                         @for($i=1;$i<60;$i++)
                                                         <option values="{{$i}}">{{$i}}</option>
                                                         @endfor
@@ -326,7 +326,17 @@
                                 </div>
                                 <div class="card">
                                     <div class="header">
-                                        <h4>Itinerary Detail</h4>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h4>Itinerary Detail</h4>
+                                            </div>
+                                            <div class="col-md-1 col-md-offset-7">
+                                                <button type="button" id="generate" class="btn btn-primary waves-effect">
+                                                    <i class="material-icons">book</i>
+                                                    <span>Generate</span>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="body" id="itinerary_list" style="display: none">
                                         <h5></h5>
@@ -436,7 +446,7 @@
                                             <div class="col-md-6 valid-info">
                                                 <h5>What's already included with pricing you have set?What will you provide?</h5>
                                                 <h5 style="font-size: 18px">Example: Meal 3 times a day, mineral water, driver as tour guide.</h5>
-                                                <select type="text" class="form-control" name="price_include[]" multiple="multiple" style="width: 100%" required></select>
+                                                <select type="text" class="form-control" name="price_includes[]" multiple="multiple" style="width: 100%" required></select>
                                             </div>
                                             <div class="col-md-6" style="padding-top:85px">
                                                 <h5>Type a paragraph and press Enter.</h5>
@@ -620,7 +630,7 @@
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script>
         $(document).ready(function () {
-        // $("form *").removeAttr("required");
+        $("form *").removeAttr("required");
         // VALIDATION
         $('#wizard_with_validation').validate({
             highlight: function (input) {
@@ -673,10 +683,9 @@
                 }
             });
         // MASK
-            $("#idr,#usd").mask('0.000.000.000', {reverse: true});
             $("#PICPhone").mask('000-0000-00000');
             $("#minPerson,#maxPerson,#scheduleField6,#cancellationDay,#cancellationFee").mask('0000');
-            $("input#idr,input#usd").mask('00000000000000000000000000000');
+            $("input#idr,input#usd").mask('0.000.000.000', {reverse: true});
             $("#scheduleField3,#scheduleField4,#field_itinerary_input2,#field_itinerary_input3").mask('00:00');
         // DATE PICKER
         	var dateFormat = 'DD-MM-YYYY';
@@ -1056,12 +1065,12 @@
         // ACTIVITY TAG
             $('select[name="activity_tag[]"]').select2();
         // GENERATE ITINERARY
-            $("#nav").find("#next").click(function(){
-				$("#itineraryGenerate").empty();
-				$("#itinerary_list").show();
-				var scheType = $("input[name='schedule_type']").attr("sel");
+            $("#generate").click(function(){
+                $("#itineraryGenerate").empty();
+                $("#itinerary_list").show();
+                var scheType = $("input[name='schedule_type']").attr("sel");
                 var days, itic;
-				if(scheType == 1){
+                if(scheType == 1){
                     days = $("#day").val();
                 }else{
                     days = 1;
@@ -1076,7 +1085,7 @@
                     $(".itinerary_list"+itic+" .row .col-md-3 button").attr("onclick","addItineraryRow("+itic+")");
                 }
                 $("#itinerary_list").hide();			
-			});
+            });
         // PRICE
             $("input[name='price_kurs']").change(function () {
                 var priceKurs = $(this).val();
@@ -1121,7 +1130,7 @@
                 }
             });
         // PRICE INCLUDE
-            $("select[name='price_include[]']").select2({
+            $("select[name='price_includes[]']").select2({
                 tags:true
             });
         // PRICE EXCLUDE

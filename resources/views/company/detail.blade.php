@@ -439,7 +439,7 @@
                             <button type="submit" class="btn btn-block bg-green btn-lg waves-effect">SAVE</button>
                         </div>
                     </div>
-                </form>
+                {{ Form::close() }}
                 </div>
             </div>
         </div>

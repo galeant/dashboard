@@ -24,7 +24,6 @@
     <link href="{{asset('plugins/animate-css/animate.css')}}" rel="stylesheet" />
 
 	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
-
     <!-- Custom Css -->
     <link href="{{asset('css/style.css')}}" rel="stylesheet">
 
@@ -194,19 +193,24 @@
 		                            <span>Company</span>
 		                        </a>
 		                    </li>
-							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
-														<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
-																<span>Coupon</span>
-														</a>
-												</li>
-							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
-		                            <span>Tour</span>
-		                        </a>
-		                    </li>
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
 		                            <span>Language</span>
+		                        </a>
+		                    </li>
+		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
+		                            <span>Country</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
+								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
+										<span>Coupon</span>
+								</a>
+							</li>
+							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
+		                            <span>Tour</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
@@ -313,6 +317,9 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.js')}}"></script>
 
 <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
+
+<!-- Select Plugin Js -->
+<!-- <script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script> -->
 
 <!-- Slimscroll Plugin Js -->
 <script src="{{asset('plugins/jquery-slimscroll/jquery.slimscroll.js')}}"></script>
