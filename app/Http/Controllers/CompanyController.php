@@ -238,6 +238,21 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        dd($id);
+    }
+
+    public function json(Request $request)
+    {
+        $data  =  new Company();
+        $name     = ($request->input('name') ? $request->input('name') : '');
+        if(!empty($request->input('country_id'))){
+            $country_id = $request->input('country_id');
+            $data = $data->where('country_id',$country_id);
+        }
+        if($name)
+        {
+            $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
+        }
+        $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
+        return $this->sendResponse($data, "Company retrieved successfully", 200);
     }
 }

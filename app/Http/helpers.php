@@ -49,25 +49,27 @@ class helpers{
 
 	public static function saveImage($image = null,$path ='images',$thumbnail = false,$ratio = null)
 	{
-		$year  = date('Y');
-		$month = date('m');
-		$day   = date('d');
-		$path  = md5($path).'/'.$year.'/'.$month.'/'.$day;
-		// dd($path);
-		$extension      = $image->getClientOriginalExtension();
-
-    	$filename       = self::encodeSpecialChar(pathinfo($image->getClientOriginalName())['filename']);
-    	$filename		= $filename.'.'.$extension;
-        $sizeimg        = $image->getSize();
-        $mime           = $image->getMimeType();
-        $bag = new MessageBag();
 		if($image == null){
 			$bag->add('error', 'Missing Image !');
 			return $bag;
 		}
+		$year  = date('Y');
+		$month = date('m');
+		$day   = date('d');
+		$path  = md5($path).'/'.$year.'/'.$month.'/'.$day;
+		$extension      = (!empty(pathinfo($image, PATHINFO_EXTENSION)) ? pathinfo($image, PATHINFO_EXTENSION) : $image->getClientOriginalExtension());
+		$name = ((pathinfo($image)['dirname'] == '/private/var/tmp') ? pathinfo($image->getClientOriginalName())['filename'] : pathinfo($image)['filename'] );
+		// dd($image);
+    	$filename       = self::encodeSpecialChar($name);
+    	$filename		= $filename.'.'.$extension;
+    	$originalSize   = getimagesize($image);
+        $sizeimg        = filesize($image);
+        $mime           = $originalSize['mime'];
+        $bag = new MessageBag();
+		
 		try {
 	        if($thumbnail == true){
-	        	$originalSize =getimagesize($image);
+	        	
 				$width = $originalSize[0];
 				$height = $originalSize[1];
 	        	try {
