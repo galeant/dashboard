@@ -27,5 +27,5 @@ function cdn( $asset = '' ){
 }
 
 function cdnPath($cdn, $asset) {
-    return  "http://" . rtrim($cdn, "/") . "/" . ltrim( $asset, "/");
+    return  "https://" . rtrim($cdn, "/") . "/" . ltrim( $asset, "/");
 }

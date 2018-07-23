@@ -280,6 +280,7 @@ class TourGuideController extends Controller
                 $filename = date('ymdhis') . '_croppedImage' . ".".$request->avatar->getClientOriginalExtension();
                 $file = $destinationPath . $filename;
                 $success = file_put_contents($file, $data);
+                // dd($file);
                 $bankPic = Helpers::saveImage($file,'avatar'/*Location*/);
                 if($bankPic instanceof  MessageBag){
                     return redirect()->back()->withInput()
@@ -289,6 +290,7 @@ class TourGuideController extends Controller
                 unlink($file);
                 $save->avatar = $avatar;
             }
+            
         $save->save();
         $save->coverage()->sync($request->input('coverage'));
         TourGuideServicePrice::where('tour_guide_id',$save->id)->forceDelete();

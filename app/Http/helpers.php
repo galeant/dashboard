@@ -5,7 +5,8 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\MessageBag;
 use Config;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+// use
 class helpers{
 	public static function salutation(){
 		return ['Mr'=> 'Mr.','Mrs'=>'Mrs.','Ms'=>'Ms.'];
@@ -53,15 +54,21 @@ class helpers{
 			$bag->add('error', 'Missing Image !');
 			return $bag;
 		}
+		if($image instanceof UploadedFile){
+			$name = pathinfo($image->getClientOriginalName())['filename'];
+		}
+		else{
+			$name = pathinfo($image)['filename'];
+		}
+		// dd($name);
 		$year  = date('Y');
 		$month = date('m');
 		$day   = date('d');
 		$path  = md5($path).'/'.$year.'/'.$month.'/'.$day;
 		$extension      = (!empty(pathinfo($image, PATHINFO_EXTENSION)) ? pathinfo($image, PATHINFO_EXTENSION) : $image->getClientOriginalExtension());
-		$name = ((pathinfo($image)['dirname'] == '/private/var/tmp') ? pathinfo($image->getClientOriginalName())['filename'] : pathinfo($image)['filename'] );
-		// dd($image);
     	$filename       = self::encodeSpecialChar($name);
     	$filename		= $filename.'.'.$extension;
+    	// dd($image);
     	$originalSize   = getimagesize($image);
         $sizeimg        = filesize($image);
         $mime           = $originalSize['mime'];

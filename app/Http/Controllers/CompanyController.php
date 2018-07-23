@@ -101,7 +101,6 @@ class CompanyController extends Controller
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
             ];
-            dd($request->bank_pic);
         if(!empty($request->bank_pic)){
             $bankPic = Helpers::saveImage($request->bank_pic,'company'/*Location*/);
             if($bankPic instanceof  MessageBag){
@@ -232,6 +231,7 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
         try {
+            // dd($request->all());
         $dataSave = [
             'company_name'=> $request->company_name,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
