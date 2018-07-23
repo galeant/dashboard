@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\coupons;
+use App\Models\Coupons;
 use Validator;
 use Datatables;
 use DB;
