@@ -10,6 +10,9 @@ use DB;
 use Validator;
 use Illuminate\Hashing\BcryptHasher;
 
+use App\Mail\PasswordResetMail;
+use Illuminate\Support\Facades\Mail;
+
 class SupplierController extends Controller
 {
     /**
@@ -82,9 +85,11 @@ class SupplierController extends Controller
             $data->username = $request->input('username');
             $data->fullname = $request->input('fullname');
             $data->phone = $request->input('phone');
-            $data->password = (new BcryptHasher)->make($request->input('email'));
+            $data->password = (new BcryptHasher)->make(str_random(20));
             $data->company_id = $request->input('company_id');
+            $data->token = str_random(100);
             if($data->save()){
+                Mail::to($request->input('email'))->send(new PasswordResetMail($data));
                 DB::commit();
                 return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
             }else{
@@ -193,6 +198,28 @@ class SupplierController extends Controller
             DB::rollBack();
             \Log::info($exception->getMessage());
             return $this->sendResponse($data, $exception->getMessage() , 200);
+        }
+    }
+
+    public function password_reset($id)
+    {
+        DB::beginTransaction();
+        try{
+            $data = Supplier::find($id);
+            // $data->password = (new BcryptHasher)->make(str_random(20));
+            $data->token = str_random(100);
+            if($data->save()){
+                Mail::to($data->email)->send(new PasswordResetMail($data));
+                DB::commit();
+                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully Send Password Reset Supplier');
+            }else{
+                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Error Database;');
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            // return $data;
+            return redirect("master/supplier/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 }

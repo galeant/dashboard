@@ -64,9 +64,20 @@
 					            <div class="form-group m-b-20">
 									<label>Company</label>
 									{{ Form::select('company_id', $company, null ,['class' => 'form-control', 'id'=>'company_id','required'=>'required'])}}
-					            </div>
+								</div>
+								<div class="form-group m-b-20">
+									<label>Role</label>
+									{{ Form::select('role_id', array('1' => 'Owner', '2' => 'Staff'), null ,['class' => 'form-control', 'id'=>'role_id'])}}
+								</div>
 					            <div class="form-group m-b-20">
-					            	<div class="col-md-3 col-lg-offset-9">
+					            	<div class="col-md-4 col-lg-offset-5">
+										@if(isset($data))
+										<a href="{{ url('/master/supplier/password_reset/'.$data->id) }}">
+											<button type="button" class="btn btn-block btn-lg btn-primary waves-effect">Send Email Password</button>
+										</a>											
+										@endif
+									</div>
+					            	<div class="col-md-3">
 					            		<button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
 									</div>
 					            </div>
