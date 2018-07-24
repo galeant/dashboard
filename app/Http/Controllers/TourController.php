@@ -123,12 +123,12 @@ class TourController extends Controller
         $dataSave = [
             // pic
             'pic_name' => $request->pic_name,
-            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone   ,
+            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
             // product 
             'product_code' => '101-'.($code+1),
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
-            'product_type' => $request->product_category,
+            'product_type' => $request->product_type,
             // person
             'min_person' => $request->min_person,
             'max_person' => $request->max_person,
@@ -413,17 +413,22 @@ class TourController extends Controller
 			'destinations',
 			'destinations.province',
 			'destinations.city',
-			// 'destinations.dest',
+			'destinations.dest',
             'activities',
             'includes',
             'excludes'
 			)
 			->where('id',$id)
-			->first();
-		$province = Province::all();
+            ->first();
+        $company = Company::all();
+        $province = Province::all();
+        $activities = ActivityTag::all();
 		$city = City::all();
 		$destination = ProductDestination::all();
-		// dd($product);
+        // dd($product);
+        // foreach($product->destinations as $ed){
+        //     dd($ed['province_id']);
+        // }
 		// DAY
 		$startDate = strtotime($product->schedules[0]->start_date);
 		$endDate = strtotime($product->schedules[0]->end_date);
@@ -440,15 +445,17 @@ class TourController extends Controller
 			'provinces'=> $province,
 			'cities'=>$city,
 			'cities2'=> new City,
-			// 'destinations'=>$destination,
-			// 'destination2' => new Destination,
+			'destinations'=>$destination,
+			'destination2' => new Destination,
 			'day' => $day,
 			'hours' => $hours,
-			'minutes' => $minutes
+            'minutes' => $minutes,
+            'companies'=>$company,
+            'activities'=>$activities
         ];
 
         // dd($pushToBlade);
-        return view('tour.detail',$pushToBlade);
+        return view('tour.test',$pushToBlade);
     }
 
     /**

@@ -171,4 +171,8 @@ class ActivityTagController extends Controller
             return $this->sendResponse($data, $exception->getMessage() , 200);
         }
     }
+    public function activityList(){
+        $activityTag = ActivityTag::all();
+        return response()->json($activityTag,200);
+    }
 }

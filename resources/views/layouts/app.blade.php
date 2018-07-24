@@ -198,11 +198,6 @@
 		                            <span>Language</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
-		                            <span>Country</span>
-		                        </a>
-		                    </li>
 							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
 								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
 										<span>Coupon</span>

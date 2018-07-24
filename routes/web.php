@@ -69,6 +69,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('district','DistrictController@json');
 		Route::get('village','VillageController@json');
 		Route::get('company','CompanyController@json');
+
+		Route::get('activity','ActivityTagController@activityList');
 		
 	});
 	Route::group(['prefix' => 'product'],function(){
