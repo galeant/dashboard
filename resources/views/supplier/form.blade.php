@@ -57,6 +57,10 @@
 					                <label>Full Name</label>
 					                 {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'fullname','required'=>'required']) }}
 					            </div>
+						    	<div class="form-group m-b-20">
+					                <label>Password</label>
+					                 {{ Form::password('password', ['class' => 'form-control','placeholder'=>'Enter Password','id'=>'password']) }}
+					            </div>
 					            <div class="form-group m-b-20">
 					                <label>Phone Number</label>
 					                 {{ Form::text('phone', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','id'=>'phone','required'=>'required']) }}
