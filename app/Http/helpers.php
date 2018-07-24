@@ -80,7 +80,7 @@ class helpers{
 				$width = $originalSize[0];
 				$height = $originalSize[1];
 	        	try {
-			        Storage::disk('s3')->put($path.'/original/'.$filename,file_get_contents($image),Config::get('s3'));
+			        Storage::disk('s3')->put($path.'/'.$filename,file_get_contents($image),Config::get('s3'));
 			        $thumbnail = self::autoRatio($width,$height,$ratio);
 			        $tempPath = 'tmp';
 			        $deleteTemp = [];

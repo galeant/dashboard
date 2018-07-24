@@ -50,7 +50,7 @@ class Tour extends Model
 
     public function activities()
     {
-        return $this->belongsToMany('App\Models\ActivityTag', 'product_activity','product_id', 'activity_id');
+        return $this->belongsToMany('App\Models\ActivityTag', 'product_activities','product_id', 'activity_id');
     }
 
     public function itineraries()

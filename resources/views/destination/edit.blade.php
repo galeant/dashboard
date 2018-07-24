@@ -5,6 +5,8 @@
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
     <link href="{{ asset('plugins/telformat/css/intlTelInput.css') }}" rel="stylesheet" />
     <link href="{{ asset('plugins/bootstrap-file-input/css/fileinput.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('plugins/cropper/cropper.min.css') }}" rel="stylesheet">
 @stop
 @section('main-content')
 
@@ -19,7 +21,7 @@
                 </h2>
             </div>
             <div class="body">
-                {{ Form::model($destination, ['route' => ['destination.update', $destination->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
+                {{ Form::model($destination, ['route' => ['destination.update', $destination->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation', 'enctype'=>'multipart/form-data']) }}
                     <div class="row container">
                         <div class="col-md-12">
                         <h5 for="destination_type_id">Destination Type</h5>
@@ -350,11 +352,33 @@
                     </div>
                     <div class="row container">
                         <div class="col-md-12">
-                            <h4>Main Image* :</h4>
+                            <h5>Main Image* :</h5>
                         </div>
                         <div class="col-md-6">
-                            <input type="file" name="cover_image">
-                            <img src="{{asset($destination->cover_image)}}" alt="">
+                            <div class="dd-avatar">
+                                <img src="{{cdn($destination->path.'/'.$destination->filename)}}" class="img-responsive" id="img-avtr">
+                            </div>
+                            <input name="image_resize" type="text" value="" hidden>
+                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
+                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
+                        </div>
+                        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                            <div class="img-container">
+                                            <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                                        <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row form-group container">
@@ -369,6 +393,33 @@
                         <div class="col-md-12" style="margin-left:10px;">
                             <h5>Traveasl tips. Give some travel tips for this destination.</h5>
                             <h5>Enter each tips in separate input field. You can add more input field.</h5>
+                        </div>
+                        <div id="clone_destination_tips" hidden>
+                            <div class="row" id="destination_tips">
+                                <div class="col-md-6" style="margin:0; padding:0;">
+                                    <br>
+                                    <div class="col-xs-1">
+                                        <ul>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <select name="destination_tips[][question_id]" class="form-control">
+                                            <option value="">-- Select Option --</option>
+                                            @foreach($destination_tips_question as $dtq)
+                                                <option value="{{$dtq->id}}">{{$dtq->question}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-11 col-md-offset-1">
+                                        <textarea name="destination_tips[][answer]" id="" class="form-control" rows="5"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 delete_tips">
+                                        <br><br>
+                                    <button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
+                                </div>
+                            </div>
                         </div>
                         @foreach($destination->destination_tips as $key=>$ddt)
                         <div class="row" id="destination_tips">
@@ -395,11 +446,13 @@
                                 </div>
                             </div>
                             <div class="col-md-6 delete_tips">
-                                <br>
+                                <br><br>
+                                <button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
                             </div>
                         </div>
-                        @endforeach
                     </div>
+                    
+                    @endforeach
                     <div class="row">
                         <div id="destination_tips_clone"></div>
                     </div>
@@ -425,29 +478,12 @@
 @endsection
 @section('head-js')
 @parent
-    <!-- Jquery Core Js -->
-    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-    <script src="{{ asset('plugins/bootstrap-file-input/js/fileinput.js') }}"></script>
-    <!-- Slimscroll Plugin Js -->
-    <script src="{{ asset('plugins/jquery-slimscroll/jquery.slimscroll.js') }}"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="{{ asset('plugins/node-waves/waves.js') }}"></script>
-
-
-    <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
-    <!-- Custom Js -->
-    <script src="{{ asset('js/admin.js') }}"></script>
-
-    <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script>
-    <!-- Demo Js -->
-    <script src="{{ asset('js/demo.js') }}"></script>
+<script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>   
+<script src="{{asset('plugins/bootstrap-file-input/js/fileinput.js') }}"></script>
+<script src="{{ asset('js/admin.js') }}"></script>
+<script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
+<script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script>
+<script src="{{ asset('js/demo.js') }}"></script>
     <script>
         $(document).ready(function(){
             $("select[name='province_id']").find("option[value='{{$destination->province_id}}']").attr('selected', 'selected')
@@ -457,9 +493,12 @@
             $("select[name='village_id']").empty();
             $.ajax({
                 method: "GET",
-                url: "{{ url('/master/findCity') }}"+"/"+{{$destination->province_id}}
+                url: "{{ url('/json/city') }}",
+                data:{
+                    province_id : {{$destination->province_id}}
+                }
             }).done(function(response) {
-                $.each(response, function (index, value) {
+                $.each(response.data, function (index, value) {
                     $("select[name='city_id']").append(
                         "<option value="+value.id+">"+value.name+"</option>"
                     );
@@ -467,9 +506,12 @@
                 $("select[name='city']").find("option[value='{{$destination->city}}']").attr('selected', 'selected');
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findDistrict') }}"+"/"+{{$destination->city_id}}
+                    url: "{{ url('/json/district') }}",
+                    data:{
+                        city_id : {{$destination->city_id}}
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $.each(response.data, function (index, value) {
                         $("select[name='district_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -478,9 +520,12 @@
                     
                     $.ajax({
                         method: "GET",
-                        url: "{{ url('/master/findVillage') }}"+"/"+{{$destination->district_id}}
+                        url: "{{ url('/json/village') }}",
+                        data:{
+                            district_id : {{$destination->district_id}}
+                        }
                     }).done(function(response) {
-                        $.each(response, function (index, value) {
+                        $.each(response.data, function (index, value) {
                             $("select[name='village_id']").append(
                                 "<option value="+value.id+">"+value.name+"</option>"
                             );
@@ -493,17 +538,25 @@
         });
     </script>
     <script type="text/javascript">
+    @if(count($destination->destination_tips) > 0)
     var i = "{{count($destination->destination_tips)}}";
-            $("#add_more_tips").click(function (){
-                $("#destination_tips").clone().appendTo("#destination_tips_clone").addClass("cloneTips"+i);
-                $(".cloneTips"+i+" select[name='destination_tips[0][question_id]']").attr("name","destination_tips["+i+"][question_id]");
-                $(".cloneTips"+i+" textarea[name='destination_tips[0][answer]']").attr("name","destination_tips["+i+"][answer]").val("");
-                $(".cloneTips"+i+" .delete").append('<div class="col-md-6"><button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button></div>');
-                i++;
-            });
+    @else
+    var i = {{count($destination->destination_tips)}}+1;
+    console.log(i);
+    @endif
+    $("#add_more_tips").click(function (){
+        $("#destination_tips").clone().appendTo("#destination_tips_clone").addClass("cloneTips"+i);
+        $(".cloneTips"+i+" select[name='destination_tips[][question_id]']").attr("name","destination_tips["+i+"][question_id]");
+        $(".cloneTips"+i+" textarea[name='destination_tips[][answer]']").attr("name","destination_tips["+i+"][answer]").val("");
+        $(".cloneTips"+i+" select").removeAttr("disabled"); 
+        $(".cloneTips"+i+" textarea").removeAttr("disabled"); 
+        $(".cloneTips"+i+" .delete").append('<div class="col-md-6"><button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button></div>');
+        i++;
+    });
     var listPlacePhoto = [];
         $(document).ready(function(){ 
-            
+            $("#clone_destination_tips").find('select').attr("disabled", "disabled").off('click');
+            $("#clone_destination_tips").find('textarea').attr("disabled", "disabled").off('click');
             var phoneNumber = "{{$destination->phone_number}}";
             var codePhoneNumber = phoneNumber.split("-");
             console.log(codePhoneNumber);
@@ -522,11 +575,17 @@
             $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
                 $("select[name='city_id']").empty();
+                $("select[name='district_id']").empty();
+                $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findCity') }}"+"/"+idProvince
+                    url: "{{ url('/json/city') }}",
+                    data:{
+                        province_id : idProvince
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='city_id']").append("<option value=''>--Select City--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -537,11 +596,16 @@
             $("select[name='city_id']").change(function(){
                 var idCity = $(this).val();
                 $("select[name='district_id']").empty();
+                $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findDistrict') }}"+"/"+idCity
+                    url: "{{ url('/json/district') }}",
+                    data:{
+                        city_id : idCity
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='district_id']").append("<option value=''>--Select District--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='district_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -553,9 +617,13 @@
                 $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findVillage') }}"+"/"+idDistrict
+                    url: "{{ url('/json/village') }}",
+                    data:{
+                        district_id : idDistrict
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='village_id']").append("<option value=''>--Select Village--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='village_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -716,12 +784,13 @@
                 }
             });
             @foreach($destination->destination_photos as $dp)
-                listPlacePhoto.push("{{url($dp->path.$dp->filename.$dp->extension)}}")
+                listPlacePhoto.push("{{cdn($dp->path.'/'.$dp->filename)}}")
             @endforeach
             $("#destination_photo").fileinput({
                 theme: 'fa',
                 uploadUrl: "a",
                 uploadAsync: false,
+                overwriteInitial: false,
                 maxFileCount: 5,
                 maxFileSize: 5000,
                 showCaption: false,
@@ -736,7 +805,7 @@
                 initialPreviewFileType: 'image',
                 initialPreviewConfig: [
                     @foreach($destination->destination_photos as $dp)
-                        {width: "120px", url: "{{url('/master/destination/deletePhoto')}}", key:"{{$dp->id}}"},    
+                        {width: "120px", url: "{{url('/master/destination_photo/destroy')}}", key:"{{$dp->id}}"},    
                     @endforeach
                 ],
                 allowedFileTypes: ['image'],
@@ -750,6 +819,71 @@
         $(document).on("click", "#deleteTips", function() {
             $(this).closest(".row").remove();
         });
-        
+    </script>
+    <script>
+        $(document).ready(function(){
+            window.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('crop-image');
+            var cropBoxData;
+            var canvasData;
+            var cropper;
+
+            $('#defaultModal').on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                    autoCropArea: 1,
+                    aspectRatio: 9/4,
+                    strict: false,
+                    guides: false,
+                    highlight: false,
+                    dragCrop: false,
+                    zoomable: false,
+                    scalable: false,
+                    rotatable: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: false,
+                    responsive: true,
+                    viewMode: 1,
+                    ready: function () {
+                        // Strict mode: set crop box data first
+                        cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                    }
+                });
+                
+            }).on('hidden.bs.modal', function () {
+                cropBoxData = cropper.getCropBoxData();
+                canvasData = cropper.getCanvasData();
+                originalData = cropper.getCroppedCanvas();
+                cropper.destroy();
+            });
+            $('.btn-img-save').click(function(){
+                data = originalData = cropper.getCroppedCanvas();
+                $('input[name="image_resize"]').val(originalData.toDataURL('image/jpeg'));
+                $('#img-avtr').attr('src',originalData.toDataURL('image/jpeg'));
+                $('.btn-img-close').click();
+            });
+        });
+            $('#c_p_picture').click(function(e){
+                e.preventDefault();
+                $('input[name="avatar"]').click();
+            });
+            
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('img#crop-image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $(document).delegate('#c_p_file', 'change', function(e){
+                e.preventDefault();
+                $('#defaultModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                readURL(this);
+            });
+        })
     </script>
 @stop

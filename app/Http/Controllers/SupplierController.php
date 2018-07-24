@@ -66,10 +66,10 @@ class SupplierController extends Controller
         // Validation //
         $validation = Validator::make($request->all(), [
             'salutation' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|max:255|unique:suppliers',
             'username' => 'required',
             'fullname' => 'required',
-            'phone' => 'required|min:10',
+            'phone' => 'required|min:9',
             'company_id' => 'required',
             'role_id' => 'required',
         ]);
@@ -91,7 +91,7 @@ class SupplierController extends Controller
             $data->role_id = $request->input('role_id');
             $data->token = str_random(100);
             if($data->save()){
-                Mail::to($request->input('email'))->send(new PasswordResetMail($data));
+                // Mail::to($request->input('email'))->send(new PasswordResetMail($data));
                 DB::commit();
                 return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
             }else{
@@ -144,7 +144,7 @@ class SupplierController extends Controller
         //
         $validation = Validator::make($request->all(), [
             'salutation' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|max:255|unique:suppliers',
             'username' => 'required',
             'fullname' => 'required',
             'phone' => 'required|min:10',

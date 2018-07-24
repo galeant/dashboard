@@ -11,4 +11,9 @@ class ActivityTag extends Model
         'name',
         'description'
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany('App\Models\Tour', 'product_activities','activity_id', 'product_id');
+    }
 }

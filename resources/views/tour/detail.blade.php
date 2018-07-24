@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="body">
-                
+                    
                     <div class="card" id="productInfo">
                         <div class="header" style="padding: 0px">
                             <div class="row clearfix" >
@@ -171,7 +171,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_destination as $dest)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($dest->url) }}" />
+                                                            <img src="{{ cdn($dest->path.'/'.$dest->filename) }}"/>
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -182,7 +182,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_accommodation as $acc)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($acc->url) }}" />
+                                                            <img src="{{ cdn($acc->path.'/'.$acc->filename) }}"/>
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -193,7 +193,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_activity as $act)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($act->url) }}" />
+                                                            <img src="{{ cdn($act->path.'/'.$act->filename) }}"/>
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -204,7 +204,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_other as $oth)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($oth->url) }}" />
+                                                            <img src="{{ cdn($oth->path.'/'.$oth->filename) }}"/>
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -226,6 +226,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row clearfix" id="input">
                                 <div class="col-md-12 valid-info">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
@@ -285,6 +286,7 @@
                                         <input id="file-i3" type="file" name="image_accommodation[]"accept=".jpg,.gif,.png,.jpeg"  multiple required>
                                     </div>
                                 </div>
+
                                 <div class="col-md-12 valid-info" style="margin-top:20px">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Delete Other Photo</h4>
@@ -364,6 +366,7 @@
                                     </table>
                                 </div>
                                 <div class="row" id="input">
+                                @if(!empty($product->destinations))
                                     @foreach($product->destinations as $key=>$destination)
                                         <div class="row" id="dinamic_destination" style="margin: 0px 3px 0px 3px;">
                                             <div class="col-md-3 valid-info">
@@ -394,6 +397,7 @@
                                             <div class="col-md-1" style="padding-top:25px "></div>
                                         </div>
                                     @endforeach
+                                @endif
                                         <div id="clone_dinamic_destination"></div>
                                             <div class="row" style="margin: 0px 3px 0px 3px;">
                                                 <div class="col-md-3">
@@ -474,6 +478,7 @@
                                     </tbody>
                                 </table>
                             </div>
+
                             <div class="row clearfix" id="input">
                                 <!-- SCHEDULE -->
                                 <div class="col-md-12" style="margin: 0px 3px 0px 3px;">
@@ -572,6 +577,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row clearfix" style="margin:10px;padding: 10px" id="action">
                                 <div class="col-md-2" id="button-edit">
                                     <button type="button" class="btn bg-red btn-block btn-lg waves-effect">EDIT</button>
@@ -601,15 +607,19 @@
                                             <div class="col-md-8" id="value">Based of Person</div>
                                         @endif
                                     </div>
+
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Pricing Scheme</label></div>
                                         <div class="col-md-8">
+
                                             @if($product->price_idr != null)
-                                                <li>{{ $product->price_idr}} Person = Rp. {{ $price->price_usd}}/person </li>
+                                                <li>{{ $product->price_idr}} Person = Rp. {{ $product->price_usd}}/person </li>
                                             @else
-                                                @foreach($product->prices as $price)
-                                                <li>{{ $price->price_idr}} Person = Rp. {{ $price->price_usd}}/person </li>
-                                                @endforeach
+                                                @if(!empty($product->prices))
+                                                    @foreach($product->prices as $price)
+                                                    <li>{{ $product->price_idr}} Person = Rp. {{ $product->price_usd}}/person </li>
+                                                    @endforeach
+                                                @endif
                                             @endif
                                         </div>
                                     </div>
@@ -627,25 +637,31 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-4"><label>Pricing Includes</label></div>
                                         <div class="col-md-8">
+                                        @if(!empty($product->includes))
                                             @foreach($product->includes as $include)
                                             <li>{{ $include->description}}</li>
                                             @endforeach
+                                        @endif
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4"><label>Pricing Excludes</label></div>
                                         <div class="col-md-8">
+                                        @if(!empty($product->excludes))
                                             @foreach($product->excludes as $exclude)
                                             <li>{{ $exclude->description}}</li>
                                             @endforeach
+                                        @endif
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row clearfix" id="input">
                                 <div class="col-md-12" style="margin-top: 20px;">
                                     <h4>Pricing Details</h4>
@@ -667,23 +683,27 @@
                                                 <option value="2">Based on Number of Person</option>
                                             </select>
                                         </div>
+
                                         <div id="price_fix">
                                             <div class="col-md-3 valid-info" id="price_idr">
                                                 <h5>Price / person (IDR)*:</h5>
                                                 <input type="hidden" name="price[0][people]" value="fixed"> 
-                                                <input type="text" id="idr" name="price[0][IDR]" class="form-control" value="{{$product->prices[0]->priceIDR}}" />     
+                                                <input type="text" id="idr" name="price[0][IDR]" class="form-control" value="" />     
                                             </div>
                                             <div class="col-md-3 valid-info" id="price_usd" style="display: none">
                                                 <h5>Price / person (USD)*:</h5>
-                                                <input type="text" id="usd" name="price[0][USD]" class="form-control" value="{{$product->prices[0]->priceUSD}}" />     
+                                                <input type="text" id="usd" name="price[0][USD]" class="form-control" value="" />     
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-12" id="price_table_container" style="display: none;">
                                     <h4>Pricing Tables</h4>
                                     <div class="row" style="margin-left:10px; margin-right: 10px;">
                                         <div class="col-md-12" id="price_list_view" style="display: none">
+                                        @if(!empty($product->prices))
+
                                             @foreach($product->prices as $key=>$pri)
                                             <div class="row">
                                                 <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
@@ -704,7 +724,10 @@
                                                 </div>
                                             </div>
                                             @endforeach
+
+                                        @endif
                                         </div>
+
                                         <div class="col-md-12" id="price_list_edit" style="display: none">
                                             <div class="row">
                                                 <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
@@ -733,6 +756,7 @@
                                         </div> 
                                     </div>
                                 </div>
+
                                 <div class="col-md-12" style="margin-top: 30px;">
                                     <h4>Price Includes</h4>
                                     <div class="row"style="margin-left: 0px;">
@@ -742,9 +766,11 @@
                                         </div>
                                         <div class="col-md-6 valid-info" style="margin-top:10px;">
                                             <select type="text" class="form-control" name="priceIncludes[]" multiple="multiple" style="width: 100%; margin-bottom: 10px;">
+                                            @if(!empty($product->includes))
                                                 @foreach($product->includes as $inc)
                                                     <option selected>{{$inc->description}}</option>
                                                 @endforeach
+                                            @endif
                                             </select>
                                         </div>									
                                         <div class="col-md-6" style="padding-top:0px;">
@@ -762,9 +788,11 @@
             
                                         <div class="col-md-6">
                                             <select class="form-control" name="priceExcludes[]" multiple="multiple" style="width: 100%" required>
+                                            @if(!empty($product->excludes))
                                                 @foreach($product->excludes as $ex)
                                                     <option selected>{{$ex->description}}</option>
                                                 @endforeach
+                                            @endif
                                             </select>
                                         </div>
             
@@ -773,6 +801,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-md-12" style="margin-top: 30px;">
                                     <h4>Cancellation Policy</h4>
                                     <div class="row valid-info" style="margin-left:0px;">
@@ -831,6 +860,7 @@
                         </div>
                         <div class="body">
                             <div id="value">
+                            @if(!empty($product->itineraries))
                                 @foreach($product->itineraries as $iti)
                                 <div class="row" >
                                     <di class="col-md-2">
@@ -851,8 +881,10 @@
                                     </di>
                                 </div>
                                 @endforeach
+                            @endif
                             </div>
                             <div id="input">
+                            @if($product->itineraries)
                                 @foreach($product->itineraries as $key=>$iti)
                                 <div id="itinerary_list" style="margin-left:15px;">
                                     <h5>{{$iti->day}}</h5>
@@ -875,8 +907,10 @@
                                     <div id="clone_dinamic_itinerary"></div> 
                                 </div>
                                 @endforeach
+                            @endif
                             </div>
                         </div>
+
                         <div class="row clearfix" style="margin:10px;padding: 10px" id="action">
                             <div class="col-md-2" id="button-edit">
                                 <button type="button" class="btn bg-red btn-block btn-lg waves-effect">EDIT</button>
@@ -1433,6 +1467,7 @@
                     });
                 });
             });
+
 			$("#destinationField2").change(function(){
 				$(this).closest("#dinamic_destination").find("#destinationField3").empty();
 				var me2 = $(this);
@@ -1507,8 +1542,8 @@
                 $(this).closest("#dinamic_destination").remove();
             });
         // PRICE
-            var dbPriceKurs = '{{$product->prices[0]->priceUSD}}';
-            var dbPriceType = '{{$product->prices[0]->priceType}}';
+            var dbPriceKurs = '';
+            var dbPriceType = '';
             var dbCancelType = '{{$product->cancellationType}}';
                 // KURS
                 if(dbPriceKurs == 0){
@@ -1599,10 +1634,12 @@
         });
     </script>
     <!-- OTHER -->
+    @if(!empty($product->activities))
     @foreach($product->activities as $activity)
     <script>
         $("select[name='activityTag[]']").find("option[value='{{$activity->activityId}}']:last").remove();
     </script>                        
     @endforeach
+    @endif
 
 @stop

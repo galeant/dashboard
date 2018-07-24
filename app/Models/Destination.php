@@ -20,7 +20,8 @@ class Destination extends Model
         'city_id',
         'district_id',
         'village_id',
-        'cover_image',
+        'path',
+        'filename',
         'status',
         'destination_type_id'
     ];
