@@ -8,5 +8,5 @@ class Includes extends Model
 {
     protected $table = 'price_includes';
     protected $hidden = ['product_id','created_at','updated_at'];
-    protected $fillable = ['product_id','description'];
+    protected $fillable = ['product_id','name'];
 }
