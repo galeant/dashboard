@@ -30,69 +30,69 @@
                               <div class="row clearfix">
                                     <div class="col-sm-12">
                                       <div class="form-group row">
-                                        <div class="col-md-4">
-                                          <h2 class="card-inside-title">Total Qty</h2>
+                                        <div class="col-md-6">
+                                          <h2 class="card-inside-title">Usage Limit per coupon</h2>
                                             <input value="{{$data->quantity}}" required type="number" name="quantity" class="form-control" placeholder="Maximum Discount" />
                                          </div>
-                                         <div class="col-md-4">
-                                           <h2 class="card-inside-title">Qty Per Use</h2>
+                                         <div class="col-md-6">
+                                           <h2 class="card-inside-title">Usage limit per User/Customer</h2>
                                              <input value="{{$data->quantity_per_use}}" required type="number" name="quantity_per_use" class="form-control" placeholder="Maximum Discount" />
                                           </div>
-                                          <div class="col-md-4">
-                                            <h2 class="card-inside-title">Type</h2>
-                                            <select name="type" class="form-control show-tick" required>
-                                                <option value="" selected>-- Please select --</option>
-                                                <option @if($data->type == 'amount'){ selected } @endif value="amount">Amount</option>
-                                                <option @if($data->type == 'percentage'){ selected } @endif value="percentage">Percentage</option>
-                                            </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Discount Type</h2>
+                                        <select name="type" class="form-control show-tick" required>
+                                            <option value="" selected>Please select</option>
+                                            <option @if($data->type == 'amount'){ selected } @endif value="amount">Amount</option>
+                                            <option @if($data->type == 'percentage'){ selected } @endif value="percentage">Percentage</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Coupon Name / Program Name</h2>
+                                          <div class="form-line">
+                                              <input value="{{$data->name}}" required name="name" type="text" class="form-control" placeholder="Coupon name / Program name" />
                                           </div>
                                       </div>
                                       <div class="form-group">
-                                        <h2 class="card-inside-title">Name</h2>
+                                        <h2 class="card-inside-title">Coupon Code</h2>
                                           <div class="form-line">
-                                              <input value="{{$data->name}}" required name="name" type="text" class="form-control" placeholder="Name" />
-                                          </div>
-                                      </div>
-                                      <div class="form-group">
-                                        <h2 class="card-inside-title">Code</h2>
-                                          <div class="form-line">
-                                              <input value="{{$data->code}}" required name="code" type="text" class="form-control" placeholder="Code" />
+                                              <input value="{{$data->code}}" required name="code" type="text" class="form-control" placeholder="Coupon Code" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Start Date</h2>
                                           <div class="form-line">
-                                            <input value="{{$data->start_date}}" required name="start_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                            <input value="{{date('Y-m-d',strtotime($data->start_date))}}" required name="start_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">End Date</h2>
                                           <div class="form-line">
-                                            <input value="{{$data->end_date}}" required name="end_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                            <input value="{{date('Y-m-d',strtotime($data->end_date))}}" required name="end_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Discount Value</h2>
                                           <div class="form-line">
-                                              <input value="{{$data->discount_value}}"  required type="number" name="discount_value" class="form-control" placeholder="Discount Value" />
+                                              <input value="{{$data->discount_value}}"  required type="number" name="discount_value" class="form-control" placeholder="Input amount or percentage based on discount type" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Minimum Order</h2>
                                           <div class="form-line">
-                                              <input value="{{$data->minimum_order}}" required type="number" name="minimum_order" class="form-control" placeholder="Minimum Order" />
+                                              <input value="{{$data->minimum_order}}" required type="number" name="minimum_order" class="form-control" placeholder="Minimum order amount that needs to be in the cart before coupon applies" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Maximum Discount</h2>
                                           <div class="form-line">
-                                              <input value="{{$data->max_discount}}" required type="number" name="max_discount" class="form-control" placeholder="Maximum Discount" />
+                                              <input value="{{$data->max_discount}}" required type="number" name="max_discount" class="form-control" placeholder="Maximum order amount allowed when using this coupon" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Description</h2>
                                           <div class="form-line">
-                                              <textarea required type="text" name="description" class="form-control" placeholder="Maximum Discount" />{{$data->description}}</textarea>
+                                              <textarea required type="text" name="description" class="form-control" placeholder="Enter Description" />{{$data->description}}</textarea>
                                           </div>
                                       </div>
                                   </div>
