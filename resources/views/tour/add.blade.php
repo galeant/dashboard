@@ -188,7 +188,7 @@
                                                     <h5>Day?* :</h5>
                                                     <select class="form-control" id="day" name="day"  required>
                                                         <option values="" selected>-- Days --</option>
-                                                        @for($i=1;$i<24;$i++)
+                                                        @for($i=2;$i<24;$i++)
                                                         <option values="{{$i}}">{{$i}}</option>
                                                         @endfor
                                                     </select>
@@ -207,7 +207,7 @@
                                                 <div class="col-md-2 valid-info">
                                                     <h5>Minutes?* :</h5>
                                                     <select class="form-control" id="minutes" name="minutes" required>
-                                                        <option values="" selected>-- Hours --</option>
+                                                        <option values="" selected>-- Minutes --</option>
                                                         @for($i=1;$i<60;$i++)
                                                         <option values="{{$i}}">{{$i}}</option>
                                                         @endfor
@@ -782,6 +782,20 @@
                     minutes = $(this).val();
                     $("#dinamic_schedule input:not(#scheduleField6)").val(null);
                     $("#clone_dinamic_schedule").empty();
+                });
+                $("#dinamic_schedule").find("#scheduleField3").change(function(){
+                    var choose = $(this).val();
+                    var newtime = new Date(moment(choose,['h:m:a','H:m']));
+                    newtime.setHours(newtime.getHours()+parseInt(hours));
+                    newtime.setMinutes(newtime.getMinutes()+parseInt(minutes));
+                    if(hours=="" || minutes==""){
+                        $(this).closest("#dinamic_schedule").find("input#scheduleField4").val("");
+                    }
+                    else{
+                        var hour = (newtime.getHours() < 10 ? '0' : '') + newtime.getHours();
+                        var minute = (newtime.getMinutes() < 10 ? '0' : '') + newtime.getMinutes();
+                        $(this).closest("#dinamic_schedule").find("input#scheduleField4").val(hour+":"+minute);
+                    }
                 });
             // SCHEDULE TYPE
             $("input[name='schedule_type']").change(function () {
