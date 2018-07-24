@@ -4,6 +4,9 @@
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
     <link href="{{ asset('plugins/telformat/css/intlTelInput.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/bootstrap-file-input/css/fileinput.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('plugins/cropper/cropper.min.css') }}" rel="stylesheet">
 @stop
 @section('main-content')
     <div class="container-fluid">
@@ -336,13 +339,18 @@
                             <textarea name="description" id="" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
+                    <br>
                     <div class="row container">
                         <div class="col-md-12">
                             <h5>Main Image* :</h5>
                         </div>
                         <div class="col-md-6">
-                            <input type="file" name="cover_image">
-                            <img src="" alt="">
+                            <div class="dd-avatar">
+                                <img src="{{!empty($data->avatar) ? cdn($data->avatar) : ''}}" class="img-responsive" id="img-avtr">
+                            </div>
+                            <input name="image_resize" type="text" value="" hidden>
+                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
+                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
                         </div>
                     </div>
                     <div class="row form-group container">
@@ -403,12 +411,31 @@
                     <br><br><br><br><br>
                 </form>
             </div>
+            <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+                        </div>
+                        <div class="modal-body">
+                                <div class="img-container">
+                                <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                            <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>  
     </div>
 @endsection
 
 @section('head-js')
 @parent
+    <script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>   
     <script src="{{asset('plugins/bootstrap-file-input/js/fileinput.js') }}"></script>
     <script src="{{ asset('js/admin.js') }}"></script>
     <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
@@ -416,6 +443,68 @@
     <script src="{{ asset('js/demo.js') }}"></script>
     <script type="text/javascript">
     	$(document).ready(function(){ 
+            window.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('crop-image');
+            var cropBoxData;
+            var canvasData;
+            var cropper;
+
+            $('#defaultModal').on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                    autoCropArea: 1,
+                    aspectRatio: 9/4,
+                    strict: false,
+                    guides: false,
+                    highlight: false,
+                    dragCrop: false,
+                    zoomable: false,
+                    scalable: false,
+                    rotatable: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: false,
+                    responsive: true,
+                    viewMode: 1,
+                    ready: function () {
+                        // Strict mode: set crop box data first
+                        cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                    }
+                });
+                
+            }).on('hidden.bs.modal', function () {
+                cropBoxData = cropper.getCropBoxData();
+                canvasData = cropper.getCanvasData();
+                originalData = cropper.getCroppedCanvas();
+                cropper.destroy();
+            });
+            $('.btn-img-save').click(function(){
+                data = originalData = cropper.getCroppedCanvas();
+                $('input[name="image_resize"]').val(originalData.toDataURL('image/jpeg'));
+                $('#img-avtr').attr('src',originalData.toDataURL('image/jpeg'));
+                $('.btn-img-close').click();
+            });
+        });
+            $('#c_p_picture').click(function(e){
+                e.preventDefault();
+                $('input[name="avatar"]').click();
+            });
+            
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('img#crop-image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $(document).delegate('#c_p_file', 'change', function(e){
+                e.preventDefault();
+                $('#defaultModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                readURL(this);
+            });
             $("input[name='phone_number']").val("+62").intlTelInput({
                 separateDialCode: true,
             });
@@ -424,12 +513,18 @@
             $(".input-time").mask('00:00');
             $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
-                $("select[name='city']").empty();
+                $("select[name='city_id']").empty();
+                $("select[name='district_id']").empty();
+                $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findCity') }}"+"/"+idProvince
+                    url: "{{ url('/json/city') }}",
+                    data:{
+                        province_id :idProvince
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='city_id']").append("<option value=''>--Select City--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='city_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -440,11 +535,16 @@
             $("select[name='city_id']").change(function(){
                 var idCity = $(this).val();
                 $("select[name='district_id']").empty();
+                $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findDistrict') }}"+"/"+idCity
+                    url: "{{ url('/json/district') }}",
+                    data:{
+                        city_id :idCity
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='district_id']").append("<option value=''>--Select District--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='district_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -456,9 +556,13 @@
                 $("select[name='village_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findVillage') }}"+"/"+idDistrict
+                    url: "{{ url('/json/village') }}",
+                    data:{
+                        district_id :idDistrict
+                    }
                 }).done(function(response) {
-                    $.each(response, function (index, value) {
+                    $("select[name='village_id']").append("<option value=''>--Select Village--</option>" );
+                    $.each(response.data, function (index, value) {
                         $("select[name='village_id']").append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );
@@ -658,8 +762,5 @@
             var a = $(this).attr("href");
             console.log(a);
         });
-        $("title").text("Super Admin Pigijo");
-        
-
     </script>
 @stop

@@ -55,8 +55,8 @@ class DestinationTypeController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required',
-            'name_EN' => 'required'
+            'name' => 'required|string|max:255|unique:destination_type',
+            'name_EN' => 'required|string|max:255|unique:destination_type'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -70,7 +70,8 @@ class DestinationTypeController extends Controller
             $data->name_EN = $request->input('name_EN');
             if($data->save()){
                 DB::commit();
-                return redirect("master/destination-type/".$data->id."/edit")->with('message', 'Successfully saved Destination Type');
+                return redirect("master/destination-type/create")->with('message', 'Successfully saved Destination Type');
+                // return redirect("master/destination-type/".$data->id."/edit")->with('message', 'Successfully saved Destination Type');
             }else{
                 return redirect("master/destination-type/create")->with('message', 'Error Database;');
             }
@@ -117,7 +118,7 @@ class DestinationTypeController extends Controller
     {
         // Validation //
         $validation = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|string|max:255|unique:name',
             'name_EN' => 'required'
         ]);
         // Check if it fails //

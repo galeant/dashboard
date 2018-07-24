@@ -56,5 +56,9 @@ class Supplier extends Model implements AuthenticatableContract, CanResetPasswor
     // 	return in_array($permission, $this->Acl());
     // }
 
+    public function companies()
+    {
+        return $this->belongsTo('App\Models\Company', 'company_id','id');
+    }
 }
 
