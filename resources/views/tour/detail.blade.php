@@ -132,6 +132,13 @@
                                         </div>
                                     </div>
                                     <div class="row" id="field">
+                                        <div class="col-md-4"><label>Meeting Point Notes</label></div>
+                                        <div class="col-md-8" id="value">{{$product->meeting_point_note}}</div>
+                                        <div class="col-md-8" id="input">
+                                            <textarea rows="4" name="meeting_point_note" class="form-control no-resize">{{$product->meeting_point_note}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="field">
                                         <div class="col-md-4"><label>Activity Tag</label></div>
                                         <div class="col-md-8" id="value">
                                             @foreach($product->activities as $activity)
@@ -607,7 +614,6 @@
                                             <div class="col-md-8" id="value">Based of Person</div>
                                         @endif
                                     </div>
-
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Pricing Scheme</label></div>
                                         <div class="col-md-8">
@@ -1439,7 +1445,7 @@
         // DESTINATION
             $.ajax({
 			  method: "GET",
-			  url: "{{ url('/province') }}",
+			  url: "{{ url('json/province') }}",
 			}).done(function(response) {
 				$.each(response, function (index, value) {
 					$("#destinationField1").append(
@@ -1453,7 +1459,7 @@
                     var me = $(this);
                     $.ajax({
                     method: "GET",
-                    url: "{{ url('/city') }}",
+                    url: "{{ url('json/findCity') }}",
                     data: {
                         id: $(this).val()
                     }
@@ -1474,10 +1480,9 @@
 				var province = $(this).closest("#dinamic_destination").find("#destinationField1").val();
 				$.ajax({
 				  method: "GET",
-				  url: "{{ url('/destination') }}",
+				  url: "{{ url('json/findDestination') }}",
 				  data: {
 				  	city: $(this).val(),
-				  	province: province
 				  }
 				}).done(function(response) {
 					me2.closest("#dinamic_destination").find("#destinationField3").append(
@@ -1500,7 +1505,7 @@
 						var me = $(this);
 						$.ajax({
 						  method: "GET",
-						  url: "{{ url('/city') }}",
+						  url: "{{ url('json/findCity') }}",
 						  data: {
 						  	id: $(this).val()
 						  }
@@ -1518,10 +1523,9 @@
 						var province = $(this).closest("#dinamic_destination").find("#destinationField1").val();
 						$.ajax({
 						  method: "GET",
-						  url: "{{ url('/destination') }}",
+						  url: "{{ url('json/findDestination') }}",
 						  data: {
 						  	city: $(this).val(),
-						  	province: province
 						  }
 						}).done(function(response) {
 							me2.closest("#dinamic_destination").find("#destinationField3").append(

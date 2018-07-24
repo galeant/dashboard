@@ -373,4 +373,8 @@ class DestinationController extends Controller
         $result = $destination_photo->delete();
         return response()->json();
     }
+    public function findDestination(Request $req){
+        $destination = Destination::where('city_id',$req->city)->get();
+        return response()->json($destination,200);
+    }
 }
