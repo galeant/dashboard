@@ -345,7 +345,7 @@
                             <h5>Destination Description. How do you describe this destination?*</h5>
                         </div>
                         <div class="col-md-6">
-                            <textarea name="description" id="" rows="5" class="form-control"></textarea>
+                            <textarea name="description" id="" rows="5" class="form-control">{{$destination->description}}</textarea>
                         </div>
                     </div>
                     <div class="row container">
@@ -621,7 +621,6 @@
             @endif
             $("select[name='visit_hours']").find("option[value='{{$destination->visit_hours}}']").attr('selected', 'selected')
             $("select[name='visit_minutes']").find("option[value='{{$destination->visit_minutes}}']").attr('selected', 'selected')
-            $("textarea[name='description']").val("{{$destination->description}}")
             $("select.type").change(function(){
                 var value = $(this).val();
                 if(value=="Close"){

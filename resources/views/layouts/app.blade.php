@@ -267,9 +267,9 @@
 		                            <span>Calender Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('bookings/byactivityschedule*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/bookings/byactivityschedule') }}" class=" waves-effect waves-block">
-		                            <span>Activity Type Management</span>
+		                    <li {{{ (Request::is('master/activity-tag/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/master/activity-tag') }}" class=" waves-effect waves-block">
+		                            <span>Activity Tag Management</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('bookings/byactivityschedule*') ? 'class=active' : '') }}}>
@@ -279,6 +279,13 @@
 		                    </li>
 
 		                </ul>
+		            </li>
+		            
+		            <li>
+		                <a href="{{ URL('/master/supplier') }}">
+		                    <i class="material-icons">person</i>
+		                    <span>Supplier</span>
+		                </a>
 		            </li>
 		            <li>
 		                <a href="{{ URL('/logout') }}">

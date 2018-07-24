@@ -24,10 +24,10 @@ class CompanyController extends Controller
             $model = Company::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(Company $data) {
-                return '<a href="/master/company/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/master/company/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="'.route('company.destroy', $data->id).'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/country/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/master/company/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/company/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
@@ -191,7 +191,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $province = Province::all();
+        $company = Company::where('id',$id)->first();
+        return view('company.detail',['company'=>$company,'provinces'=>$province]);
     }
 
     /**
@@ -324,21 +326,19 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-    }
-
-    public function json(Request $request)
-    {
-        $data  =  new Company();
-        $name     = ($request->input('name') ? $request->input('name') : '');
-        if(!empty($request->input('country_id'))){
-            $country_id = $request->input('country_id');
-            $data = $data->where('country_id',$country_id);
-        }
-        if($name)
-        {
-            $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
-        }
-        $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
-        return $this->sendResponse($data, "Company retrieved successfully", 200);
+         DB::beginTransaction();
+         try{
+             $data = Company::find($id);
+             if($data->delete()){
+                 DB::commit();
+                 return $this->sendResponse($data, "Delete Company ".$data->name." successfully", 200);
+             }else{
+                 return $this->sendResponse($data, "Error Database;", 200);
+             }
+         }catch (\Exception $exception){
+             DB::rollBack();
+             \Log::info($exception->getMessage());
+             return $this->sendResponse($data, $exception->getMessage() , 200);
+         }
     }
 }

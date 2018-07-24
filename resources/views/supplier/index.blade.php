@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Company List
-                    <small>Master Data / Company</small>
+                    Supplier List
+                    <small>Master Data / Supplier</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,11 +17,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Company
+                                All Supplier
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="{{ url('master/company/create') }}" class="btn bg-teal btn-block waves-effect">Add Company</a>
+                                    <a href="/master/supplier/create" class="btn bg-teal btn-block waves-effect">Add Supplier</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,10 +31,9 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Company Email</th>
-                                            <th>Company Phone</th>
-                                            <th>Company Address</th>
+                                            <th>Email</th>
+                                            <th>Full Name</th>
+                                            <th>Company Name</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>
@@ -50,29 +49,26 @@
 @stop
 @section('head-js')
 @parent
-<!-- Jquery Core Js -->
-
-<script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
-<!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
+    <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
     <script type="text/javascript">
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/company',
+	        ajax: '/master/supplier',
 	        columns: [
 	            {data: 'id'},
-                {data: 'company_name'},
-                {data: 'company_email'},
-                {data: 'company_phone'},
-	            {data: 'company_address'},
+	            {data: 'email'},
+	            {data: 'fullname'},
+	            {data: 'companies.company_name'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},
 	            {data: 'action'}
