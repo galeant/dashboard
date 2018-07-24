@@ -86,7 +86,17 @@ class SupplierController extends Controller
             $data->username = $request->input('username');
             $data->fullname = $request->input('fullname');
             $data->phone = $request->input('phone');
-            $data->password = (new BcryptHasher)->make(str_random(20));
+            if($request->input('password')!="" || $request->input('password')!=NULL){
+                $validation = Validator::make($request->all(), [
+                    'password' => 'required|min:8'
+                ]);
+                // Check if it fails //
+                if( $validation->fails() ){
+                    return redirect()->back()->withInput()
+                    ->with('errors', $validation->errors() );
+                }
+                $data->password = (new BcryptHasher)->make($request->input('password'));
+            }
             $data->company_id = $request->input('company_id');
             $data->role_id = $request->input('role_id');
             $data->token = str_random(100);
