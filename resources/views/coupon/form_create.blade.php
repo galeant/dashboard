@@ -30,33 +30,33 @@
                               <div class="row clearfix">
                                     <div class="col-sm-12">
                                       <div class="form-group row">
-                                        <div class="col-md-4">
-                                          <h2 class="card-inside-title">Total Qty</h2>
-                                            <input required type="text" name="quantity" class="form-control" placeholder="Maximum Discount" />
+                                        <div class="col-md-6">
+                                          <h2 class="card-inside-title">Usage Limit per coupon</h2>
+                                            <input required type="number" name="quantity" class="form-control" placeholder="Usage limit per coupon" />
                                          </div>
-                                         <div class="col-md-4">
-                                           <h2 class="card-inside-title">Qty Per Use</h2>
-                                             <input required type="text" name="quantity_per_use" class="form-control" placeholder="Maximum Discount" />
-                                          </div>
-                                          <div class="col-md-4">
-                                            <h2 class="card-inside-title">Type</h2>
-                                            <select name="type" class="form-control show-tick" required>
-                                                <option value="" selected>-- Please select --</option>
-                                                <option value="amount">Amount</option>
-                                                <option value="percentage">Percentage</option>
-                                            </select>
+                                         <div class="col-md-6">
+                                           <h2 class="card-inside-title">Usage limit per User/Customer</h2>
+                                             <input required type="number" name="quantity_per_use" class="form-control" placeholder="Usage limit per User/Customer" />
                                           </div>
                                       </div>
                                       <div class="form-group">
-                                        <h2 class="card-inside-title">Name</h2>
+                                        <h2 class="card-inside-title">Discount Type</h2>
+                                        <select name="type" class="form-control" required>
+                                            <option value="" selected disabled>Please select</option>
+                                            <option value="amount">Amount</option>
+                                            <option value="percentage">Percentage</option>
+                                        </select>
+                                      </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Coupon Name / Program Name</h2>
                                           <div class="form-line">
-                                              <input required name="name" type="text" class="form-control" placeholder="Name" />
+                                              <input required name="name" type="text" class="form-control" placeholder="Coupon name / Program name" />
                                           </div>
                                       </div>
                                       <div class="form-group">
-                                        <h2 class="card-inside-title">Code</h2>
+                                        <h2 class="card-inside-title">Coupon Code</h2>
                                           <div class="form-line">
-                                              <input required name="code" type="text" class="form-control" placeholder="Code" />
+                                              <input required name="code" type="text" class="form-control" placeholder="Coupon Code" />
                                           </div>
                                       </div>
                                       <div class="form-group">
@@ -74,25 +74,25 @@
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Discount Value</h2>
                                           <div class="form-line">
-                                              <input required type="number" name="discount_value" class="form-control" placeholder="Discount Value" />
+                                              <input required type="number" name="discount_value" class="form-control" placeholder="Input amount or percentage based on discount type" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Minimum Order</h2>
                                           <div class="form-line">
-                                              <input required type="number" name="minimum_order" class="form-control" placeholder="Minimum Order" />
+                                              <input required type="number" name="minimum_order" class="form-control" placeholder="Minimum order amount that needs to be in the cart before coupon applies" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Maximum Discount</h2>
                                           <div class="form-line">
-                                              <input required type="number" name="max_discount" class="form-control" placeholder="Maximum Discount" />
+                                              <input required type="number" name="max_discount" class="form-control" placeholder="Maximum order amount allowed when using this coupon" />
                                           </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Description</h2>
                                           <div class="form-line">
-                                              <textarea required type="text" name="description" class="form-control" placeholder="Maximum Discount" /></textarea>
+                                              <textarea required type="text" name="description" class="form-control" placeholder="Enter Description" /></textarea>
                                           </div>
                                       </div>
                                   </div>
