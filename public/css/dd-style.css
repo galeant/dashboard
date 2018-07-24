@@ -5,6 +5,11 @@
 	/*margin-bottom: 15px;*/
 	border: 1px solid #ddd;
 }
+.dd-main-image{
+	border: 1px solid #ddd;
+	width: 100%;
+	min-height: 150px;
+}
 .dd-b-line{
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 20px !important;

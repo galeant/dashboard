@@ -67,8 +67,8 @@ class TourController extends Controller
      */
     public function create()
     {
-        $company = Company::all();
         $activities = ActivityTag::all();
+        $company = Company::all();
         $province = Province::all();
         return view('tour.add',[
             'companies'=>$company,
@@ -103,7 +103,7 @@ class TourController extends Controller
             'schedule_type' => 'required',
             'schedule' => 'required',
             'place' => 'required',
-            'activity_tag' => 'required',
+            // 'activity_tag' => 'required',
             'itinerary' => 'required',
             'price_kurs' => 'required',
             'price_type' => 'required',
@@ -117,6 +117,7 @@ class TourController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
+        // dd($request->all());
         DB::beginTransaction();
         try {
         $code  = Tour::all()->count();
@@ -128,7 +129,7 @@ class TourController extends Controller
             'product_code' => '101-'.($code+1),
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
-            'product_type' => $request->product_category,
+            'product_type' => $request->product_type,
             // person
             'min_person' => $request->min_person,
             'max_person' => $request->max_person,
@@ -148,6 +149,28 @@ class TourController extends Controller
             'status' => 0,
             'company_id' => $request->company_id
             ];
+        if(!empty($request->input('image_resize'))){
+
+            $destinationPath = public_path('img/temp/');
+            if( ! \File::isDirectory($destinationPath) ) 
+            {
+                File::makeDirectory($destinationPath, 0777, true , true);
+            }
+            $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+            $img = str_replace(' ', '+', $file);
+            $data = base64_decode($img);
+            $filename = date('ymdhis') . '_croppedImage' . ".".$request->cover_img->getClientOriginalExtension();
+            $file = $destinationPath . $filename;
+            $success = file_put_contents($file, $data);
+            $bankPic = Helpers::saveImage($file,'products',true,[4,3]);
+            if($bankPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['cover_path'] = $bankPic['path'];
+            $dataSave['cover_filename'] = $bankPic['filename'];
+            unlink($file);
+        }
         
         $product = Tour::create($dataSave);
         // SCHEDULE
@@ -210,16 +233,10 @@ class TourController extends Controller
                 ]);
             }
         }
-        
+        // step 2
         // ACTIVITY
         if($request->activity_tag != null){
-            foreach($request->activity_tag as $activity)
-            {
-                $destination = ProductActivity::create([
-                    'product_id' => $product->id,
-                    'activity_id' => $activity
-                ]);
-            }
+            $product->activities()->sync($request->activity_tag);
         }
 
         // ITINERARY
@@ -237,7 +254,6 @@ class TourController extends Controller
 
         
         // PRICE
-        // dd($request->price);
         if($request->price_type == 1){
             foreach($request->price as $price){
                 if($price['USD'] == null || $price['USD'] == ''){
@@ -282,7 +298,7 @@ class TourController extends Controller
             foreach($request->price_includes as $includes){
                 $includes = Includes::create([
                     'product_id' => $product->id,
-                    'description' => $includes
+                    'name' => $includes
                 ]);
             }
         }
@@ -291,11 +307,50 @@ class TourController extends Controller
             foreach($request->price_excludes as $excludes){
                 $excludes = Excludes::create([
                     'product_id' => $product->id,
-                    'description' => $excludes
+                    'name' => $excludes
                 ]);
             }
         }
-        
+        if(!empty($request->destination_images)){
+            foreach($request->destination_images as $image){
+                $imgSave = Helpers::saveImage($image,'products');
+                ImageDestination::insert([
+                    'product_id' => $product->id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->activity_images)){
+            foreach($request->destination_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageActivity::insert([
+                    'product_id' => $product->id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->accommodation_images)){
+            foreach($request->destination_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageAccomodation::insert([
+                    'product_id' => $product->id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->other_images)){
+            foreach($request->destination_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageOther::insert([
+                    'product_id' => $product->id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
         // // IMAGE DESTINATION
         // if($request->hasFile('image_destination')){
         //     $i = 0;

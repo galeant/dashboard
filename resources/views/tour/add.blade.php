@@ -12,6 +12,8 @@
     <link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
     <!-- Date range picker -->
     <link href="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" />
+    <link href="{{ asset('plugins/cropper/cropper.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/bootstrap-file-input/css/fileinput.css') }}" rel="stylesheet">
     <style>
         .row{
             margin:0px;
@@ -50,6 +52,7 @@
             font-size:12px;
         }
     </style>
+
 @stop
 @section('main-content')
     <div class="block-header">
@@ -66,9 +69,9 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form id="wizard_with_validation" method="POST" action="{{ url('master/product') }}" enctype="multipart/form-data">
+                <form id="" method="POST" action="{{ url('master/product') }}" enctype="multipart/form-data">
                 @csrf
-                    <div class="row" id="wizard">
+                    <div class="row" >
                         <div class="col-md-12" id="general_information">
                             <fieldset>
                                 <div class="card">
@@ -113,6 +116,17 @@
                                             <div class="col-md-6 valid-info">
                                                 <h5>Product Name*</h5>
                                                 <input type="text" class="form-control" name="product_name" required />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="margin: 0px 3px 10px 3px;">
+                                            <div class="col-md-6 cover-image">
+                                                <h5>Cover Product Image*</h5>
+                                                <div class="dd-main-image">
+                                                    <img style="width: 100%" src="http://via.placeholder.com/400x300" id="cover-img">
+                                                </div>
+                                                <input name="image_resize" type="text" value="" hidden>
+                                                <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Upload Cover Image</a>
+                                                <input name="cover_img" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
                                             </div>
                                         </div>
                                         <div class="row" style="margin: 0px 3px 0px 3px;">
@@ -303,9 +317,6 @@
                                     </div>
                                 </div>
                             </fieldset>
-                        </div>
-                        
-                        <div class="col-md-12" id="activity_detail">
                             <fieldset>
                                 <div class="card">
                                     <div class="header">
@@ -361,9 +372,6 @@
                                     <div id="itineraryGenerate"></div>
                                 </div>
                             </fieldset>
-                        </div>
-                        
-                        <div class="col-md-12" id="price">
                             <fieldset>
                                 <div class="card">
                                     <div class="header">
@@ -513,24 +521,77 @@
                                     </div>
                                 </div>
                             </fieldset>
+                            <fieldset>
+                                <div class="card">
+                                    <div class="header">
+                                        <h4>Image for Destination</h4>
+                                    </div>
+                                    <div class="body">
+                                        <div class="file-loading">
+                                            <input id="destination_images" name="destination_images[]" type="file" multiple>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="header">
+                                        <h4>Image for Activities</h4>
+                                    </div>
+                                    <div class="body">
+                                        <div class="file-loading">
+                                            <input id="activity_images" name="activity_images[]" type="file" multiple>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="header">
+                                        <h4>Image for Acommodation</h4>
+                                    </div>
+                                    <div class="body">
+                                        <div class="file-loading">
+                                            <input id="accomodation_images" name="accomodation_images[]" type="file" multiple>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="header">
+                                        <h4>Others Image</h4>
+                                    </div>
+                                    <div class="body">
+                                        <div class="file-loading">
+                                            <input id="other_images" name="other_images[]" type="file" multiple>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
                         </div>
-                    </div>
-                    <div class="row" style="margin: 20px" id="nav">
-                        <div class="col-md-3">
-                            <button type="button" class="btn btn-primary waves-effect" id="prev">
-                                <i class="material-icons">add</i>
-                                <span>Prev</span>
+                        <div class="col-md-3 col-md-offset-9">
+                            <button type="submit" class="btn bg-teal btn-block waves-effect" id="next">
+                                <i class="material-icons">save</i>
+                                <span>Save</span>
                             </button>
                         </div>
-                        <div class="col-md-3 col-md-offset-6">
-                            <button type="button" class="btn btn-primary waves-effect" id="next">
-                                <i class="material-icons">add</i>
-                                <span>Next</span>
-                            </button>
-                        </div>
                     </div>
-                    
                 </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- #END# Advanced Validation -->
+    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="img-container">
+                      <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                    <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
         </div>
@@ -603,19 +664,10 @@
 	</script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXELYNJkxo43slp8y_FFng0KL4YXSsOo4&libraries=places&callback=initAutocomplete" async defer></script>
 
-    <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
-    <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    <script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>  
 
     <!-- Bootstrap File-Input-Js -->
-    <script src="{{ asset('plugins/bootstrap-file-input/js/fileinput.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('plugins/bootstrap-file-input/js/fileinput.js') }}"></script>
     <!-- Tel format -->
     <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
     <!-- Mask js -->
@@ -630,6 +682,14 @@
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script>
         $(document).ready(function () {
+            $("input[name='destination_photo']").fileinput({
+            browseClass: "btn btn-primary btn-block",
+            showCaption: false,
+            showRemove: false,
+            showUpload: false,
+            maxFileSize: 100,
+            initialCaption: "Product Destination Image"
+        });
         $("form *").removeAttr("required");
         // VALIDATION
         $('#wizard_with_validation').validate({
@@ -649,39 +709,7 @@
             }
         });
         // WIZARD
-            var s = 0;
-            var maxStep = $("#wizard>.col-md-12").length-1;
-            $("#wizard>.col-md-12").eq(0).show().addClass("active");
-            $("#step>.col-md-3").eq(0).css("background-color","#E5730D");
-            $("#nav").find("#next").click(function(){
-                if($('#wizard_with_validation').valid()){
-                    s++;
-                    $("#wizard>.col-md-12").eq(s).show().addClass("active").prev().hide().removeClass("active");
-                    $("#step>.col-md-3").eq(s).css("background-color","#E5730D").prevAll().css("background-color","#E5730D");
-                    $("#nav").find("#prev").show();
-                    if(s== maxStep){
-                        $(this).find("span").text("Submit");
-                        $(this).find("i").text("clear");
-                    }
-                    if(s>maxStep){
-                        s = maxStep+1;
-                        $(this).attr("type","submit");
-                    }
-                }
-            });
-            $("#nav").find("#prev").click(function(){
-                s--;
-                $("#wizard>.col-md-12").eq(s).show().addClass("active").next().hide().removeClass("active");
-                $("#step>.col-md-3").eq(s+1).css("background-color","#676C56").nextAll().css("background-color","#676C56");
-                if(s== 0){
-                    $(this).hide();
-                }
-                if(s<maxStep){
-                    $("#nav").find("#next").find("span").text("Next");
-                    $("#nav").find("#next").find("i").text("add");
-                    $("#nav").find("#next").attr("type","button");
-                }
-            });
+            
         // MASK
             $("#PICPhone").mask('000-0000-00000');
             $("#minPerson,#maxPerson,#scheduleField6,#cancellationDay,#cancellationFee").mask('0000');
@@ -1159,6 +1187,106 @@
                 }else{
                     $("#cancel_policy").hide();
                 }
+            });
+        });
+    
+    $(document).ready(function () {
+        window.addEventListener('DOMContentLoaded', function () {
+            var image = document.getElementById('crop-image');
+            var cropBoxData;
+            var canvasData;
+            var cropper;
+
+            $('#defaultModal').on('shown.bs.modal', function () {
+                cropper = new Cropper(image, {
+                    autoCropArea: 1,
+                    aspectRatio: 4/3,
+                    strict: false,
+                    guides: false,
+                    highlight: false,
+                    dragCrop: false,
+                    zoomable: false,
+                    scalable: false,
+                    rotatable: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: false,
+                    responsive: true,
+                    viewMode: 1,
+                    ready: function () {
+                        // Strict mode: set crop box data first
+                        cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                    }
+                });
+                
+            }).on('hidden.bs.modal', function () {
+                cropBoxData = cropper.getCropBoxData();
+                canvasData = cropper.getCanvasData();
+                originalData = cropper.getCroppedCanvas();
+                cropper.destroy();
+            });
+            $('.btn-img-save').click(function(){
+                data = originalData = cropper.getCroppedCanvas();
+                $('input[name="image_resize"]').val(originalData.toDataURL('image/jpeg'));
+                $('#cover-img').attr('src',originalData.toDataURL('image/jpeg'));
+                $('.btn-img-close').click();
+            });
+        });
+
+        $('#c_p_picture').click(function(e){
+            e.preventDefault();
+            $('input[name="cover_img"]').click();
+
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('img#crop-image').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(document).delegate('#c_p_file', 'change', function(e){
+            e.preventDefault();
+            $('#defaultModal').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+            readURL(this);
+        });
+        
+    });
+    </script>
+    <script>
+        $(document).on('ready', function() {
+            $("#destination_images").fileinput({
+                initialPreviewAsData: true,
+                maxFileSize: 2000,
+                showCaption: false,
+                showRemove: false,
+                showUpload: false
+            });
+            $("#activity_images").fileinput({
+                initialPreviewAsData: true,
+                maxFileSize: 2000,
+                showCaption: false,
+                showRemove: false,
+                showUpload: false
+            });
+            $("#accomodation_images").fileinput({
+                initialPreviewAsData: true,
+                maxFileSize: 2000,
+                showCaption: false,
+                showRemove: false,
+                showUpload: false
+            });
+            $("#other_images").fileinput({
+                initialPreviewAsData: true,
+                maxFileSize: 2000,
+                showCaption: false,
+                showRemove: false,
+                showUpload: false
             });
         });
     </script>
