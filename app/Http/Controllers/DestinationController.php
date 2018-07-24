@@ -14,6 +14,8 @@ use App\Models\ActivityTag;
 use DB;
 use Illuminate\Http\Request;
 use Datatables;
+use Helpers;
+use File;
 
 class DestinationController extends Controller
 {
@@ -77,24 +79,37 @@ class DestinationController extends Controller
         if($data['visit_hours']=="" || $data['visit_hours']==null){
             $data['visit_hours']=0;
         }
-        if($request->hasFile('cover_image')){
-            $i = 0;
-            $fileName = 'cover_image_'.$i.'_';
-            $fileExt = $request->cover_image->getClientOriginalExtension();
-            $fileToSave = $fileName.time().'.'.$fileExt;
-            $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
+        $cover = '';
+        if(!empty($request->avatar)){
+            $cover = Helpers::saveImage($request->avatar,'destination'/*Location*/);
+            if($cover instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
         }
-        $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
+        // if($request->hasFile('cover_image')){
+        //     $i = 0;
+        //     $fileName = 'cover_image_'.$i.'_';
+        //     $fileExt = $request->cover_image->getClientOriginalExtension();
+        //     $fileToSave = $fileName.time().'.'.$fileExt;
+        //     $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
+        // }
+        // $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
+        // return $cover['path'];
+        $data['path'] = $cover['path'];
+        $data['filename'] = $cover['filename'];
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = new Destination;
         $destination->fill($data)->save();
 
         if($request->has('destination_tips')){
-                foreach($data['destination_tips'] as $dt){
-                // dd($dpt);
-                $t = new DestinationTips;
-                $dt['destination_id'] = $destination->id;
-                $t->fill($dt)->save();
+            foreach($data['destination_tips'] as $dt){
+                // dd($dt->destination_id);
+                if(!empty($dt['destination_id'])){
+                    $t = new DestinationTips;
+                    $dt['destination_id'] = $destination->id;
+                    $t->fill($dt)->save();
+                }
             }
         }
         if($request->has('destination_activities')){
@@ -106,18 +121,17 @@ class DestinationController extends Controller
             }
         }
         if($request->hasFile('destination_photo')){
-            $i = 0;
             foreach($data['destination_photo'] as $ddp){
-                $i++;
-                $fileName = 'destination_photo_'.$i.'_';
-                $fileExt = $ddp->getClientOriginalExtension();
-                $fileToSave = $fileName.time().'.'.$fileExt;
-                $path = $ddp->move('upload/destination/photo',$fileToSave);
+                $photo = Helpers::saveImage($ddp,'destination'/*Location*/);
+                if($photo instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
                 $dp = new DestinationPhoto;
                 $dp->destination_id = $destination->id;
-                $dp->path = 'upload/destination/photo/';
-                $dp->filename = $fileName.time();
-                $dp->extension = '.'.$fileExt;
+                $dp->path = $photo['path'];
+                $dp->filename = $photo['filename'];
+                $dp->extension = $photo['extension'];
                 $dp->save();
             }
         }
@@ -156,6 +170,8 @@ class DestinationController extends Controller
                 $ds->save();
             }
         }
+
+        // return redirect()->back();
         
     }
 
@@ -205,21 +221,32 @@ class DestinationController extends Controller
     {
         $data =$request->all();
         // dd($data);
-
         if($data['visit_hours']=="" || $data['visit_hours']==null){
             $data['visit_hours']=0;
         }
         
-        if($request->has('cover_image')){
-            if($request->hasFile('cover_image')){
-                $i = 0;
-                $fileName = 'cover_image_'.$i.'_';
-                $fileExt = $request->cover_image->getClientOriginalExtension();
-                $fileToSave = $fileName.time().'.'.$fileExt;
-                $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
-                $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
+        // if($request->has('cover_image')){
+        //     if($request->hasFile('cover_image')){
+        //         $i = 0;
+        //         $fileName = 'cover_image_'.$i.'_';
+        //         $fileExt = $request->cover_image->getClientOriginalExtension();
+        //         $fileToSave = $fileName.time().'.'.$fileExt;
+        //         $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
+        //         $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
+        //     }
+        // }
+        $cover = '';
+        if(!empty($request->avatar)){
+            $cover = Helpers::saveImage($request->avatar,'destination'/*Location*/);
+            if($cover instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
             }
+            $data['path'] = $cover['path'];
+            $data['filename'] = $cover['filename'];
         }
+        
+        
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = Destination::find($id);
         $destination->fill($data)->save();
@@ -234,18 +261,17 @@ class DestinationController extends Controller
             }
         }
         if($request->hasFile('destination_photo')){
-            $i = 0;
             foreach($data['destination_photo'] as $ddp){
-                $i++;
-                $fileName = 'destination_photo_'.$i.'_';
-                $fileExt = $ddp->getClientOriginalExtension();
-                $fileToSave = $fileName.time().'.'.$fileExt;
-                $path = $ddp->move('upload/destination/photo',$fileToSave);
+                $photo = Helpers::saveImage($ddp,'destination'/*Location*/);
+                if($photo instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
                 $dp = new DestinationPhoto;
                 $dp->destination_id = $destination->id;
-                $dp->path = 'upload/destination/photo/';
-                $dp->filename = $fileName.time();
-                $dp->extension = '.'.$fileExt;
+                $dp->path = $photo['path'];
+                $dp->filename = $photo['filename'];
+                $dp->extension = $photo['extension'];
                 $dp->save();
             }
         }
@@ -287,9 +313,11 @@ class DestinationController extends Controller
         if($request->has('destination_tips')){
             foreach($data['destination_tips'] as $dt){
                 // dd($dpt);
-                $t = new DestinationTips;
-                $dt['destination_id'] = $destination->id;
-                $t->fill($dt)->save();
+                if(!empty($dt['destination_id'])){
+                    $t = new DestinationTips;
+                    $dt['destination_id'] = $destination->id;
+                    $t->fill($dt)->save();
+                }
             }
         }
 
