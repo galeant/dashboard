@@ -341,4 +341,16 @@ class CompanyController extends Controller
              return $this->sendResponse($data, $exception->getMessage() , 200);
          }
     }
+
+    public function json(Request $request)
+    {
+        $data  =  new Company();
+        $name     = ($request->input('name') ? $request->input('name') : '');
+        if($name)
+        {
+            $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
+        }
+        $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
+        return $this->sendResponse($data, "Company retrieved successfully", 200);
+    }
 }
