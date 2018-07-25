@@ -93,7 +93,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form method="POST" action="{{ url('product/productinfo/update1') }}" enctype="multipart/form-data">
+                <form method="POST" id="form-1" action="{{ url('product/productinfo/update1') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card" id="productInfo">
@@ -152,8 +152,8 @@
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Product Category</label></div>
                                         <div class="col-md-8" id="value">{{$product->product_category}}</div>
-                                        <div class="col-md-6" id="input">
-                                            <select name="product_category" class="form-control show-tick">
+                                        <div class="col-md-6 valid-info" id="input">
+                                            <select name="product_category" class="form-control" required>
                                                 <option sel="act">Activity</option>
                                             </select>
                                         </div>
@@ -161,8 +161,8 @@
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Product type</label></div>
                                         <div class="col-md-8" id="value">{{$product->product_type}}</div>
-                                        <div class="col-md-6" id="input">
-                                            <select name="product_type" id="productType" class="form-control show-tick">
+                                        <div class="col-md-6 valid-info" id="input">
+                                            <select name="product_type" id="productType" class="form-control" required>
                                                 <option sel="open">Open Group</option>
                                                 <option sel="private">Private Group</option>
                                             </select>
@@ -171,22 +171,22 @@
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Product Name</label></div>
                                         <div class="col-md-8" id="value">{{$product->product_name}}</div>
-                                        <div class="col-md-8" id="input">
-                                            <input type="text" class="form-control" name="product_name" value="{{$product->product_name}}">
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <input type="text" class="form-control" name="product_name" value="{{$product->product_name}}" required>
                                         </div>
                                     </div>
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Min person</label></div>
                                         <div class="col-md-8" id="value">{{$product->min_person}}</div>
-                                        <div class="col-md-8" id="input">
-                                            <input type="text" class="form-control" name="min_person" value="{{$product->min_person}}">
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <input type="text" class="form-control" name="min_person" value="{{$product->min_person}}" required>
                                         </div>
                                     </div>
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Max person</label></div>
                                         <div class="col-md-8" id="value">{{$product->max_person}}</div>
-                                        <div class="col-md-8" id="input">
-                                            <input type="text" class="form-control" name="max_person" value="{{$product->max_person}}">
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <input type="text" class="form-control" name="max_person" value="{{$product->max_person}}" required>
                                             <input type="hidden" name="dbMaxPerson" value="{{$product->max_person}}">
                                             <input type="hidden" name="dbPriceType" value="{{$price_type}}">
                                         </div>
@@ -194,14 +194,14 @@
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>PIC Name</label></div>
                                         <div class="col-md-8" id="value">{{$product->pic_name}}</div>
-                                        <div class="col-md-8" id="input">
-                                            <input type="text" class="form-control" name="pic_name" value="{{$product->pic_name}}">
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <input type="text" class="form-control" name="pic_name" value="{{$product->pic_name}}" required>
                                         </div>
                                     </div>
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>PIC Phone</label></div>
                                         <div class="col-md-8" id="value">{{$product->pic_phone}}</div>
-                                        <div class="col-md-8" id="input">
+                                        <div class="col-md-8 valid-info" id="input">
                                             <input type="hidden" class="form-control" id="PICFormat" name="format_pic_phone">	
                                             <input type="text" class="form-control" id="PICPhone" name="pic_phone" required>	
                                         </div>
@@ -212,8 +212,8 @@
                                             <p>{{$product->meeting_point_address}}</p>
                                             <a class="col-orange" href="https://www.google.com/maps/{{'@'.$product->meeting_point_latitude}},{{$product->meeting_point_longitude}},17z"><b>Open on map ></b></a>
                                         </div>
-                                        <div class="col-md-8" id="input">
-                                            <input type="text" id="pac-input" class="form-control" name="meeting_point_address" value="{{$product->meeting_point_address}}" />
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <input type="text" id="pac-input" class="form-control" name="meeting_point_address" value="{{$product->meeting_point_address}}" required />
                                             <input type="hidden" id="geo-lat" class="form-control" name="meeting_point_latitude" value="{{$product->meeting_point_latitude}}"/>   
                                             <input type="hidden" id="geo-long" class="form-control" name="meeting_point_longitude" value="{{$product->meeting_point_longitude}}"/>   
                                         </div>
@@ -223,8 +223,8 @@
                                         <div class="col-md-8" id="value">
                                             <textarea rows="4" class="form-control no-resize" disabled>{{$product->meeting_point_note}}</textarea>
                                         </div>
-                                        <div class="col-md-8" id="input">
-                                            <textarea rows="4" name="meeting_point_note" class="form-control no-resize">{{$product->meeting_point_note}}</textarea>
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <textarea rows="4" name="meeting_point_note" class="form-control no-resize" required>{{$product->meeting_point_note}}</textarea>
                                         </div>
                                     </div>
                                     <div class="row" id="field">
@@ -234,8 +234,8 @@
                                                 <span class="label bg-deep-orange">{{ $activity->name}}</span>
                                             @endforeach
                                         </div>
-                                        <div class="col-md-8" id="input">
-                                            <select class="form-control" name="activity_tag[]" multiple="multiple" style="width: 100%">
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <select class="form-control" name="activity_tag[]" multiple="multiple" style="width: 100%" required>
                                                 @foreach($product->activities as $activity)
                                                     <option value="{{$activity->id}}" selected="selected">{{$activity->name}}</option>
                                                 @endforeach
@@ -248,8 +248,8 @@
                                         <div class="col-md-8" id="value">
                                             <textarea rows="4" class="form-control no-resize" disabled>{{$product->term_condition}}</textarea>
                                         </div>
-                                        <div class="col-md-8" id="input">
-                                            <textarea rows="4" name="term_condition" class="form-control no-resize">{{$product->term_condition}}</textarea>
+                                        <div class="col-md-8 valid-info" id="input">
+                                            <textarea rows="4" name="term_condition" class="form-control no-resize" required>{{$product->term_condition}}</textarea>
                                         </div>
                                     </div>
 
@@ -257,11 +257,11 @@
                                 <div class="col-md-6">
                                     <div class="body" id="value">
                                         <ul class="nav nav-tabs tab-nav-right tab-col-orange" role="tablist">
-                                            <li style="width:20%" role="presentation"  class="active"><a href="#cover" data-toggle="tab"><p class="col-orange">Cover</p></a></li>
+                                            <li style="width:15%" role="presentation"  class="active"><a href="#cover" data-toggle="tab"><p class="col-orange">Cover</p></a></li>
                                             <li style="width:20%" role="presentation"><a href="#destination" data-toggle="tab"><p class="col-orange">Destination</p></a></li>
-                                            <li style="width:20%" role="presentation"><a href="#accomodation" data-toggle="tab"><p class="col-orange">Accomodation</p></a></li>
+                                            <li style="width:30%" role="presentation"><a href="#accomodation" data-toggle="tab"><p class="col-orange">Accomodation</p></a></li>
                                             <li style="width:20%" role="presentation"><a href="#activities" data-toggle="tab"><p class="col-orange">Activities</p></a></li>
-                                            <li style="width:20%" role="presentation"><a href="#other" data-toggle="tab"><p class="col-orange">Other</p></a></li>
+                                            <li style="width:15%" role="presentation"><a href="#other" data-toggle="tab"><p class="col-orange">Other</p></a></li>
                                         </ul>
                                     
                                         <div class="tab-content">
@@ -357,7 +357,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 valid-info">
+                                <div class="col-md-12">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Delete Destination Photo</h4>
                                         @foreach($product->image_destination as $dest)
@@ -373,10 +373,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Upload Activity Photo</h4>
-                                        <input id="file-i1" type="file" name="destination_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
+                                        <input id="file-i1" type="file" name="destination_images[]" accept=".jpg,.gif,.png,.jpeg" multiple>
                                     </div>
                                 </div>
-                                <div class="col-md-12 valid-info" style="margin-top:20px">
+                                <div class="col-md-12" style="margin-top:20px">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Delete Activity Photo</h4>
                                         @foreach($product->image_activity as $act)
@@ -392,11 +392,11 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Activities Photo</h4>
-                                        <input id="file-i2" type="file" name="activity_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>    
+                                        <input id="file-i2" type="file" name="activity_images[]" accept=".jpg,.gif,.png,.jpeg" multiple>    
                                     </div>
                                     
                                 </div>
-                                <div class="col-md-12 valid-info" style="margin-top:20px">
+                                <div class="col-md-12" style="margin-top:20px">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Delete Accommodation Photo</h4>
                                         @foreach($product->image_accommodation as $acc)
@@ -412,10 +412,10 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Accommodation Photo</h4>
-                                        <input id="file-i3" type="file" name="accommodation_images[]"accept=".jpg,.gif,.png,.jpeg"  multiple required>
+                                        <input id="file-i3" type="file" name="accommodation_images[]"accept=".jpg,.gif,.png,.jpeg"  multiple>
                                     </div>
                                 </div>
-                                <div class="col-md-12 valid-info" style="margin-top:20px">
+                                <div class="col-md-12" style="margin-top:20px">
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Delete Other Photo</h4>
                                         @foreach($product->image_other as $oth)
@@ -431,7 +431,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Others Photo</h4>
-                                        <input id="file-i4" type="file" name="other_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
+                                        <input id="file-i4" type="file" name="other_images[]" accept=".jpg,.gif,.png,.jpeg" multiple>
                                     </div>
                                     
                                 </div>
@@ -450,7 +450,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('product/productinfo/update2') }}" enctype="multipart/form-data">
+                <form method="POST" id="form-2" action="{{ url('product/productinfo/update2') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -543,7 +543,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('product/productinfo/update3') }}" enctype="multipart/form-data">
+                <form method="POST" id="form-3" action="{{ url('product/productinfo/update3') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -607,7 +607,7 @@
                                 <!-- SCHEDULE -->
                                 <div class="col-md-12" style="margin: 0px 3px 0px 3px;">
                                     <h4 style="margin-top: 40px;">Duration & Schedule:</h4>
-                                    <div class="row valid-info" style="margin: 0px 3px 0px 3px;">
+                                    <div class="row" style="margin: 0px 3px 0px 3px;">
                                         <div class="col-md-12">
                                             <h5>How long is the duration of your tour/activity ?:</h5>
                                         </div>
@@ -624,7 +624,7 @@
                                             <label for="3d">One day full</label>
                                         </div>
                                     </div>
-                                    <div class="row valid-info" style="margin: 0px 3px 0px 3px;">
+                                    <div class="row" style="margin: 0px 3px 0px 3px;">
                                         <div class="scheduleDays">
                                             <div class="col-md-2 valid-info">
                                                 <h5>Day?* :</h5>
@@ -663,7 +663,7 @@
                                         <input type="hidden" id="scheduleField0" name="schedule[{{$key}}][id]" value="{{$sche->id}}" />
                                             <div class="col-md-3 valid-info" id="scheduleCol1">
                                                 <h5>Start date*</h5>
-                                                <input type="text" id="scheduleField1" class="form-control" name="schedule[{{$key}}][startDate]" value='{{ date("d-m-Y", strtotime($sche->start_date)) }}'/>
+                                                <input type="text" id="scheduleField1" class="form-control" name="schedule[{{$key}}][startDate]" value='{{ date("d-m-Y", strtotime($sche->start_date)) }}' required/>
                                             </div>
                                             <div class="col-md-3 valid-info" id="scheduleCol2">
                                                 <h5>End date*</h5>
@@ -671,7 +671,7 @@
                                             </div>
                                             <div class="col-md-2 valid-info" id="scheduleCol3">
                                                 <h5>Start hours *</h5>
-                                                <input type="text" id="scheduleField3" class="form-control" name="schedule[{{$key}}][startHours]" value='{{ date("H:i:s", strtotime($sche->start_hours)) }}'/>
+                                                <input type="text" id="scheduleField3" class="form-control" name="schedule[{{$key}}][startHours]" value='{{ date("H:i:s", strtotime($sche->start_hours)) }}'required />
                                             </div>
                                             <div class="col-md-2 valid-info" id="scheduleCol4">
                                                 <h5>End hours*</h5>
@@ -679,11 +679,11 @@
                                             </div>
                                             <div class="col-md-3 valid-info" id="scheduleCol5">
                                                 <h5>Max.Booking Date*</h5>
-                                                <input type="text" id="scheduleField5" class="form-control" name="schedule[{{$key}}][maxBookingDate]" value='{{ date("d-m-Y", strtotime($sche->max_booking_date_time)) }}'/>
+                                                <input type="text" id="scheduleField5" class="form-control" name="schedule[{{$key}}][maxBookingDate]" value='{{ date("d-m-Y", strtotime($sche->max_booking_date_time)) }}'required />
                                             </div>
                                             <div class="col-md-2 valid-info" id="scheduleCol6">
                                                 <h5>Max.Booking*</h5>
-                                                <input type="text" id="scheduleField6" class="form-control" name="schedule[{{$key}}][maximumGroup]" value='{{$sche->maximum_booking}}'>
+                                                <input type="text" id="scheduleField6" class="form-control" name="schedule[{{$key}}][maximumGroup]" value='{{$sche->maximum_booking}}' required>
                                             </div>
                                             <div class="col-md-1" style="padding-top:25px" id="button_del">
                                                 <button type="button" id="delete_schedule" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
@@ -716,7 +716,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('product/productinfo/update4') }}" enctype="multipart/form-data">
+                <form method="POST" id="form-4" action="{{ url('product/productinfo/update4') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -821,7 +821,7 @@
                             <div class="row clearfix" id="input">
                                 <div class="col-md-12" style="margin-top: 20px;">
                                     <h4>Pricing Details</h4>
-                                    <div class="row valid-info" style="">
+                                    <div class="row" style="">
                                         <div class="col-md-4" style="margin-left:0px;">
                                             <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1"/>
                                             <label for="1p" style="font-size:15px">I only have pricing in IDR</label>
@@ -844,21 +844,21 @@
                                             <div class="col-md-3 valid-info" id="price_idr">
                                                 <h5>Price / person (IDR)*:</h5>
                                                 <input type="hidden" name="price[0][people]" value="fixed"> 
-                                                <input id="price_list_field2" type="text" class="form-control" name="price[0][IDR]" value="{{$product->price_idr}}" />     
+                                                <input id="price_list_field2" type="text" class="form-control" name="price[0][IDR]" value="{{$product->price_idr}}" required />     
                                             </div>
                                             <div class="col-md-3 valid-info" id="price_usd" style="display: none">
                                                 <h5>Price / person (USD)*:</h5>
-                                                <input id="price_list_field3" type="text" class="form-control" name="price[0][USD]" value="{{$product->price_usd}}" /> 
+                                                <input id="price_list_field3" type="text" class="form-control" name="price[0][USD]" value="{{$product->price_usd}}" required/> 
                                             </div>
                                             @else
                                             <div class="col-md-3 valid-info" id="price_idr">
                                                 <h5>Price / person (IDR)*:</h5>
                                                 <input type="hidden" name="price[0][people]" value="fixed"> 
-                                                <input type="text" id="idr" name="price[0][IDR]" class="form-control" />     
+                                                <input type="text" id="idr" name="price[0][IDR]" class="form-control" required/>     
                                             </div>
                                             <div class="col-md-3 valid-info" id="price_usd" style="display: none">
                                                 <h5>Price / person (USD)*:</h5>
-                                                <input type="text" id="usd" name="price[0][USD]" class="form-control"  />     
+                                                <input type="text" id="usd" name="price[0][USD]" class="form-control" required/>     
                                             </div>
                                             @endif
                                         </div>
@@ -879,11 +879,11 @@
                                                             <div class="col-md-6 valid-info" id="price_idr">
                                                                 <h5>Price / person (IDR)*:</h5>
                                                                 <input id="price_list_field1" type="hidden" name="price[{{$key}}][people]" value="{{$pri->number_of_person}}" />  
-                                                                <input id="price_list_field2" type="text" class="form-control" name="price[{{$key}}][IDR]" value="{{$pri->price_idr}}" />     
+                                                                <input id="price_list_field2" type="text" class="form-control" name="price[{{$key}}][IDR]" value="{{$pri->price_idr}}"/>     
                                                             </div>
                                                             <div class="col-md-6 valid-info" id="price_usd" style="display: none">
                                                                 <h5>Price / person (USD)*:</h5>
-                                                                <input id="price_list_field3" type="text" class="form-control" name="price[{{$key}}][USD]" value="{{$pri->price_usd}}" /> 
+                                                                <input id="price_list_field3" type="text" class="form-control" name="price[{{$key}}][USD]" value="{{$pri->price_usd}}" required/> 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -961,7 +961,7 @@
                                 </div>
                                 <div class="col-md-12" style="margin-top: 30px;">
                                     <h4>Cancellation Policy</h4>
-                                    <div class="row valid-info" style="margin-left:0px;">
+                                    <div class="row" style="margin-left:0px;">
                                         <div class="col-md-3">
                                             <input name="cancellation_type" type="radio" id="1c" class="radio-col-deep-orange" value="1" />
                                             <label for="1c">No cancellation</label>
@@ -1011,7 +1011,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('product/productinfo/update5') }}" enctype="multipart/form-data">
+                <form method="POST" id="form-5" action="{{ url('product/productinfo/update5') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -1196,7 +1196,27 @@
     <script src="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.js') }}"></script>
     <!-- Select2 Plugin Js -->
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-    
+    <!-- VALIDATION -->
+    <script>
+        $(document).ready(function(){
+            $('#form-1,#form-2,#form-3,#form-4,#form-5').validate({
+                highlight: function (input) {
+                    $(input).parents('.valid-info').addClass('error');
+                },
+                unhighlight: function (input) {
+                    $(input).parents('.valid-info').removeClass('error');
+                },
+                errorPlacement: function (error, element) {
+                    $(element).parents('.valid-info').append(error);
+                },
+                rules: {
+                    'confirm': {
+                        equalTo: '#password'
+                    }
+                }
+            });
+        });
+    </script>
     <!-- MASK -->
          <script>
             $(document).ready(function(){
@@ -1336,7 +1356,10 @@
                             $(this).show();
                         })
                         $(this).closest(".card").find("#button-save").show().find("button").click(function(){
-                            $(this).closest("form").submit();
+                            if($(this).closest("form").valid()){
+                                $(this).closest("form").submit();
+                            }
+                            
                         });
                         $(this).closest(".card").find("#button-cancel").show().find("button").click(function(){
                             $(this).closest("div.card").find("div#statusChange").hide();
@@ -1391,7 +1414,25 @@
 <!-- Date Picker-->
     <script type="text/javascript">
         $(document).ready(function(){
-			var day=1,hours=1,minute=1;	
+            var dbScheType = '{{$product->schedule_type}}';
+            var dbDay = '{{$day}}';
+            var dbHours = '{{$hours}}';
+            var dbMinutes = '{{$minutes}}';
+            if(dbDay == null || dbDay == ''){
+                var day = 2;
+            }else{
+                var day = dbDay;
+            }
+            if(dbHours == null || dbHours == ''){
+                var hours = 1;
+            }else{
+                var hours = dbHours;
+            }
+            if(dbMinutes == null || dbMinutes == ''){
+                var minutes = 1;
+            }else{
+                var minutes = dbMinutes;
+            }
 			$("select[name='day']").change(function(){
 				day = $(this).val();
 			});
@@ -1509,7 +1550,22 @@
         $("div#dinamic_schedule:first").find("#button_del button").remove();
         $("div#dinamic_destination:first").find("#button_del button").remove();
         // 
-		var day = 1,hours= 1,minute=1,maxBooked;
+        if(dbDay == null || dbDay == ''){
+            var day = 2;
+        }else{
+            var day = dbDay;
+        }
+        if(dbHours == null || dbHours == ''){
+            var hours = 1;
+        }else{
+            var hours = dbHours;
+        }
+        if(dbMinutes == null || dbMinutes == ''){
+            var minutes = 1;
+        }else{
+            var minutes = dbMinutes;
+        }
+		var maxBooked;
 		$("select[name='day']").change(function(){
 			day = $(this).val();
 			$("#dinamic_schedule input").val(null);
@@ -1646,10 +1702,10 @@
           }
         });
         // ADD MORE
+        
         var i = '{{count($product->schedules)}}';
-        var dbIdSche = 
         $("#add_more_schedule").click(function(){
-			i++;
+            i++;
             var length = $("#clone_dinamic_schedule").find("#scheduleField2").length;
             if(type == 1){
                 if(length != 0){

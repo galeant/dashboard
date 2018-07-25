@@ -69,7 +69,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form id="" method="POST" action="{{ url('product/tour-activity') }}" enctype="multipart/form-data">
+                <form id="form-1" method="POST" action="{{ url('product/tour-activity') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row" >
                         <div class="col-md-12" id="general_information">
@@ -689,7 +689,7 @@
         });
         $("form *").removeAttr("required");
         // VALIDATION
-        $('#wizard_with_validation').validate({
+        $('#form-1').validate({
             highlight: function (input) {
                 $(input).parents('.valid-info').addClass('error');
             },
