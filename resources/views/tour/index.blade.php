@@ -31,6 +31,7 @@
                                     <thead>
                                         <tr>
                                             <th>Code</th>
+                                            <th>Company</th>
                                             <th>Product Name</th>
                                             <th>PIC Name</th>
                                             <th>Pic Phone</th>
@@ -67,6 +68,7 @@
 	        ajax: '/product/tour-activity',
 	        columns: [
 	            {data: 'product_code'},
+                {data: 'company.company_name'},
 	            {data: 'product_name'},
                 {data: 'pic_name'},
                 {data: 'pic_phone'},

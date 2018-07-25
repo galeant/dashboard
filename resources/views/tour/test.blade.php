@@ -107,6 +107,7 @@
                         <div class="body" style="padding:0 25px">
                             <div class="row clearfix">
                                 <div class="col-md-6" >
+                                    <h4>Company : {{ $product->company->company_name}}</h3>
                                     <h3>{{ $product->product_name}}</h3>
                                     <h4>Product Code: {{ $product->product_code}}</h4>
                                     <hr style="margin: 10px 0">

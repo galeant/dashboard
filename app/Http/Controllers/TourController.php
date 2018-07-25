@@ -45,7 +45,7 @@ class TourController extends Controller
     {
         if($requestuest->ajax())
         {
-            $model = Tour::query();
+            $model = Tour::with('company')->select('products.*');;
             return Datatables::eloquent($model)
             ->addColumn('action', function(Tour $data) {
                 return '<a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
@@ -104,7 +104,7 @@ class TourController extends Controller
             'schedule_type' => 'required',
             'schedule' => 'required',
             'place' => 'required',
-            // 'activity_tag' => 'required',
+            'activity_tag' => 'required',
             'itinerary' => 'required',
             'price_kurs' => 'required',
             'price_type' => 'required',
