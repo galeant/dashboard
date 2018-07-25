@@ -15,7 +15,7 @@ use App\Models\Includes;
 use App\Models\Excludes;
 use App\Models\ImageDestination;
 use App\Models\ImageActivity;
-use App\Models\ImageAccomodation;
+use App\Models\ImageAccommodation;
 use App\Models\ImageOther;
 use App\Models\Videos;
 
@@ -440,7 +440,8 @@ class TourController extends Controller
             'price_type' => $price_type
         ];
 
-        // dd($pushToBlade);
+        // dd($product);
+        
         return view('tour.test',$pushToBlade);
     }
 
@@ -674,7 +675,7 @@ class TourController extends Controller
         if(!empty($request->accommodation_images)){
             foreach($request->destination_images as $image){
                 $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageAccomodation::insert([
+                ImageAccommodation::insert([
                     'product_id' => $product->id,
                     'path' => $imgSave['path'],
                     'filename' => $imgSave['filename']
@@ -715,8 +716,75 @@ class TourController extends Controller
         //
     }
     public function update1(Request $request){
-        dd($request->all());
-    }
+        // dd($request->all());
+        $product = Tour::where('id',$request->product_id)
+		->update([
+            'product_name' => $request->product_name,
+            'product_category' => $request->product_category,
+            'product_type' => $request->product_type,
+            'min_person' => $request->min_person,
+            'max_person' => $request->max_person,
+            'pic_name' => $request->pic_name,
+            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
+            'meeting_point_address' => $request->meeting_point_address,
+            'meeting_point_latitude' => $request->meeting_point_latitude,
+            'meeting_point_longitude' => $request->meeting_point_longitude,
+            'meeting_point_note' => $request->meeting_point_note,
+            'term_condition' => $request->term_condition,
+        ]);
+        // ACTIVITY
+        if($request->activity_tag != null){
+			ProductActivity::where('product_id',$request->product_id)->delete();
+            foreach($request->activity_tag as $activity)
+            {
+                $destination = ProductActivity::create([
+                    'product_id' => $request->product_id,
+                    'activity_id' => $activity
+                ]);
+            }
+        }
+        if(!empty($request->destination_images)){
+            foreach($request->destination_images as $image){
+                $imgSave = Helpers::saveImage($image,'products');
+                ImageDestination::insert([
+                    'product_id' => $request->product_id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->activity_images)){
+            foreach($request->activity_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageActivity::insert([
+                    'product_id' => $request->product_id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->accommodation_images)){
+            foreach($request->accommodation_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageAccommodation::insert([
+                    'product_id' => $request->product_id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        if(!empty($request->other_images)){
+            foreach($request->other_images as $image){
+                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                ImageOther::insert([
+                    'product_id' => $request->product_id,
+                    'path' => $imgSave['path'],
+                    'filename' => $imgSave['filename']
+                ]);
+            }
+        }
+        return redirect()->back();
+    }   
     public function update2(Request $request){
         // dd($request->all());
          /// DESTINATION

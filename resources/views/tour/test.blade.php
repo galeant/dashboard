@@ -149,6 +149,21 @@
                                         </div>
                                     </div>
                                     <div class="row" id="field">
+                                        <div class="col-md-4"><label>PIC Name</label></div>
+                                        <div class="col-md-8" id="value">{{$product->pic_name}}</div>
+                                        <div class="col-md-8" id="input">
+                                            <input type="text" class="form-control" name="pic_name" value="{{$product->pic_name}}">
+                                        </div>
+                                    </div>
+                                    <div class="row" id="field">
+                                        <div class="col-md-4"><label>PIC Phone</label></div>
+                                        <div class="col-md-8" id="value">{{$product->pic_phone}}</div>
+                                        <div class="col-md-8" id="input">
+                                            <input type="hidden" class="form-control" id="PICFormat" name="format_pic_phone">	
+                                            <input type="text" class="form-control" id="PICPhone" name="pic_phone" required>	
+                                        </div>
+                                    </div>
+                                    <div class="row" id="field">
                                         <div class="col-md-4"><label>Meeting Point</label></div>
                                         <div class="col-md-8" id="value">
                                             <p>{{$product->meeting_point_address}}</p>
@@ -161,6 +176,15 @@
                                         </div>
                                     </div>
                                     <div class="row" id="field">
+                                    <div class="col-md-4"><label>Meeting Point Notes</label></div>
+                                        <div class="col-md-8" id="value">
+                                            <textarea rows="4" class="form-control no-resize" disabled>{{$product->meeting_point_note}}</textarea>
+                                        </div>
+                                        <div class="col-md-8" id="input">
+                                            <textarea rows="4" name="meeting_point_note" class="form-control no-resize">{{$product->meeting_point_note}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="field">
                                         <div class="col-md-4"><label>Activity Tag</label></div>
                                         <div class="col-md-8" id="value">
                                             @foreach($product->activities as $activity)
@@ -170,7 +194,7 @@
                                         <div class="col-md-8" id="input">
                                             <select class="form-control" name="activity_tag[]" multiple="multiple" style="width: 100%">
                                                 @foreach($product->activities as $activity)
-                                                    <option value="{{$activity->activityId}}" selected="selected">{{$activity->name}}</option>
+                                                    <option value="{{$activity->id}}" selected="selected">{{$activity->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -178,7 +202,9 @@
                                     </div>
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Term & Condition</label></div>
-                                        <div class="col-md-8" id="value">{{$product->term_condition}}</div>
+                                        <div class="col-md-8" id="value">
+                                            <textarea rows="4" class="form-control no-resize" disabled>{{$product->term_condition}}</textarea>
+                                        </div>
                                         <div class="col-md-8" id="input">
                                             <textarea rows="4" name="term_condition" class="form-control no-resize">{{$product->term_condition}}</textarea>
                                         </div>
@@ -188,12 +214,11 @@
                                 <div class="col-md-6">
                                     <div class="body" id="value">
                                         <ul class="nav nav-tabs tab-nav-right tab-col-orange" role="tablist">
-                                            <li role="presentation"  class="active"><a href="#cover" data-toggle="tab"><p class="col-orange">Cover</p></a></li>
-                                            <li role="presentation"><a href="#destination" data-toggle="tab"><p class="col-orange">Destination</p></a></li>
-                                            <li role="presentation"><a href="#accomodation" data-toggle="tab"><p class="col-orange">Accomodation</p></a></li>
-                                            <li role="presentation"><a href="#activities" data-toggle="tab"><p class="col-orange">Activities</p></a></li>
-                                            <li role="presentation"><a href="#other" data-toggle="tab"><p class="col-orange">Other</p></a></li>
-                                            <li role="presentation"><a href="#video" data-toggle="tab"><p class="col-orange">Video</p></a></li>
+                                            <li style="width:20%" role="presentation"  class="active"><a href="#cover" data-toggle="tab"><p class="col-orange">Cover</p></a></li>
+                                            <li style="width:20%" role="presentation"><a href="#destination" data-toggle="tab"><p class="col-orange">Destination</p></a></li>
+                                            <li style="width:20%" role="presentation"><a href="#accomodation" data-toggle="tab"><p class="col-orange">Accomodation</p></a></li>
+                                            <li style="width:20%" role="presentation"><a href="#activities" data-toggle="tab"><p class="col-orange">Activities</p></a></li>
+                                            <li style="width:20%" role="presentation"><a href="#other" data-toggle="tab"><p class="col-orange">Other</p></a></li>
                                         </ul>
                                     
                                         <div class="tab-content">
@@ -201,19 +226,10 @@
                                                 <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                                                     <!-- Wrapper for slides -->
                                                     <div class="carousel-inner" role="listbox">
-                                                        <div class="item" id="caros">
-                                                            <img src="{{ asset($product->cover_path) }}" />
+                                                        <div class="item active" id="caros">
+                                                            <img src="{{cdn($product->cover_path)}}">
                                                         </div>
                                                     </div>
-                                                    <!-- Controls -->
-                                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
                                                 </div>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade in active" id="destination">
@@ -222,19 +238,10 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_destination as $dest)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($dest->url) }}" />
+                                                            <img src="{{cdn($dest->path)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
-                                                    <!-- Controls -->
-                                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
                                                 </div>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade" id="accomodation">
@@ -243,19 +250,10 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_accommodation as $acc)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($acc->url) }}" />
+                                                            <img src="{{cdn($acc->path)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
-                                                    <!-- Controls -->
-                                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
                                                 </div>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade" id="activities">
@@ -264,19 +262,10 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_activity as $act)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($act->url) }}" />
+                                                            <img src="{{cdn($act->path)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
-                                                    <!-- Controls -->
-                                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
                                                 </div>
                                             </div>
                                             <div role="tabpanel" class="tab-pane fade" id="other">
@@ -285,41 +274,10 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_other as $oth)
                                                         <div class="item" id="caros">
-                                                            <img src="{{ asset($oth->url) }}" />
+                                                            <img src="{{cdn($oth->path)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
-                                                    <!-- Controls -->
-                                                    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            
-                                            <div role="tabpanel" class="tab-pane fade" id="video">
-                                                <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                                                    <!-- Wrapper for slides -->
-                                                    <div class="carousel-inner" role="listbox">
-                                                        @foreach($product->videos as $vid)
-                                                        <div class="item" id="caros">
-                                                            <iframe width="100%" height="300px" src="{{$vid->url}}"></iframe>
-                                                        </div>
-                                                        @endforeach
-                                                    </div>
-                                                    <!-- Controls -->
-                                                    <!-- <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                                        <span class="sr-only">Previous</span>
-                                                    </a>
-                                                    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                                        <span class="sr-only">Next</span>
-                                                    </a> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -331,10 +289,12 @@
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Cover</h4>
                                         <div class="row">
-                                            <div class="col-md-12 valid-info" id="input" hidden>
-                                                <input id="bankPic" type="file" name="bank_pic">	
+                                            
+                                            <div class="col-md-12 valid-info" id="upload" hidden>
+                                                <input id="coverPic" type="file" name="cover_pic">	
                                             </div>
-                                            <div class="col-md-8" id="value" cat="bank">
+                                            
+                                            <div class="col-md-12" cat="cover">
                                                 <div class="thumbnail">
                                                     <img src="{{cdn($product->cover_path)}}">
                                                     <div class="caption">
@@ -354,7 +314,7 @@
                                         @foreach($product->image_destination as $dest)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{asset($dest->url)}}" class="img-responsive">
+                                                <img src="{{cdn($dest->path)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/dest/'.$dest->id)}}">Hapus</a>
@@ -364,7 +324,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Upload Activity Photo</h4>
-                                        <input id="file-i1" type="file" name="image_destination[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
+                                        <input id="file-i1" type="file" name="destination_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 valid-info" style="margin-top:20px">
@@ -373,7 +333,7 @@
                                         @foreach($product->image_activity as $act)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{asset($act->url)}}" class="img-responsive">
+                                                <img src="{{cdn($act->path)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/act/'.$act->id)}}">Hapus</a>
@@ -383,7 +343,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Activities Photo</h4>
-                                        <input id="file-i2" type="file" name="image_activities[]" accept=".jpg,.gif,.png,.jpeg" multiple required>    
+                                        <input id="file-i2" type="file" name="activity_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>    
                                     </div>
                                     
                                 </div>
@@ -393,7 +353,7 @@
                                         @foreach($product->image_accommodation as $acc)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{asset($acc->url)}}" class="img-responsive">
+                                                <img src="{{cdn($acc->path)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/acc/'.$acc->id)}}">Hapus</a>
@@ -403,7 +363,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Accommodation Photo</h4>
-                                        <input id="file-i3" type="file" name="image_accommodation[]"accept=".jpg,.gif,.png,.jpeg"  multiple required>
+                                        <input id="file-i3" type="file" name="accommodation_images[]"accept=".jpg,.gif,.png,.jpeg"  multiple required>
                                     </div>
                                 </div>
                                 <div class="col-md-12 valid-info" style="margin-top:20px">
@@ -412,7 +372,7 @@
                                         @foreach($product->image_other as $oth)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{asset($oth->url)}}" class="img-responsive">
+                                                <img src="{{cdn($oth->path)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/oth/'.$oth->id)}}">Hapus</a>
@@ -422,27 +382,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h4><i class="material-icons">perm_media</i> Others Photo</h4>
-                                        <input id="file-i4" type="file" name="image_other[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
+                                        <input id="file-i4" type="file" name="other_images[]" accept=".jpg,.gif,.png,.jpeg" multiple required>
                                     </div>
                                     
-                                </div>
-                                <div class="col-md-12 valid-info" style="margin-top:20px">
-                                    <h4><i class="material-icons">perm_media</i> Video URL</h4>
-                                    <h5>Add your video link to embed the video into your product's gallery.</h5>
-                                    <div class="row" id="embed" style="display: w;margin-bottom: 10px">
-                                        <div class="col-md-6" >
-                                            @foreach($product->videos as $vid)
-                                            <input type="url" class="form-control" name="videoUrl[]" value="{{$vid->url}}" />
-                                            @endforeach
-                                        </div>
-                                        <div class="col-md-3">                            
-                                            <button type="button" class="btn btn-warning waves-effect" id="add_more_video">
-                                                <i class="material-icons">add</i>
-                                                <span>Add link</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div id="clone_dinamic_video"></div>
                                 </div>
                             </div>
                             <div class="row clearfix" style="margin:10px;padding: 10px" id="action">
@@ -1205,6 +1147,19 @@
                     allowedFileExtensions: ["jpg", "png", "gif"],
                     allowedPreviewTypes :['image']
                 });
+                $("#coverPic").fileinput({
+                    theme: 'fa',
+                    maxFileSize: 1000,
+                    showPreview: false,
+                    showRemove: false,
+                    showCancel: false,
+                    showUpload: false,
+                    allowedFileExtensions: ["jpg", "png", "gif","pdf","doc","docs","xls"]
+                });
+                $("div[cat='cover']").find("button").click(function(){
+                    $(this).closest("div[cat='cover']").hide();
+                    $(this).closest(".row").find("#upload").show();
+                });
                 var i = 0;
                 $("#add_more_video").click(function(){
                     i++;
@@ -1949,24 +1904,17 @@
 <!-- PHONE FORMAT -->
     <script>
         $(document).ready(function() {
+            var dbphone = "{{$product->pic_phone}}";
+            var dbformat = dbphone.split("-");
             // PIC PRODUCT
-            $("input[name='format_pic_phone']").val("+62");
-            $("input[name='pic_phone']").val("+62").intlTelInput({
+            $("input[name='format_pic_phone']").val(dbformat[0]);
+            $("input[name='pic_phone']").val(dbformat[0]+''+dbformat[1]+'-'+dbformat[2]+'-'+dbformat[3]).intlTelInput({
                 separateDialCode: true,
             });
-            $("input[name='format_pic_phone']").val("+62");
             $(".country").click(function(){
-                $(this).closest(".valid-info").find("input[name='format_pic_phone']").val("+"+$(this).attr( "data-dial-code" ));
+                $(this).closest(".valid-info").find("input[name='format_pic_phone']").val("+"+$(this).attr("data-dial-code"));
             });
         });
     </script>        
-
-    <!-- OTHER -->
-    @foreach($product->activities as $activity)
-    <script>
-        $("select[name='activity_tag[]']").find("option[value='{{$activity->id}}']:last").remove();
-    </script>                        
-    @endforeach
-
   
 @stop
