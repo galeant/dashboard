@@ -99,8 +99,46 @@
                     <div class="card" id="productInfo">
                         <div class="header" style="padding: 0px">
                             <div class="row clearfix" >
-                                <div class="col-md-2 col-md-offset-10">
-                                    <h3>{{$product->status}}</h3>
+                                <div class="col-md-1">
+                                    <h4>Status:</h4>
+                                </div>
+                                <div class="col-md-2" id="statusValue" style="margin-top:10px;margin-bottom:10px;width:auto">
+                                    @if($product->status == 0)
+                                    <button type="button" class="btn bg-orange waves-effect">
+                                        <i class="material-icons">close</i>
+                                        <span>No-Active</span>
+                                    </button>
+                                    @elseif($product->status == 1)
+                                    <button type="button" class="btn bg-green waves-effect">
+                                        <i class="material-icons">check</i>
+                                        <span>Active</span>
+                                    </button>
+                                    @else
+                                    <button type="button" class="btn bg-red waves-effect">
+                                        <i class="material-icons">cancel</i>
+                                        <span>Suspend</span>
+                                    </button>
+                                    @endif
+                                </div>
+                                <div id="statusChange" hidden>
+                                    <div class="col-md-2" id="butNonactive" style="margin-top:10px;margin-bottom:10px;width:auto" hidden>
+                                        <button type="button" class="btn bg-orange waves-effect">
+                                            <i class="material-icons">close</i>
+                                            <span>No-Active</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2" id="butActive" style="margin-top:10px;margin-bottom:10px;width:auto" hidden>
+                                        <button type="button" class="btn bg-green waves-effect">
+                                            <i class="material-icons">check</i>
+                                            <span>Active</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-md-2" id="butSuspend" style="margin-top:10px;margin-bottom:10px;width:auto" hidden>
+                                        <button type="button" class="btn bg-red waves-effect">
+                                            <i class="material-icons">cancel</i>
+                                            <span>Suspend</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +187,8 @@
                                         <div class="col-md-8" id="value">{{$product->max_person}}</div>
                                         <div class="col-md-8" id="input">
                                             <input type="text" class="form-control" name="max_person" value="{{$product->max_person}}">
+                                            <input type="hidden" name="dbMaxPerson" value="{{$product->max_person}}">
+                                            <input type="hidden" name="dbPriceType" value="{{$price_type}}">
                                         </div>
                                     </div>
                                     <div class="row" id="field">
@@ -292,7 +332,6 @@
                                     <div class="col-md-6" style="border: soli 1px;border-radius: 5px;padding:x;margin-top: ">
                                         <h4><i class="material-icons">perm_media</i> Cover</h4>
                                         <div class="row">
-                                            
                                             <div class="col-md-12 valid-info" id="upload" hidden>
                                                 <div class="col-md-3 cover-image">
                                                     <h5>Cover Product Image*</h5>
@@ -304,7 +343,6 @@
                                                     <input name="cover_img" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
                                                 </div>	
                                             </div>
-                                            
                                             <div class="col-md-12" cat="cover">
                                                 <div class="thumbnail">
                                                     <img src="{{cdn($product->cover_path.'/'.$product->cover_filename)}}">
@@ -475,7 +513,9 @@
                                                 </select>
                                                 <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                             </div>
-                                            <div class="col-md-1" style="padding-top:25px "></div>
+                                            <div class="col-md-1" style="padding-top:25px" id="button_del">
+                                                <button type="button" id="delete_destination" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
+                                            </div>
                                         </div>
                                     @endforeach
                                         <div id="clone_dinamic_destination"></div>
@@ -562,6 +602,8 @@
                                 </table>
                             </div>
                             <div class="row clearfix" id="input">
+                                <input type="hidden" name="dbDay" value="{{$day}}"/>
+                                <input type="hidden" name="dbScheduleType" value="{{$product->schedule_type}}"/>
                                 <!-- SCHEDULE -->
                                 <div class="col-md-12" style="margin: 0px 3px 0px 3px;">
                                     <h4 style="margin-top: 40px;">Duration & Schedule:</h4>
@@ -570,25 +612,24 @@
                                             <h5>How long is the duration of your tour/activity ?:</h5>
                                         </div>
                                         <div class="col-md-3" style="margin: 5px 3px 0px 3px;">
-                                            <input name="schedule_type" type="radio" id="1d" class="radio-col-deep-orange" value="1" sel="1" disabled/>
+                                            <input name="schedule_type" type="radio" id="1d" class="radio-col-deep-orange" value="1" sel="1" />
                                             <label for="1d">Multiple days</label>
                                         </div>
                                         <div class="col-md-3" style="margin: 5px 3px 0px 3px;">
-                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange" value="2" sel="2" disabled/>
+                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange" value="2" sel="2" />
                                             <label for="2d">A couple of hours</label>
                                         </div>
                                         <div class="col-md-3" style="margin: 5px 3px 0px 3px;">
-                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange" value="3" sel="3"  disabled/>
+                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange" value="3" sel="3"  />
                                             <label for="3d">One day full</label>
-                                            <input name="schedule_type" type="hidden" value="{{$product->schedule_type}}"/>
                                         </div>
                                     </div>
                                     <div class="row valid-info" style="margin: 0px 3px 0px 3px;">
                                         <div class="scheduleDays">
                                             <div class="col-md-2 valid-info">
                                                 <h5>Day?* :</h5>
-                                                <select class="form-control" name="day" disabled>
-                                                    <option value="">-- Days --</option>
+                                                <select class="form-control" name="day">
+                                                    <option value="null">-- Days --</option>
                                                     @for($i=2;$i<24;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                     @endfor
@@ -598,8 +639,8 @@
                                         <div class="scheduleHours" hidden>
                                             <div class="col-md-2 valid-info">
                                                 <h5>Hours?* :</h5>
-                                                <select class="form-control" name="hours" disabled>
-                                                    <option value="">-- Hours --</option>
+                                                <select class="form-control" name="hours">
+                                                    <option value="null">-- Hours --</option>
                                                     @for($i=1;$i<=24;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                     @endfor
@@ -607,8 +648,8 @@
                                             </div>
                                             <div class="col-md-2 valid-info">
                                                 <h5>Minutes?* :</h5>
-                                                <select class="form-control" name="minutes" disabled>
-                                                    <option value="">-- Minutes --</option>
+                                                <select class="form-control" name="minutes">
+                                                    <option value="null">-- Minutes --</option>
                                                     @for($i=1;$i<=60;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                     @endfor
@@ -687,7 +728,7 @@
                                 <div class="col-md-6">
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Price Type</label></div>
-                                        @if($product->price_idr != null)
+                                        @if($price_type == 'fix')
                                             <div class="col-md-8" id="value">Fixed Price</div>
                                         @else
                                             <div class="col-md-8" id="value">Based of Person</div>
@@ -696,27 +737,54 @@
                                     <div class="row" id="field">
                                         <div class="col-md-4"><label>Pricing Scheme</label></div>
                                         <div class="col-md-8">
-                                        @if($product->price_idr != null)
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <li>1 Person = Rp. {{ $product->price_idr}}/person </li>
-                                                </div>
-                                                <div class="col-md-6">
-                                                <li>1 Person = Rp. {{ $product->price_usd}}/person </li>
-                                                </div>
-                                            </div>
-                                        @else
-                                            @foreach($product->prices as $price)
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <li>{{ $price->number_of_person}} Person = Rp. {{ $price->price_idr}}/person </li>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                    <li>{{ $price->number_of_person}} Person = Rp. {{ $price->price_usd}}/person </li>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        @endif
+                                            <table class="table table-striped" id="value_sche">
+                                                <thead>
+                                                    <tr>
+                                                        <td id="person">Person</td>
+                                                        @if($price_kurs == 'one')
+                                                            <td id="IDR" >IDR</td>
+                                                        @else
+                                                            <td id="IDR" >IDR</td>
+                                                            <td id="USD">USD</td>
+                                                        @endif
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                @if($price_type == 'fix')
+                                                    @if($price_kurs == 'one')
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td id="IDR">{{ $product->price_idr}}</td>
+                                                    </tr>
+                                                    @else
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td id="IDR">{{ $product->price_idr}}</td>
+                                                        <td id="USD" >{{ $product->price_usd}}</td>
+                                                    </tr>
+                                                    @endif
+                                                    
+                                                @else
+                                                    @if($price_kurs == 'one')
+                                                        @foreach($product->prices as $price)
+                                                        <tr>
+                                                            <td>{{ $price->number_of_person }}</td>
+                                                            <td id="IDR">{{ $price->price_idr }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @else
+                                                        @foreach($product->prices as $price)
+                                                        <tr>
+                                                            <td>{{ $price->number_of_person }}</td>
+                                                            <td id="IDR">{{ $price->price_idr }}</td>
+                                                            <td id="USD" >{{ $price->price_usd }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    @endif
+                                                
+                                                @endif
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -1243,8 +1311,23 @@
     <!-- FOR SHOW EDIT/DISPLAY -->
         <script>
             $(document).ready(function(){
+                var id = "{{$product->id}}";
+                var status = "{{$product->status}}";
+                if(status == 0){
+                    $("#butActive").show();
+                    $("#butSuspend").show();
+                }else if(status == 1){
+                    $("#butNonactive").show();
+                    $("#butSuspend").show();
+                }else{
+                    $("#butNonactive").show();
+                    $("#butActive").show();
+                }
                 $("div.card").each(function(){
                     $(this).find("#button-edit button").click(function(){
+                        $(this).closest("div.card").find("div#statusChange").show();
+                        $(this).closest("div.card").find("div#statusValue").hide();
+                        
                         $(this).closest("#button-edit").hide();
                         $(this).closest(".card").find("div#value").each(function(){
                             $(this).hide();
@@ -1256,6 +1339,8 @@
                             $(this).closest("form").submit();
                         });
                         $(this).closest(".card").find("#button-cancel").show().find("button").click(function(){
+                            $(this).closest("div.card").find("div#statusChange").hide();
+                            $(this).closest("div.card").find("div#statusValue").show();
                             $(this).closest(".card").find("div#value").each(function(){
                                 $(this).show();
                             })
@@ -1267,6 +1352,37 @@
                             $(this).closest("#button-cancel").siblings("#button-edit").show();
                         });
                     })
+                });
+                $.ajaxSetup({
+                    headers:
+                    { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+                });
+                $("#butNonactive button").click(function(){
+                    $.ajax({
+                        method: "POST",
+                        url: "{{url('json/changeStatus/nonactive')}}",
+                        data: { id: id  }
+                    }).done(function(response) {
+                        location.reload();
+                    });
+                });
+                $("#butActive button").click(function(){
+                    $.ajax({
+                        method: "POST",
+                        url: "{{url('json/changeStatus/active')}}",
+                        data: { id: id  }
+                    }).done(function(response) {
+                        location.reload();
+                    });
+                });
+                $("#butSuspend button").click(function(){
+                    $.ajax({
+                        method: "POST",
+                        url: "{{url('json/changeStatus/suspend')}}",
+                        data: { id: id  }
+                    }).done(function(response) {
+                        location.reload();
+                    });
                 });
             })
         </script>
@@ -1300,18 +1416,23 @@
 		    $("input#scheduleField1").each(function(){
                 $(this).daterangepicker(options).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));
-
-                    var newdate = new Date(picker.startDate.format('YYYY-MM-DD'));
-                    var scheduledays = day+1;
-                    newdate.setDate(newdate.getDate()+parseInt(scheduledays))
-                    if(scheduledays==""){
-                        $(this).closest("#dinamic_schedule").find("#scheduleField2").val("");
-                    }
-                    else{
-                        var datee = (newdate.getDate() < 10 ? '0' : '') + newdate.getDate();
-                        var month = ((newdate.getMonth() + 1) < 10 ? '0' : '') + (newdate.getMonth() + 1);
-                        var year = newdate.getFullYear();
-                    }
+                    
+                    // if($("input[name='day']").val() == 'null'){
+                    //     alert('Please choose Day');
+                    // }else{
+                        var newdate = new Date(picker.startDate.format('YYYY-MM-DD'));
+                        var scheduledays = parseInt(day)-1;
+                        
+                        newdate.setDate(newdate.getDate()+parseInt(scheduledays))
+                        if(scheduledays==""){
+                            $(this).closest("#dinamic_schedule").find("#scheduleField2").val("");
+                        }
+                        else{
+                            var datee = (newdate.getDate() < 10 ? '0' : '') + newdate.getDate();
+                            var month = ((newdate.getMonth() + 1) < 10 ? '0' : '') + (newdate.getMonth() + 1);
+                            var year = newdate.getFullYear();
+                        }
+                    // }
                 $(this).closest("#dinamic_schedule").find("#scheduleField2").val(datee+"-"+month+"-"+year);
                 });
             });
@@ -1379,14 +1500,14 @@
             });
         }else{
             $("input[name='schedule_type'][sel='3']").attr("checked","checked");
-            $("select[name='hours'],select[name='minutes'].select[name='day']").hide();
+            $("div.scheduleHours").hide();
             $("div#dinamic_schedule").each(function(){
                 $(this).find("div#scheduleCol2,div#scheduleCol3,div#scheduleCol4").hide();
             });
         }
         // DEL BUTTON
         $("div#dinamic_schedule:first").find("#button_del button").remove();
-
+        $("div#dinamic_destination:first").find("#button_del button").remove();
         // 
 		var day = 1,hours= 1,minute=1,maxBooked;
 		$("select[name='day']").change(function(){
@@ -1405,20 +1526,22 @@
 			$("#dinamic_schedule input").val(null);
 			$("#clone_dinamic_schedule").empty();
 		});
-		$("#dinamic_schedule").find("#scheduleField3").change(function(){
-			var choose = $(this).val();
-			var newtime = new Date(moment(choose,['h:m:a','H:m']));
-			newtime.setHours(newtime.getHours()+parseInt(hours));
-			newtime.setMinutes(newtime.getMinutes()+parseInt(minutes));
-			if(hours=="" || minutes==""){
-				$(this).closest("#dinamic_schedule").find("input#scheduleField4").val("");
-			}
-			else{
-				var hour = (newtime.getHours() < 10 ? '0' : '') + newtime.getHours();
-				var minute = (newtime.getMinutes() < 10 ? '0' : '') + newtime.getMinutes();
-				$(this).closest("#dinamic_schedule").find("input#scheduleField4").val(hour+":"+minute);
-			}
-		});
+		$("div#dinamic_schedule").each(function(){
+            $(this).find("#scheduleField3").change(function(){
+                var choose = $(this).val();
+                var newtime = new Date(moment(choose,['h:m:a','H:m']));
+                newtime.setHours(newtime.getHours()+parseInt(hours));
+                newtime.setMinutes(newtime.getMinutes()+parseInt(minutes));
+                if(hours=="" || minutes==""){
+                    $(this).closest("#dinamic_schedule").find("input#scheduleField4").val("");
+                }
+                else{
+                    var hour = (newtime.getHours() < 10 ? '0' : '') + newtime.getHours();
+                    var minute = (newtime.getMinutes() < 10 ? '0' : '') + newtime.getMinutes();
+                    $(this).closest("#dinamic_schedule").find("input#scheduleField4").val(hour+":"+minute);
+                }
+            });
+        })
       	var dateFormat = 'DD-MM-YYYY';
         var type = $("input[name='schedule_type']:radio").val();
         $("input[name='schedule_type']:radio").change(function () {
@@ -1447,7 +1570,8 @@
 			}).on('apply.daterangepicker', function(ev, picker) {
 			  	$(this).val(picker.startDate.format('DD-MM-YYYY'));
 				var newdate = new Date(picker.startDate.format('YYYY-MM-DD'));
-				var scheduledays = day+1;
+				var scheduledays = parseInt(day)-1;
+                console.log(scheduledays);
 				newdate.setDate(newdate.getDate()+parseInt(scheduledays))
 				if(scheduledays==""){
 					$(this).closest("#dinamic_schedule").find("#scheduleField2").val("");
@@ -1561,7 +1685,7 @@
             	}).on('apply.daterangepicker', function(ev, picker) {
 				  	$(this).val(picker.startDate.format('DD-MM-YYYY'));
 			  		var newdate = new Date(picker.startDate.format('YYYY-MM-DD'));
-                    var scheduledays = day;
+                    var scheduledays = parseInt(day)-1;
                     newdate.setDate(newdate.getDate()+parseInt(scheduledays))
                     if(scheduledays==""){
                         $(this).closest("#dinamic_schedule").find("#scheduleField2").val("");

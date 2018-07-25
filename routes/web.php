@@ -79,7 +79,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('activity','ActivityTagController@activityList');
 
 		Route::get('findDestination','DestinationController@findDestination');
-		
+
+		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
