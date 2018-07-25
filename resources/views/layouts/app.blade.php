@@ -125,9 +125,9 @@
 		                    <span>Products</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
-		                    <li {{{ (Request::is('product/activity*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('product/activity') }}" class=" waves-effect waves-block">
-		                            <span>Activity</span>
+		                    <li {{{ (Request::is('product/tour-activity*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('product/tour-activity') }}" class=" waves-effect waves-block">
+		                            <span>Tour Activity</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('product/tour-guide*') ? 'class=active' : '') }}}>
@@ -203,11 +203,6 @@
 										<span>Coupon</span>
 								</a>
 							</li>
-							<li {{{ (Request::is('master/product*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/product') }}" class=" waves-effect waves-block">
-		                            <span>Tour</span>
-		                        </a>
-		                    </li>
 		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
 		                    {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
 			                    <a href="javascript:void(0);" class="menu-toggle">

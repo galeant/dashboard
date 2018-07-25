@@ -11,6 +11,13 @@ class helpers{
 	public static function salutation(){
 		return ['Mr'=> 'Mr.','Mrs'=>'Mrs.','Ms'=>'Ms.'];
 	}
+	public static function productCategory(){
+		return ['Activity'=> 'Activity'];
+	}
+
+	public static function productType(){
+		return ['private'=>'Private Group','open'=> 'Open Group'];
+	}
 	public static function bankName(){
 		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB'];
 	}

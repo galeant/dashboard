@@ -10,6 +10,8 @@
     <link href="{{ asset('plugins/telformat/css/intlTelInput.css') }}" rel="stylesheet">
     <!-- Bootstrap Select2 -->
     <link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
+
+    <link href="{{ asset('plugins/cropper/cropper.min.css') }}" rel="stylesheet">
     <!-- Date range picker -->
     <link href="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet" />
     <style>
@@ -91,7 +93,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form method="POST" action="{{ url('master/productinfo/update1') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('product/productinfo/update1') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card" id="productInfo">
@@ -143,6 +145,7 @@
                         <div class="body" style="padding:0 25px">
                             <div class="row clearfix">
                                 <div class="col-md-6" >
+                                    <h4>Company : {{ $product->company->company_name}}</h3>
                                     <h3>{{ $product->product_name}}</h3>
                                     <h4>Product Code: {{ $product->product_code}}</h4>
                                     <hr style="margin: 10px 0">
@@ -267,7 +270,7 @@
                                                     <!-- Wrapper for slides -->
                                                     <div class="carousel-inner" role="listbox">
                                                         <div class="item active" id="caros">
-                                                            <img src="{{cdn($product->cover_path)}}">
+                                                            <img src="{{cdn($product->cover_path.'/'.$product->cover_filename)}}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -278,7 +281,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_destination as $dest)
                                                         <div class="item" id="caros">
-                                                            <img src="{{cdn($dest->path)}}">
+                                                            <img src="{{cdn($dest->path.'/'.$dest->filename)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -290,7 +293,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_accommodation as $acc)
                                                         <div class="item" id="caros">
-                                                            <img src="{{cdn($acc->path)}}">
+                                                            <img src="{{cdn($acc->path.'/'.$acc->filename)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -302,7 +305,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_activity as $act)
                                                         <div class="item" id="caros">
-                                                            <img src="{{cdn($act->path)}}">
+                                                            <img src="{{cdn($act->path.'/'.$act->filename)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -314,7 +317,7 @@
                                                     <div class="carousel-inner" role="listbox">
                                                         @foreach($product->image_other as $oth)
                                                         <div class="item" id="caros">
-                                                            <img src="{{cdn($oth->path)}}">
+                                                            <img src="{{cdn($oth->path.'/'.$oth->filename)}}">
                                                         </div>
                                                         @endforeach
                                                     </div>
@@ -330,11 +333,19 @@
                                         <h4><i class="material-icons">perm_media</i> Cover</h4>
                                         <div class="row">
                                             <div class="col-md-12 valid-info" id="upload" hidden>
-                                                <input id="coverPic" type="file" name="cover_pic">	
+                                                <div class="col-md-3 cover-image">
+                                                    <h5>Cover Product Image*</h5>
+                                                    <div class="dd-main-image">
+                                                        <img style="width: 100%" src="http://via.placeholder.com/400x300" id="cover-img">
+                                                    </div>
+                                                    <input name="image_resize" type="text" value="" hidden>
+                                                    <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Upload Cover Image</a>
+                                                    <input name="cover_img" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
+                                                </div>	
                                             </div>
                                             <div class="col-md-12" cat="cover">
                                                 <div class="thumbnail">
-                                                    <img src="{{cdn($product->cover_path)}}">
+                                                    <img src="{{cdn($product->cover_path.'/'.$product->cover_filename)}}">
                                                     <div class="caption">
                                                         <button type="button" class="btn bg-red waves-effect" id="change">
                                                             <i class="material-icons">replay</i>
@@ -352,7 +363,7 @@
                                         @foreach($product->image_destination as $dest)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{cdn($dest->path)}}" class="img-responsive">
+                                                <img src="{{cdn($dest->path.'/'.$dest->filename)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/dest/'.$dest->id)}}">Hapus</a>
@@ -371,7 +382,7 @@
                                         @foreach($product->image_activity as $act)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{cdn($act->path)}}" class="img-responsive">
+                                                <img src="{{cdn($act->path).'/'.$act->filename}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/act/'.$act->id)}}">Hapus</a>
@@ -391,7 +402,7 @@
                                         @foreach($product->image_accommodation as $acc)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{cdn($acc->path)}}" class="img-responsive">
+                                                <img src="{{cdn($acc->path.'/'.$acc->filename)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/acc/'.$acc->id)}}">Hapus</a>
@@ -410,7 +421,7 @@
                                         @foreach($product->image_other as $oth)
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <img src="{{cdn($oth->path)}}" class="img-responsive">
+                                                <img src="{{cdn($oth->path.'/'.$oth->filename)}}" class="img-responsive">
                                             </div>
                                             <div class="col-md-4">
                                                 <a href="{{url('deleteImage/oth/'.$oth->id)}}">Hapus</a>
@@ -439,7 +450,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('master/productinfo/update2') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('product/productinfo/update2') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -532,7 +543,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('master/productinfo/update3') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('product/productinfo/update3') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -705,7 +716,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('master/productinfo/update4') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('product/productinfo/update4') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -1000,7 +1011,7 @@
                         </div>
                     </div>
                 </form>
-                <form method="POST" action="{{ url('master/productinfo/update5') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('product/productinfo/update5') }}" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                     <div class="card">
@@ -1072,6 +1083,25 @@
             </div>
         </div>
     </div>
+    <!-- #END# Basic Example | Horizontal Layout -->
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                  <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('head-js')
 @parent
@@ -1151,6 +1181,7 @@
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
 
+    <script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>
     <!-- Bootstrap File-Input-Js -->
     <script src="{{ asset('plugins/bootstrap-file-input/js/fileinput.js') }}" type="text/javascript"></script>
     <!-- Tel format -->
@@ -2027,9 +2058,77 @@
     </script> -->
 <!-- PHONE FORMAT -->
     <script>
+        $(document).ready(function () {
+            window.addEventListener('DOMContentLoaded', function () {
+                var image = document.getElementById('crop-image');
+                var cropBoxData;
+                var canvasData;
+                var cropper;
+
+                $('#defaultModal').on('shown.bs.modal', function () {
+                    cropper = new Cropper(image, {
+                        autoCropArea: 1,
+                        aspectRatio: 4/3,
+                        strict: false,
+                        guides: false,
+                        highlight: false,
+                        dragCrop: false,
+                        zoomable: false,
+                        scalable: false,
+                        rotatable: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: false,
+                        responsive: true,
+                        viewMode: 1,
+                        ready: function () {
+                            // Strict mode: set crop box data first
+                            cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                        }
+                    });
+                    
+                }).on('hidden.bs.modal', function () {
+                    cropBoxData = cropper.getCropBoxData();
+                    canvasData = cropper.getCanvasData();
+                    originalData = cropper.getCroppedCanvas();
+                    cropper.destroy();
+                });
+                $('.btn-img-save').click(function(){
+                    data = originalData = cropper.getCroppedCanvas();
+                    $('input[name="image_resize"]').val(originalData.toDataURL('image/jpeg'));
+                    $('#cover-img').attr('src',originalData.toDataURL('image/jpeg'));
+                    $('.btn-img-close').click();
+                });
+            });
+
+            $('#c_p_picture').click(function(e){
+                e.preventDefault();
+                $('input[name="cover_img"]').click();
+
+            });
+            function readURL(input) {
+            if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('img#crop-image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $(document).delegate('#c_p_file', 'change', function(e){
+                e.preventDefault();
+                $('#defaultModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                readURL(this);
+            });
+        });
+
         $(document).ready(function() {
             var dbphone = "{{$product->pic_phone}}";
             var dbformat = dbphone.split("-");
+            console.log(dbformat);
             // PIC PRODUCT
             $("input[name='format_pic_phone']").val(dbformat[0]);
             $("input[name='pic_phone']").val(dbformat[0]+''+dbformat[1]+'-'+dbformat[2]+'-'+dbformat[3]).intlTelInput({
