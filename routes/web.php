@@ -61,6 +61,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 		//Supplier
 		Route::resource('supplier', 'SupplierController');
 
+		// 
+		Route::post('/productinfo/update1','TourController@update1');
+		Route::post('/productinfo/update2','TourController@update2');
+		Route::post('/productinfo/update3','TourController@update3');
+		Route::post('/productinfo/update4','TourController@update4');
+		Route::post('/productinfo/update5','TourController@update5');
+
 	});
 	Route::group(['prefix' => 'json'], function(){
 		Route::get('country','CountryController@json');
@@ -73,6 +80,10 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('district','DistrictController@json');
 		Route::get('village','VillageController@json');
 		Route::get('company','CompanyController@json');
+
+		Route::get('activity','ActivityTagController@activityList');
+
+		Route::get('findDestination','DestinationController@findDestination');
 		
 	});
 	Route::group(['prefix' => 'product'],function(){

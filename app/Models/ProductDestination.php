@@ -16,7 +16,7 @@ class ProductDestination extends Model
     public function city(){
         return $this->belongsTo('App\Models\City','city_id', 'id');
     }
-    // public function dest(){
-    //     return $this->belongsTo('App\Models\Destination','destination_id', 'id');
-    // }
+    public function dest(){
+        return $this->belongsTo('App\Models\Destination','destination_id', 'id');
+    }
 }
