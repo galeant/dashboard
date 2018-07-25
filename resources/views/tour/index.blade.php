@@ -7,8 +7,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Company List
-                    <small>Master Data / Company</small>
+                    Product List
+                    <small>Product Data / Activity</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -17,23 +17,27 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Product
+                                All Product Activity
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="{{ url('master/product/create') }}" class="btn bg-teal btn-block waves-effect">Add Tour</a>
+                                    <a href="{{ url('product/tour-activity/create') }}" class="btn bg-teal btn-block waves-effect">Add New Activity</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
+                                            <th>Code</th>
+                                            <th>Product Name</th>
+                                            <th>PIC Name</th>
+                                            <th>Pic Phone</th>
+                                            <th>Product Type</th>
+                                            <th>Min Person</th>
+                                            <th>Max Person</th>
                                             <th>Created At</th>
-                                            <th>Updated At</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -60,12 +64,16 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/master/product',
+	        ajax: '/product/tour-activity',
 	        columns: [
-	            {data: 'id'},
+	            {data: 'product_code'},
 	            {data: 'product_name'},
+                {data: 'pic_name'},
+                {data: 'pic_phone'},
+                {data: 'product_type'},
+                {data: 'min_person'},
+                {data: 'max_person'},
 	            {data: 'created_at'},
-	            {data: 'updated_at'},
 	            {data: 'action'}
 	        ]
 	    });

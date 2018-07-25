@@ -21,7 +21,6 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('company', 'CompanyController');
-		Route::resource('product', 'TourController');
 		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
@@ -62,11 +61,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('supplier', 'SupplierController');
 
 		// 
-		Route::post('/productinfo/update1','TourController@update1');
-		Route::post('/productinfo/update2','TourController@update2');
-		Route::post('/productinfo/update3','TourController@update3');
-		Route::post('/productinfo/update4','TourController@update4');
-		Route::post('/productinfo/update5','TourController@update5');
+		
 
 	});
 	Route::group(['prefix' => 'json'], function(){
@@ -88,6 +83,12 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::resource('tour-guide', 'TourGuideController');
+		Route::resource('tour-activity', 'TourController');
+		Route::post('/productinfo/update1','TourController@update1');
+		Route::post('/productinfo/update2','TourController@update2');
+		Route::post('/productinfo/update3','TourController@update3');
+		Route::post('/productinfo/update4','TourController@update4');
+		Route::post('/productinfo/update5','TourController@update5');
 	});
 
  	Route::resource('members', 'MembersController');

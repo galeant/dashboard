@@ -48,10 +48,10 @@ class TourController extends Controller
             $model = Tour::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(Tour $data) {
-                return '<a href="/master/product/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/country/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/country/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
@@ -121,13 +121,13 @@ class TourController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         try {
-        $code  = Tour::all()->count();
+        $code  = Tour::select('id')->orderBy('created_at','DESC')->first();
         $dataSave = [
             // pic
             'pic_name' => $request->pic_name,
             'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
             // product 
-            'product_code' => '101-'.($code+1),
+            'product_code' => '101-'.($code->id+1),
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
             'product_type' => $request->product_type,
@@ -150,6 +150,7 @@ class TourController extends Controller
             'status' => 0,
             'company_id' => $request->company_id
             ];
+        // dd($dataSave);
         if(!empty($request->input('image_resize'))){
 
             $destinationPath = public_path('img/temp/');
@@ -296,7 +297,6 @@ class TourController extends Controller
         }
         
         // INCLUDE
-        // dd($request->price_includes);
         if($request->price_includes != null){
             foreach($request->price_includes as $includes){
                 $includes = Includes::create([
@@ -359,9 +359,9 @@ class TourController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("master/company/create")->with('message', $exception->getMessage());
+            return redirect("/product/tour-activity/create")->with('message', $exception->getMessage());
         }
-        return redirect('master/product');
+        return redirect('/product/tour-activity');
     }
 
     /**
@@ -465,20 +465,6 @@ class TourController extends Controller
      */
     public function update(Request $request, $id)
     {
-        dd($request->all());
-        // if($request->cancellationType == 1){
-        //     $cancellationType = "No Cancellation";
-        //     $minCancellationDay = '-';
-        //     $cancelationFee = '-';
-        // }else if($request->cancellationType == 2){
-        //     $cancellationType = "Free Cancellation";
-        //     $minCancellationDay = '-';
-        //     $cancelationFee = '-';
-        // }else{
-        //     $cancellationType = "Cancel Policy";
-        //     $minCancellationDay = $request->minCancellationDay;
-        //     $cancelationFee = $request->cancellationFee;
-        // }
 		$product = Tour::where('id',$id)
 		->update([
             'pic_name' => $request->pic_name,
@@ -711,27 +697,88 @@ class TourController extends Controller
      * @param  \App\Tour  $tour
      * @return \Illuminate\Http\Response
      */
-    public function destroy($tour)
+    public function destroy($id)
     {
         //
+        //
+        DB::beginTransaction();
+        try{
+            $data = Tour::find($id);
+            if($data->delete()){
+                DB::commit();
+                return $this->sendResponse($data, "Delete Tour ".$data->name." successfully", 200);
+            }else{
+                return $this->sendResponse($data, "Error Database;", 200);
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return $this->sendResponse($data, $exception->getMessage() , 200);
+        }
     }
     public function update1(Request $request){
-        // dd($request->all());
-        $product = Tour::where('id',$request->product_id)
-		->update([
-            'product_name' => $request->product_name,
-            'product_category' => $request->product_category,
-            'product_type' => $request->product_type,
-            'min_person' => $request->min_person,
-            'max_person' => $request->max_person,
-            'pic_name' => $request->pic_name,
-            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
-            'meeting_point_address' => $request->meeting_point_address,
-            'meeting_point_latitude' => $request->meeting_point_latitude,
-            'meeting_point_longitude' => $request->meeting_point_longitude,
-            'meeting_point_note' => $request->meeting_point_note,
-            'term_condition' => $request->term_condition,
+
+        $validation = Validator::make($request->all(), [
+            'product_category' => 'required',
+            'product_type' => 'required',
+            'product_name' => 'required',
+            'min_person' => 'required|numeric',
+            'max_person' => 'required|numeric',
+            'meeting_point_address' => 'required',
+            'meeting_point_latitude' => 'required',
+            'meeting_point_longitude' => 'required',
+            'meeting_point_note' => 'required',
+            'pic_name' => 'required',
+            'pic_phone' => 'required',
+            'term_condition' => 'required',
         ]);
+        // Check if it fails //
+        if($validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        
+        $dataSave = [
+                'product_name' => $request->product_name,
+                'product_category' => $request->product_category,
+                'product_type' => $request->product_type,
+                'min_person' => $request->min_person,
+                'max_person' => $request->max_person,
+                'pic_name' => $request->pic_name,
+                'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
+                'meeting_point_address' => $request->meeting_point_address,
+                'meeting_point_latitude' => $request->meeting_point_latitude,
+                'meeting_point_longitude' => $request->meeting_point_longitude,
+                'meeting_point_note' => $request->meeting_point_note,
+                'term_condition' => $request->term_condition
+                ];
+        if(!empty($request->input('image_resize'))){
+
+            $destinationPath = public_path('img/temp/');
+            if( ! \File::isDirectory($destinationPath) ) 
+            {
+                File::makeDirectory($destinationPath, 0777, true , true);
+            }
+            $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+            $img = str_replace(' ', '+', $file);
+            $data = base64_decode($img);
+            $filename = date('ymdhis') . '_croppedImage' . ".".$request->cover_img->getClientOriginalExtension();
+            $file = $destinationPath . $filename;
+            $success = file_put_contents($file, $data);
+            $bankPic = Helpers::saveImage($file,'products',true,[4,3]);
+            if($bankPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['cover_path'] = $bankPic['path'];
+            $dataSave['cover_filename'] = $bankPic['filename'];
+            unlink($file);
+        }        
+        $product = Tour::where('id',$request->product_id)
+		->update($dataSave);
+
+        
+
         // ACTIVITY
         if($request->activity_tag != null){
 			ProductActivity::where('product_id',$request->product_id)->delete();

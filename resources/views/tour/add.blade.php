@@ -69,7 +69,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form id="" method="POST" action="{{ url('master/product') }}" enctype="multipart/form-data">
+                <form id="" method="POST" action="{{ url('product/tour-activity') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row" >
                         <div class="col-md-12" id="general_information">
@@ -98,10 +98,7 @@
                                             </div>
                                             <div class="col-md-3 valid-info">
                                                 <h5>Type</h5>
-                                                <select name="product_type" id="productType" class="form-control">
-                                                    <option value="open">Open Group</option>
-                                                    <option value="private" selected>Private Group</option>
-                                                </select>
+                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control','id'=>'productType']) !!}
                                             </div>
                                             <div class="col-md-6" style="" id="productTypeOpen" hidden>
                                                 <h5><b><u>Open Group</u></b><br></h5>
@@ -1023,7 +1020,7 @@
 				  method: "GET",
 				  url: "{{ url('json/findCity') }}",
 				  data: {
-                    province_id: $(this).val()
+                    id: $(this).val()
 				  }
 				}).done(function(response) {
 					$.each(response, function (index, value) {

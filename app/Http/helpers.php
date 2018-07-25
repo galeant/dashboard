@@ -16,7 +16,7 @@ class helpers{
 	}
 
 	public static function productType(){
-		return ['open'=> 'Open Group','private'=>'Private Group'];
+		return ['private'=>'Private Group','open'=> 'Open Group'];
 	}
 	public static function bankName(){
 		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB'];
