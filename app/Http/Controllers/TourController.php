@@ -127,7 +127,7 @@ class TourController extends Controller
             'pic_name' => $request->pic_name,
             'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
             // product 
-            'product_code' => '101-'.($code->id+1),
+            'product_code' => '101-'.(!empty($code) ? $code->id+1 : 1),
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
             'product_type' => $request->product_type,
