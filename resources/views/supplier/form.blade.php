@@ -71,7 +71,7 @@
 								</div>
 								<div class="form-group m-b-20">
 									<label>Role</label>
-									{{ Form::select('role_id', array('1' => 'Owner', '2' => 'Staff'), null ,['class' => 'form-control', 'id'=>'role_id'])}}
+									{{ Form::select('role_id', $supplier_role, null ,['class' => 'form-control', 'id'=>'role_id','required'=>'required'])}}
 								</div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-4 col-lg-offset-5">
