@@ -26,6 +26,7 @@ class Tour extends Model
         'min_cancellation_day',
         'cancellation_fee',
         'schedule_type',
+        'schedule_interval',
         'cover_path',
         'cover_filename',
         'price_idr',

@@ -70,11 +70,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
-                                <select class="form-control" name="role" value="{{$company->suppliers[0]->role_id}}" required >
-                                    <option value="owner">Business Owner</option>
-                                    <option value="staff">Staff</option>
-                                    <option value="aggregator">Aggregator</option>
-                                </select>
+                                {{ Form::select('role', $roles, $company->suppliers[0]->role_id ,['class' => 'form-control', 'id'=>'role_id'])}}
                             </div>
                         </div>
                     </div>
@@ -561,7 +557,7 @@
                 $.ajax({
                     method: "GET",
                     url: "{{ url('json/findCity') }}",
-                    data: { province_id: province  }
+                    data: { id: province  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
                         $("select[name='city_id']").append(

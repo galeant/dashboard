@@ -14,7 +14,6 @@ class helpers{
 	public static function productCategory(){
 		return ['Activity'=> 'Activity'];
 	}
-
 	public static function productType(){
 		return ['private'=>'Private Group','open'=> 'Open Group'];
 	}

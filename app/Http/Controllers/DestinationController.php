@@ -377,4 +377,15 @@ class DestinationController extends Controller
         $destination = Destination::where('city_id',$req->city)->get();
         return response()->json($destination,200);
     }
+    public function json(Request $request){
+        $data = new Destination;
+        if($request->input('city_id')){
+            $data->where('city_id',$request->input('city_id'));
+        }
+        if($request->input('province_id')){
+            $data->where('province_id',$request->input('province_id'));
+        }
+        $data = $data->select('id',DB::raw('`destination_name` as name'))->get();
+        return $this->sendResponse($data, "Destination retrieved successfully", 200); 
+    }
 }
