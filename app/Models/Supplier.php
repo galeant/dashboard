@@ -60,5 +60,9 @@ class Supplier extends Model implements AuthenticatableContract, CanResetPasswor
     {
         return $this->belongsTo('App\Models\Company', 'company_id','id');
     }
+    public function supplier_roles()
+    {
+        return $this->belongsTo('App\Models\SupplierRole', 'role_id','id');
+    }
 }
 
