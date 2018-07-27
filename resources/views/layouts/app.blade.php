@@ -89,6 +89,14 @@
 		                    <span>Members</span>
 		                </a>
 		            </li>
+
+					 <li>
+		                <a href="{{ URL('/products') }}">
+		                    <i class="material-icons">card_travel</i>
+		                    <span>Products</span>
+		                </a>
+		            </li>
+
 		            <li {{{ (Request::is('admin/partner*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">people</i>
