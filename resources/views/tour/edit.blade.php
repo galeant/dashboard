@@ -176,7 +176,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4 class="dd-title m-t-20">
-                                            Duration Activity
+                                             Activity Duration
                                         </h4>
                                         <h5>How long is the duration of your tour/activity ?</h5>
                                         <div class="col-md-3">
@@ -228,11 +228,10 @@
                                                     <div class="form-group">
                                                         <label>Minutes?* :</label>
                                                         <select class="form-control" id="minutes" name="minutes" required>
-                                                            <option values="" selected>-- Minutes --</option>
-                                                            @for($i=0;$i<60;$i++)
-                                                            <option values="{{$i}}" @if(old('minutes') ==$i)selected @elseif($data->schedule_type == 2 &&
-                                                            (int)substr($data->schedule_interval,3) == $i) selected @endif>{{$i}}</option>
-                                                            @endfor
+                                                            <option values="0" @if(old('minutes') ==0)selected @elseif($data->schedule_type == 2 &&
+                                                            (int)substr($data->schedule_interval,3) == 0) selected @endif>0</option>
+                                                            <option values="30" @if(old('minutes') ==30)selected @elseif($data->schedule_type == 2 &&
+                                                            (int)substr($data->schedule_interval,3) == 30) selected @endif>30</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -242,7 +241,7 @@
                                     </div>
                                 </div>
                                 <h4 class="dd-title m-t-20">
-                                    Service Details
+                                    Destination Details
                                 </h4>
                                 <h5>List down all destination related to your tour package / activity.</h5>
                                 <h5>The more accurate you list down the destinations, better your product's peformance in search result.</h5>
