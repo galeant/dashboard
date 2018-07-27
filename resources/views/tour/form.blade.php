@@ -166,6 +166,12 @@
                             <strong>Disabled!</strong> Please save first to next step.
                         </div>
                     </section>
+                    <h3>Itinerary</h3>
+                    <section>
+                        <div class="alert alert-danger">
+                            <strong>Disabled!</strong> Please save first to next step.
+                        </div>
+                    </section>
                     <h3>Pricing</h3>
                     <section>
                         <div class="alert alert-danger">
