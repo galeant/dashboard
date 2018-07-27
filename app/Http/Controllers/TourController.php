@@ -495,7 +495,7 @@ class TourController extends Controller
                     ]);
                 }
             }
-            return redirect("/product/tour-activity/".$id.'/edit#step-h-5');
+            return redirect("/product/tour-activity/".$id.'/edit#step-h-4');
         }
         return redirect()->back()->with('message','nothing update!');
     }

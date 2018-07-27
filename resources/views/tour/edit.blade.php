@@ -154,10 +154,7 @@
                                 <div class=" col-md-4">
                                     <div class="row clearfix">
                                         <div class="col-md-6">
-                                            <button type="submit" value="0" class="btn btn-block btn-lg btn-warning waves-effect">Save As Draft</button>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
+                                            <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -170,9 +167,9 @@
                     <section>
                         <div class="row clearfix">
                         @if(isset($data))
-                            {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'product_form','enctype' =>'multipart/form-data']) }}
+                            {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_2','enctype' =>'multipart/form-data']) }}
                         @else
-                            {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'product_form','enctype' =>'multipart/form-data']) }}
+                            {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'step_2','enctype' =>'multipart/form-data']) }}
                         @endif
                         {{ Form::hidden('step',2)}}
                         <div class="col-md-12 activity-details">
@@ -359,10 +356,7 @@
                             <div class=" col-md-4 m-t-30">
                                 <div class="row clearfix">
                                     <div class="col-md-6">
-                                        <button type="submit" value="0" class="btn btn-block btn-lg btn-warning waves-effect">Save As Draft</button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
+                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +370,7 @@
                     @if(isset($data))
                         {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_3','enctype' =>'multipart/form-data']) }}
                     @else
-                        {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'product_form','enctype' =>'multipart/form-data']) }}
+                        {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'step_3','enctype' =>'multipart/form-data']) }}
                     @endif   
                         {{ Form::hidden('step',3)}}
                         <div class="row">
@@ -415,9 +409,9 @@
                     <h3>Pricing</h3>
                     <section>
                         @if(isset($data))
-                            {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_3','enctype' =>'multipart/form-data']) }}
+                            {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_4','enctype' =>'multipart/form-data']) }}
                         @else
-                            {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'product_form','enctype' =>'multipart/form-data']) }}
+                            {{ Form::open(['url'=>'product/tour-activity', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'step_4','enctype' =>'multipart/form-data']) }}
                         @endif
                         {{ Form::hidden('step',4)}}
                         <h4 class="dd-title m-t-20">
@@ -635,9 +629,6 @@
                         <div class=" col-md-4 m-t-20 m-b-20">
                             <div class="row clearfix">
                                 <div class="col-md-6">
-                                    <button type="submit" value="0" class="btn btn-block btn-lg btn-warning waves-effect">Save As Draft</button>
-                                </div>
-                                <div class="col-md-6">
                                     <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
                                 </div>
                             </div>
@@ -685,7 +676,7 @@
                         </div>
                         <h4 class="dd-title m-t-20"><i class="material-icons">perm_media</i> Video URL</h4>
                         <h5>Add your video link to embed the video into your product's gallery.</h5>
-                        {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_3','enctype' =>'multipart/form-data']) }}
+                        {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_5','enctype' =>'multipart/form-data']) }}
                         {{ Form::hidden('step',5)}}
                         <div class="row" id="embed" style="display: block;margin-bottom: 10px">
                             
@@ -856,13 +847,31 @@
                 }
               }
             });
-            $( "#step_3" ).validate({
+            $( "#step_4" ).validate({
               rules: {
                 "price[0][IDR]": {
                   number: true
                 },
                 "price[0][USD]": {
                   number: true
+                },
+                "max_cancellation_day":{
+                    number:true
+                },
+                "cancel_fee":{
+                    number:true
+                }
+              }
+            });
+            $( "#step_3" ).validate({
+              rules: {
+                
+              }
+            });
+            $( "#step_2" ).validate({
+              rules: {
+                "activity_tag":{
+                    required:true
                 }
               }
             });
@@ -992,17 +1001,6 @@
             }
         });
         $(document).ready(function () {
-
-            $( "#product_form" ).validate({
-              rules: {
-                min_person: {
-                  number: true
-                },
-                max_person: {
-                  number: true
-                }
-              }
-            });
 
             window.addEventListener('DOMContentLoaded', function () {
                 var image = document.getElementById('crop-image');

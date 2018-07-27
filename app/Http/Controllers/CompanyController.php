@@ -60,7 +60,7 @@ class CompanyController extends Controller
         $validation = Validator::make($request->all(), [
             'company_name' => 'required|unique:companies',
             'fullname' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:suppliers',
             'phone' => 'required',
             'company_phone' => 'required',
             'role' => 'required',

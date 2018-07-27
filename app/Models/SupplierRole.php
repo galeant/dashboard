@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php 
 namespace App\Models;
 
@@ -21,7 +20,7 @@ class SupplierRole extends Model {
      */
     protected $table = 'supplier_roles';
     protected $fillable = ['id','name'];
-    
+
     public function suppliers(){
         return $this->hasMany('App\Models\Supplier');
     }
