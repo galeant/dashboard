@@ -101,10 +101,8 @@ class TourController extends Controller
                 'meeting_point_address' => 'required',
                 'meeting_point_latitude' => 'required',
                 'meeting_point_longitude' => 'required',
-                'meeting_point_note' => 'required',
                 'pic_name' => 'required',
                 'pic_phone' => 'required',
-                'term_condition' => 'required',
                 'image_resize' => 'required'
             ],$messages);
 
@@ -113,7 +111,8 @@ class TourController extends Controller
             ->with('errors', $validation->errors() );
         }
         $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
-        $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? '101-'.($id->id+1) : '101-1')]);
+        $code = ($request->input('product_type') == 'private' ? '102' : '101'); 
+        $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? $code.($id->id+1) : $code.'1')]);
         if(!empty($request->input('image_resize'))){
 
             $destinationPath = public_path('img/temp/');
@@ -275,6 +274,7 @@ class TourController extends Controller
                     'pic_phone' => 'required',
                     'term_condition' => 'required'
                 ],$messages);
+            
 
             if($validation->fails() ){
                 return redirect()->back()->withInput()
@@ -305,6 +305,8 @@ class TourController extends Controller
             DB::beginTransaction();
             try {
                 $product = Tour::find($id);
+                $code = ($request->input('product_type') == 'private' ? '102' : '101');
+                $data['product_code'] = $code.substr($product->product_code,3,strlen($product->product_code));
                 $product->update($data);
                 DB::commit();
                 return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
@@ -1074,7 +1076,7 @@ class TourController extends Controller
                 $delete = ImageAccommodation::where('id',$id);
             }
             if($request->type == 'other'){
-                $delete = Other::where('id',$id);
+                $delete = ImageOther::where('id',$id);
             }
             if($delete->delete()){
                 DB::commit();
