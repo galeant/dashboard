@@ -171,4 +171,14 @@ class ActivityTagController extends Controller
             return $this->sendResponse($data, $exception->getMessage() , 200);
         }
     }
+    public function activityList(Request $request){
+        $activityTag = new ActivityTag;
+        $name     = ($request->input('name') ? $request->input('name') : '');
+        if($name)
+        {
+            $activityTag = $activityTag->whereRaw('(name LIKE "%'.$name.'%" )');
+        }
+        $activityTag = $activityTag->select('id','name')->get()->toArray();
+        return response()->json($activityTag,200);
+    }
 }

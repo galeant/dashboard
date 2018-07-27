@@ -344,12 +344,12 @@
             });
         // CITY
             $("select[name='province_id']").change(function(){
-                var idProvince = $(this).val();
+                var province_id = $(this).val();
                 $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
                     url: "{{ url('json/findCity') }}",
-                    data: { province_id: idProvince  }
+                    data: { province_id: province_id  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
                         $("select[name='city_id']").append(

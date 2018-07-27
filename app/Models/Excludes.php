@@ -8,5 +8,5 @@ class Excludes extends Model
 {
     protected $table = 'price_excludes';
     protected $hidden = ['id','created_at','updated_at'];
-    protected $fillable = ['product_id','description'];
+    protected $fillable = ['product_id','name'];
 }

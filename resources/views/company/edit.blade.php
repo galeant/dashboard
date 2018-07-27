@@ -61,11 +61,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
-                                <select class="form-control" name="role" required>
-                                    <option value="0">Business Owner</option>
-                                    <option value="1">Staff</option>
-                                    <option value="2">Aggregator</option>
-                                </select>
+                                
                             </div>
                         </div>
                     </div>
@@ -161,11 +157,9 @@
                             <div class="valid-info">
                                 <h5>Bank Name*:</h5>
                                 <select class="form-control" name="bank_name">
-                                    <option>BRI</option>
-                                    <option>BCA</option>
-                                    <option>BNI</option>
-                                    <option>Mandiri</option>
-                                    <option>CIMB</option>
+                                    @foreach(Helpers::bankName() as $index => $value)
+                                    <option value="{{$index}}" @if($company->bank_account_name === $index') selected @endif>{{$value}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -179,9 +173,9 @@
                             <div class="col-md-3 col-sm-3 col-xs-5 valid-info">
                                 <h5>Title*:</h5>
                                 <select class="form-control" name="bank_account_holder_title" required>
-                                    <option>Mr</option>
-                                    <option>Mrs</option>
-                                    <option>Miss</option>
+                                 @foreach(Helpers::salutation() as $index => $value)
+                                    <option value={{$index}} @if($index == $company->bank_account_title) selected @endif>{{$value}}</option>
+                                 @endforeach
                                 </select>
                             </div>
                             <div class="col-md-7 col-sm-7 col-xs-12">

@@ -57,6 +57,10 @@
 					                <label>Full Name</label>
 					                 {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'fullname','required'=>'required']) }}
 					            </div>
+						    	<div class="form-group m-b-20">
+					                <label>Password</label>
+					                 {{ Form::password('password', ['class' => 'form-control','placeholder'=>'Enter Password','id'=>'password']) }}
+					            </div>
 					            <div class="form-group m-b-20">
 					                <label>Phone Number</label>
 					                 {{ Form::text('phone', null, ['class' => 'form-control','placeholder'=>'Please Enter Phone Number','id'=>'phone','required'=>'required']) }}
@@ -67,7 +71,7 @@
 								</div>
 								<div class="form-group m-b-20">
 									<label>Role</label>
-									{{ Form::select('role_id', array('1' => 'Owner', '2' => 'Staff'), null ,['class' => 'form-control', 'id'=>'role_id'])}}
+									{{ Form::select('role_id', $supplier_role, null ,['class' => 'form-control', 'id'=>'role_id','required'=>'required'])}}
 								</div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-4 col-lg-offset-5">

@@ -70,11 +70,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
-                                <select class="form-control" name="role" value="{{$company->suppliers[0]->role_id}}" required >
-                                    <option value="owner">Business Owner</option>
-                                    <option value="staff">Staff</option>
-                                    <option value="aggregator">Aggregator</option>
-                                </select>
+                                {{ Form::select('role', $roles, $company->suppliers[0]->role_id ,['class' => 'form-control', 'id'=>'role_id'])}}
                             </div>
                         </div>
                     </div>
@@ -187,11 +183,7 @@
                         <div class="row" style="margin:0px">
                             <div class="col-md-3 col-sm-3 col-xs-5 valid-info">
                                 <h5>Title*:</h5>
-                                <select class="form-control" name="bank_account_title" required>
-                                    <option value="Mr">Mr</option>
-                                    <option value="Mrs">Mrs</option>
-                                    <option value="Ms">Miss</option>
-                                </select>
+                                {{ Form::select('bank_account_title', Helpers::salutation(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
                             </div>
                             <div class="col-md-7 col-sm-7 col-xs-12">
                                 <div class="valid-info">
@@ -584,7 +576,8 @@
             // BANK NAME
                 $("select[name='bank_name']").find("option:contains('{{$company->bank_name}}')").attr("selected","selected");
             // BANK TITLE
-                $("select[name='bank_account_holder_title']").find("option:contains('{{$company->bank_account_title}}')").attr("selected","selected");
+            console.log('{{$company->bank_account_title}}');
+                $("select[name='bank_account_title']").find("option[value='{{$company->bank_account_title}}']").attr("selected","selected");
             // OWNERSHIP
                 var dbownership = '{{$company->company_ownership}}';
                 if(dbownership == 'Company'){

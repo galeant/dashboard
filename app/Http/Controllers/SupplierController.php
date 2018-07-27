@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Supplier;
+use App\Models\SupplierRole;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Datatables;
@@ -49,9 +50,11 @@ class SupplierController extends Controller
     public function create()
     {
         $company = Company::pluck('company_name', 'id');
+        $supplier_role = SupplierRole::pluck('name', 'id');
         // return $company;
         return view('supplier.form', [
-            'company' => $company
+            'company' => $company,
+            'supplier_role' => $supplier_role
         ]);
     }
 
@@ -67,7 +70,7 @@ class SupplierController extends Controller
         $validation = Validator::make($request->all(), [
             'salutation' => 'required',
             'email' => 'required|email|max:255|unique:suppliers',
-            'username' => 'required',
+            // 'username' => 'required|string|max:255|unique:suppliers',
             'fullname' => 'required',
             'phone' => 'required|min:9',
             'company_id' => 'required',
@@ -86,7 +89,17 @@ class SupplierController extends Controller
             $data->username = $request->input('username');
             $data->fullname = $request->input('fullname');
             $data->phone = $request->input('phone');
-            $data->password = (new BcryptHasher)->make(str_random(20));
+            if($request->input('password')!="" || $request->input('password')!=NULL){
+                $validation = Validator::make($request->all(), [
+                    'password' => 'required|min:8'
+                ]);
+                // Check if it fails //
+                if( $validation->fails() ){
+                    return redirect()->back()->withInput()
+                    ->with('errors', $validation->errors() );
+                }
+                $data->password = (new BcryptHasher)->make($request->input('password'));
+            }
             $data->company_id = $request->input('company_id');
             $data->role_id = $request->input('role_id');
             $data->token = str_random(100);
@@ -125,10 +138,12 @@ class SupplierController extends Controller
     {
         //
         $company = Company::pluck('company_name', 'id');
+        $supplier_role = SupplierRole::pluck('name', 'id');
         $data = Supplier::find($id);
         return view('supplier.form')->with([
             'data'=> $data,
-            'company' => $company
+            'company' => $company,
+            'supplier_role' => $supplier_role
         ]);
     }
 
@@ -144,11 +159,12 @@ class SupplierController extends Controller
         //
         $validation = Validator::make($request->all(), [
             'salutation' => 'required',
-            'email' => 'required|email|max:255|unique:suppliers',
-            'username' => 'required',
+            'email' => 'required|email',
+            // 'username' => 'required',
             'fullname' => 'required',
-            'phone' => 'required|min:10',
-            'company_id' => 'required'
+            'phone' => 'required|min:9',
+            'company_id' => 'required',
+            'role_id' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -163,7 +179,19 @@ class SupplierController extends Controller
             $data->username = $request->input('username');
             $data->fullname = $request->input('fullname');
             $data->phone = $request->input('phone');
+            if($request->input('password')!="" || $request->input('password')!=NULL){
+                $validation = Validator::make($request->all(), [
+                    'password' => 'required|min:8'
+                ]);
+                // Check if it fails //
+                if( $validation->fails() ){
+                    return redirect()->back()->withInput()
+                    ->with('errors', $validation->errors() );
+                }
+                $data->password = (new BcryptHasher)->make($request->input('password'));
+            }
             $data->company_id = $request->input('company_id');
+            $data->role_id = $request->input('role_id');
             if($data->save()){
                 DB::commit();
                 return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
