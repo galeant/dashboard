@@ -113,7 +113,7 @@ class TourController extends Controller
             ->with('errors', $validation->errors() );
         }
         $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
-        $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? '101-'.$id->id : '101-1')]);
+        $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? '101-'.($id->id+1) : '101-1')]);
         if(!empty($request->input('image_resize'))){
 
             $destinationPath = public_path('img/temp/');
@@ -133,7 +133,7 @@ class TourController extends Controller
             ->with('errors', $validation->errors() );
             }
             // dd($bankPic);
-            $request->request->add(['cover_path'=> $bankPic['path'],'cover_filename' => $bankPic['filename']]);
+            $request->request->add(['cover_path'=> $bankPic['path'],'cover_path' => $bankPic['filename']]);
             unlink($file);
         }
         $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');

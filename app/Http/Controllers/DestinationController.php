@@ -374,7 +374,7 @@ class DestinationController extends Controller
         return response()->json();
     }
     public function findDestination(Request $req){
-        $destination = Destination::where('city_id',$req->city)->get();
+        $destination = Destination::where('city_id',$req->city_id)->get();
         return response()->json($destination,200);
     }
     public function json(Request $request){

@@ -140,7 +140,7 @@ class CompanyController extends Controller
                 return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
             }
-            $dataSave['siup_path'] = $npwpPic['path_full'];
+            $dataSave['siup_path'] = $siupPic['path_full'];
         }
         if(!empty($request->evi_pic)){
             $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
@@ -253,6 +253,7 @@ class CompanyController extends Controller
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
             ];
+
         if(!empty($request->bank_pic)){
             $bankPic = Helpers::saveImage($request->bank_pic,'company'/*Location*/);
             if($bankPic instanceof  MessageBag){
@@ -277,30 +278,37 @@ class CompanyController extends Controller
             }
             $dataSave['npwp_path'] = $npwpPic['path_full'];
         }
-        if(!empty($request->akta_pic)){
-            $aktaPic = Helpers::saveImage($request->akta_pic,'company'/*Location*/);
-            if($aktaPic instanceof  MessageBag){
-                return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+        if($request->company_ownership == 'Company'){
+            if(!empty($request->akta_pic)){
+                $aktaPic = Helpers::saveImage($request->akta_pic,'company'/*Location*/);
+                if($aktaPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $dataSave['akta_path'] = $aktaPic['path_full'];
             }
-            $dataSave['akta_path'] = $aktaPic['path_full'];
-        }
-        if(!empty($request->siup_pic)){
-            $siupPic = Helpers::saveImage($request->siup_pic,'company'/*Location*/);
-            if($siupPic instanceof  MessageBag){
-                return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            if(!empty($request->siup_pic)){
+                $siupPic = Helpers::saveImage($request->siup_pic,'company'/*Location*/);
+                if($siupPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $dataSave['siup_path'] = $siupPic['path_full'];
             }
-            $dataSave['siup_path'] = $npwpPic['path_full'];
-        }
-        if(!empty($request->evi_pic)){
-            $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
-            if($eviPic instanceof  MessageBag){
-                return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            if(!empty($request->evi_pic)){
+                $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
+                if($eviPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $dataSave['evidance_path'] = $eviPic['path_full'];
             }
-            $dataSave['evidance_path'] = $eviPic['path_full'];
+        }else{
+            $dataSave['evidance_path'] = null;
+            $dataSave['akta_path'] = null;
+            $dataSave['siup_path'] = null;
         }
+        // dd($dataSave);
         $company = Company::where('id',$id)
                 ->update($dataSave);
         $supplier = Supplier::where(['company_id' => $id, 'role_id'=>1])
