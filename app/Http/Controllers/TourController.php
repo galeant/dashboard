@@ -920,101 +920,130 @@ class TourController extends Controller
             $data['error'] = '';
             $id = $request->id;
             if($request->type == 'activity'){
-                // dd($request->all());
-                foreach($request->activity_images  as $index => $image){
-                    $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                    $save = new ImageActivity;
-                    $save->product_id = $id;
-                    $save->path =$imgSave['path'];
-                    $save->filename = $imgSave['filename'];
-                    if($imgSave instanceof  MessageBag){
-                        $data['error'] = $validation->errors();
+                $validation = Validator::make($request->all(), [
+                        'activity_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->activity_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageActivity;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Activity Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'activty','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
                     }
-                    if($save->save()){
-                        $data['initialPreviewConfig'][$index] = [
-                            'caption' => 'Activity Image',
-                            'width' => '120px',
-                            'url' => url('product/delete/image'),
-                            'key' => $save->id,
-                            'extra' => ['_token' => csrf_token(),'type' =>'activty','id' =>$save->id]
-                        ];
-                    }else{
-                        $data['error'] = 'cant save data !';
-                    }
-                    
                 }
             }
             if($request->type == 'destination'){
-                foreach($request->destination_images  as $index => $image){
-                    $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                    $save = new ImageDestination;
-                    $save->product_id = $id;
-                    $save->path =$imgSave['path'];
-                    $save->filename = $imgSave['filename'];
-                    if($imgSave instanceof  MessageBag){
-                        $data['error'] = $validation->errors();
+                $validation = Validator::make($request->all(), [
+                        'destination_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->destination_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageDestination;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Destinations Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'destination','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
                     }
-                    if($save->save()){
-                        $data['initialPreviewConfig'][$index] = [
-                            'caption' => 'Destinations Image',
-                            'width' => '120px',
-                            'url' => url('product/delete/image'),
-                            'key' => $save->id,
-                            'extra' => ['_token' => csrf_token(),'type' =>'destination','id' =>$save->id]
-                        ];
-                    }else{
-                        $data['error'] = 'cant save data !';
-                    }
-                    
                 }
             }
             if($request->type == 'accommodation'){
-                // dd($request->all());
-                foreach($request->accomodation_images  as $index => $image){
-                    $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                    $save = new ImageAccommodation;
-                    $save->product_id = $id;
-                    $save->path =$imgSave['path'];
-                    $save->filename = $imgSave['filename'];
-                    if($imgSave instanceof  MessageBag){
-                        $data['error'] = $validation->errors();
+                $validation = Validator::make($request->all(), [
+                        'destination_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->accomodation_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageAccommodation;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Destinations Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'accommodation','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
                     }
-                    if($save->save()){
-                        $data['initialPreviewConfig'][$index] = [
-                            'caption' => 'Destinations Image',
-                            'width' => '120px',
-                            'url' => url('product/delete/image'),
-                            'key' => $save->id,
-                            'extra' => ['_token' => csrf_token(),'type' =>'accommodation','id' =>$save->id]
-                        ];
-                    }else{
-                        $data['error'] = 'cant save data !';
-                    }
-                    
                 }
             }
             if($request->type == 'other'){
-                foreach($request->other_images  as $index => $image){
-                    $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                    $save = new ImageOther;
-                    $save->product_id = $id;
-                    $save->path =$imgSave['path'];
-                    $save->filename = $imgSave['filename'];
-                    if($imgSave instanceof  MessageBag){
-                        $data['error'] = $validation->errors();
+                $validation = Validator::make($request->all(), [
+                        'other_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->other_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageOther;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Other Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'other','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
                     }
-                    if($save->save()){
-                        $data['initialPreviewConfig'][$index] = [
-                            'caption' => 'Other Image',
-                            'width' => '120px',
-                            'url' => url('product/delete/image'),
-                            'key' => $save->id,
-                            'extra' => ['_token' => csrf_token(),'type' =>'other','id' =>$save->id]
-                        ];
-                    }else{
-                        $data['error'] = 'cant save data !';
-                    }
-                    
                 }
             }
             // dd($data);

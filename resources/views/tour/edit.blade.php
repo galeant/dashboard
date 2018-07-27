@@ -637,6 +637,10 @@
                     </section>
                     <h3>Images</h3>
                     <section>
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            Attention Please! When the image is uploaded. <b>Button delete</b> doesn't work before refresh this page !
+                        </div>
                         <h4 class="dd-title m-t-20">
                             Activity Image
                         </h4>
@@ -646,32 +650,35 @@
                                     <input id="activity_images" name="activity_images[]" type="file" multiple>
                                 </div>
                             </div>
-                           
                         </div>
                         <h4 class="dd-title m-t-20">
                             Destination Image
                         </h4>
-                        <div id="destination-image" class="list-unstyled row clearfix">
-                            <div class="file-loading">
-                                <input id="destination_images" name="destination_images[]" type="file" multiple>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="file-loading">
+                                    <input id="destination_images" name="destination_images[]" type="file" multiple>
+                                </div>
                             </div>
-                                
                         </div>
                         <h4 class="dd-title m-t-20">
                             Accomodation Image
                         </h4>
-                        <div id="accommodation-image" class="list-unstyled row clearfix">
-                            <div class="file-loading">
-                                <input id="accomodation_images" name="accomodation_images[]" type="file" multiple>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="file-loading">
+                                    <input id="destination_images" name="accomodation_images[]" type="file" multiple>
+                                </div>
                             </div>
-                                
                         </div>
                         <h4 class="dd-title m-t-20">
                             Others Image
                         </h4>
-                        <div id="other-image" class="list-unstyled row clearfix">
-                            <div class="file-loading">
-                                <input id="other_images" name="other_images[]" type="file" multiple>
+                        <div class="row clearfix">
+                            <div class="col-md-12">
+                                <div class="file-loading">
+                                    <input id="other_images" name="other_images[]" type="file" multiple>
+                                </div>
                             </div>
                         </div>
                         <h4 class="dd-title m-t-20"><i class="material-icons">perm_media</i> Video URL</h4>

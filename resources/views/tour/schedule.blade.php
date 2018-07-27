@@ -38,7 +38,8 @@
                 </ul>
             </div>
             <div class="body">
-                
+                <img style="margin-left: auto;
+    margin-right: auto; width: 50%; display: block;" src="https://allridepowersports.com/wp-content/uploads/2018/02/Under-Construction-Sign-1024x483.png">
             </div>
         </div>
     </div>
