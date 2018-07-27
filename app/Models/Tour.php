@@ -23,7 +23,7 @@ class Tour extends Model
         'meeting_point_note',
         'term_condition',
         'cancellation_type',
-        'min_cancellation_day',
+        'max_cancellation_day',
         'cancellation_fee',
         'schedule_type',
         'schedule_interval',

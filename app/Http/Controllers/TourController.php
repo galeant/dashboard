@@ -402,7 +402,7 @@ class TourController extends Controller
            DB::beginTransaction();
             try {
                 $data->cancellation_type = $request->cancellation_type;
-                $data->min_cancellation_day = $request->min_cancel_day;
+                $data->max_cancellation_day = $request->max_cancellation_day;
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
                 // PRICE TYPE
@@ -858,7 +858,7 @@ class TourController extends Controller
             $product = Tour::where('id',$request->product_id)
             ->update([
                 'cancellation_type' => $request->cancellation_type,
-                'min_cancellation_day' => $request->min_cancellation_day,
+                'max_cancellation_day' => $request->max_cancellation_day,
                 'cancellation_fee' => $request->cancellation_fee
             ]);
             DB::commit();

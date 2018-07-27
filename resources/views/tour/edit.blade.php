@@ -618,7 +618,7 @@
                                         <h5>Cancellation less than</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
-                                        <input type="text" id="cancellationDay" name="min_cancel_day" class="form-control" placeholder="Day" value="{{$data->min_cancellation_day}}" required>
+                                        <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" placeholder="Day" value="{{$data->max_cancellation_day}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
                                         <h5>days from shcedule, cancellation fee is</h5>
