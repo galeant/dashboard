@@ -332,7 +332,7 @@ class TourController extends Controller
                     $data->schedule_interval = 1;
                 }
                 $data->save();
-                if($changeType == true && $changeInterval == true){
+                if($changeType == true || $changeInterval == true){
                     Itinerary::where('product_id',$id)->delete();
                     if($request->schedule_type == 1){
                         Itinerary::where('product_id',$id)->delete();
@@ -984,7 +984,7 @@ class TourController extends Controller
             }
             if($request->type == 'accommodation'){
                 $validation = Validator::make($request->all(), [
-                        'destination_images' => 'required'
+                        'accomodation_images' => 'required'
                     ]);
                 if($validation->fails() ){
                     $data['error'] = 'Image isn`t uploaded. please re-insert image.';

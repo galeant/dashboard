@@ -203,7 +203,6 @@
                                             <div class="form-group">
                                                 <h5>Day?* :</h5>
                                                 <select class="form-control" id="day" name="day"  required>
-                                                    <option values="" selected>-- Days --</option>
                                                     @for($i=2;$i<=24;$i++)
                                                     <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option>
                                                     @endfor
@@ -425,10 +424,13 @@
                         <div class="col-md-12">
                             <div class="row valid-info">
                                 <div class="col-md-4">
-
                                     <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                     @if(count($data->prices) !== 0)
                                         @if(empty($data->prices[0]->price_usd))
+                                            checked
+                                        @endif
+                                    @else
+                                        @if(empty($data->price_idr))
                                             checked
                                         @endif
                                     @endif 
