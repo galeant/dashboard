@@ -113,7 +113,6 @@ class TourController extends Controller
             ->with('errors', $validation->errors() );
         }
         $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
-        dd();
         $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? '101-'.($id->id+1) : '101-1')]);
         if(!empty($request->input('image_resize'))){
 
