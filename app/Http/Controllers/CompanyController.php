@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Supplier;
+use App\Models\SupplierRole;
 use App\Models\Province;
 use Datatables;
 use Validator;
@@ -59,7 +60,7 @@ class CompanyController extends Controller
         $validation = Validator::make($request->all(), [
             'company_name' => 'required|unique:companies',
             'fullname' => 'required',
-            'email' => 'required',
+            'email' => 'required|unique:suppliers',
             'phone' => 'required',
             'company_phone' => 'required',
             'role' => 'required',
@@ -191,9 +192,10 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
+        $roles = SupplierRole::pluck('name','id');
         $province = Province::all();
         $company = Company::where('id',$id)->first();
-        return view('company.detail',['company'=>$company,'provinces'=>$province]);
+        return view('company.detail',['company'=>$company,'provinces'=>$province,'roles' =>$roles]);
     }
 
     /**
@@ -233,7 +235,6 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
         try {
-            // dd($request->all());
         $dataSave = [
             'company_name'=> $request->company_name,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
@@ -346,9 +347,14 @@ class CompanyController extends Controller
     {
         $data  =  new Company();
         $name     = ($request->input('name') ? $request->input('name') : '');
+        $id     = ($request->input('id') ? $request->input('id') : '');
         if($name)
         {
             $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
+        }
+        if($id)
+        {
+            $data = $data->where('id',$id);
         }
         $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
         return $this->sendResponse($data, "Company retrieved successfully", 200);

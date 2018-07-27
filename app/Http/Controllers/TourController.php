@@ -48,7 +48,7 @@ class TourController extends Controller
             $model = Tour::with('company')->select('products.*');;
             return Datatables::eloquent($model)
             ->addColumn('action', function(Tour $data) {
-                return '<a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/product/tour-activity/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
                     <a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
@@ -68,14 +68,15 @@ class TourController extends Controller
      */
     public function create()
     {
-        $activities = ActivityTag::all();
-        $company = Company::all();
-        $province = Province::all();
-        return view('tour.add',[
-            'companies'=>$company,
-            'activities'=>$activities,
-            'provinces' => $province
-        ]);
+        // $activities = ActivityTag::all();
+        // $company = Company::all();
+        // $province = Province::all();
+        // return view('tour.add',[
+        //     'companies'=>$company,
+        //     'activities'=>$activities,
+        //     'provinces' => $province
+        // ]);
+        return view('tour.form');
     }
 
     /**
@@ -86,71 +87,33 @@ class TourController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $messages = [
+                'company_id' => 'Company filed is required.',
+                'image_resize.required' => 'Cover Image is required.'
+        ];
         $validation = Validator::make($request->all(), [
-            'company_id' => 'required',
-            'product_category' => 'required',
-            'product_type' => 'required',
-            'product_name' => 'required',
-            'min_person' => 'required|numeric',
-            'max_person' => 'required|numeric',
-            'meeting_point_address' => 'required',
-            'meeting_point_latitude' => 'required',
-            'meeting_point_longitude' => 'required',
-            'meeting_point_note' => 'required',
-            'pic_name' => 'required',
-            'pic_phone' => 'required',
-            'term_condition' => 'required',
-            'schedule_type' => 'required',
-            'schedule' => 'required',
-            'place' => 'required',
-            'activity_tag' => 'required',
-            'itinerary' => 'required',
-            'price_kurs' => 'required',
-            'price_type' => 'required',
-            'price' => 'required',
-            'price_includes' => 'required',
-            'price_excludes' => 'required',
-            'cancellation_type' => 'required'
-        ]);
-        // Check if it fails //
+                'company_id' => 'required',
+                'product_category' => 'required',
+                'product_type' => 'required',
+                'product_name' => 'required',
+                'min_person' => 'required|numeric',
+                'max_person' => 'required|numeric',
+                'meeting_point_address' => 'required',
+                'meeting_point_latitude' => 'required',
+                'meeting_point_longitude' => 'required',
+                'meeting_point_note' => 'required',
+                'pic_name' => 'required',
+                'pic_phone' => 'required',
+                'term_condition' => 'required',
+                'image_resize' => 'required'
+            ],$messages);
+
         if($validation->fails() ){
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
-        // dd($request->all());
-        DB::beginTransaction();
-        try {
-        $code  = Tour::select('id')->orderBy('created_at','DESC')->first();
-        $dataSave = [
-            // pic
-            'pic_name' => $request->pic_name,
-            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
-            // product 
-            'product_code' => '101-'.($code->id+1),
-            'product_name' => $request->product_name,
-            'product_category' => $request->product_category,
-            'product_type' => $request->product_type,
-            // person
-            'min_person' => $request->min_person,
-            'max_person' => $request->max_person,
-            // meetpoint
-            'meeting_point_address' => $request->meeting_point_address,
-            'meeting_point_latitude' => $request->meeting_point_latitude,
-            'meeting_point_longitude' => $request->meeting_point_longitude,
-            'meeting_point_note' => $request->meeting_point_note,
-            // schedule_type
-            'schedule_type' => $request->schedule_type,
-            // term con
-            'term_condition' => $request->term_condition,
-            'cancellation_type' => $request->cancellation_type,
-            'min_cancellation_day' => $request->min_cancel_day,
-            'cancellation_fee' => $request->cancel_fee,
-            // stat
-            'status' => 0,
-            'company_id' => $request->company_id
-            ];
-        // dd($dataSave);
+        $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
+        $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? '101-'.$id->id : '101-1')]);
         if(!empty($request->input('image_resize'))){
 
             $destinationPath = public_path('img/temp/');
@@ -161,7 +124,7 @@ class TourController extends Controller
             $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
             $img = str_replace(' ', '+', $file);
             $data = base64_decode($img);
-            $filename = date('ymdhis') . '_croppedImage' . ".".$request->cover_img->getClientOriginalExtension();
+            $filename = md5($request->product_code).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
             $file = $destinationPath . $filename;
             $success = file_put_contents($file, $data);
             $bankPic = Helpers::saveImage($file,'products',true,[4,3]);
@@ -169,201 +132,24 @@ class TourController extends Controller
                 return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
             }
-            $dataSave['cover_path'] = $bankPic['path'];
-            $dataSave['cover_filename'] = $bankPic['filename'];
+            // dd($bankPic);
+            $request->request->add(['cover_path'=> $bankPic['path'],'cover_filename' => $bankPic['filename']]);
             unlink($file);
         }
-        
-        $product = Tour::create($dataSave);
-        // SCHEDULE
-        if($request->schedule != null){
-            if($request->scheduleType == 1){
-                foreach($request->schedule  as $schedule){
-                    $scheduleList = Schedule::create([
-                        'start_date' => date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' => date("Y-m-d",strtotime($schedule['endDate'])),
-                        'start_hours' =>'00:00',
-                        'end_hours' =>'23:59',
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['maxBookingDate'].' 23:59:00')),
-                        'maximum_booking ' =>$schedule['maximumGroup'],
-                        'product_id' =>$product->id
-                    ]);
-                }
-            }else if($request->scheduleType == 2){
-                foreach($request->schedule as $schedule){
-                    $scheduleList = Schedule::create([
-                        'start_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'start_hours' =>$schedule['startHours'],
-                        'end_hours' =>$schedule['endHours'],
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['startDate'].' '.$schedule['startHours'])),
-                        'maximum_booking' =>$schedule['maximumGroup'],
-                        'product_id' =>$product->id
-                    ]);
-                }
-            }else{
-                foreach($request->schedule  as $schedule){
-                    $scheduleList = Schedule::create([
-                        'start_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'start_hours' =>'00:00',
-                        'end_hours' =>'23:59',
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['maxBookingDate'].' 23:59:00')),
-                        'maximum_booking' =>$schedule['maximumGroup'],
-                        'product_id' =>$product->id
-                    ]);
-                }
-            }
-        }
-        
-		/// DESTINATION
-        if($request->place != null){
-            foreach($request->place as $place){
-                // using this if destination still null
-                if(array_key_exists('destination',$place)){
-                    $destination = $place['destination'];
-                }else{
-                    $destination = null;
-                }
-                //
-                $destination = ProductDestination::create([
-                    'product_id' => $product->id,
-                    'province_id' =>$place['province'],
-                    'city_id' => $place['city'],
-                    'destination_id' => $destination
-                    // 'destinationId' => $place['destination']
-                ]);
-            }
-        }
-        // step 2
-        // ACTIVITY
-        if($request->activity_tag != null){
-            $product->activities()->sync($request->activity_tag);
-        }
-
-        // ITINERARY
-        if($request->itinerary != null){
-            foreach($request->itinerary as $itinerary){
-                $itineraryList = Itinerary::create([
-                    'day' => $itinerary['day'],
-                    'start_time' => $itinerary['startTime'],
-                    'end_time' => $itinerary['endTime'],
-                    'description' => $itinerary['description'],
-                    'product_id' => $product->id
-                ]);
-            }
-        }
-
-        
-        // PRICE
-        // dd($request->price);
-        if($request->price_type == 1){
-            foreach($request->price as $price){
-                if($price['USD'] == null || $price['USD'] == ''){
-                    $price_usd = null;
-                }else{
-                    if(strlen($price['USD']) > 3){
-                        $price_usd = str_replace(".", "", $price['USD']);    
-                    }else{
-                        $price_usd = $price['USD'];
-                    }
-                    
-                }
-                $priceList = Tour::where('id',$product->id)
-                ->update([
-                    'price_idr'=> str_replace(".", "", $price['IDR']),
-                    'price_usd'=> $price_usd,
-                ]);
-            }
-        }else{
-            
-            foreach($request->price as $price){
-                if($price['USD'] == null){
-                    $price_usd = null;
-                }else{
-                    if(strlen($price['USD']) > 3){
-                        $price_usd = str_replace(".", "", $price['USD']);    
-                    }else{
-                        $price_usd = $price['USD'];
-                    }
-                }
-                $priceList = Price::create([
-                    'number_of_person' => $price['people'],
-                    'price_idr'=> str_replace(".", "", $price['IDR']),
-                    'price_usd'=> $price_usd,
-                    'product_id'=> $product->id
-                ]);    
-            }
-        }
-        
-        // INCLUDE
-        if($request->price_includes != null){
-            foreach($request->price_includes as $includes){
-                $includes = Includes::create([
-                    'product_id' => $product->id,
-                    'name' => $includes
-                ]);
-            }
-        }
-        // EXCLUDE
-        if($request->price_excludes != null){
-            foreach($request->price_excludes as $excludes){
-                $excludes = Excludes::create([
-                    'product_id' => $product->id,
-                    'name' => $excludes
-                ]);
-            }
-        }
-        if(!empty($request->destination_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products');
-                ImageDestination::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        if(!empty($request->activity_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageActivity::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        if(!empty($request->accommodation_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageAccomodation::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        if(!empty($request->other_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageOther::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        
-        DB::commit();
+        $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');
+        DB::beginTransaction();
+        try {
+            $product = Tour::create($data);
+            DB::commit();
+            return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
         } catch (Exception $e) {
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("/product/tour-activity/create")->with('message', $exception->getMessage());
+            return redirect("/product/tour-activity/")->with('message', $exception->getMessage());
         }
         return redirect('/product/tour-activity');
-    }
 
+    }
     /**
      * Display the specified resource.
      *
@@ -419,7 +205,6 @@ class TourController extends Controller
                 $price_kurs = 'both';
             }
         }
-
 		$day = round(($endDate - $startDate)/(60 * 60 * 24))+1;
 		$hours = floor(($endTime - $startTime)/(60 * 60));
 		$minutes = (($endTime - $startTime)/60)%60;
@@ -453,7 +238,10 @@ class TourController extends Controller
      */
     public function edit($id)
     {
-        dd($id);
+        $activities = ActivityTag::all();
+        $provinces = Province::select('id','name')->get();
+        $tour = Tour::find($id);
+        return view('tour.edit')->with(['data' => $tour,'provinces' => $provinces,'activities' => $activities]);
     }
 
     /**
@@ -465,232 +253,252 @@ class TourController extends Controller
      */
     public function update(Request $request, $id)
     {
-		$product = Tour::where('id',$id)
-		->update([
-            'pic_name' => $request->pic_name,
-            'pic_phone' => $request->format_pic_phone.'-'.$request->pic_phone,
-            'product_name' => $request->product_name,
-            'product_category' => $request->product_category,
-            'product_type' => $request->product_type,
-            'min_person' => $request->min_person,
-            'max_person' => $request->max_person,
-            'meeting_point_address' => $request->meeting_point_address,
-            'meeting_point_latitude' => $request->meeting_point_latitude,
-            'meeting_point_longitude' => $request->meeting_point_longitude,
-            'meeting_point_note' => $request->meeting_point_note,
-            'term_condition' => $request->term_condition,
-            'cancellation_type' => $request->cancellation_type,
-            'min_cancellation_day' => $request->min_cancellation_day,
-            'cancellation_fee' => $request->cancellation_fee,
-            'status' => 0
-        ]);
-        // INCLUDE
-        if($request->price_includes != null){
-			Includes::where('product_id',$id)->delete();
-            foreach($request->price_includes as $includes){
-                $includes = Includes::create([
-                    'product_id' => $id,
-                    'name' => $includes
-                ]);
+        // dd($request->all());
+		if($request->step == 1)
+        {
+            $messages = [
+                    'company_id' => 'Company filed is required.',
+                    'image_resize.required' => 'Cover Image is required.'
+            ];
+            $validation = Validator::make($request->all(), [
+                    'company_id' => 'required',
+                    'product_category' => 'required',
+                    'product_type' => 'required',
+                    'product_name' => 'required',
+                    'min_person' => 'required|numeric',
+                    'max_person' => 'required|numeric',
+                    'meeting_point_address' => 'required',
+                    'meeting_point_latitude' => 'required',
+                    'meeting_point_longitude' => 'required',
+                    'meeting_point_note' => 'required',
+                    'pic_name' => 'required',
+                    'pic_phone' => 'required',
+                    'term_condition' => 'required'
+                ],$messages);
+
+            if($validation->fails() ){
+                return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
             }
-        }
-        // EXCLUDE
-        if($request->price_excludes != null){
-			Excludes::where('product_id',$id)->delete();
-            foreach($request->price_excludes as $excludes){
-                $excludes = Excludes::create([
-                    'product_id' => $id,
-                    'name' => $excludes
-                ]);
-            }
-        }
-        /// DESTINATION
-        if($request->place != null){
-			ProductDestination::where('product_id',$id)->delete();
-            foreach($request->place as $place){
-                // using this if destination still null
-                if(array_key_exists('destination',$place)){
-                    $destination = $place['destination'];
-                }else{
-                    $destination = null;
-                }
-                //
-                $destination = ProductDestination::create([
-                    'product_id' => $id,
-                    'province_id' =>$place['province'],
-                    'city_id' => $place['city'],
-                    'destination_id' => $destination
-                    // 'destinationId' => $place['destination']
-                ]);
-            }
-        }
-        // ACTIVITY
-        if($request->activity_tag != null){
-			ProductActivity::where('product_id',$id)->delete();
-            foreach($request->activity_tag as $activity)
-            {
-                $destination = ProductActivity::create([
-                    'product_id' => $id,
-                    'activity_id' => $activity
-                ]);
-            }
-        }
-        // SCHEDULE
-		if($request->schedule_type == 1){
-            if($request->schedule != null){
-				Schedule::where('product_id',$id)->delete();
-                foreach($request->schedule  as $schedule)
+            $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone]);
+            if(!empty($request->input('image_resize'))){
+                $destinationPath = public_path('img/temp/');
+                if( ! \File::isDirectory($destinationPath) ) 
                 {
-                    $scheduleList = Schedule::create([
-                        'start_date' => date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' => date("Y-m-d",strtotime($schedule['endDate'])),
-                        'start_hours' =>'00:00',
-                        'end_hours' =>'23:59',
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['maxBookingDate'].' 23:59:00')),
-                        'maximum_booking' =>$schedule['maximumGroup'],
-                        'product_id' =>$id
-                    ]);
+                    File::makeDirectory($destinationPath, 0777, true , true);
                 }
+                $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+                $img = str_replace(' ', '+', $file);
+                $data = base64_decode($img);
+                $filename = md5($request->product_code).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
+                $file = $destinationPath . $filename;
+                $success = file_put_contents($file, $data);
+                $bankPic = Helpers::saveImage($file,'products',true,[4,3]);
+                if($bankPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $request->request->add(['cover_path'=> $bankPic['path'],'cover_filename' => $bankPic['filename']]);
+                unlink($file);
             }
-        }else if($request->scheduleType == 2){
-            if($request->schedule != null){
-				Schedule::where('product_id',$id)->delete();
-                foreach($request->schedule as $schedule){
-                    $scheduleList = Schedule::create([
-                        'start_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'start_hours' =>$schedule['startHours'],
-                        'end_hours' =>$schedule['endHours'],
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['startDate'].' '.$schedule['startHours'])),
-                        'maximum_booking' =>$schedule['maximumGroup'],
-                        'product_id' =>$id
-                    ]);
-                }
-            }
-        }else{
-            if($request->schedule != null){
-				Schedule::where('product_id',$id)->delete();
-                foreach($request->schedule  as $schedule){
-                    $scheduleList = Schedule::create([
-                        'start_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'end_date' =>date("Y-m-d",strtotime($schedule['startDate'])),
-                        'start_hours' =>'00:00',
-                        'end_hours' =>'23:59',
-                        'max_booking_date_time' => date("Y-m-d H:i:s",strtotime($schedule['maxBookingDate'].' 23:59:00')),
-                        'maximum_booking' =>$schedule['maximumGroup'],
-                        'product_id' =>$id
-                    ]);
-                }
+            $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');
+            DB::beginTransaction();
+            try {
+                $product = Tour::find($id);
+                $product->update($data);
+                DB::commit();
+                return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
+            } catch (Exception $e) {
+                DB::rollBack();
+                \Log::info($exception->getMessage());
+                return redirect("/product/tour-activity/".$id.'/edit#step-h-0')->with('message', $exception->getMessage());
             }
         }
-        // ITINERARY
-        if($request->itinerary != null){
-			Itinerary::where('product_id',$id)->delete();
-            foreach($request->itinerary as $itinerary){
-                $itineraryList = Itinerary::create([
-                    'day' => $itinerary['day'],
-                    'start_time' => $itinerary['startTime'],
-                    'end_time' => $itinerary['endTime'],
-                    'description' => $itinerary['description'],
-                    'product_id' => $id
-                ]);
-            }
-        }
-        // PRICE
-        if($request->price_type == 1){
-            foreach($request->price as $price){
-                if($price['USD'] == null || $price['USD'] == ''){
-                    $price_usd = null;
+        elseif($request->step == 2){
+            $data = Tour::find($id);
+            DB::beginTransaction();
+            try {
+                $changeType = ($data->schedule_type != $request->schedule_type ? true : false);
+                $changeInterval = false; 
+                $data->schedule_type = $request->schedule_type;
+                if($request->schedule_type == 1){
+                    $changeInterval = ($data->schedule_interval == $request->day ? false : true);
+                    $data->schedule_interval = $request->day;
+                }elseif($request->schedule_type == 2){
+                    $changeInterval = (((int)substr($data->schedule_interval,0,2) == $request->hours && (int)substr($data->schedule_interval,3) == $request->minutes) ? false : true);
+                    $data->schedule_interval = ($request->hours < 10 ? '0'.$request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes) : $request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes));
                 }else{
-                    if(strlen($price['USD']) > 3){
-                        $price_usd = str_replace(".", "", $price['USD']);    
-                    }else{
-                        $price_usd = $price['USD'];
-                    }
-                    
+                    $changeInterval = false;
+                    $data->schedule_interval = 1;
                 }
-                $priceList = Tour::where('id',$product->id)
-                ->update([
-                    'price_idr'=> str_replace(".", "", $price['IDR']),
-                    'price_usd'=> $price_usd,
-                ]);
-            }
-        }else{
-            Price::where('product_id',$id)->delete();
-            foreach($request->price as $price){
-                if($price['USD'] == null){
-                    $price_usd = null;
-                }else{
-                    if(strlen($price['USD']) > 3){
-                        $price_usd = str_replace(".", "", $price['USD']);    
+                $data->save();
+                if($changeType == true || $changeInterval == true){
+                    Itinerary::where('product_id',$id)->delete();
+                    if($request->schedule_type == 1){
+                        Itinerary::where('product_id',$id)->delete();
+                        $itnry = [];
+                        for($i = 1; $i <= $request->day;$i++){
+                            $itnry[] =['day' => $i , 'product_id' => $id];
+                        }
+                        Itinerary::insert($itnry);
                     }else{
-                        $price_usd = $price['USD'];
+                        if($request->schedule_type == 2){
+                            Itinerary::create(['product_id' => $id,'day' => 1]);
+                        }else{
+                            Itinerary::create(['product_id' => $id,'day' => 1,'start_time' =>'00:00:01','end_time' => '23:59:59']);
+                        }
                     }
                 }
-                $priceList = Price::create([
-                    'number_of_person' => $price['people'],
-                    'price_idr'=> str_replace(".", "", $price['IDR']),
-                    'price_usd'=> $price_usd,
-                    'product_id'=> $product->id
-                ]);    
+                
+                if($request->place != null){
+                    $delete = ProductDestination::where('product_id',$id)->delete();
+                    foreach($request->place as $place){
+                        // using this if destination still null
+                        if(array_key_exists('destination',$place)){
+                            $destination = $place['destination'];
+                        }else{
+                            $destination = null;
+                        }
+                        $destination = ProductDestination::create([
+                            'product_id' => $data->id,
+                            'province_id' =>$place['province'],
+                            'city_id' => $place['city'],
+                            'destination_id' => $destination
+                            // 'destinationId' => $place['destination']
+                        ]);
+                    }
+                }
+                $data->activities()->sync($request->activity_tag);
+                DB::commit();
+                return redirect('/product/tour-activity/'.$id.'/edit#step-h-1');
+            } catch (Exception $e) {
+                DB::rollBack();
+                \Log::info($exception->getMessage());
+                return redirect("/product/tour-activity/".$id.'/edit#step-h-1')->with('message', $exception->getMessage());
             }
         }
-        // IMAGE DESTINATION
-        if(!empty($request->destination_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products');
-                ImageDestination::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
+        elseif($request->step == 3){
+            DB::beginTransaction();
+            try{
+                $count = count($request->id);
+                for($i = 0; $i < $count;$i++){
+                    $data = Itinerary::find($request->id[$i]);
+                    $data->start_time = $request->start_time[$i];
+                    $data->end_time = $request->end_time[$i];
+                    $data->description = $request->description[$i];
+                    $data->save();
+                }
+                DB::commit();
+                return redirect('/product/tour-activity/'.$id.'/edit#step-h-2');
+            } catch (Exception $e) {
+                DB::rollBack();
+                \Log::info($exception->getMessage());
+                return redirect("/product/tour-activity/".$id.'/edit#step-h-2')->with('message', $exception->getMessage());
+            }
+            
+        }
+        elseif($request->step == 4){
+           $data = Tour::find($id);
+           DB::beginTransaction();
+            try {
+                $data->cancellation_type = $request->cancellation_type;
+                $data->max_cancellation_day = $request->max_cancellation_day;
+                $data->cancellation_fee = $request->cancel_fee;
+                $data->save();
+                // PRICE TYPE
+                if($request->price_type == 1){
+                    Price::where('product_id',$data->id)->delete();
+                    Tour::where('id',$data->id)
+                        ->update([
+                            'price_idr'=> null,
+                            'price_usd'=> null,
+                        ]);
+                    foreach($request->price as $price){
+                        if($price['USD'] == null || $price['USD'] == ''){
+                            $price_usd = null;
+                        }else{
+                            if(strlen($price['USD']) > 3){
+                                $price_usd = str_replace(".", "", $price['USD']);    
+                            }else{
+                                $price_usd = $price['USD'];
+                            }
+                            
+                        }
+                        $priceList = Tour::where('id',$data->id)
+                        ->update([
+                            'price_idr'=> str_replace(".", "", $price['IDR']),
+                            'price_usd'=> $price_usd,
+                        ]);
+                    }
+                }else{
+                    Price::where('product_id',$data->id)->delete();
+                    Tour::where('id',$data->id)
+                        ->update([
+                            'price_idr'=> null,
+                            'price_usd'=> null,
+                        ]);
+                    foreach($request->price as $price){
+                        if($price['USD'] == null){
+                            $price_usd = null;
+                        }else{
+                            if(strlen($price['USD']) > 3){
+                                $price_usd = str_replace(".", "", $price['USD']);    
+                            }else{
+                                $price_usd = $price['USD'];
+                            }
+                        }
+                        $priceList = Price::create([
+                            'number_of_person' => $price['people'],
+                            'price_idr'=> str_replace(".", "", $price['IDR']),
+                            'price_usd'=> $price_usd,
+                            'product_id'=> $data->id
+                        ]);    
+                    }
+                }
+                // INCLUDE
+                if($request->price_includes != null){
+                    Includes::where('product_id',$data->id)->delete();
+                    foreach($request->price_includes as $includes){
+                        $includes = Includes::create([
+                            'product_id' => $data->id,
+                            'name' => $includes
+                        ]);
+                    }
+                }
+                // EXCLUDE
+                if($request->price_excludes != null){
+                    Excludes::where('product_id',$data->id)->delete();
+                    foreach($request->price_excludes as $excludes){
+                        $excludes = Excludes::create([
+                            'product_id' => $data->id,
+                            'name' => $excludes
+                        ]);
+                    }
+                }
+                DB::commit();
+                return redirect("/product/tour-activity/".$id.'/edit#step-h-3');
+            } catch (Exception $e) {
+                DB::rollBack();
+                \Log::info($exception->getMessage());
+                return redirect("/product/tour-activity/".$id.'/edit#step-h-3')->with('message', $exception->getMessage());
             }
         }
-        // IMAGE ACTIVITY
-        if(!empty($request->activity_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageActivity::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
+        else if($request->step == 5){
+            // VIDEO
+            Videos::where('product_id',$id)->delete();
+            foreach($request->videoUrl as $video){
+                if(!empty($video)){
+                    $video = Videos::create([
+                        'fileCategory' => 'video',
+                        'url' => $video,
+                        'product_id' => $id
+                    ]);
+                }
             }
+            return redirect("/product/tour-activity/".$id.'/edit#step-h-4');
         }
-        // IMAGE ACCOMMODATION
-        if(!empty($request->accommodation_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageAccommodation::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        // IMAGE OTHER
-        if(!empty($request->other_images)){
-            foreach($request->destination_images as $image){
-                $imgSave = Helpers::saveImage($image,'products'/*Location*/);
-                ImageOther::insert([
-                    'product_id' => $product->id,
-                    'path' => $imgSave['path'],
-                    'filename' => $imgSave['filename']
-                ]);
-            }
-        }
-        // // VIDEO
-        // foreach($request->videoUrl as $video){
-        //     $video = Videos::create([
-        //         'fileCategory' => 'video',
-        //         'url' => $video,
-        //         'product_id' => $request->product_id
-        //     ]);
-        // }
-
-		return redirect()->back();
+        return redirect()->back()->with('message','nothing update!');
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -699,8 +507,6 @@ class TourController extends Controller
      */
     public function destroy($id)
     {
-        //
-        //
         DB::beginTransaction();
         try{
             $data = Tour::find($id);
@@ -1052,7 +858,7 @@ class TourController extends Controller
             $product = Tour::where('id',$request->product_id)
             ->update([
                 'cancellation_type' => $request->cancellation_type,
-                'min_cancellation_day' => $request->min_cancellation_day,
+                'max_cancellation_day' => $request->max_cancellation_day,
                 'cancellation_fee' => $request->cancellation_fee
             ]);
             DB::commit();
@@ -1106,5 +912,189 @@ class TourController extends Controller
                 ]);
         }
         return response()->json('sukses',200);  
+    }
+    public function uploadImageAjax(Request $request)
+    {
+        DB::beginTransaction();
+        try{
+            $data['error'] = '';
+            $id = $request->id;
+            if($request->type == 'activity'){
+                $validation = Validator::make($request->all(), [
+                        'activity_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->activity_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageActivity;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Activity Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'activty','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                    }
+                }
+            }
+            if($request->type == 'destination'){
+                $validation = Validator::make($request->all(), [
+                        'destination_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->destination_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageDestination;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Destinations Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'destination','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
+                    }
+                }
+            }
+            if($request->type == 'accommodation'){
+                $validation = Validator::make($request->all(), [
+                        'accomodation_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->accomodation_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageAccommodation;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Destinations Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'accommodation','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
+                    }
+                }
+            }
+            if($request->type == 'other'){
+                $validation = Validator::make($request->all(), [
+                        'other_images' => 'required'
+                    ]);
+                if($validation->fails() ){
+                    $data['error'] = 'Image isn`t uploaded. please re-insert image.';
+                }
+                else{
+                    foreach($request->other_images  as $index => $image){
+                        $imgSave = Helpers::saveImage($image,'products'/*Location*/);
+                        $save = new ImageOther;
+                        $save->product_id = $id;
+                        $save->path =$imgSave['path'];
+                        $save->filename = $imgSave['filename'];
+                        if($imgSave instanceof  MessageBag){
+                            $data['error'] = $validation->errors();
+                        }
+                        if($save->save()){
+                            $data['initialPreviewConfig'][$index] = [
+                                'caption' => 'Other Image',
+                                'width' => '120px',
+                                'url' => url('product/delete/image'),
+                                'key' => $save->id,
+                                'extra' => ['_token' => csrf_token(),'type' =>'other','id' =>$save->id]
+                            ];
+                        }else{
+                            $data['error'] = 'cant save data !';
+                        }
+                        
+                    }
+                }
+            }
+            // dd($data);
+            $data['initialPreview']=[];
+            $data['initialPreiewThumbTag']=[];
+            $data['append'] = false;
+
+            DB::commit();
+            return $data;
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            
+        }
+    }
+    public function deleteImageAjax(Request $request){
+        $data['error'] = '';
+        DB::beginTransaction();
+        try{
+            $id = $request->key;
+            if($request->type == 'activity'){
+                $delete = ImageActivity::where('id',$id);
+            }
+            if($request->type == 'destination'){
+                $delete = ImageDestination::where('id',$id);
+            }
+            if($request->type == 'accommodation'){
+                $delete = ImageAccommodation::where('id',$id);
+            }
+            if($request->type == 'other'){
+                $delete = Other::where('id',$id);
+            }
+            if($delete->delete()){
+                DB::commit();
+            }
+            else{
+                $data['error'] = 'Cant Delete Image';
+                return $data;
+            }
+            return $data;
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            $data['error'] = $exception->getMessage();
+            return $data;
+        }
+    }
+
+    public function schedule(Request $request, $id)
+    {
+        $data = Tour::find($id);
+        return view('tour.schedule')->with(['data' => $data]);
     }
 }
