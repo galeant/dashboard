@@ -667,7 +667,7 @@
                         <div class="row clearfix">
                             <div class="col-md-12">
                                 <div class="file-loading">
-                                    <input id="destination_images" name="accomodation_images[]" type="file" multiple>
+                                    <input id="accomodation_images" name="accomodation_images[]" type="file" multiple>
                                 </div>
                             </div>
                         </div>
