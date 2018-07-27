@@ -158,7 +158,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         {{Form::close()}}
                         </div>
@@ -196,6 +195,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row clearfix">
                                     <div class="col-md-12">
                                         <h5>This is related with your itinerary.</h5>
@@ -210,6 +210,7 @@
                                                 </select>
                                             </div>
                                         </div>
+
                                         <div class="col-md-4 scheduleHours" hidden>
                                             <div class ="row">
                                                 <div class="col-md-6">
@@ -223,6 +224,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Minutes?* :</label>
@@ -235,6 +237,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
@@ -247,12 +250,13 @@
                                 <div class="master-destinations">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-province">
+
                                             <h5>Province*</h5>
                                             <select  class="form-control province-sel" name="place[0][province]" id="0-province" data-id="0" style="width: 100%" required>
                                                 <option value="" selected>-- Select Province --</option>
                                                 @if(!empty($provinces))
                                                     @foreach($provinces as $province)
-                                                        @if(!empty($data->destinations))
+                                                        @if(count($data->destinations) !=0)
                                                         <option value="{{$province->id}}" @if($data->destinations[0]->province_id == $province->id) selected="" @endif>{{$province->name}}</option>
                                                         @else
                                                         <option value="{{$province->id}}">{{$province->name}}</option>
@@ -261,10 +265,11 @@
                                                 @endif
                                             </select>
                                         </div>
+
                                         <div class="col-md-3 col-city">
                                             <h5>City*</h5>
                                             <select  class="form-control city-sel" name="place[0][city]" id="0-city" style="width: 100%" data-id="0" required>
-                                                @if(!empty($data->destinations))
+                                                @if(count($data->destinations) !=0)
                                                 <option value="{{$province->id}}" selected="">{{$data->destinations[0]->city->name}}</option>
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
@@ -274,7 +279,7 @@
                                         <div class="col-md-4 col-destination">
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
-                                                @if(!empty($data->destinations))
+                                                @if(count($data->destinations) !=0)
                                                 <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->destination->name @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
