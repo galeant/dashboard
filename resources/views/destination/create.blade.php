@@ -452,7 +452,7 @@
             $('#defaultModal').on('shown.bs.modal', function () {
                 cropper = new Cropper(image, {
                     autoCropArea: 1,
-                    aspectRatio: 9/4,
+                    aspectRatio: 3/4,
                     strict: false,
                     guides: false,
                     highlight: false,
