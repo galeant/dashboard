@@ -76,16 +76,19 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('district','DistrictController@json');
 		Route::get('village','VillageController@json');
 		Route::get('company','CompanyController@json');
-
 		Route::get('activity','ActivityTagController@activityList');
 
 		Route::get('findDestination','DestinationController@findDestination');
+		Route::get('destination','DestinationController@json');
 
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
 	Route::group(['prefix' => 'product'],function(){
+		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
+		Route::post('/upload/image', 'TourController@uploadImageAjax');
+		Route::post('/delete/image', 'TourController@deleteImageAjax');
 		Route::post('/productinfo/update1','TourController@update1');
 		Route::post('/productinfo/update2','TourController@update2');
 		Route::post('/productinfo/update3','TourController@update3');

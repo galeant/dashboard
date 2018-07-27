@@ -349,7 +349,7 @@
                 $.ajax({
                     method: "GET",
                     url: "{{ url('json/findCity') }}",
-                    data: { province_id: idProvince  }
+                    data: { id: idProvince  }
                 }).done(function(response) {
                     $.each(response, function (index, value) {
                         $("select[name='city_id']").append(
