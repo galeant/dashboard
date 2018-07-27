@@ -111,7 +111,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-b-20">
-                                                        <label>Min Person(*)</label>
+                                                        <label>Max Person(*)</label>
                                                          {{ Form::text('max_person', null, ['class' => 'form-control','id'=>'max_person','required'=>'required']) }}
                                                     </div>
                                                 </div>
@@ -349,7 +349,7 @@
                                     Activity Tag
                                 </h4>
                                 <h5>How would you describe the activities in this product?</h5>
-                                <select class="form-control" id="activity_tag" name="activity_tag[]" multiple="multiple" style="width: 100%" required>
+                                <select class="form-control" id="activity_tag" name="activity_tag[]" multiple="multiple" style="width: 100%">
                                     @if(!empty($data))
                                         @foreach($data->activities as $activity)
                                             <option value="{{$activity->id}}" selected>{{$activity->name}}</option>
@@ -396,7 +396,7 @@
                                     </div>
                                     <div class="col-md-8 valid-info" id="field_itinerary_{{$itinerary->id}}">
                                         <h5>Description</h5>
-                                        {{ Form::textArea('description[]', $itinerary->description, ['class' => 'form-control','rows'=>"6",'required'=>'required']) }}
+                                        {{ Form::textArea('description[]', $itinerary->description, ['class' => 'form-control','rows'=>"6"]) }}
                                     </div>
                                 </div>
                                 @endforeach
@@ -564,7 +564,7 @@
                                 <div class="col-md-6 valid-info">
                                     <h5>What's already included with pricing you have set?What will you provide?</h5>
                                     <h5 style="font-size: 18px">Example: Meal 3 times a day, mineral water, driver as tour guide.</h5>
-                                    <select type="text" class="form-control" name="price_includes[]" multiple="multiple" style="width: 100%" required>
+                                    <select type="text" class="form-control" name="price_includes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->includes as $include)
                                             <option selected>{{$include->name}}</option>
                                         @endforeach
@@ -583,7 +583,7 @@
                                 <div class="col-md-6 valid-info">
                                     <h5>What's not included with pricing you have set?Any extra cost the costumer should be awere of?</h5>
                                     <h5 style="font-size: 18px">Example: Entrance fee IDR 200,000, bicycle rental, etc</h5>
-                                    <select class="form-control" name="price_excludes[]" multiple="multiple" style="width: 100%" required>
+                                    <select class="form-control" name="price_excludes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->excludes as $exclude)
                                             <option value="{{$exclude->name}}" selected="">{{$exclude->name}}</option>
                                         @endforeach

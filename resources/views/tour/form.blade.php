@@ -104,7 +104,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group m-b-20">
-                                                        <label>Min Person(*)</label>
+                                                        <label>Max Person(*)</label>
                                                          {{ Form::text('max_person', null, ['class' => 'form-control','id'=>'max_person','required'=>'required']) }}
                                                     </div>
                                                 </div>
