@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DestinationType;
+use App\Models\DestinationTipsQuestion;
 use Illuminate\Http\Request;
 use Datatables;
 use DB;
 use Validator;
 
-class DestinationTypeController extends Controller
+class DestinationTipsQuestionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,23 +17,22 @@ class DestinationTypeController extends Controller
      */
     public function index(Request $request)
     {
-        //
         if($request->ajax())
         {
-            $model = DestinationType::query();
+            $model = DestinationTipsQuestion::query();
             return Datatables::eloquent($model)
-            ->addColumn('action', function(DestinationType $data) {
-                return '<a href="/master/destination-type/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+            ->addColumn('action', function(DestinationTipsQuestion $data) {
+                return '<a href="/master/tips-question/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/destination-type/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination-type/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/master/tips-question/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/tips-question/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);        
         }
-        return view('destination-type.index');
+        return view('tips-question.index');
     }
 
     /**
@@ -43,7 +42,7 @@ class DestinationTypeController extends Controller
      */
     public function create()
     {
-        return view('destination-type.form');
+        return view('tips-question.form');
     }
 
     /**
@@ -55,8 +54,7 @@ class DestinationTypeController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:destination_type',
-            'name_EN' => 'required|string|max:255|unique:destination_type'
+            'question' => 'required|unique:destination_tips_questions',
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -65,30 +63,29 @@ class DestinationTypeController extends Controller
         }
         DB::beginTransaction();
         try{
-            $data = new DestinationType();
-            $data->name = $request->input('name');
-            $data->name_EN = $request->input('name_EN');
+            $data = new DestinationTipsQuestion();
+            $data->question = $request->input('question');
             if($data->save()){
                 DB::commit();
-                return redirect("master/destination-type/create")->with('message', 'Successfully saved Destination Type');
+                return redirect("master/tips-question/create")->with('message', 'Successfully saved Destination Tips Question');
                 // return redirect("master/destination-type/".$data->id."/edit")->with('message', 'Successfully saved Destination Type');
             }else{
-                return redirect("master/destination-type/create")->with('message', 'Error Database;');
+                return redirect("master/tips-question/create")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("master/destination-type/create")->with('message', $exception->getMessage());
+            return redirect("master/tips-question/create")->with('message', $exception->getMessage());
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DestinationType  $destinationType
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(DestinationType $destinationType)
+    public function show($id)
     {
         //
     }
@@ -96,13 +93,13 @@ class DestinationTypeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DestinationType  $destinationType
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $data = DestinationType::find($id);
-        return view('destination-type.form')->with([
+        $data = DestinationTipsQuestion::find($id);
+        return view('tips-question.form')->with([
             'data'=> $data
         ]);
     }
@@ -111,15 +108,13 @@ class DestinationTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DestinationType  $destinationType
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        // Validation //
         $validation = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:name',
-            'name_EN' => 'required'
+            'question' => 'required|unique:destination_tips_questions',
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -128,38 +123,35 @@ class DestinationTypeController extends Controller
         }
         DB::beginTransaction();
         try{
-            $data = DestinationType::find($id);
-            $data->name = $request->input('name');
-            $data->name_EN = $request->input('name_EN');
+            $data = DestinationTipsQuestion::find($id);
+            $data->question = $request->input('question');
             if($data->save()){
                 DB::commit();
-                return redirect("master/destination-type/".$data->id."/edit")->with('message', 'Successfully saved Destination Type');
+                return redirect("master/tips-question/".$data->id."/edit")->with('message', 'Successfully saved Destination Tips Question');
             }else{
-                return redirect("master/destination-type/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("master/tips-question/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("master/destination-type/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("master/tips-question/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\DestinationType  $destinationType
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        
-        //
         DB::beginTransaction();
         try{
-            $data = DestinationType::find($id);
+            $data = DestinationTipsQuestion::find($id);
             if($data->delete()){
                 DB::commit();
-                return $this->sendResponse($data, "Delete Destination Type ".$data->name." successfully", 200);
+                return $this->sendResponse($data, "Delete Destination Tips Question ".$data->name." successfully", 200);
             }else{
                 return $this->sendResponse($data, "Error Database;", 200);
             }

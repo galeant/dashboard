@@ -44,7 +44,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		//DestinationType
 		Route::resource('destination-type', 'DestinationTypeController');
 
-		//DestinationType
+		//DestinationTipsQuestion
+		Route::resource('tips-question', 'DestinationTipsQuestionController');
 
 		//API
 		Route::get('/findCity/{id}','CityController@findCity');

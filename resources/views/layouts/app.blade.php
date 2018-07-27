@@ -244,12 +244,17 @@
 		                    </li>
 		                    <li {{{ (Request::is('master/destination/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/destination') }}" class=" waves-effect waves-block">
-		                            <span>Place Management</span>
+		                            <span>Destination Management</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('master/destination-type/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/destination-type') }}" class=" waves-effect waves-block">
-		                            <span>Place Type Management</span>
+		                            <span>Destination Type Management</span>
+		                        </a>
+							</li>
+		                    <li {{{ (Request::is('master/tips-question/*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/tips-question') }}" class=" waves-effect waves-block">
+		                            <span>Tips Question Management</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('admin/master/calender*') ? 'class=active' : '') }}}>
@@ -267,10 +272,8 @@
 		                            <span>Pigijo Company Setting</span>
 		                        </a>
 		                    </li>
-
 		                </ul>
 		            </li>
-		            
 		            <li>
 		                <a href="{{ URL('/master/supplier') }}">
 		                    <i class="material-icons">person</i>
