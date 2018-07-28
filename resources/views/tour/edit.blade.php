@@ -899,7 +899,9 @@
             enableAllSteps: true,
             enablePagination: false
         });
-        
+        $("#idr,#usd").each(function(){
+            $(this).mask('0.000.000.000', {reverse: true});
+        });
         $("#PICPhone").mask('000-0000-00000');
         $("#PICFormat").val("+62");
         $("#PICPhone").val("+62").intlTelInput({
@@ -1079,7 +1081,8 @@
                 });
                 readURL(this);
             });
-            var destLength = 0;
+            // ADDMORE
+            var destLength = "{{count($data->destinations)}}";
             $("#add_more_destination").click(function(){
                 destLength++;
                 $('.child-'+destLength+' .btn-delete-des').remove()
@@ -1099,7 +1102,7 @@
                   method: "GET",
                   url: "{{ url('json/findCity') }}",
                   data: {
-                    id: $(this).val()
+                    province_id: $(this).val()
                   }
                 }).done(function(response) {
                     $('#'+id+'-city option').remove();
@@ -1127,13 +1130,13 @@
                 var id = $(this).attr('data-id');
                 $.ajax({
                   method: "GET",
-                  url: "{{ url('json/destination') }}",
+                  url: "{{ url('json/findDestination') }}",
                   data: {
                     city_id: $(this).val()
                   }
                 }).done(function(response) {
                     $('#'+id+'-destination option').remove();
-                    $.each(response.data, function (index, value) {
+                    $.each(response, function (index, value) {
                         $('#'+id+'-destination').append(
                             "<option value="+value.id+">"+value.name+"</option>"
                         );

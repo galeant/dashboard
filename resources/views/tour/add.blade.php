@@ -69,7 +69,7 @@
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form id="" method="POST" action="{{ url('product/tour-activity') }}" enctype="multipart/form-data">
+                <form id="form-1" method="POST" action="{{ url('product/tour-activity') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row" >
                         <div class="col-md-12" id="general_information">
@@ -689,7 +689,7 @@
         });
         $("form *").removeAttr("required");
         // VALIDATION
-        $('#wizard_with_validation').validate({
+        $('#form-1').validate({
             highlight: function (input) {
                 $(input).parents('.valid-info').addClass('error');
             },
@@ -1020,7 +1020,7 @@
 				  method: "GET",
 				  url: "{{ url('json/findCity') }}",
 				  data: {
-                    id: $(this).val()
+                    province_id: $(this).val()
 				  }
 				}).done(function(response) {
 					$.each(response, function (index, value) {
@@ -1037,10 +1037,9 @@
 				var province = $(this).closest("#dinamic_destination").find("#destinationField1").val();
 				$.ajax({
 				  method: "GET",
-				  url: "{{ url('/destination') }}",
+				  url: "{{ url('json/findDestination') }}",
 				  data: {
-				  	city: $(this).val(),
-				  	province: province
+				  	city_id: $(this).val()
 				  }
 				}).done(function(response) {
 					me2.closest("#dinamic_destination").find("#destinationField3").append(
@@ -1080,8 +1079,7 @@
                         method: "GET",
                         url: "{{ url('/destination') }}",
                         data: {
-                        city: $(this).val(),
-                        province: province
+                        city_id: $(this).val(),
                         }
                     }).done(function(response) {
                         me2.closest("#dinamic_destination").find("#destinationField3").append(

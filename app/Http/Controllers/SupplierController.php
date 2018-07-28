@@ -66,7 +66,6 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         // Validation //
         $validation = Validator::make($request->all(), [
             'salutation' => 'required',

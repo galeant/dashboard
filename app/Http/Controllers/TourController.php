@@ -132,7 +132,7 @@ class TourController extends Controller
             ->with('errors', $validation->errors() );
             }
             // dd($bankPic);
-            $request->request->add(['cover_path'=> $bankPic['path'],'cover_filename' => $bankPic['filename']]);
+            $request->request->add(['cover_path'=> $bankPic['path'],'cover_path' => $bankPic['filename']]);
             unlink($file);
         }
         $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');
