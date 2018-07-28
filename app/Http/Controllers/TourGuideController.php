@@ -9,6 +9,7 @@ use App\Models\TourGuideService;
 use App\Models\Language;
 use App\Models\TourGuideServicePrice;
 use App\Models\City;
+use App\Models\Province;
 use App\Models\Country;
 use Helpers;
 use Validator;
@@ -72,7 +73,6 @@ class TourGuideController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         //
         $validate = [
             'company_id' => 'required',
@@ -103,20 +103,24 @@ class TourGuideController extends Controller
         if(!empty($request->services)){
             foreach($request->services as $value)
             {
-                $validate['rate_per_day_'.$value] ='required|numeric';
-                $validate['rate_per_day2_'.$value] ='required|numeric';
+                $validate['rate_per_day_'.$value] ='required';
+                $validate['rate_per_day2_'.$value] ='required';
                 $messages['rate_day_day_'.$value.'.required'] = 'Service Price must be fill !';
                 $messages['rate_day_day2_'.$value.'.required'] = 'Service Price must be fill !';
             }
         }
         $validation = Validator::make($request->all(), $validate,$messages);
-
         // Check if it fails //
         if( $validation->fails() ){
+            $coverage = null;
+            if(!empty($request->input('coverage'))){
+                $coverage = Province::whereIn('id',$request->input('coverage'))->get();
+            }
+            $request->request->add(['coverage' => $coverage]);
             return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            ->with('errors', $validation->errors());
         }
-        // dd($request->all());
+
         DB::beginTransaction();
         try {
         $save = new TourGuide();
@@ -128,7 +132,7 @@ class TourGuideController extends Controller
         $save->email = $request->input('email');
         $save->phone = $request->input('format').'-'.$request->input('phone');
         $save->company_id = $request->input('company_id');
-        $save->status = $request->input('status',0);
+        $save->status = ($request->input('status') != 'on' ? 1 : 0);
         $save->experience_year = $request->input('experience_year');
         $save->language = $request->input('language');
         $save->guide_license = $request->input('guide_license',null);
@@ -160,7 +164,7 @@ class TourGuideController extends Controller
         $save->coverage()->sync($request->input('coverage'));
         foreach($request->input('services') as $serviceId){
             $service = TourGuideService::find($serviceId);
-            TourGuideServicePrice::updateOrCreate(['tour_guide_id'=>$save->id,'tour_guide_service_id' =>$serviceId],['service_name' =>$service->name,'rate_per_day' => $request->input('rate_per_day_'.$serviceId),'rate_per_day2' => $request->input('rate_per_day2_'.$serviceId)]);
+            TourGuideServicePrice::updateOrCreate(['tour_guide_id'=>$save->id,'tour_guide_service_id' =>$serviceId],['service_name' =>$service->name,'rate_per_day' => str_replace(',','',$request->input('rate_per_day_'.$serviceId)),'rate_per_day2' => str_replace(',','',$request->input('rate_per_day2_'.$serviceId))]);
         }
         DB::commit();
         return redirect("product/tour-guide")->with('message', 'Successfully Created Tour Guide');
@@ -236,8 +240,8 @@ class TourGuideController extends Controller
         if(!empty($request->services)){
             foreach($request->services as $value)
             {
-                $validate['rate_per_day_'.$value] ='required|numeric';
-                $validate['rate_per_day2_'.$value] ='required|numeric';
+                $validate['rate_per_day_'.$value] ='required';
+                $validate['rate_per_day2_'.$value] ='required';
                 $messages['rate_day_day_'.$value.'.required'] = 'Service Price must be fill !';
                 $messages['rate_day_day2_'.$value.'.required'] = 'Service Price must be fill !';
             }
@@ -246,9 +250,12 @@ class TourGuideController extends Controller
 
         // Check if it fails //
         if( $validation->fails() ){
+            $coverage = Province::whereIn('id',$request->input('coverage'))->get();
             return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            ->with('errors', $validation->errors())->with('coverages', $coverage);
         }
+        
+        // dd($request->all());
         DB::beginTransaction();
         try {
         $save = TourGuide::find($id);
@@ -260,7 +267,7 @@ class TourGuideController extends Controller
         $save->email = $request->input('email');
         $save->phone = $request->input('format').'-'.$request->input('phone');
         $save->company_id = $request->input('company_id');
-        $save->status = $request->input('status',0);
+        $save->status = ($request->input('status') != 'on' ? 1 : 0);
         $save->experience_year = $request->input('experience_year');
         $save->language = $request->input('language');
         $save->guide_license = $request->input('guide_license',null);
@@ -290,13 +297,13 @@ class TourGuideController extends Controller
                 unlink($file);
                 $save->avatar = $avatar;
             }
-            
+        
         $save->save();
         $save->coverage()->sync($request->input('coverage'));
         TourGuideServicePrice::where('tour_guide_id',$save->id)->forceDelete();
         foreach($request->input('services') as $serviceId){
             $service = TourGuideService::find($serviceId);
-            TourGuideServicePrice::updateOrCreate(['tour_guide_id'=>$save->id,'tour_guide_service_id' =>$serviceId],['service_name' =>$service->name,'rate_per_day' => $request->input('rate_per_day_'.$serviceId),'rate_per_day2' => $request->input('rate_per_day2_'.$serviceId)]);
+            TourGuideServicePrice::updateOrCreate(['tour_guide_id'=>$save->id,'tour_guide_service_id' =>$serviceId],['service_name' =>$service->name,'rate_per_day' => str_replace(',','',$request->input('rate_per_day_'.$serviceId)),'rate_per_day2' => str_replace(',','',$request->input('rate_per_day2_'.$serviceId))]);
         }
         DB::commit();
         

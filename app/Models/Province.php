@@ -21,5 +21,10 @@ class Province extends Model {
     {
         return $this->hasOne('App\Models\Country','id','country_id');
     }
+
+    public function tourguide()
+    {
+        return $this->belongsToMany('App\Models\TourGuide','tour_guide_coverages','province_id','tour_guide_id');
+    }
 }
 

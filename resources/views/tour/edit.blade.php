@@ -599,15 +599,15 @@
                                     Cancellation Policy
                                 </h4>
                                 <div class="col-md-3">
-                                    <input name="cancellation_type" type="radio" id="1c" class="radio-col-deep-orange" value="1" required @if($data->cancellation_type == 1) checked @elseif($data->cancellation_type == null) checked @endif />
+                                    <input name="cancellation_type" type="radio" id="1c" class="radio-col-deep-orange" value="0" required @if($data->cancellation_type == 0) checked @elseif($data->cancellation_type == null) checked @endif />
                                     <label for="1c">No cancellation</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input name="cancellation_type" type="radio" id="2c" class="radio-col-deep-orange" value="2"  @if($data->cancellation_type == 2) checked @endif />
+                                    <input name="cancellation_type" type="radio" id="2c" class="radio-col-deep-orange" value="1"  @if($data->cancellation_type == 1) checked @endif />
                                     <label for="2c">Free cancellation</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <input name="cancellation_type" type="radio" id="3c" class="radio-col-deep-orange" value="3"   @if($data->cancellation_type == 3) checked @endif />
+                                    <input name="cancellation_type" type="radio" id="3c" class="radio-col-deep-orange" value="2"   @if($data->cancellation_type == 2) checked @endif />
                                     <label for="3c">Cancellation policy applies</label>
                                 </div>
                             </div>
@@ -1194,7 +1194,7 @@
         // CANCELLATION 
             $("input[name='cancellation_type']").change(function () {
                 var cancelType = $(this).val();
-                if(cancelType == 3){
+                if(cancelType == 2){
                     $("#cancel_policy").show();
                 }else{
                     $("#cancel_policy").hide();
