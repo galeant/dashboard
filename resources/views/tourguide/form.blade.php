@@ -53,7 +53,7 @@
 							    	<div class="col-md-12">
 								    	<div class="col-md-3">
 								    		<div class="dd-avatar">
-								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : 'http://via.placeholder.com/300x400'}}" class="img-responsive" id="img-avtr">
+								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : 'http://via.placeholder.com/300x400'}}" class="img-responsive" style="width: 100%" id="img-avtr">
 								    		</div>
 								    		<input name="image_resize" type="text" value="" hidden>
 								    		<a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Profile Picture</a>
