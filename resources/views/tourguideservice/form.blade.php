@@ -43,7 +43,7 @@
 						    @endif
 					            <div class="form-group m-b-20">
 					                <label>Tour Guide Service Name(*)</label>
-					                 {{ Form::text('name', null, ['class' => 'form-control',id'=>'name','required'=>'required']) }}
+					                 {{ Form::text('name', null, ['class' => 'form-control','id'=>'name','required'=>'required']) }}
 					            </div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-3 col-lg-offset-9">
