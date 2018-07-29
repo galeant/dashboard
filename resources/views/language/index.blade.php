@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/master/language/create" class="btn bg-teal btn-block waves-effect">Add Language</a>
+                                    <a href="/master/language/create" class="btn bg-teal btn-block waves-effect">Add New Language</a>
                                 </li>
                             </ul>
                         </div>

@@ -42,11 +42,11 @@
 						        {{ Form::open(['route'=>'language.store', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
 						    @endif
 						    	<div class="form-group m-b-20">
-					                <label>Code</label>
+					                <label>Language Code(*)</label>
 					                 {{ Form::text('code', null, ['class' => 'form-control','placeholder'=>'Please Enter Code','id'=>'code','required'=>'required']) }}
 					            </div>
 					            <div class="form-group m-b-20">
-					                <label>Name</label>
+					                <label>Language Name(*)</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
 					            </div>
 					            <div class="form-group m-b-20">

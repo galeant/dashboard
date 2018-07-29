@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/product/tour-guide/create" class="btn bg-teal btn-block waves-effect">Add Tour Guide</a>
+                                    <a href="/product/tour-guide/create" class="btn bg-teal btn-block waves-effect">Add New Tour Guide</a>
                                 </li>
                             </ul>
                         </div>

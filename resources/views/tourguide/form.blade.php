@@ -53,7 +53,7 @@
 							    	<div class="col-md-12">
 								    	<div class="col-md-3">
 								    		<div class="dd-avatar">
-								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : ''}}" class="img-responsive" id="img-avtr">
+								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : 'http://via.placeholder.com/300x400'}}" class="img-responsive" id="img-avtr">
 								    		</div>
 								    		<input name="image_resize" type="text" value="" hidden>
 								    		<a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Profile Picture</a>
@@ -81,7 +81,7 @@
 									            <div class="col-md-10">
 										            <div class="form-group m-b-20">
 										                <label>Full Name(*)</label>
-										                 {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'fullname','required'=>'required']) }}
+										                 {{ Form::text('fullname', null, ['class' => 'form-control','id'=>'fullname','required'=>'required']) }}
 										            </div>
 									            </div>
 								            </div>
@@ -89,7 +89,7 @@
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 										                <label>Age(*)</label>
-										                 {{ Form::text('age', null, ['class' => 'form-control','placeholder'=>'Please Enter Age','id'=>'age','required'=>'required']) }}
+										                 {{ Form::text('age', null, ['class' => 'form-control','id'=>'age','required'=>'required']) }}
 										            </div>
 									            </div>
 									            <div class="col-md-6">
@@ -110,7 +110,7 @@
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 										                <label>Email(*)</label>
-										                 {{ Form::text('email', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Email','id'=>'email','required'=>'required']) }}
+										                 {{ Form::text('email', null, ['class' => 'form-control','id'=>'email','required'=>'required']) }}
 										            </div>
 									            </div>
 									            <div class="col-md-6">
@@ -137,7 +137,7 @@
 		                                </div>
 		                                <div class="col-md-3">
 		                                    <div class="form-group">
-		                                        {{ Form::text('experience_year', null, ['class' => 'form-control','placeholder'=>'Please Enter Personal Experience','id'=>'personal_experience','required'=>'required']) }}
+		                                        {{ Form::text('experience_year', null, ['class' => 'form-control','id'=>'personal_experience','required'=>'required']) }}
 		                                    </div>
 		                                </div>
 		                                <div class="col-md-6">
@@ -272,7 +272,7 @@
 		                                        <label for="association_no">No License</label>
 		                                    </div>
 		                                    <div class="form-group" id="parent_association">
-		                                    	{{ Form::text('guide_association', null, ['class' => 'form-control','placeholder'=>'Please Enter Registration Number','id'=>'guide_association','required' => 'required']) }}
+		                                    	{{ Form::text('guide_association', null, ['class' => 'form-control','id'=>'guide_association','required' => 'required']) }}
 		                                    </div>
 		                                </div>
 		                        	</div>
