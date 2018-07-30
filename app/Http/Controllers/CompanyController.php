@@ -7,9 +7,12 @@ use App\Models\Company;
 use App\Models\Supplier;
 use App\Models\SupplierRole;
 use App\Models\Province;
+use App\Models\CompanyStatusLog;
 use Datatables;
+use App\Mail\StatusCompany;
 use Validator;
 use Helpers;
+use Mail;
 use DB;
 class CompanyController extends Controller
 {
@@ -25,17 +28,41 @@ class CompanyController extends Controller
             $model = Company::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(Company $data) {
-                return '<a href="/master/company/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/company/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/company/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
+            ->editColumn('status', function (Company $data){
+                return view('company.status',['data' => $data]);
+            })
+            ->rawColumns(['status','action'])
             ->make(true);        
         }
         return view('company.index');
+    }
+
+    public function registrationList(Request $request){
+        if($request->ajax())
+        {
+            $model = Company::where('status',1);
+            return Datatables::eloquent($model)
+            ->addColumn('action', function(Company $data) {
+                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-success  waves-effect waves-circle waves-float">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+            })
+            ->editColumn('id', 'ID: {{$id}}')
+            ->editColumn('status', function (Company $data){
+                return view('company.status',['data' => $data]);
+            })
+            ->rawColumns(['status','action'])
+            ->make(true);        
+        }
+        return view('company.registration-list');
     }
 
     /**
@@ -231,7 +258,7 @@ class CompanyController extends Controller
         // Check if it fails //
         if( $validation->fails() ){
             return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            ->with('errors', $validation->errors());
         }
         DB::beginTransaction();
         try {
@@ -349,6 +376,42 @@ class CompanyController extends Controller
              \Log::info($exception->getMessage());
              return $this->sendResponse($data, $exception->getMessage() , 200);
          }
+    }
+
+    public function changeStatus(Request $request,$id)
+    {
+        $status = $request->input('status');
+        $note = $request->input('note');
+        $validation = Validator::make($request->all(), [
+            'status' => 'required'
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        DB::beginTransaction();
+         try{
+            $data = Company::find($id);
+            $data->status = $status;
+            // dd($data->save());
+             if($data->save()){
+                $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                // dd($status);
+                $data->note = $note;
+                Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                DB::commit();
+                return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
+             }else{
+                 return redirect('partner/'.$id.'/edit')->with('message','Change Status Failed');
+             }
+         }catch (\Exception $exception){
+            dd($exception);
+             DB::rollBack();
+             \Log::info($exception->getMessage());
+             return redirect('partner/'.$id.'/edit')->with('error',$exception->getMessage());
+         }
+        
     }
 
     public function json(Request $request)

@@ -89,23 +89,23 @@
 		                    <span>Members</span>
 		                </a>
 		            </li>
-		            <li {{{ (Request::is('admin/partner*') ? 'class=active' : '') }}}>
+		            <li {{{ (Request::is('partner*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">people</i>
 		                    <span>Partners</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
-		                    <li {{{ (Request::is('admin/partner/index*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/partner/index') }}" class=" waves-effect waves-block">
-		                            <span>Partner List</span>
+		                    <li {{{ (Request::is('partner') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('partner') }}" class=" waves-effect waves-block">
+		                            <span>Partners</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/partner/activity*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/partner/activity') }}" class=" waves-effect waves-block">
+		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
 		                            <span>Registration - Activity (5)</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/partner/accomodation*') ? 'class=active' : '') }}}>
+		                   <!--  <li {{{ (Request::is('admin/partner/accomodation*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/admin/partner/accomodation') }}" class=" waves-effect waves-block">
 		                            <span>Registration - Accomodation (0)</span>
 		                        </a>
@@ -115,7 +115,7 @@
 		                            <span>Registration - Car Rental (0)</span>
 		                        </a>
 		                    </li>
-
+ -->
 		                </ul>
 		            </li>
 
@@ -188,11 +188,7 @@
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
-							<li {{{ (Request::is('master/company*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('master/company') }}" class=" waves-effect waves-block">
-		                            <span>Company</span>
-		                        </a>
-		                    </li>
+							
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
 		                            <span>Language</span>

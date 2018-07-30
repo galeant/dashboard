@@ -7,7 +7,7 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Partner List
+                    Partner Activity List
                     <small>Master Data / Partners</small>
                 </h2>
             </div>
@@ -17,18 +17,18 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All Partners
+                                Registration Activity
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">Add new Partner</a>
+                                    <a href="{{ url('partner') }}" class="btn bg-teal btn-block waves-effect">List Partners</a>
                                 </li>
                             </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
-                                <thead>
+                                    <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
@@ -66,7 +66,7 @@
     	$('#data-tables').DataTable({
 	        processing: true,
 	        serverSide: true,
-	        ajax: '/partner',
+	        ajax: '/partner/registration/activity',
 	        columns: [
 	            {data: 'id'},
                 {data: 'company_name'},

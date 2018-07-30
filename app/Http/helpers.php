@@ -23,6 +23,9 @@ class helpers{
 	public static function typeCity(){
 		return ['Kota'=> 'Kota','Kabupaten'=>'Kabupaten'];
 	}
+	public static function statusCompany(){
+		return [0 => 'Not verified',1 =>'Awaiting Submission',2 => 'Awaiting Moderation',3 => 'Insufficient Data',4=>'Rejected',5=>'Active',6=>'Disabled'];
+	}
 	public static function encodeSpecialChar($string)
 	{
 	    $replace  = str_replace(' ', '-', $string);

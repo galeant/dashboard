@@ -19,9 +19,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	});
+
+	Route::resource('partner', 'CompanyController');
+	Route::group(['prefix' => 'partner'], function(){
+		Route::get('registration/activity', 'CompanyController@registrationList');
+		Route::post('{id}/change/status', 'CompanyController@changeStatus');
+	});
 	Route::group(['prefix' => 'master'],function(){
-		Route::resource('company', 'CompanyController');
-		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');

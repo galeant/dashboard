@@ -24,8 +24,8 @@
 @section('main-content')
     <div class="block-header">
         <h2>
-            Add New Company
-            <small>Master Data / Company</small>
+            Add New Partners
+            <small>Data / Partners</small>
         </h2>
     </div>
     <div class="row clearfix">
@@ -33,12 +33,12 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Add New Company
+                        Add New Partners
                     </h2>
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                <form method="POST" action="{{ url('master/company') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ url('partner') }}" enctype="multipart/form-data">
                 @csrf
                     <div class="row">
                         <h4>Company PIC Personal Information</h4>
