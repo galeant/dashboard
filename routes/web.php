@@ -85,6 +85,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
+		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
+		// UPDATE SHCHEDULE
+		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
+		// DELETE SHCHEDULE
+		Route::get('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax');
