@@ -1100,7 +1100,62 @@ class TourController extends Controller
 
     public function schedule(Request $request, $id)
     {
-        $data = Tour::find($id);
+        $data = Tour::with('schedules'/*,'schedules.booking'*/)->find($id);
         return view('tour.schedule')->with(['data' => $data]);
+    }
+    public function scheduleSave(Request $request, $id, $type){
+        // 
+        // $request['start_date'] = 'qdwq';
+        if($request->end_date){
+            $request['end_date'] = date("Y-m-d",strtotime($request->end_date));   
+        }else{
+            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
+        }
+        // 
+        if($request->start_hours){
+            $request['start_hours'] = $request->start_hours;
+        }else{
+            $request['start_hours'] = '00:00';
+        }
+        // 
+        if($request->end_hours){
+            $request['end_hours'] = $request->end_hours;
+        }else{
+            $request['end_hours'] = '23:59';
+        }
+        // 
+        if($type != 2){
+            $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' 00:00';
+        }else{
+            $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' '.$request->start_hours;
+        }
+        $schedule = Schedule::create([
+            'start_date' => date("Y-m-d",strtotime($request->start_date)),
+            'end_date' => $request['end_date'],
+            'start_hours' => $request['start_hours'],
+            'end_hours' => $request['end_hours'],
+            'max_booking_date_time' => $request['max_booking_date_time'],
+            'maximum_booking' => $request->maximum_booking,
+            'product_id' =>$id
+        ]);
+        
+        return redirect()->back();
+    }
+    public function scheduleUpdate(Request $request){
+        $schedule = Schedule::where('id',$request->id)
+        ->update([
+            'start_date' => date("Y-m-d",strtotime($request->start_date)),
+            'end_date' => date("Y-m-d",strtotime($request->end_date)),
+            'start_hours' => $request->start_hours,
+            'end_hours' => $request->end_hours,
+            'max_booking_date_time' => date("Y-m-d",strtotime($request->max_booking_date_time)),
+            'maximum_booking' => $request->maximum_booking
+        ]);
+        // dd($request->all());
+        return response()->json('success',200);
+    }
+    public function scheduleDelete($id){
+        Schedule::where('id',$id)->delete();
+        return redirect()->back();
     }
 }

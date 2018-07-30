@@ -37,6 +37,7 @@
                 <h2>Edit Tour Activity</h2>
                 <ul class="header-dropdown m-r--5">
                     <li>
+                        <!-- <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#largeModal">MODAL - LARGE SIZE</button> -->
                         <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
                     </li>
                     <li>
