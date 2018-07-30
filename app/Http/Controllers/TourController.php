@@ -113,6 +113,7 @@ class TourController extends Controller
         $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
         $code = ($request->input('product_type') == 'private' ? '102' : '101'); 
         $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? $code.($id->id+1) : $code.'1')]);
+        // dd($request->all());
         if(!empty($request->input('image_resize'))){
 
             $destinationPath = public_path('img/temp/');
@@ -126,13 +127,15 @@ class TourController extends Controller
             $filename = md5($request->product_code).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
             $file = $destinationPath . $filename;
             $success = file_put_contents($file, $data);
+            // dd($filename);
             $bankPic = Helpers::saveImage($file,'products',true,[4,3]);
+            // dd($bankPic);
             if($bankPic instanceof  MessageBag){
                 return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
             }
             // dd($bankPic);
-            $request->request->add(['cover_path'=> $bankPic['path'],'cover_path' => $bankPic['filename']]);
+            $request->request->add(['cover_path'=> $bankPic['path'],'cover_filename' => $bankPic['filename']]);
             unlink($file);
         }
         $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');
@@ -353,6 +356,7 @@ class TourController extends Controller
                 }
                 
                 if($request->place != null){
+                    // dd($request->place);
                     $delete = ProductDestination::where('product_id',$id)->delete();
                     foreach($request->place as $place){
                         // using this if destination still null
