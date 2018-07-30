@@ -269,7 +269,8 @@
                                             <h5>City*</h5>
                                             <select  class="form-control city-sel" name="place[0][city]" id="0-city" style="width: 100%" data-id="0" required>
                                                 @if(count($data->destinations) !=0)
-                                                <option value="{{$province->id}}" selected="">{{$data->destinations[0]->city->name}}</option>
+
+                                                <option value="{{$data->destinations[0]->city_id}}" selected="">{{$data->destinations[0]->city->name}}</option>
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
                                                 @endif
@@ -1090,6 +1091,7 @@
                 $(".master-destinations").children().clone().appendTo(".dynamic-destinations").addClass("child-"+destLength);
                 $('.child-'+destLength+' .col-province select').attr('name','place['+destLength+'][province]').attr('id',destLength+'-province').attr('data-id',destLength);
                 $('.child-'+destLength+' .col-city select').attr('name','place['+destLength+'][city]').attr('id',destLength+'-city').attr('data-id',destLength);
+                $('.child-'+destLength+' .col-city select').val('');
                 $('.child-'+destLength+' .col-destination select').attr('name','place['+destLength+'][destination]').attr('id',destLength+'-destination').attr('data-id',destLength);
                 $('.child-'+destLength).append('<button type="button" class="btn btn-xs btn-danger waves-effect btn-delete-des"><i class="material-icons">clear</i></button>').attr('data-id',destLength);
             });
