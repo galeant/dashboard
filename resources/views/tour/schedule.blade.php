@@ -86,7 +86,7 @@
                                 <th id="startHours">Start Hours</th>
                                 <th id="endHours">End Hours</th>
                                 <th id="maxBookDate">Max Booking Date</th>
-                                <th id="book">Book</th>
+                                <th id="book">Number Of Booking</th>
                                 <th id="maxBook">Max Booking</th>
                                 <th id="action">Action</th>
                             </tr>
@@ -117,7 +117,7 @@
                                         <input type="text" id="scheduleField5" class="form-control" name="max_booking_date_time" value="{{date('d-m-Y',strtotime($schedule->max_booking_date_time))}}"/>
                                     </td>
                                     <td id="book">
-                                        1
+                                        0
                                     </td>
                                     <td id="maxBook">
                                         <p>{{$schedule->maximum_booking}}</p>

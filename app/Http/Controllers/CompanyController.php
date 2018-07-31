@@ -184,6 +184,11 @@ class CompanyController extends Controller
                     'role_id'=> $request->role,
                     'company_id' => $company->id,
                     'password' => '-']);
+        $companyStatusLog = CompanyStatusLog::create([
+            'company_id' => $company->id,
+            'status' => 1,
+            'note' => 'awating submit from suplier/admin' 
+        ]);
 
         DB::commit();
         } catch (Exception $e) {
@@ -191,7 +196,8 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        return redirect('master/company');
+        
+        return redirect('partner');
     }
 
     /**
@@ -344,6 +350,7 @@ class CompanyController extends Controller
                     'phone'=> $request->format.'-'.$request->phone,
                     'email'=> $request->email,
                     'password' => '-']);
+        $supplier = 
 
         DB::commit();
         } catch (Exception $e) {

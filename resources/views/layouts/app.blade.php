@@ -97,7 +97,7 @@
 		                <ul class="ml-menu" style="display: block;">
 		                    <li {{{ (Request::is('partner') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('partner') }}" class=" waves-effect waves-block">
-		                            <span>Partners</span>
+		                            <span>Partner List</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
@@ -132,7 +132,7 @@
 		                    </li>
 		                    <li {{{ (Request::is('product/tour-guide*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/product/tour-guide') }}" class=" waves-effect waves-block">
-		                            <span>TourGuide</span>
+		                            <span>Tour Guide</span>
 		                        </a>
 		                    </li>
 
