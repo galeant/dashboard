@@ -104,6 +104,7 @@ class TourController extends Controller
                 'meeting_point_longitude' => 'required',
                 'pic_name' => 'required',
                 'pic_phone' => 'required',
+                'term_condition' => ' required',
                 'image_resize' => 'required'
             ],$messages);
 
