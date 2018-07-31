@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Tour;
 use App\Models\Supplier;
 use App\Models\SupplierRole;
 use App\Models\Province;
@@ -187,7 +188,7 @@ class CompanyController extends Controller
         $companyStatusLog = CompanyStatusLog::create([
             'company_id' => $company->id,
             'status' => 1,
-            'note' => 'awating submit from suplier/admin' 
+            'note' => 'awaiting submit product, this company input from super admin' 
         ]);
 
         DB::commit();
@@ -225,6 +226,8 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
+        session()->forget('condition');
+        session()->forget('company');
         $roles = SupplierRole::pluck('name','id');
         $province = Province::all();
         $company = Company::where('id',$id)->first();
@@ -281,7 +284,6 @@ class CompanyController extends Controller
             'bank_account_title'=> $request->bank_account_title,
             'bank_account_name' => $request->bank_account_name,
             'company_ownership' => $request->company_ownership,
-            'status'=> 1,
             // 
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
@@ -350,7 +352,7 @@ class CompanyController extends Controller
                     'phone'=> $request->format.'-'.$request->phone,
                     'email'=> $request->email,
                     'password' => '-']);
-        $supplier = 
+        
 
         DB::commit();
         } catch (Exception $e) {
@@ -358,7 +360,8 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        return redirect('master/company');
+        return redirect()->back();
+        // return redirect('partner');
     }
 
     /**
@@ -399,6 +402,8 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
          try{
+            session()->forget('condition');
+            session()->forget('company');
             $data = Company::find($id);
             $data->status = $status;
             // dd($data->save());
@@ -436,5 +441,19 @@ class CompanyController extends Controller
         }
         $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
         return $this->sendResponse($data, "Company retrieved successfully", 200);
+    }
+
+    //
+    public function sample($id){
+        $company = Company::with('log_statuses')->where('id',$id)->first();
+        $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
+        session()->put('condition', 'kuration');
+        session()->put('company', $company);
+        if($product != null ){
+            return redirect('/product/tour-activity/'.$product->id.'/edit');
+        }else{
+            return redirect()->back();
+        }
+        
     }
 }

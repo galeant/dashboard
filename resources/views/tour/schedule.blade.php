@@ -299,6 +299,13 @@
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));
             });
         });
+        var condition = "{{session()->get('condition')}}";
+        if(condition != null || condition != ''){
+            $("#leftsidebar").find("li").each(function(){
+                $(this).find("a").css("pointer-events","none");
+            });
+            $("li#back a,div.navbar-header a").css("pointer-events","none");
+        }
     });
 </script>
 @stop
