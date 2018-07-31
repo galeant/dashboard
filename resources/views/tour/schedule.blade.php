@@ -283,6 +283,22 @@
                 me.closest("tr#value").find("input").show();
             });
         });
+        $("td").find("#scheduleField5").each(function(){
+            var maxBookLocal = $(this).closest("td").siblings("td#startDate").find("#scheduleField1").val();
+            $(this).daterangepicker({
+                autoUpdateInput: false,
+                singleDatePicker: true,
+                autoApply: true,
+                opens: "left",
+                locale: {
+                    format: 'DD-MM-YYYY',
+                },
+                minDate: moment().add(0, 'days'),
+                maxDate: maxBookLocal
+            }).on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('DD-MM-YYYY'));
+            });
+        });
     });
 </script>
 @stop
