@@ -312,14 +312,14 @@ class TourController extends Controller
                 $code = ($request->input('product_type') == 'private' ? '102' : '101');
                 $data['product_code'] = $code.substr($product->product_code,3,strlen($product->product_code));
                 $product->update($data);
-                // STATUS COMPANY
-                $statusCompany = Company::where('id',$request->company_id)->update(['status' => 2]);
-                $statusCompanyLog = CompanyStatusLog::create([
-                    'company_id' => $request->company_id,
-                    'status' => 2,
-                    'note' => 'insert product tour ke'.Tour::where('company_id', $request->company_id->count())
-                ]); 
-                // 
+                // // STATUS COMPANY
+                // $statusCompany = Company::where('id',$request->company_id)->update(['status' => 2]);
+                // $statusCompanyLog = CompanyStatusLog::create([
+                //     'company_id' => $request->company_id,
+                //     'status' => 2,
+                //     'note' => 'insert product tour ke'.Tour::where('company_id', $request->company_id->count())
+                // ]); 
+                // // 
                 DB::commit();
                 return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
             } catch (Exception $e) {
