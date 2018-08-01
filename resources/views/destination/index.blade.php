@@ -115,7 +115,7 @@
                 searching: false,
                 ajax: '/master/destination',
                 columns: [
-                    {data: 'destination_types.name'},
+                    {data: 'destination_types.name_EN'},
                     {data: 'destination_name'},
                     {data: 'provinces.name'},
                     {data: 'cities.name'},
@@ -154,7 +154,7 @@
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'destination_types.name' },
+                        { data: 'destination_types.name_EN' },
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },
@@ -196,7 +196,7 @@
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'destination_types.name' },
+                        { data: 'destination_types.name_EN' },
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },

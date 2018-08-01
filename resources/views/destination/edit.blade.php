@@ -29,7 +29,7 @@
                         <div class="col-md-6">
                             <select name="destination_type_id" class="form-control" required>
                                 @foreach($destination_type as $dt)
-                                <option value="{{$dt->id}}">{{$dt->name_EN}}</option>
+                                <option value="{{$dt->id}}" @if($destination->destination_type_id == $dt->id) selected @endif>{{$dt->name_EN}}</option>
                                 @endforeach
                             </select>
                         </div>
