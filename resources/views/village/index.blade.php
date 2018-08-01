@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li>
-                                    <a href="/master/village/create" class="btn bg-teal btn-block waves-effect">Add Village</a>
+                                    <a href="/master/village/create" class="btn bg-teal btn-block waves-effect">Add New Village</a>
                                 </li>
 
                             </ul>

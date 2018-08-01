@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/master/supplier/create" class="btn bg-teal btn-block waves-effect">Add Supplier</a>
+                                    <a href="/master/supplier/create" class="btn bg-teal btn-block waves-effect">Add New Supplier</a>
                                 </li>
                             </ul>
                         </div>

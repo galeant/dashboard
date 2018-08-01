@@ -19,9 +19,15 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	});
+
+	Route::resource('partner', 'CompanyController');
+	Route::group(['prefix' => 'partner'], function(){
+		Route::get('registration/activity', 'CompanyController@registrationList');
+		Route::post('{id}/change/status', 'CompanyController@changeStatus');
+		// REDIRECT URL
+		Route::get('sample/{id}', 'CompanyController@sample');
+	});
 	Route::group(['prefix' => 'master'],function(){
-		Route::resource('company', 'CompanyController');
-		Route::resource('country', 'CountryController');
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');
@@ -85,6 +91,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
+		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
+		// UPDATE SHCHEDULE
+		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
+		// DELETE SHCHEDULE
+		Route::get('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax');

@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li>
-                                    <a href="/master/province/create" class="btn bg-teal btn-block waves-effect">Add Province</a>
+                                    <a href="/master/province/create" class="btn bg-teal btn-block waves-effect">Add New Province</a>
                                 </li>
                             </ul>
                         </div>

@@ -42,9 +42,9 @@
 			        <div class="row clearfix">
 			        	<div class="col-md-12">
 					        @if(isset($data))
-						        {{ Form::model($data, ['route' => ['tour-guide.update', $data->id], 'method'=>'PUT','class'=>'form-horizontal','enctype' =>'multipart/form-data','id'=>'form_advanced_validation']) }}
+						        {{ Form::model($data, ['route' => ['tour-guide.update', $data->id], 'method'=>'PUT','class'=>'form-horizontal','enctype' =>'multipart/form-data','id'=>'tour_guide']) }}
 						    @else
-						        {{ Form::open(['route'=>'tour-guide.store', 'method'=>'POST','id'=>'form_advanced_validation','class'=>'form-horizontal','enctype' =>'multipart/form-data']) }}
+						        {{ Form::open(['route'=>'tour-guide.store', 'method'=>'POST','id'=>'tour_guide','class'=>'form-horizontal','enctype' =>'multipart/form-data']) }}
 						    @endif
 						    	<h4 class="dd-title">
 						    		Personal Information
@@ -53,7 +53,7 @@
 							    	<div class="col-md-12">
 								    	<div class="col-md-3">
 								    		<div class="dd-avatar">
-								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : ''}}" class="img-responsive" id="img-avtr">
+								    			<img src="{{!empty($data->avatar) ? cdn($data->avatar) : 'http://via.placeholder.com/300x400'}}" class="img-responsive" style="width: 100%" id="img-avtr">
 								    		</div>
 								    		<input name="image_resize" type="text" value="" hidden>
 								    		<a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Profile Picture</a>
@@ -69,6 +69,7 @@
 									                <option value="">--Select Company--</option>
 									                @endif
 					                            </select>
+					                            <label class="error error-company_id"></label>
 								            </div>
 								            <div class="row clearfix">
 									            <div class="col-md-2">
@@ -80,7 +81,7 @@
 									            <div class="col-md-10">
 										            <div class="form-group m-b-20">
 										                <label>Full Name(*)</label>
-										                 {{ Form::text('fullname', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'fullname','required'=>'required']) }}
+										                 {{ Form::text('fullname', null, ['class' => 'form-control','id'=>'fullname','required'=>'required']) }}
 										            </div>
 									            </div>
 								            </div>
@@ -88,19 +89,20 @@
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 										                <label>Age(*)</label>
-										                 {{ Form::text('age', null, ['class' => 'form-control','placeholder'=>'Please Enter Age','id'=>'age','required'=>'required']) }}
+										                 {{ Form::text('age', null, ['class' => 'form-control','id'=>'age','required'=>'required']) }}
 										            </div>
 									            </div>
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 										                <label>Nationality(*)</label>
-											                 <select name="nationality" class="form-control" id="nationality">
+											            <select name="nationality" class="form-control" id="nationality" required>
 							                                @if(!empty($data->nationality))
 											                <option value="{{$data->country_id}}" selected="selected">{{$data->nationality}}</option>
 											                @else
-											                <option>--Select Nationality--</option>
+											                <option value="">--Select Nationality--</option>
 											                @endif
 							                            </select>
+							                            <label class="error error-nationality"></label>
 										            </div>
 									            </div>
 									        </div>
@@ -108,15 +110,17 @@
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 										                <label>Email(*)</label>
-										                 {{ Form::text('email', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Email','id'=>'email','required'=>'required']) }}
+										                 {{ Form::text('email', null, ['class' => 'form-control','id'=>'email','required'=>'required']) }}
 										            </div>
 									            </div>
 									            <div class="col-md-6">
 									            	<div class="form-group m-b-20">
 			                                            <label>Phone(*)</label>
 			                                            <input type="hidden" class="form-control" id="format" name="format">	
-			                                            <input type="tel" class="form-control" name="phone" required>	
+			                                            <input type="tel" id="phone" class="form-control" name="phone"  data-old="@if(!empty(old('phone'))){{old('format').'-'.old('phone')}} @elseif(!empty($data)){{$data->phone}}@endif" required>
+			                                            <label id="error-phone"></label>
 			                                        </div>
+
 									            </div>
 									        </div>
 							        		
@@ -133,7 +137,7 @@
 		                                </div>
 		                                <div class="col-md-3">
 		                                    <div class="form-group">
-		                                        {{ Form::text('experience_year', null, ['class' => 'form-control','placeholder'=>'Please Enter Personal Experience','id'=>'personal_experience','required'=>'required']) }}
+		                                        {{ Form::text('experience_year', null, ['class' => 'form-control','id'=>'personal_experience','required'=>'required']) }}
 		                                    </div>
 		                                </div>
 		                                <div class="col-md-6">
@@ -148,11 +152,11 @@
 		                                </div>
 		                                <div class="col-md-3">
 		                                    <div class="form-group">
-		                                        <select name="language" class="form-control" id="language" >
+		                                        <select name="language" class="form-control" id="language" required>
 		                                        
-		                                        	<option>--Select Language--</option>
+		                                        	<option value="">--Select Language--</option>
 					                            @foreach($languages as $language)
-									                <option @if(!empty($data->language)) @if($language->name === $data->language) selected @endif @endif>{{$language->name}}</option>
+									                <option @if(!empty($data->language)) @if($language->name === $data->language) selected @endif @elseif(old('language') === $language->name) selected @endif>{{$language->name}}</option>
 									            @endforeach
 					                            </select>
 		                                    </div>
@@ -164,16 +168,18 @@
 		                                <div class="col-md-3 form-control-label label-desc">
 		                                    <label for="coverage">Area of Coverage(*)</label>
 		                                    <p>
-		                                    <small>(Please add minimum 1 city)</small>
+		                                    <small>(Please add minimum 1 province)</small>
 		                                    </p>
 		                                </div>
+		                                
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
-		                                        <select id="coverage" name="coverage[]" multiple="multiple" style="width: 100%">
+		                                        <select id="coverage" name="coverage[]"  class="form-control" multiple="multiple" style="width: 100%" required>
 		                                        @if(!empty($data))
-					                                @if(!empty($data->coverage))
-						                                @foreach($data->coverage as $coverage)
-										                <option value="{{$coverage->id}}" selected="selected">{{$coverage->name}}</option>
+					                                @if(!empty(count($data->coverage)))
+						                                @foreach($data->coverage as $cover)
+
+										                <option value="{{$cover->id}}" selected="selected">{{$cover->name}}</option>
 										                @endforeach
 									                @else
 									                <option value="">--Select Coverage--</option>
@@ -181,7 +187,13 @@
 									            @else
 									            	 <option value="">--Select Coverage--</option>
 									            @endif
+									            @if(!empty(old('coverage')) && empty($data))
+									            	@foreach(old('coverage') as $cov)
+									            		<option value="{{$cov->id}}" selected="selected">{{$cov->name}}</option>
+									            	@endforeach
+									            @endif
 					                            </select>
+					                            <label id="error-coverage"></label>
 		                                    </div>
 		                                </div>
 		                        	</div>
@@ -191,20 +203,37 @@
 		                                <div class="col-md-3 form-control-label">
 		                                    <label for="personal_experience">Do you have Guide License?</label>
 		                                </div>
-
+		                                
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
-		                                        <input name="license" type="radio" value="yes" id="license_yes" @if(!empty($data)) @if(!empty($data->guide_license))
-		                                        	checked=""
-		                                        @endif @else checked="" @endif>
+		                                        <input name="license" type="radio" class="license" value="yes" id="license_yes"  
+		                                        @if(!empty($data))
+				                                	@if(!empty($data->guide_license))
+				                                		checked	
+				                                	@endif
+				                                @else
+				                                	@if(old('license') == 'yes')
+				                                		checked
+				                                	@endif
+				                                @endif
+				                                @if(empty(old('license')) && empty($data))
+				                                		checked
+				                                @endif>
 		                                        <label for="license_yes">Yes</label>
-		                                        <input name="license" type="radio" id="license_no" value="no" @if(!empty($data))@if(empty($data->guide_license))
-		                                        	checked=""
-		                                        @endif  @endif>
+		                                        <input name="license" type="radio" class="license" id="license_no" value="no" 
+		                                        @if(!empty($data))
+				                                	@if(empty($data->guide_license))
+				                                		checked	
+				                                	@endif
+				                                @else
+				                                	@if(old('license') == 'no')
+				                                		checked
+				                                	@endif
+				                                @endif>
 		                                        <label for="license_no">No License</label>
 		                                    </div>
 		                                    <div class="form-group" id="parent_license" >
-		                                    	{{ Form::text('guide_license', null, ['class' => 'form-control','placeholder'=>'Please Enter License Number','id'=>'guide_license']) }}
+		                                    	{{ Form::text('guide_license', null, ['class' => 'form-control','placeholder'=>'Please Enter License Number','id'=>'guide_license','required' => 'required']) }}
 		                                    </div>
 		                                </div>
 		                        	</div>
@@ -216,17 +245,34 @@
 		                                </div>
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
-		                                        <input name="association" type="radio" id="association_yes" value="yes" @if(!empty($data)) @if(!empty($data->guide_association))
-		                                        	checked=""
-		                                        @endif @else checked="" @endif>
+		                                        <input name="association" type="radio" id="association_yes" value="yes" class="association" 
+		                                        @if(!empty($data))
+				                                	@if(!empty($data->guide_association))
+				                                		checked	
+				                                	@endif
+				                                @else
+				                                	@if(old('association') == 'yes')
+				                                		checked
+				                                	@endif
+				                                @endif
+				                                @if(empty(old('association')) && empty($data))
+				                                		checked
+				                                @endif>
 		                                        <label for="association_yes">Yes</label>
-		                                        <input name="association" type="radio" id="association_no" value="no" @if(!empty($data))@if(empty($data->guide_association))
-		                                        	checked=""
-		                                        @endif @endif>
+		                                        <input name="association" type="radio" id="association_no" value="no" class="association"
+		                                        @if(!empty($data))
+				                                	@if(empty($data->guide_association))
+				                                		checked	
+				                                	@endif
+				                                @else
+				                                	@if(old('association') == 'no')
+				                                		checked
+				                                	@endif
+				                                @endif>
 		                                        <label for="association_no">No License</label>
 		                                    </div>
 		                                    <div class="form-group" id="parent_association">
-		                                    	{{ Form::text('guide_association', null, ['class' => 'form-control','placeholder'=>'Please Enter Registration Number','id'=>'guide_association']) }}
+		                                    	{{ Form::text('guide_association', null, ['class' => 'form-control','id'=>'guide_association','required' => 'required']) }}
 		                                    </div>
 		                                </div>
 		                        	</div>
@@ -240,7 +286,7 @@
 		                                <div class="col-md-5">
 		                                    <div class="form-group">
 		                                        <div class="switch" style="margin-top:7px">
-				                                    <label>{{Form::checkbox('status',(!empty($data) ? (!empty($data->status) ? 1 : 0 ) : 0),(!empty($data) ? (!empty($data->status) ? true : false) : (empty($data->status) ? true : false)))}}<span class="lever"></span></label>
+				                                    <label>{{Form::checkbox('status',(!empty($data) ? $data->status : null))}}<span class="lever"></span></label>
 				                                </div>
 		                                    </div>
 		                                </div>
@@ -252,11 +298,12 @@
 		                                    <label for="service">What kind of service do you offer?(*)</label>
 		                                </div>
 		                                <div class="col-md-5 ">
+		                                	<label class="error-services"></label>
 		                                	@foreach($services as $service)
 			                                	<div class="row">
 				                                	<div class="col-md-12 srvcs-catch">
 					                                    <input type="checkbox" id="basic_checkbox_{{$service->id}}" class="service-detail" data-id="{{$service->id}}" data-name="{{$service->name}}" data-value1="" data-value2="" name="services[]" value="{{$service->id}}">
-					                                    <label for="basic_checkbox_{{$service->id}}">{{$service->name}}</label>
+					                                    <label for="basic_checkbox_{{$service->id}}" id="name_service_{{$service->id}}">{{$service->name}}</label>
 				                                    </div>
 			                                    </div>
 		                                    @endforeach
@@ -266,12 +313,7 @@
                             	<div class="row clearfix">
                             		<div class="col-md-12 s-detail">
                             		@if(!empty($data->price))
-                            			<h4 class="dd-title">
-								    		Service Details
-								    	</h4>
-
 								    	@foreach($data->price as $price)
-
 								    	<div id="service_dt_{{$price->tour_guide_service_id}}" data-id ="{{$price->tour_guide_service_id}}" class="data-price">
 									    	<h4 class="dd-title">
 									    		{{$price->service_name}}
@@ -279,7 +321,7 @@
 									    	<div class="row clearfix">
 									    		<div class="col-md-12 m-b-20-i">
 					                                <div class="col-md-3 form-control-label label-desc">
-					                                    <label for="service_1_{{$price->tour_guide_service_id}}">Rate per day:</label>
+					                                    <label for="service_1_{{$price->tour_guide_service_id}}">Rate per day(*):</label>
 					                                    <p>
 					                                    <small>(Group size 1-9 people)</small>
 					                                    </p>
@@ -288,7 +330,7 @@
 					                                	<div class="input-group input-group-sm">
 					                                        <span class="input-group-addon">Rp</span>
 					                                        <div class="form-line">
-					                                            <input type="text" name="rate_per_day_{{$price->tour_guide_service_id}}" value="{{(int)$price->rate_per_day}}" class="form-control" required ">
+					                                            <input type="text" name="rate_per_day_{{$price->tour_guide_service_id}}" value="{{number_format((int)$price->rate_per_day)}}" class="form-control money-format" required ">
 					                                        </div>
 					                                        <span class="input-group-addon">per day.</span>
 					                                    </div>
@@ -296,7 +338,7 @@
 					                            </div>
 					                            <div class="col-md-12 m-b-20-i">
 					                                <div class="col-md-3 form-control-label label-desc">
-					                                    <label for="service_2_{{$price->tour_guide_service_id}}">Rate per day:</label>
+					                                    <label for="service_2_{{$price->tour_guide_service_id}}">Rate per day(*):</label>
 					                                    <p>
 					                                    <small>(Group size 10 people and over)</small>
 					                                    </p>
@@ -305,7 +347,7 @@
 					                                	<div class="input-group input-group-sm">
 					                                        <span class="input-group-addon">Rp</span>
 					                                        <div class="form-line">
-					                                            <input type="text" name="rate_per_day2_{{$price->tour_guide_service_id}}" class="form-control" value="{{(int)$price->rate_per_day2}}" required>
+					                                            <input type="text" name="rate_per_day2_{{$price->tour_guide_service_id}}" class="form-control money-format" value="{{number_format((int)$price->rate_per_day2)}}" required>
 					                                        </div>
 					                                        <span class="input-group-addon">per day.</span>
 					                                     
@@ -315,6 +357,53 @@
 					                        	</div>
 									    	</div>
 									    </div>
+								    	@endforeach
+								    @endif
+								    @if(!empty(old('services')))
+								    	@foreach(old('services') as $id)
+								    		<div id="service_dt_{{$id}}" data-id ="{{$id}}" class="data-price">
+										    	<h4 class="dd-title">
+										    		Service_1
+										    	</h4>
+										    	<div class="row clearfix">
+										    		<div class="col-md-12 m-b-20-i">
+						                                <div class="col-md-3 form-control-label label-desc">
+						                                    <label for="service_1_{{$id}}">Rate per day(*):</label>
+						                                    <p>
+						                                    <small>(Group size 1-9 people)</small>
+						                                    </p>
+						                                </div>
+						                                <div class="col-md-3">
+						                                	<div class="input-group input-group-sm">
+						                                        <span class="input-group-addon">Rp</span>
+						                                        <div class="form-line">
+						                                            <input type="text" name="rate_per_day_{{$id}}" value="{{old('rate_per_day_'.$id)}}" class="form-control money-format" required ">
+						                                        </div>
+						                                        <span class="input-group-addon">per day.</span>
+						                                    </div>
+						                                </div>
+						                            </div>
+						                            <div class="col-md-12 m-b-20-i">
+						                                <div class="col-md-3 form-control-label label-desc">
+						                                    <label for="service_2_{{$id}}">Rate per day(*):</label>
+						                                    <p>
+						                                    <small>(Group size 10 people and over)</small>
+						                                    </p>
+						                                </div>
+						                                <div class="col-md-3">
+						                                	<div class="input-group input-group-sm">
+						                                        <span class="input-group-addon">Rp</span>
+						                                        <div class="form-line">
+						                                            <input type="text" name="rate_per_day2_{{$id}}" class="form-control money-format" value="{{old('rate_per_day2_'.$id)}}" required>
+						                                        </div>
+						                                        <span class="input-group-addon">per day.</span>
+						                                     
+						                                    </div>
+
+						                                </div>
+						                        	</div>
+										    	</div>
+										    </div>
 								    	@endforeach
 								    @endif
                             		</div>
@@ -410,26 +499,123 @@
 <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
 <script type="text/javascript">
 $( window ).on( "load", function() {
+	@if(!empty(old('company_id')))
+        $.ajax({
+            type: "GET",
+            data: {"id": {{old('company_id')}} },
+            url: '/json/company',
+            success: function(result) {
+                if(result.code == 200){
+                    $("#company_id").select2("trigger", "select", {
+                        data: { id: result.data[0].id,name: result.data[0].name }
+                    });
+                }
+            }
+        });
+    @endif
+    @if(!empty(old('nationality')))
+        $.ajax({
+            type: "GET",
+            data: {"id": {{old('nationality')}} },
+            url: '/json/country',
+            success: function(result) {
+                if(result.code == 200){
+                    $("#nationality").select2("trigger", "select", {
+                        data: { id: result.data[0].id,name: result.data[0].name }
+                    });
+                }
+            }
+        });
+    @endif
 	if ($('#association_no').is(':checked')) {
 		$('#parent_association').slideUp();
 	}
+
 	if ($('#license_no').is(':checked')) {
 		$('#parent_license').slideUp();
 	}
 	$(".data-price").each(function(index) {
     	$('#basic_checkbox_'+$(this).attr('data-id')).attr('checked', true);
     	$( "#basic_checkbox_"+$(this).attr('data-id') ).addClass( "on" );
+    	$(this).children('.dd-title').text($('#name_service_'+$(this).attr('data-id')).text());
     });
-    @if(!empty($data->phone))
-    var dbphone = "{{$data->phone}}";
-    var dbformat = dbphone.split("-");
-    $("input[name='format']").val(dbformat[0]);
-    $("input[name='phone']").val(dbformat[1]+'-'+dbformat[2]+'-'+dbformat[3]).intlTelInput({
-        separateDialCode: true,
-    });
-    @endif
+    var dbphone = $('input[name="phone"]').attr('data-old');
+    if(dbphone != ""){
+        var dbformat = dbphone.split("-");
+        var pic_phone = "";
+        $(dbformat).each(function(index,value) {
+            if(index == 1){
+                pic_phone = value;
+            }
+            else if(index > 1){
+                pic_phone = pic_phone+'-'+value;
+            }
+
+        });
+        $("input[name='format']").val(dbformat[0]);
+        $("input[name='phone']").val(pic_phone).intlTelInput({
+            separateDialCode: true,
+        });
+    }
+    
 });
 $(document).ready(function () {
+	$( "#tour_guide" ).validate({
+      rules: {
+      	email:{
+      		email:true
+      	},
+        age: {
+          number: true,
+          maxlength:100
+        },
+        rate_per_day2_: {
+          number: true
+        },
+        rate_per_day: {
+          number: true
+        },
+        experience_year:{
+        	number:true
+        },
+        nationality:{
+        	required:true
+        },
+        'services[]':{
+        	required:true
+        }
+      },
+      messages: {
+            'services[]': {
+                required: "You must check at least 1 box",
+                maxlength: "Check no more than {0} boxes"
+            }
+        },
+        errorPlacement: function(error, element) {
+        	
+        	if(element.attr('name') == 'phone'){
+        		error.insertAfter('.intl-tel-input');
+        	}
+        	else if(element.attr('name') == 'nationality'){
+        		error.insertAfter('.error-nationality');
+        	}
+        	else if(element.attr('name') == 'company_id'){
+        		error.insertAfter('.error-company_id');
+        	}
+        	else if(element.attr('name') == 'nationality'){
+        		error.insertAfter('.error-company_id');
+        	}
+        	else if(element.attr('name') == 'coverage[]'){
+        		error.insertAfter('#error-coverage');
+        	}
+        	else if(element.attr('name') == 'services[]'){
+        		error.insertAfter('.error-services');
+        	}else{
+		  	error.insertAfter(element);
+		  	}
+		}
+    });
+
 
 	window.addEventListener('DOMContentLoaded', function () {
 	    var image = document.getElementById('crop-image');
@@ -505,14 +691,14 @@ $(document).ready(function () {
 						    	'<div class="row clearfix">'+
 						    		'<div class="col-md-12 m-b-20-i">'+
 		                                '<div class="col-md-3 form-control-label label-desc">'+
-		                                    '<label for="service_1_">Rate per day:</label>'+
+		                                    '<label for="service_1_">Rate per day(*):</label>'+
 		                                    '<p><small>(Group size 1-9 people)</small></p>'+
 		                                '</div>'+
 		                                '<div class="col-md-3">'+
 		                                	'<div class="input-group input-group-sm">'+
 		                                        '<span class="input-group-addon">Rp</span>'+
 		                                        '<div class="form-line">'+
-		                                            '<input type="text" class="form-control" name="rate_per_day_'+$(this).attr('data-id')+'" required>'+
+		                                            '<input type="text" class="form-control money-format" name="rate_per_day_'+$(this).attr('data-id')+'" required>'+
 		                                        '</div>'+
 		                                        '<span class="input-group-addon">per day.</span>'+
 		                                    '</div>'+
@@ -520,14 +706,14 @@ $(document).ready(function () {
 		                            '</div>'+
 		                            '<div class="col-md-12 m-b-20-i">'+
 		                                '<div class="col-md-3 form-control-label label-desc">'+
-		                                    '<label for="service_'+$(this).attr('data-id')+'">Rate per day:</label>'+
+		                                    '<label for="service_'+$(this).attr('data-id')+'">Rate per day(*):</label>'+
 		                                    '<p><small>(Group size 10 people and over)</small></p>'+
 		                                '</div>'+
 		                                '<div class="col-md-3">'+
 		                                	'<div class="input-group input-group-sm">'+
 		                                        '<span class="input-group-addon">Rp</span>'+
 		                                        '<div class="form-line">'+
-		                                            '<input type="text" class="form-control" name="rate_per_day2_'+$(this).attr('data-id')+'" required>'+
+		                                            '<input type="text" class="form-control money-format" name="rate_per_day2_'+$(this).attr('data-id')+'" required>'+
 		                                        '</div>'+
 		                                        '<span class="input-group-addon">per day.</span>'+
 		                                    '</div>'+
@@ -543,22 +729,29 @@ $(document).ready(function () {
 	});
 
 	$("input[name='phone']").mask('000-0000-00000');
+	$("input[name='experience_year']").mask('00');
+	$("input[name='age']").mask('00');
 	$("#format").val("+62");
 	$("input[name='phone']").val("+62").intlTelInput({
 		separateDialCode: true,
 	});
 	$('#license_yes').click(function(e){
+		$('input[name="guide_license"]').attr('required','required');
 		$('#parent_license').slideDown();
 		$('#guide_license').val('');
 	});
 	$('#license_no').click(function(e){
+
+		$('input[name="guide_license"]').removeAttr('required');
 		$('#parent_license').slideUp();
 	});
 	$('#association_yes').click(function(e){
+		$('input[name="guide_association"]').attr('required','required');
 		$('#parent_association').slideDown();
 		$('#guide_association').val('');
 	});
 	$('#association_no').click(function(e){
+		$('input[name="guide_association"]').removeAttr('required');
 		$('#parent_association').slideUp();
 	});
 	$('input[name="status"]').change(function(){
@@ -568,11 +761,22 @@ $(document).ready(function () {
 			$(this).val(0);
 		}
 	});
+	$('.money-format').change(function(){
+		$(this).mask("#,##0", {reverse: true});
+	});
 	$(function(){
+		@if(!empty($data->phone))
+	    var dbphone = "{{$data->phone}}";
+	    var dbformat = dbphone.split("-");
+	    $("input[name='format']").val(dbformat[0]);
+	    $("input[name='phone']").val(dbformat[1]+'-'+dbformat[2]+'-'+dbformat[3]).intlTelInput({
+	        separateDialCode: true,
+	    });
+	    @endif
 		
 		$("#coverage").select2({
 	            ajax: {
-	                url: "/json/city",
+	                url: "/json/province",
 	                dataType: 'json',
 	                delay: 250,
 	                data: function (params) {
@@ -663,38 +867,6 @@ $(document).ready(function () {
               templateResult: formatRepo, // omitted for brevity, see the source of this page
               templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
         });
-        // $("#language").select2({
-        //     ajax: {
-        //         url: "/json/language",
-        //         dataType: 'json',
-        //         delay: 250,
-        //         data: function (params) {
-        //           return {
-        //             name: params.term, // search term
-        //             page: params.page,
-        //             value: true
-        //           };
-        //         },
-        //         processResults: function (data, params) {
-        //           // parse the results into the format expected by Select2
-        //           // since we are using custom formatting functions we do not need to
-        //           // alter the remote JSON data, except to indicate that infinite
-        //           // scrolling can be used
-        //           params.page = params.page || 1;
-        //           return {
-        //             results: data.data,
-        //             pagination: {
-        //               more: (params.page * 30) < data.total_count
-        //             }
-        //           };
-        //         },
-        //         cache: true
-        //       },
-        //       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-        //       minimumInputLength: 1,
-        //       templateResult: formatRepo, // omitted for brevity, see the source of this page
-        //       templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-        // });  
 	        function formatRepo (repo) {
 	              if (repo.loading) return repo.text;
 

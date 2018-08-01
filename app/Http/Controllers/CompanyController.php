@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Models\Tour;
 use App\Models\Supplier;
 use App\Models\SupplierRole;
 use App\Models\Province;
+use App\Models\CompanyStatusLog;
 use Datatables;
+use App\Mail\StatusCompany;
 use Validator;
 use Helpers;
+use Mail;
 use DB;
 class CompanyController extends Controller
 {
@@ -25,17 +29,41 @@ class CompanyController extends Controller
             $model = Company::query();
             return Datatables::eloquent($model)
             ->addColumn('action', function(Company $data) {
-                return '<a href="/master/company/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/company/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/company/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
+            ->editColumn('status', function (Company $data){
+                return view('company.status',['data' => $data]);
+            })
+            ->rawColumns(['status','action'])
             ->make(true);        
         }
         return view('company.index');
+    }
+
+    public function registrationList(Request $request){
+        if($request->ajax())
+        {
+            $model = Company::where('status',1);
+            return Datatables::eloquent($model)
+            ->addColumn('action', function(Company $data) {
+                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-success  waves-effect waves-circle waves-float">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>';
+            })
+            ->editColumn('id', 'ID: {{$id}}')
+            ->editColumn('status', function (Company $data){
+                return view('company.status',['data' => $data]);
+            })
+            ->rawColumns(['status','action'])
+            ->make(true);        
+        }
+        return view('company.registration-list');
     }
 
     /**
@@ -157,6 +185,11 @@ class CompanyController extends Controller
                     'role_id'=> $request->role,
                     'company_id' => $company->id,
                     'password' => '-']);
+        $companyStatusLog = CompanyStatusLog::create([
+            'company_id' => $company->id,
+            'status' => 1,
+            'note' => 'awaiting submit product, this company input from super admin' 
+        ]);
 
         DB::commit();
         } catch (Exception $e) {
@@ -164,7 +197,8 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        return redirect('master/company');
+        
+        return redirect('partner');
     }
 
     /**
@@ -192,6 +226,8 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
+        session()->forget('condition');
+        session()->forget('company');
         $roles = SupplierRole::pluck('name','id');
         $province = Province::all();
         $company = Company::where('id',$id)->first();
@@ -231,7 +267,7 @@ class CompanyController extends Controller
         // Check if it fails //
         if( $validation->fails() ){
             return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
+            ->with('errors', $validation->errors());
         }
         DB::beginTransaction();
         try {
@@ -248,7 +284,6 @@ class CompanyController extends Controller
             'bank_account_title'=> $request->bank_account_title,
             'bank_account_name' => $request->bank_account_name,
             'company_ownership' => $request->company_ownership,
-            'status'=> 1,
             // 
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
@@ -317,6 +352,7 @@ class CompanyController extends Controller
                     'phone'=> $request->format.'-'.$request->phone,
                     'email'=> $request->email,
                     'password' => '-']);
+        
 
         DB::commit();
         } catch (Exception $e) {
@@ -324,7 +360,8 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        return redirect('master/company');
+        return redirect()->back();
+        // return redirect('partner');
     }
 
     /**
@@ -351,6 +388,44 @@ class CompanyController extends Controller
          }
     }
 
+    public function changeStatus(Request $request,$id)
+    {
+        $status = $request->input('status');
+        $note = $request->input('note');
+        $validation = Validator::make($request->all(), [
+            'status' => 'required'
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        DB::beginTransaction();
+         try{
+            session()->forget('condition');
+            session()->forget('company');
+            $data = Company::find($id);
+            $data->status = $status;
+            // dd($data->save());
+             if($data->save()){
+                $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                // dd($status);
+                $data->note = $note;
+                Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                DB::commit();
+                return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
+             }else{
+                 return redirect('partner/'.$id.'/edit')->with('message','Change Status Failed');
+             }
+         }catch (\Exception $exception){
+            dd($exception);
+             DB::rollBack();
+             \Log::info($exception->getMessage());
+             return redirect('partner/'.$id.'/edit')->with('error',$exception->getMessage());
+         }
+        
+    }
+
     public function json(Request $request)
     {
         $data  =  new Company();
@@ -366,5 +441,19 @@ class CompanyController extends Controller
         }
         $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
         return $this->sendResponse($data, "Company retrieved successfully", 200);
+    }
+
+    //
+    public function sample($id){
+        $company = Company::with('log_statuses')->where('id',$id)->first();
+        $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
+        session()->put('condition', 'kuration');
+        session()->put('company', $company);
+        if($product != null ){
+            return redirect('/product/tour-activity/'.$product->id.'/edit');
+        }else{
+            return redirect()->back();
+        }
+        
     }
 }

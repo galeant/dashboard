@@ -24,8 +24,8 @@
 @section('main-content')
     <div class="block-header">
         <h2>
-            Detail Company
-            <small>Master Data / Company</small>
+            Detail Partners
+            <small>Data / Partners</small>
         </h2>
     </div>
     <div class="row clearfix">
@@ -34,18 +34,24 @@
                 <div class="header">
                     <div class="row">
                         <div class="col-md-3" style="margin-top:10px">
-                            <h2>Detail Company</h2>
+                            <h2>Detail Partners</h2>
                         </div>
-                        <div class="col-md-1 col-md-offset-8">
-                            <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
+                        <ul class="header-dropdown m-r--5">
+                            <li >
+                                <button style="display: none" type="button" id="sample"class="btn btn-default waves-effect m-r-20" >Sample</button>
+                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Status</button>
+                            </li>
+                            <li>
+                                <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
                                 <i class="material-icons">settings</i>
                             </button>
-                        </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <div class="body">
                 @include('errors.error_notification')
-                {{ Form::open(['route'=>['company.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
+                {{ Form::open(['route'=>['partner.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
@@ -436,6 +442,82 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <form method="POST" action="{{ url('partner/'.$company->id.'/change/status') }}" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-header">
+                    <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="modal-title" id="defaultModalLabel">Status</h4>
+                    </div>
+                    <div class="col-md-6">
+                        <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
+                    </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped log-status-list">
+                        <tbody>
+                            @if(!empty($company->log_statuses))
+                            @foreach($company->log_statuses as $test)
+                            
+                            <tr>
+                                <td>
+                                    @if($test->status == 0)
+                                    <span class="badge bg-purple">Not Verified</span>
+                                    @elseif($test->status ==1)
+                                    <span class="badge bg-blue">Awaiting Submission</span>
+                                    @elseif($test->status ==2)
+                                    <span class="badge bg-cyan">Awaiting Moderation</span>
+                                    @elseif($test->status ==3)
+                                    <span class="badge bg-pink">Insufficient Data</span>
+                                    @elseif($test->status ==4)
+                                    <span class="badge bg-red">Rejected</span>
+                                    @elseif($test->status ==5)
+                                    <span class="badge bg-green">Active</span>
+                                    @else
+                                    <span class="badge bg-red">Disbaled</span>
+                                    @endif
+                                </td>
+                                <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
+                                <td>{{$test->note}}</td>
+                            </tr>
+                            @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                    <div class="change-status row clearfix" style="display: none">
+                        <div class="col-md-12">
+                            <div class="valid-info">
+                                <h5>Status:</h5>
+                                <select class="form-control" name="status" required>
+                                    <option value="">-- Select Status --</option>
+                                    @foreach(Helpers::statusCompany() as $value => $status)
+                                        <option value="{{$value}}">{{$status}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="valid-info">
+                                <h5>Note:</h5>
+                                <textarea class="form-control" name="note" rows="6"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" style="display: none" class="btn btn-link waves-effect btn-save">SAVE CHANGES</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+
 @stop
 @section('head-js')
 @parent
@@ -615,13 +697,35 @@
                     $(this).closest("div#value").hide().siblings("div#input").show();
                 })
             // EDIT BUTTON
+                $('.modal-header').delegate('.btn-back','click', function(e){
+                    $(this).text('Change Status');
+                    $(this).removeClass('btn-back');
+                    $(this).addClass('btn-change-status');
+                    $('.change-status').hide();
+                    $('.btn-save').hide();
+                    $('.log-status-list').show();
+                });
+                
+                $('.modal-header').delegate('.btn-change-status','click', function(e){
+                    $(this).text('Back');
+                    $(this).removeClass('btn-change-status');
+                    $(this).addClass('btn-back');
+                    $('.change-status').show();
+                    $('.btn-save').show();
+                    $('.log-status-list').hide();
+                });
                 $("button#edit").click(function(){
                     $(this).hide()
+                    $("#sample").show();
+                    $("#change-status").show();
                     $("#submit").show();
                     $("input").removeAttr("disabled");
                     $("select").removeAttr("disabled");
                     $("textarea").removeAttr("disabled");
                     $("button#change").closest(".caption").show();
+                });
+                $("button#sample").click(function(){
+                    window.location.href="{{ url('partner/sample/'.$company->id) }}";
                 });
         });
     </script>

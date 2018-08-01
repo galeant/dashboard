@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/master/tour-guide-service/create" class="btn bg-teal btn-block waves-effect">Add Service</a>
+                                    <a href="/master/tour-guide-service/create" class="btn bg-teal btn-block waves-effect">Add New Tour Guide Service</a>
                                 </li>
                             </ul>
                         </div>
@@ -31,7 +31,7 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
+                                            <th>Tour Guide Service Name</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
                                             <th>Action</th>

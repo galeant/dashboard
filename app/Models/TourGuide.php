@@ -23,7 +23,7 @@ class TourGuide extends Model {
 
     public function coverage()
     {
-        return $this->belongsToMany('App\Models\City','tour_guide_coverages','tour_guide_id','city_id');
+        return $this->belongsToMany('App\Models\Province','tour_guide_coverages','tour_guide_id','province_id');
     }
     public function company()
     {

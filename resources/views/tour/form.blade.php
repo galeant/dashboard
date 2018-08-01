@@ -121,7 +121,7 @@
                                         {{ Form::text('meeting_point_address', null, ['class' => 'form-control','id'=>'meeting_point_address','required'=>'required']) }}
                                         </div>
                                         <div class="form-group m-b-20">
-                                            <label>Meeting Point Note</label>
+                                            <label>Meeting Point Notes</label>
                                             {{ Form::textArea('meeting_point_note', null, ['class' => 'form-control no-resize','rows'=>"4"]) }}
                                         </div>
                                         <div class="form-group m-b-20">
@@ -140,8 +140,8 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group ">
-                                            <label>Term & Condition</label>
-                                            {{ Form::textArea('term_condition', null, ['class' => 'form-control no-resize','rows'=>"4"]) }}
+                                            <label>Term & Condition(*)</label>
+                                            {{ Form::textArea('term_condition', null, ['class' => 'form-control no-resize','rows'=>"4","required"=>"required"]) }}
                                         </div>
                                     </div>
                                 </div>

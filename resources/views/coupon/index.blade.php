@@ -32,6 +32,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Code</th>
                                             <th>Type</th>
                                             <th>Value</th>
                                             <th>Start Date</th>
@@ -69,6 +70,7 @@
 	        columns: [
               {data: 'id'},
               {data: 'name'},
+              {data: 'code'},
               {data: 'type'},
               {data: 'discount_value'},
               {data: 'start_date'},
