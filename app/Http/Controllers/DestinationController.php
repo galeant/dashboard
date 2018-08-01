@@ -30,13 +30,18 @@ class DestinationController extends Controller
         $province = Province::all();
         if($request->ajax())
         {
-            $model = Destination::with('provinces', 'cities','destination_types')->get();
-            return Datatables::of($model)
+            $data = Destination::with('provinces', 'cities','destination_types')->get();
+            return Datatables::of($data)
                 // ->addColumn('status', function(Destination $data) {
                 //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
                 // })
                 ->addColumn('action', function(Destination $data) {
-                    return '<a href="destination/'.$data->id.'/edit"> View Detail </a>';
+                return '<a href="/master/destination/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a href="/master/destination/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>';
                 })
             ->make(true);        
         }
@@ -75,29 +80,32 @@ class DestinationController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
+       
+        if(!empty($request->image_resize)){
+            $destinationPath = public_path('img/temp/');
+            if( ! \File::isDirectory($destinationPath) ) 
+            {
+                File::makeDirectory($destinationPath, 0777, true , true);
+            }
+            $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+            $img = str_replace(' ', '+', $file);
+            $fileUpload = base64_decode($img);
+            $filename = date('ymdhis') . '_croppedImage' . ".".$request->avatar->getClientOriginalExtension();
+            $file = $destinationPath . $filename;
+            $success = file_put_contents($file, $fileUpload);
+            $bankPic = Helpers::saveImage($file,'destinations',true,[4,3]);
+            if($bankPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $request->request->add(['path'=> $bankPic['path'],'filename' => $bankPic['filename']]);
+            unlink($file);
+        }
         $data = $request->all();
         if($data['visit_hours']=="" || $data['visit_hours']==null){
             $data['visit_hours']=0;
         }
-        $cover = '';
-        if(!empty($request->avatar)){
-            $cover = Helpers::saveImage($request->avatar,'destination'/*Location*/);
-            if($cover instanceof  MessageBag){
-                return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
-            }
-        }
-        // if($request->hasFile('cover_image')){
-        //     $i = 0;
-        //     $fileName = 'cover_image_'.$i.'_';
-        //     $fileExt = $request->cover_image->getClientOriginalExtension();
-        //     $fileToSave = $fileName.time().'.'.$fileExt;
-        //     $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
-        // }
-        // $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
-        // return $cover['path'];
-        $data['path'] = $cover['path'];
-        $data['filename'] = $cover['filename'];
+        
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = new Destination;
         $destination->fill($data)->save();
@@ -219,34 +227,31 @@ class DestinationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data =$request->all();
-        // dd($data);
-        if($data['visit_hours']=="" || $data['visit_hours']==null){
-            $data['visit_hours']=0;
-        }
         
-        // if($request->has('cover_image')){
-        //     if($request->hasFile('cover_image')){
-        //         $i = 0;
-        //         $fileName = 'cover_image_'.$i.'_';
-        //         $fileExt = $request->cover_image->getClientOriginalExtension();
-        //         $fileToSave = $fileName.time().'.'.$fileExt;
-        //         $path = $request->cover_image->move('upload/destination/cover_image',$fileToSave);
-        //         $data['cover_image'] = 'upload/destination/cover_image/'.$fileToSave;
-        //     }
-        // }
-        $cover = '';
-        if(!empty($request->avatar)){
-            $cover = Helpers::saveImage($request->avatar,'destination'/*Location*/);
-            if($cover instanceof  MessageBag){
+        if(!empty($request->image_resize)){
+            $destinationPath = public_path('img/temp/');
+            if( ! \File::isDirectory($destinationPath) ) 
+            {
+                File::makeDirectory($destinationPath, 0777, true , true);
+            }
+            $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+            $img = str_replace(' ', '+', $file);
+            $fileUpload = base64_decode($img);
+            $filename = date('ymdhis') . '_croppedImage' . ".".$request->avatar->getClientOriginalExtension();
+            $file = $destinationPath . $filename;
+            $success = file_put_contents($file, $fileUpload);
+            $bankPic = Helpers::saveImage($file,'destinations',true,[4,3]);
+            if($bankPic instanceof  MessageBag){
                 return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
             }
-            $data['path'] = $cover['path'];
-            $data['filename'] = $cover['filename'];
+            $request->request->add(['path'=> $bankPic['path'],'filename' => $bankPic['filename']]);
+            unlink($file);
         }
-        
-        
+        $data =$request->all();
+        if($data['visit_hours']=="" || $data['visit_hours']==null){
+            $data['visit_hours']=0;
+        }
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = Destination::find($id);
         $destination->fill($data)->save();
@@ -329,9 +334,22 @@ class DestinationController extends Controller
      * @param  \App\Destination  $destination
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Destination $destination)
+    public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try{
+            $data = Destination::find($id);
+            if($data->delete()){
+                DB::commit();
+                return $this->sendResponse($data, "Delete Destination ".$data->name." successfully", 200);
+            }else{
+                return $this->sendResponse($data, "Error Database;", 200);
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return $this->sendResponse($data, $exception->getMessage() , 200);
+        }
     }
     public function find(Request $request){
         $datasearch = $request->all();

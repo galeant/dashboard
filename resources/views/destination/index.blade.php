@@ -71,7 +71,7 @@
                 <h2>All Place / Destination</h2>
             </div>
             <div class="body table-responsive">
-                <table class="table table-bordered table-striped table-hover dataTable" id="data-tables">
+                <table class="table table-bordered table-striped table-hover dataTable table-modif" id="data-tables">
                     <thead>
                         <tr>
                             <th>Destination Type</th>

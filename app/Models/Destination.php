@@ -9,6 +9,7 @@ class Destination extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'destination_name',
+        'description',
         'latitude',
         'longitude',
         'visit_hours',
