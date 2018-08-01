@@ -24,6 +24,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');
+		// REDIRECT URL
+		Route::get('sample/{id}', 'CompanyController@sample');
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('language', 'LanguageController');

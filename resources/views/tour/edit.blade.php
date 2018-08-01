@@ -37,15 +37,20 @@
                 <h2>Edit Tour Activity</h2>
                 <ul class="header-dropdown m-r--5">
                     <li>
-                        <!-- <button type="button" class="btn btn-default waves-effect m-r-20" data-toggle="modal" data-target="#largeModal">MODAL - LARGE SIZE</button> -->
-                        <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
+                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Kuration Status</button>
                     </li>
                     <li>
+                        <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
+                    </li>
+                    <li id="backProduct">
                         <a href="/product/tour-activity" class="btn btn-waves">Back</a>
+                    </li>
+                    <li id="backKuration">
+                        <a @if(session()->has('company')) href="{{ url('partner/'.session()->get('company')->id.'/edit') }}" @endif class="btn btn-waves">Back</a>
                     </li>
                 </ul>
             </div>
-            <div class="body">
+            <div class="body" id="content">
                 <div id="step">
                     @include('errors.error_notification')
                     <h3>General Information</h3>
@@ -735,18 +740,80 @@
 <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+        <form method="POST" 
+
+        @if(session()->has('company'))
+        action="{{ url('partner/'.session()->get('company')->id.'/change/status') }}" 
+        @endif
+        
+        enctype="multipart/form-data">
+            @csrf
             <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+                <div class="row">
+                <div class="col-md-6">
+                    <h4 class="modal-title" id="defaultModalLabel">Status</h4>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
+                </div>
+                </div>
             </div>
             <div class="modal-body">
-                <div class="img-container">
-                  <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                <table class="table table-striped log-status-list">
+                    <tbody>
+                        @if(!empty(session()->get('company')->log_statuses))
+                        @foreach(session()->get('company')->log_statuses as $test)
+                        
+                        <tr>
+                            <td>
+                                @if($test->status == 0)
+                                <span class="badge bg-purple">Not Verified</span>
+                                @elseif($test->status ==1)
+                                <span class="badge bg-blue">Awaiting Submission</span>
+                                @elseif($test->status ==2)
+                                <span class="badge bg-cyan">Awaiting Moderation</span>
+                                @elseif($test->status ==3)
+                                <span class="badge bg-pink">Insufficient Data</span>
+                                @elseif($test->status ==4)
+                                <span class="badge bg-red">Rejected</span>
+                                @elseif($test->status ==5)
+                                <span class="badge bg-green">Active</span>
+                                @else
+                                <span class="badge bg-red">Disbaled</span>
+                                @endif
+                            </td>
+                            <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
+                            <td>{{$test->note}}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                <div class="change-status row clearfix" style="display: none">
+                    <div class="col-md-12">
+                        <div class="valid-info">
+                            <h5>Status:</h5>
+                            <select class="form-control" name="status" required>
+                                <option value="">-- Select Status --</option>
+                                @foreach(Helpers::statusCompany() as $value => $status)
+                                    <option value="{{$value}}">{{$status}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="valid-info">
+                            <h5>Note:</h5>
+                            <textarea class="form-control" name="note" rows="6"></textarea>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
-                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+                <button type="submit" style="display: none" class="btn btn-link waves-effect btn-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -1329,6 +1396,46 @@
                 }
             });
         });
+         // EDIT BUTTON
+         $('.modal-header').delegate('.btn-back','click', function(e){
+            $(this).text('Change Status');
+            $(this).removeClass('btn-back');
+            $(this).addClass('btn-change-status');
+            $('.change-status').hide();
+            $('.btn-save').hide();
+            $('.log-status-list').show();
+        });
+        
+        $('.modal-header').delegate('.btn-change-status','click', function(e){
+            $(this).text('Back');
+            $(this).removeClass('btn-change-status');
+            $(this).addClass('btn-back');
+            $('.change-status').show();
+            $('.btn-save').show();
+            $('.log-status-list').hide();
+        });
+        $("button#edit").click(function(){
+            $(this).hide()
+            $("#sample").show();
+            $("#change-status").show();
+            $("#submit").show();
+            $("input").removeAttr("disabled");
+            $("select").removeAttr("disabled");
+            $("textarea").removeAttr("disabled");
+            $("button#change").closest(".caption").show();
+        });
+        var condition = "{{session()->get('condition')}}";
+        if(condition == null || condition == ''){
+            $("button#change-status").closest("li").remove();
+            $("li#backKuration").remove();
+        }else{
+            $("li#backProduct").remove();
+            $("#leftsidebar").find("li").each(function(){
+                $(this).find("a").css("pointer-events","none");
+            });
+            $("div.navbar-header a").css("pointer-events","none");
+        }
+        
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop
