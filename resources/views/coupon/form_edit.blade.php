@@ -39,13 +39,24 @@
                                              <input value="{{$data->quantity_per_use}}" required type="number" name="quantity_per_use" class="form-control" placeholder="Maximum Discount" />
                                           </div>
                                       </div>
-                                      <div class="form-group">
-                                        <h2 class="card-inside-title">Discount Type</h2>
-                                        <select name="type" class="form-control show-tick" required>
-                                            <option value="" selected>Please select</option>
-                                            <option @if($data->type == 'amount'){ selected } @endif value="amount">Amount</option>
-                                            <option @if($data->type == 'percentage'){ selected } @endif value="percentage">Percentage</option>
-                                        </select>
+                                      <div class="form-group row">
+                                        <div class="col-md-6">
+                                          <h2 class="card-inside-title">Discount Type</h2>
+                                          <select name="type" class="form-control show-tick coupon_type" required>
+                                              <option value="" selected>Please select</option>
+                                              <option @if($data->type == 'amount'){ selected } @endif value="amount">Amount</option>
+                                              <option @if($data->type == 'percentage'){ selected } @endif value="percentage">Percentage</option>
+                                          </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                          <h2 class="card-inside-title">Product Type</h2>
+                                          <select name="product_type" class="form-control" required>
+                                                  <option @if($data->product_type == 0){ selected } @endif value="0" selected>All</option>
+                                                @foreach($product_type as $type)
+                                                  <option @if($data->product_type == $type['id']){ selected } @endif value="{{$type['id']}}">{{$type['name']}}</option>
+                                                @endforeach
+                                          </select>
+                                        </div>
                                       </div>
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Coupon Name / Program Name</h2>
@@ -74,7 +85,7 @@
                                       <div class="form-group">
                                         <h2 class="card-inside-title">Discount Value</h2>
                                           <div class="form-line">
-                                              <input value="{{$data->discount_value}}"  required type="number" name="discount_value" class="form-control" placeholder="Input amount or percentage based on discount type" />
+                                              <input @if($data->type == 'percentage') max=100 @endif value="{{$data->discount_value}}"  required type="number" name="discount_value" class="discount_value form-control" placeholder="Input amount or percentage based on discount type" />
                                           </div>
                                       </div>
                                       <div class="form-group">
@@ -125,4 +136,21 @@
     <script src="{{asset('plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
     <script src="{{asset('plugins/js/custom.js')}}"></script>
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    <script>
+      $(document).ready(function(){
+        $( ".coupon_type" ).change(function(){
+          var copupon_type = $('.coupon_type').val();
+          if(copupon_type == 'percentage')
+            {
+              $('.discount_value').attr({
+                'max' : 100
+              });
+            }
+          else if(copupon_type == 'amount')
+            {
+              $('.discount_value').removeAttr('max');
+            }
+        });
+      })
+    </script>
 @stop
