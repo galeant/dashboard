@@ -26,7 +26,7 @@
                                 <select class="form-control" name="destination_type_id" id="destination_type_id">
                                     <option value="">-Select Type-</option>
                                     @foreach($destination_type as $dt)
-                                    <option value="{{$dt->name}}">{{$dt->name}}</option>
+                                    <option value="{{$dt->id}}">{{$dt->name_EN}}</option>
                                     @endforeach
                                 </select>
                             </div>

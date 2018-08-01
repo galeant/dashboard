@@ -179,7 +179,7 @@ class DestinationController extends Controller
             }
         }
 
-        // return redirect()->back();
+        return redirect('/master/destination');
         
     }
 
@@ -227,7 +227,9 @@ class DestinationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+
+
+
         if(!empty($request->image_resize)){
             $destinationPath = public_path('img/temp/');
             if( ! \File::isDirectory($destinationPath) ) 
@@ -255,15 +257,14 @@ class DestinationController extends Controller
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = Destination::find($id);
         $destination->fill($data)->save();
-
-        DestinationActivity::where('destination_id', $id)->delete();
-        if($request->has('destination_activities')){
-            foreach($data['destination_activities'] as $da){
-                // dd($dpt);
-                $a = new DestinationActivity;
-                $da['destination_id'] = $destination->id;
-                $a->fill($da)->save();
+        
+        $destination->destination_activities()->sync($request->destination_activities);
+        if($request->has('destination_tips')){
+            $dataSync;
+            foreach($request->destination_tips as $dt){
+               $dataSync[$dt["question_id"]] = ['answer' => $dt['answer']];
             }
+            $destination->destination_tips()->sync($dataSync, false);
         }
         if($request->hasFile('destination_photo')){
             foreach($data['destination_photo'] as $ddp){
@@ -314,17 +315,7 @@ class DestinationController extends Controller
                 $ds->save();
             }
         }
-        DestinationTips::where('destination_id', $id)->delete();
-        if($request->has('destination_tips')){
-            foreach($data['destination_tips'] as $dt){
-                // dd($dpt);
-                if(!empty($dt['destination_id'])){
-                    $t = new DestinationTips;
-                    $dt['destination_id'] = $destination->id;
-                    $t->fill($dt)->save();
-                }
-            }
-        }
+
 
         return redirect()->back();
     }
@@ -354,27 +345,43 @@ class DestinationController extends Controller
     public function find(Request $request){
         $datasearch = $request->all();
         $destination_type_id = $datasearch['destination_type_id'];
-        // return $destination_type_id;
+
         $city_id = $datasearch['city_id'];
         $province_id = $datasearch['province_id'];
         $keyword = $datasearch['keyword'];
-        $destination = Destination::with('provinces', 'cities', 'destination_types')
-            ->whereHas('provinces', function ($query) use ($province_id){
-                $query->where('name', 'like', '%'.$province_id.'%');
-            })
-            ->whereHas('cities', function ($query) use ($city_id){
-                $query->where('name', 'like', '%'.$city_id.'%');
-            })
-            ->whereHas('destination_types', function ($query) use ($destination_type_id){
-                $query->where('name', 'like', '%'.$destination_type_id.'%');
-            })
-            ->where('destination_name', 'like', '%'.$datasearch['keyword'].'%')
-            ->get();
+        $destination = Destination::with('provinces', 'cities', 'destination_types');
+        if(!empty($province_id)){
+            $destination = $destination->whereHas('provinces', function ($query) use ($province_id){
+                $query->where('id',$province_id);
+            });
+        }
+        if(!empty($city_id)){
+            $destination = $destination->whereHas('cities', function ($query) use ($city_id){
+                    $query->where('id', $city_id);
+            });
+        }
+        if(!empty($destination_type_id)){
+            $destination = $destination->whereHas('destination_types', function ($query) use ($destination_type_id){
+                    $query->where('id', $destination_type_id);
+            });
+        }
+        if(!empty($datasearch['keyword'])){
+            $destination = $destination->where('destination_name', 'like', '%'.$datasearch['keyword'].'%');
+        }
+        $destination = $destination->get();
         return Datatables::of($destination)
         ->addColumn('action', function ($destination) {
             return '<a href="/master/destination/'.$destination->id.'/edit"> View Detail</a>';
         })
         ->make(true);
+    }
+    public function delTips(Request $request){
+        if(!empty($request->input('id')) && !empty($request->input('question_id'))){
+        $dest = DestinationTips::where('question_id',$request->question_id)->where('destination_id', $request->id)->forceDelete();
+        return $this->sendResponse($dest, "Delete successfully", 200); 
+        }
+        return $this->sendResponse([], "Delete error", 500); 
+
     }
     public function active($id){
         $destination = Destination::find($id);

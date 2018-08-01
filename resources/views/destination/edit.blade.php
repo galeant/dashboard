@@ -41,6 +41,19 @@
                         </div>
                     </div>
                     <div class="row container">
+                        <div class="col-md-12">
+                            <h5>Main Image* :</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="dd-avatar">
+                                <img src="@if(!empty($destination->path)){{cdn($destination->path.'/'.$destination->filename)}}@endif" class="img-responsive" id="img-avtr" style="width: 100%">
+                            </div>
+                            <input name="image_resize" type="text" value="" hidden>
+                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
+                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
+                        </div>
+                    </div>
+                    <div class="row container">
                         <div class="col-md-3">
                             <h5>Province*:</h5>
                             <select name="province_id" id="province" class="form-control" required>
@@ -124,171 +137,172 @@
                     </div>
                     <div class="row " id="destination_schedule">
                         <div class="col-md-10">
-                            <h5>Open Schedule</h5>
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[0][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[0][ScheduleDay]" value="Monday">
-                                <div class="col-md-2">
-                                    <h5>Monday</h5>
+                            <div class="col-md-12">
+                                <h5>Open Schedule</h5>
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[0][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[0][ScheduleDay]" value="Monday">
+                                    <div class="col-md-2">
+                                        <h5>Monday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[0][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeMon">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[0][FullDay]" id="destination_schedule_mon" value="FullDay">
+                                        <label for="destination_schedule_mon">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[0][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
+                                
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[1][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[1][ScheduleDay]" value="Tuesday">
+                                    <div class="col-md-2">
+                                        <h5>Tuesday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[1][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeTue">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[1][FullDay]" id="destination_schedule_tue" value="FullDay">
+                                        <label for="destination_schedule_tue">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 time" id="scheduleTimeMon">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][EndHour]" required>
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[2][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[2][ScheduleDay]" value="Wednesday">
+                                    <div class="col-md-2">
+                                        <h5>Wednesday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[2][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeWed">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[2][FullDay]" id="destination_schedule_wed" value="FullDay">
+                                        <label for="destination_schedule_wed">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[0][FullDay]" id="destination_schedule_mon" value="FullDay">
-                                    <label for="destination_schedule_mon">Open 24 Hours</label>
+                                
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[3][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
+                                    <div class="col-md-2">
+                                        <h5>Thursday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[3][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeThu">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[3][FullDay]" id="destination_schedule_thu" value="FullDay">
+                                        <label for="destination_schedule_thu">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[1][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[1][ScheduleDay]" value="Tuesday">
-                                <div class="col-md-2">
-                                    <h5>Tuesday</h5>
+                                
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[4][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
+                                    <div class="col-md-2">
+                                        <h5>Friday</h5>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <select name="destination_schedule[4][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeFri">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[4][FullDay]" id="destination_schedule_fri" value="FullDay">
+                                        <label for="destination_schedule_fri">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[1][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
+                                
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[5][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
+                                    <div class="col-md-2">
+                                        <h5>Saturday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[5][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeSat">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[5][FullDay]" id="destination_schedule_sat" value="FullDay">
+                                        <label for="destination_schedule_sat">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 time" id="scheduleTimeTue">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[1][FullDay]" id="destination_schedule_tue" value="FullDay">
-                                    <label for="destination_schedule_tue">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[2][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[2][ScheduleDay]" value="Wednesday">
-                                <div class="col-md-2">
-                                    <h5>Wednesday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[2][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeWed">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[2][FullDay]" id="destination_schedule_wed" value="FullDay">
-                                    <label for="destination_schedule_wed">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[3][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
-                                <div class="col-md-2">
-                                    <h5>Thursday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[3][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeThu">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[3][FullDay]" id="destination_schedule_thu" value="FullDay">
-                                    <label for="destination_schedule_thu">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[4][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
-                                <div class="col-md-2">
-                                    <h5>Friday</h5>
-                                </div>
-                                <div class="col-md-2 ">
-                                    <select name="destination_schedule[4][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeFri">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[4][FullDay]" id="destination_schedule_fri" value="FullDay">
-                                    <label for="destination_schedule_fri">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[5][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
-                                <div class="col-md-2">
-                                    <h5>Saturday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[5][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeSat">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[5][FullDay]" id="destination_schedule_sat" value="FullDay">
-                                    <label for="destination_schedule_sat">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                {{ Form::hidden('destination_schedule[6][DestinationScheduleId]', '') }}
-                                <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
-                                <div class="col-md-2">
-                                    <h5>Sunday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[6][ScheduleCondition]" id="" class="form-control type">
-                                        <option value="Open">Open</option>
-                                        <option value="Close">Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time" id="scheduleTimeSun">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[6][FullDay]" id="destination_schedule_sun" value="FullDay">
-                                    <label for="destination_schedule_sun">Open 24 Hours</label>
+                                <div class="row">
+                                    {{ Form::hidden('destination_schedule[6][DestinationScheduleId]', '') }}
+                                    <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
+                                    <div class="col-md-2">
+                                        <h5>Sunday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[6][ScheduleCondition]" id="" class="form-control type">
+                                            <option value="Open">Open</option>
+                                            <option value="Close">Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeSun">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[6][FullDay]" id="destination_schedule_sun" value="FullDay">
+                                        <label for="destination_schedule_sun">Open 24 Hours</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -350,37 +364,7 @@
                             <textarea name="description" id="" rows="5" class="form-control">{{$destination->description}}</textarea>
                         </div>
                     </div>
-                    <div class="row container">
-                        <div class="col-md-12">
-                            <h5>Main Image* :</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="dd-avatar">
-                                <img src="{{cdn($destination->path.'/'.$destination->filename)}}" class="img-responsive" id="img-avtr">
-                            </div>
-                            <input name="image_resize" type="text" value="" hidden>
-                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
-                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
-                        </div>
-                        <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                            <div class="img-container">
-                                            <img id="crop-image" src="" alt="Picture" class="img-responsive">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
-                                        <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="row form-group container">
                         <div class="col-md-6" id="file_destination_photo">
                             <h4>Destination Photo</h4>
@@ -391,7 +375,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12" style="margin-left:10px;">
-                            <h5>Traveasl tips. Give some travel tips for this destination.</h5>
+                            <h5>Travel tips. Give some travel tips for this destination.</h5>
                             <h5>Enter each tips in separate input field. You can add more input field.</h5>
                         </div>
                         <div id="clone_destination_tips" hidden>
@@ -417,44 +401,42 @@
                                 </div>
                                 <div class="col-md-6 delete_tips">
                                         <br><br>
-                                    <button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
+                                    <button type="button" class="btn btn-danger waves-effect deleteTips"><i class="material-icons">clear</i></button>
                                 </div>
                             </div>
                         </div>
-                        @foreach($destination->destination_tips as $key=>$ddt)
-                        <div class="row" id="destination_tips">
-                            <div class="col-md-6" style="margin:0; padding:0;">
-                                <br>
-                                <div class="col-xs-1">
-                                    <ul>
-                                        <li></li>
-                                    </ul>
+                        <div class="row destination-row clearfix">
+                            @foreach($destination->destination_tips as $key=>$ddt)
+                            <div class="row cloneTips{{$key}}" id="destination_tips">
+                                <div class="col-md-6" style="margin:0; padding:0;">
+                                    <br>
+                                    <div class="col-xs-1">
+                                        <ul>
+                                            <li></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <select name="destination_tips[{{$key}}][question_id]" class="form-control">
+                                            @foreach($destination_tips_question as $dtq)
+                                                @if($dtq->id == $ddt->pivot->question_id)
+                                                    <option value="{{$dtq->id}}" selected>{{$dtq->question}}</option>
+                                                @else
+                                                <option value="{{$dtq->id}}">{{$dtq->question}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-11 col-md-offset-1">
+                                        <textarea name="destination_tips[{{$key}}][answer]" id="" class="form-control" rows="5">{{$ddt->pivot->answer}}</textarea>
+                                    </div>
                                 </div>
-                                <div class="col-md-11">
-                                    <select name="destination_tips[{{$key}}][question_id]" class="form-control">
-                                        @foreach($destination_tips_question as $dtq)
-                                            @if($dtq->id == $ddt->pivot->question_id)
-                                                <option value="{{$dtq->id}}" selected>{{$dtq->question}}</option>
-                                            @else
-                                            <option value="{{$dtq->id}}">{{$dtq->question}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-11 col-md-offset-1">
-                                    <textarea name="destination_tips[{{$key}}][answer]" id="" class="form-control" rows="5">{{$ddt->pivot->answer}}</textarea>
+                                <div class="col-md-6 delete_tips">
+                                    <br><br>
+                                    <button type="button" data-index="{{$key}}" class="btn btn-danger waves-effect deleteTips" data-id="{{$destination->id}}" data-question-id="{{$ddt->id}}"><i class="material-icons" >clear</i></button>
                                 </div>
                             </div>
-                            <div class="col-md-6 delete_tips">
-                                <br><br>
-                                <button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>
-                            </div>
+                            @endforeach
                         </div>
-                    </div>
-                    
-                    @endforeach
-                    <div class="row">
-                        <div id="destination_tips_clone"></div>
                     </div>
                     <br>
                     <div class="row"  style="margin-left:10px;" >
@@ -474,6 +456,24 @@
                 </form>
             </div>
         </div>  
+    </div>
+    <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="img-container">
+                        <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                    <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('head-js')
@@ -542,15 +542,16 @@
     var i = "{{count($destination->destination_tips)}}";
     @else
     var i = {{count($destination->destination_tips)}}+1;
-    console.log(i);
     @endif
     $("#add_more_tips").click(function (){
-        $("#destination_tips").clone().appendTo("#destination_tips_clone").addClass("cloneTips"+i);
+        $("#destination_tips").clone().appendTo(".destination-row").addClass("cloneTips"+i);
+        
         $(".cloneTips"+i+" select[name='destination_tips[][question_id]']").attr("name","destination_tips["+i+"][question_id]");
         $(".cloneTips"+i+" textarea[name='destination_tips[][answer]']").attr("name","destination_tips["+i+"][answer]").val("");
+        $(".cloneTips"+i+" input").removeAttr("disabled"); 
         $(".cloneTips"+i+" select").removeAttr("disabled"); 
         $(".cloneTips"+i+" textarea").removeAttr("disabled"); 
-        $(".cloneTips"+i+" .delete").append('<div class="col-md-6"><button type="button" id="deleteTips" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button></div>');
+        $(".cloneTips"+i+" .delete").append('<div class="col-md-6"><button type="button" data-index='+i+' class="btn btn-danger waves-effect deleteTips"><i class="material-icons">clear</i></button></div>');
         i++;
     });
     var listPlacePhoto = [];
@@ -559,7 +560,6 @@
             $("#clone_destination_tips").find('textarea').attr("disabled", "disabled").off('click');
             var phoneNumber = "{{$destination->phone_number}}";
             var codePhoneNumber = phoneNumber.split("-");
-            console.log(codePhoneNumber);
             $("input[name='phone_number']").val(codePhoneNumber[0]).intlTelInput({
                 separateDialCode: true,
             });
@@ -816,8 +816,30 @@
                 },
             })
         });
-        $(document).on("click", "#deleteTips", function() {
-            $(this).closest(".row").remove();
+        $(document).delegate('.deleteTips', 'click', function(e){
+            var ini = $(this);
+            var id =$(this).attr('data-id');
+            var qid = $(this).attr('data-question-id');
+            if(typeof id != "undefined" && typeof qid != "undefined"){
+                 $.ajax({
+                    method: "POST",
+                    url: "{{ url('/master/destination_tips/destroy') }}",
+                    data:{
+                        _token : "{{ csrf_token() }}",
+                        id : id,
+                        question_id : qid,
+                    }
+                }).done(function(response) {
+                    if(response.code == 200){
+                        ini.closest(".row").remove();
+                    }else{
+                        alert(response.message);
+                    }
+                });
+            }else{
+                $(this).closest(".row").remove();
+            }
+            
         });
     </script>
     <script>
