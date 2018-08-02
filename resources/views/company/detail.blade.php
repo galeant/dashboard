@@ -52,18 +52,18 @@
                 <div class="body">
                 @include('errors.error_notification')
                 {{ Form::open(['route'=>['partner.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
-                    <div class="row">
+                    <div class="row">   
                         <h4>Personal Information</h4>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
-                                <input type="text" class="form-control" name="fullname" value="{{$company->suppliers[0]->fullname}}">
+                                <input type="text" class="form-control" name="fullname" value="@if(!empty($company->pic)) {{$company->pic->fullname}} @endif">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Email:</h5>
-                                <input type="email" class="form-control" name="email" value="{{$company->suppliers[0]->email}}">
+                                <input type="email" class="form-control" name="email" value="@if(!empty($company->pic)) {{$company->pic->email}} @endif">
                             </div>
                         </div>
                         <div class="col-md-5" style="margin-top: 10px;">
@@ -76,7 +76,7 @@
                         <div class="col-md-5" style="margin-top: 10px;">
                             <div class="valid-info">
                                 <h5>What is your role?* :</h5>
-                                {{ Form::select('role', $roles, $company->suppliers[0]->role_id ,['class' => 'form-control', 'id'=>'role_id'])}}
+                                {{ Form::select('role', $roles, (!empty($company->pic) ? $company->pic->role_id : null) ,['class' => 'form-control', 'id'=>'role_id'])}}
                             </div>
                         </div>
                     </div>
@@ -624,7 +624,7 @@
 			});
 		// DETAIL
             // PHONE
-                var dbphone = "{{$company->suppliers[0]->phone}}";
+                var dbphone = "{{(!empty($company->pic) ? $company->pic->phone : '+62-')}}";
                 var dbformat = dbphone.split("-");
                 var dbCompanyPhone = "{{$company->company_phone}}";
                 var dbCompanyformat = dbCompanyPhone.split("-");
@@ -644,7 +644,7 @@
                     });
                 });
             // ROLE
-                var dbRole = '{{$company->suppliers[0]->role_id}}'
+                var dbRole = '{{(!empty($company->pic) ? $company->pic->role_id : 0)}}'
                 $("select[name='role']").find("option[value='"+dbRole+"']").attr("selected","selected");
             // BOOK SYS
                 var dbBookSys = '{{$company->book_system}}';
@@ -683,6 +683,23 @@
                 $("input[name='phone']").val(dbformat[1]+'-'+dbformat[2]+'-'+dbformat[3]).intlTelInput({
                     separateDialCode: true,
                 });
+                if(dbphone != ""){
+                    var dbformat = dbphone.split("-");
+                    var pic_phone = "";
+                    $(dbformat).each(function(index,value) {
+                        if(index == 1){
+                            pic_phone = value;
+                        }
+                        else if(index > 1){
+                            pic_phone = pic_phone+'-'+value;
+                        }
+
+                    });
+                    $("input[name='format']").val(dbformat[0]);
+                    $("input[name='phone']").val(pic_phone).intlTelInput({
+                        separateDialCode: true,
+                    });
+                }
 			
 			// COMPANY
                 $("input[name='format_company']").val(dbCompanyformat[0]);

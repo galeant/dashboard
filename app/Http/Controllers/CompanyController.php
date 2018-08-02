@@ -346,7 +346,7 @@ class CompanyController extends Controller
         // dd($dataSave);
         $company = Company::where('id',$id)
                 ->update($dataSave);
-        $supplier = Supplier::where(['company_id' => $id, 'role_id'=>1])
+        $supplier = Supplier::where('company_id',$id)->orderBy('created_at','ASC')
                 ->update([
                     'fullname'=> $request->fullname,
                     'phone'=> $request->format.'-'.$request->phone,

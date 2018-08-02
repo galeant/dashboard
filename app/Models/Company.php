@@ -49,5 +49,8 @@ class Company extends Model {
     public function log_statuses(){
         return $this->hasMany('App\Models\CompanyStatusLog','company_id','id');
     }
+    public function pic(){
+        return $this->hasOne('App\Models\Supplier')->orderBy('created_at','ASC');
+    }
 }
 
