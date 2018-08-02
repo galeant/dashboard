@@ -24,8 +24,6 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');
-		// REDIRECT URL
-		Route::get('sample/{id}', 'CompanyController@sample');
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('language', 'LanguageController');
@@ -92,6 +90,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
 		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
+		// change status
+		Route::post('tour-activity/{id}/change/status', 'TourController@changeStatus');
 		// UPDATE SHCHEDULE
 		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
 		// DELETE SHCHEDULE
