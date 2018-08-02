@@ -38,7 +38,6 @@
                         </div>
                         <ul class="header-dropdown m-r--5">
                             <li >
-                                <button style="display: none" type="button" id="sample"class="btn btn-default waves-effect m-r-20" >Sample</button>
                                 <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Status</button>
                             </li>
                             <li>
@@ -740,9 +739,6 @@
                     $("select").removeAttr("disabled");
                     $("textarea").removeAttr("disabled");
                     $("button#change").closest(".caption").show();
-                });
-                $("button#sample").click(function(){
-                    window.location.href="{{ url('partner/sample/'.$company->id) }}";
                 });
         });
     </script>
