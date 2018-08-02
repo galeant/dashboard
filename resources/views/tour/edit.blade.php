@@ -931,12 +931,6 @@
             });
             $( "#step_4" ).validate({
               rules: {
-                "price[0][IDR]": {
-                  number: true
-                },
-                "price[0][USD]": {
-                  number: true
-                },
                 "max_cancellation_day":{
                     number:true
                 },
