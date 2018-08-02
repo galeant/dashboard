@@ -26,7 +26,7 @@
                                 <select class="form-control" name="destination_type_id" id="destination_type_id">
                                     <option value="">-Select Type-</option>
                                     @foreach($destination_type as $dt)
-                                    <option value="{{$dt->name}}">{{$dt->name}}</option>
+                                    <option value="{{$dt->id}}">{{$dt->name_EN}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,7 +71,7 @@
                 <h2>All Place / Destination</h2>
             </div>
             <div class="body table-responsive">
-                <table class="table table-bordered table-striped table-hover dataTable" id="data-tables">
+                <table class="table table-bordered table-striped table-hover dataTable table-modif" id="data-tables">
                     <thead>
                         <tr>
                             <th>Destination Type</th>
@@ -115,7 +115,7 @@
                 searching: false,
                 ajax: '/master/destination',
                 columns: [
-                    {data: 'destination_types.name'},
+                    {data: 'destination_types.name_EN'},
                     {data: 'destination_name'},
                     {data: 'provinces.name'},
                     {data: 'cities.name'},
@@ -154,7 +154,7 @@
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'destination_types.name' },
+                        { data: 'destination_types.name_EN' },
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },
@@ -196,7 +196,7 @@
                         type: 'GET'
                     },
                     columns: [
-                        { data: 'destination_types.name' },
+                        { data: 'destination_types.name_EN' },
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },

@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 		//Delete Photo
 		Route::post('destination_photo/destroy','DestinationPhotoController@destroy');
+		Route::post('destination_tips/destroy','DestinationController@delTips');
 
 		Route::group(['prefix' => 'destination'],function($id){
 			Route::get('find', 'DestinationController@find');

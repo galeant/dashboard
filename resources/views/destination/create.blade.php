@@ -36,6 +36,19 @@
                         </div>
                     </div>
                     <div class="row container">
+                        <div class="col-md-12">
+                            <h5>Main Image* :</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="dd-avatar">
+                                <img src="{{!empty($data->avatar) ? cdn($data->avatar) : ''}}" class="img-responsive" id="img-avtr" style="width: 100%">
+                            </div>
+                            <input name="image_resize" type="text" value="" hidden>
+                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
+                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
+                        </div>
+                    </div>
+                    <div class="row container">
                         <div class="col-md-3">
                             <h5>Province*:</h5>
                             <select name="province_id" id="province" class="form-control" required>
@@ -117,167 +130,169 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row " id="destination_schedule">
-                        <div class="col-md-10">
-                            <h5>Open Schedule</h5>
-                            <div class="row">
-                                <input type="hidden" name="destination_schedule[0][ScheduleDay]" value="Monday">
-                                <div class="col-md-2">
-                                    <h5>Monday</h5>
+                    <div class="col-md-12">
+                        <div class="row " id="destination_schedule">
+                            <div class="col-md-10">
+                                <h5>Open Schedule</h5>
+                                <div class="row">
+                                    <input type="hidden" name="destination_schedule[0][ScheduleDay]" value="Monday">
+                                    <div class="col-md-2">
+                                        <h5>Monday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[0][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeMon">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[0][FullDay]" id="destination_schedule_mon" value="FullDay">
+                                        <label for="destination_schedule_mon">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[0][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
+                                
+                                <div class="row">
+                                    <input type="hidden" name="destination_schedule[1][ScheduleDay]" value="Tuesday">
+                                    <div class="col-md-2">
+                                        <h5>Tuesday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[1][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeTue">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[1][FullDay]" id="destination_schedule_tue" value="FullDay">
+                                        <label for="destination_schedule_tue">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 time" id="scheduleTimeMon">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[0][EndHour]" required>
+                                
+                                <div class="row">
+                                    <input type="hidden" name="destination_schedule[2][ScheduleDay]" value="Wednesday">
+                                    <div class="col-md-2">
+                                        <h5>Wednesday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[2][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeWed">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[2][FullDay]" id="destination_schedule_wed" value="FullDay">
+                                        <label for="destination_schedule_wed">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[0][FullDay]" id="destination_schedule_mon" value="FullDay">
-                                    <label for="destination_schedule_mon">Open 24 Hours</label>
+                                
+                                <div class="row">
+                                        <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
+                                    <div class="col-md-2">
+                                        <h5>Thursday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[3][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeThu">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[3][FullDay]" id="destination_schedule_thu" value="FullDay">
+                                        <label for="destination_schedule_thu">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row">
-                                <input type="hidden" name="destination_schedule[1][ScheduleDay]" value="Tuesday">
-                                <div class="col-md-2">
-                                    <h5>Tuesday</h5>
+                                
+                                <div class="row">
+                                        <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
+                                    <div class="col-md-2">
+                                        <h5>Friday</h5>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <select name="destination_schedule[4][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeFri">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[4][FullDay]" id="destination_schedule_fri" value="FullDay">
+                                        <label for="destination_schedule_fri">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[1][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
+                                
+                                <div class="row">
+                                        <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
+                                    <div class="col-md-2">
+                                        <h5>Saturday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[5][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time"  id="scheduleTimeSat">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[5][FullDay]" id="destination_schedule_sat" value="FullDay">
+                                        <label for="destination_schedule_sat">Open 24 Hours</label>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 time" id="scheduleTimeTue">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[1][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[1][FullDay]" id="destination_schedule_tue" value="FullDay">
-                                    <label for="destination_schedule_tue">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <input type="hidden" name="destination_schedule[2][ScheduleDay]" value="Wednesday">
-                                <div class="col-md-2">
-                                    <h5>Wednesday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[2][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeWed">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[2][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[2][FullDay]" id="destination_schedule_wed" value="FullDay">
-                                    <label for="destination_schedule_wed">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                    <input type="hidden" name="destination_schedule[3][ScheduleDay]" value="Thursday">
-                                <div class="col-md-2">
-                                    <h5>Thursday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[3][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeThu">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[3][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[3][FullDay]" id="destination_schedule_thu" value="FullDay">
-                                    <label for="destination_schedule_thu">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                    <input type="hidden" name="destination_schedule[4][ScheduleDay]" value="Friday">
-                                <div class="col-md-2">
-                                    <h5>Friday</h5>
-                                </div>
-                                <div class="col-md-2 ">
-                                    <select name="destination_schedule[4][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeFri">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[4][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[4][FullDay]" id="destination_schedule_fri" value="FullDay">
-                                    <label for="destination_schedule_fri">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                    <input type="hidden" name="destination_schedule[5][ScheduleDay]" value="Saturday">
-                                <div class="col-md-2">
-                                    <h5>Saturday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[5][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time"  id="scheduleTimeSat">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[5][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[5][FullDay]" id="destination_schedule_sat" value="FullDay">
-                                    <label for="destination_schedule_sat">Open 24 Hours</label>
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                    <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
-                                <div class="col-md-2">
-                                    <h5>Sunday</h5>
-                                </div>
-                                <div class="col-md-2">
-                                    <select name="destination_schedule[6][ScheduleCondition]" id="" class="form-control type">
-                                        <option>Open</option>
-                                        <option>Close</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4 time" id="scheduleTimeSun">
-                                    <span>Open From*:</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][StartHour]" required>
-                                    <span>to</span>
-                                    <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][EndHour]" required>
-                                </div>
-                                <div class="col-md-2 checkbox" id="scheduleFullDay">
-                                    <input type="checkbox" class="filled-in form-control" name="destination_schedule[6][FullDay]" id="destination_schedule_sun" value="FullDay">
-                                    <label for="destination_schedule_sun">Open 24 Hours</label>
+                                
+                                <div class="row">
+                                        <input type="hidden" name="destination_schedule[6][ScheduleDay]" value="Sunday">
+                                    <div class="col-md-2">
+                                        <h5>Sunday</h5>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select name="destination_schedule[6][ScheduleCondition]" id="" class="form-control type">
+                                            <option>Open</option>
+                                            <option>Close</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 time" id="scheduleTimeSun">
+                                        <span>Open From*:</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][StartHour]" required>
+                                        <span>to</span>
+                                        <input id="time" type="text"  class="input-time" placeholder="HH:MM" style="width:30%" name="destination_schedule[6][EndHour]" required>
+                                    </div>
+                                    <div class="col-md-2 checkbox" id="scheduleFullDay">
+                                        <input type="checkbox" class="filled-in form-control" name="destination_schedule[6][FullDay]" id="destination_schedule_sun" value="FullDay">
+                                        <label for="destination_schedule_sun">Open 24 Hours</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -340,21 +355,9 @@
                         </div>
                     </div>
                     <br>
-                    <div class="row container">
-                        <div class="col-md-12">
-                            <h5>Main Image* :</h5>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="dd-avatar">
-                                <img src="{{!empty($data->avatar) ? cdn($data->avatar) : ''}}" class="img-responsive" id="img-avtr">
-                            </div>
-                            <input name="image_resize" type="text" value="" hidden>
-                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Change Cover Image</a>
-                            <input name="avatar" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
-                        </div>
-                    </div>
+                    
                     <div class="row form-group container">
-                        <div class="col-md-6" id="file_destination_photo">
+                        <div class="col-md-12" id="file_destination_photo">
                             <h5>Destination Photo</h5>
                             <div class="file-loading">
                                 <input type="file" name="destination_photo[]" id="destination_photo" multiple>
