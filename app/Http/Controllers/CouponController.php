@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Coupons;
+use App\Models\ProductType;
 use Validator;
 use Datatables;
 use DB;
@@ -43,7 +44,8 @@ class CouponController extends Controller
      */
     public function create()
     {
-      return view('coupon.form_create');
+      $data['product_type'] = ProductType::all();
+      return view('coupon.form_create',$data);
     }
 
 
@@ -66,7 +68,8 @@ class CouponController extends Controller
           "end_date" => "required",
           "discount_value" => "required",
           "discount_value" => "required",
-          "max_discount" => "required"
+          "max_discount" => "required",
+          "product_type" => "required",
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -75,18 +78,25 @@ class CouponController extends Controller
         }
         DB::beginTransaction();
         try{
-            $data = new Coupons();
-            $data->quantity = $request->input('quantity');
-            $data->quantity_per_use = $request->input('quantity_per_use');
-            $data->type = $request->input('type');
-            $data->name = $request->input('name');
-            $data->code = $request->input('code');
-            $data->start_date = $request->input('start_date');
-            $data->end_date = $request->input('end_date');
-            $data->discount_value = $request->input('discount_value');
-            $data->discount_value = $request->input('discount_value');
-            $data->max_discount = $request->input('max_discount');
-            $data->description = $request->input('description');
+         for($i = 1 ;$i < $request->input('number_of_generate') ; $i++)
+          {
+              $data = new Coupons();
+              $data->quantity = $request->input('quantity');
+              $data->quantity_per_use = $request->input('quantity_per_use');
+              $data->type = $request->input('type');
+              $data->name = $request->input('name');
+              $data->code = $request->input('code').'R'.rand(1,99).'N'.$i;
+              $data->start_date = $request->input('start_date');
+              $data->end_date = $request->input('end_date');
+              $data->discount_value = $request->input('discount_value');
+              $data->discount_value = $request->input('discount_value');
+              $data->max_discount = $request->input('max_discount');
+              $data->minimum_order = $request->input('minimum_order');
+              $data->description = $request->input('description');
+              $data->product_type = $request->input('product_type');
+              $data->save();
+            }
+
             if($data->save()){
                 DB::commit();
                 return redirect("coupon/".$data->id."/edit")->with('message', 'Successfully saved Coupon');
@@ -119,10 +129,9 @@ class CouponController extends Controller
      */
     public function edit($id)
     {
-      $data = Coupons::find($id);
-      return view('coupon.form_edit')->with([
-          'data'=> $data
-      ]);
+      $data['data'] = Coupons::find($id);
+      $data['product_type'] = ProductType::all();
+      return view('coupon.form_edit')->with($data);
     }
 
     /**
@@ -165,6 +174,7 @@ class CouponController extends Controller
               $data->discount_value = $request->input('discount_value');
               $data->discount_value = $request->input('discount_value');
               $data->max_discount = $request->input('max_discount');
+              $data->minimum_order = $request->input('minimum_order');
               $data->description = $request->input('description');
              if($data->save()){
                 DB::commit();
