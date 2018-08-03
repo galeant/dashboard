@@ -1191,7 +1191,7 @@
                 </div>
             </div>
         </div>
-        @if($data != null)
+        
         <!-- Croper Modal -->
         <div class="modal fade" id="croperModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
@@ -1211,7 +1211,7 @@
                 </div>
             </div>
         </div>
-
+        @if($data != null)
         <!-- Schedule -->
         <div class="modal fade" id="largeModal" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">

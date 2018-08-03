@@ -814,7 +814,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="submit" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
                 <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
