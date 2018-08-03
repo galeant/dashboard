@@ -109,16 +109,17 @@ class DestinationController extends Controller
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = new Destination;
         $destination->fill($data)->save();
-
+        
+        if($request->has('destination_activities')){
+            $test = $destination->destination_activities()->sync($request->destination_activities);
+        }
+        // dd($test);
         if($request->has('destination_tips')){
-            foreach($data['destination_tips'] as $dt){
-                // dd($dt->destination_id);
-                if(!empty($dt['destination_id'])){
-                    $t = new DestinationTips;
-                    $dt['destination_id'] = $destination->id;
-                    $t->fill($dt)->save();
-                }
+            $dataSync;
+            foreach($request->destination_tips as $dt){
+               $dataSync[$dt["question_id"]] = ['answer' => $dt['answer']];
             }
+            $destination->destination_tips()->sync($dataSync, false);
         }
         if($request->has('destination_activities')){
             foreach($data['destination_activities'] as $da){
