@@ -188,7 +188,7 @@ class CompanyController extends Controller
         $companyStatusLog = CompanyStatusLog::create([
             'company_id' => $company->id,
             'status' => 1,
-            'note' => 'awaiting submit product, this company input from super admin' 
+            'note' => 'initial create' 
         ]);
 
         DB::commit();
@@ -226,12 +226,11 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        session()->forget('condition');
-        session()->forget('company');
         $roles = SupplierRole::pluck('name','id');
         $province = Province::all();
         $company = Company::where('id',$id)->first();
-        return view('company.detail',['company'=>$company,'provinces'=>$province,'roles' =>$roles]);
+        $tour = Tour::with('schedules')->where('company_id',$company->id)->orderBy('created_at','asc')->first();
+        return view('company.detail',['company'=>$company,'data' => $tour,'provinces'=>$province,'roles' =>$roles]);
     }
 
     /**
@@ -402,21 +401,24 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
          try{
-            session()->forget('condition');
-            session()->forget('company');
             $data = Company::find($id);
-            $data->status = $status;
-            // dd($data->save());
-             if($data->save()){
-                $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                // dd($status);
-                $data->note = $note;
-                Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
-                DB::commit();
-                return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
-             }else{
-                 return redirect('partner/'.$id.'/edit')->with('message','Change Status Failed');
-             }
+            if($data->status != $status){
+                $data->status = $status;
+                // dd($data->save());
+                if($data->save()){
+                    $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                    // dd($status);
+                    $data->note = $note;
+                    Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                    DB::commit();
+                    return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
+                }else{
+                    return redirect('partner/'.$id.'/edit')->with('message','Change Status Failed');
+                }
+            }else{
+                return redirect('partner/'.$id.'/edit')->with('message','Latest Status is same');
+            }
+            
          }catch (\Exception $exception){
             dd($exception);
              DB::rollBack();
@@ -444,16 +446,16 @@ class CompanyController extends Controller
     }
 
     //
-    public function sample($id){
-        $company = Company::with('log_statuses')->where('id',$id)->first();
-        $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
-        session()->put('condition', 'kuration');
-        session()->put('company', $company);
-        if($product != null ){
-            return redirect('/product/tour-activity/'.$product->id.'/edit');
-        }else{
-            return redirect()->back();
-        }
+    // public function sample($id){
+    //     $company = Company::with('log_statuses')->where('id',$id)->first();
+    //     $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
+    //     session()->put('condition', 'kuration');
+    //     session()->put('company', $company);
+    //     if($product != null ){
+    //         return redirect('/product/tour-activity/'.$product->id.'/edit');
+    //     }else{
+    //         return redirect()->back();
+    //     }
         
-    }
+    // }
 }

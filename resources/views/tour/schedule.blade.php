@@ -38,6 +38,7 @@
                 </ul>
             </div>
             <div class="body">
+            @include('errors.error_notification')
             <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/'.$data->schedule_type.'/schedule/save') }}">
             @csrf
                 <div id="schedule_body">
@@ -299,13 +300,7 @@
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));
             });
         });
-        var condition = "{{session()->get('condition')}}";
-        if(condition != null || condition != ''){
-            $("#leftsidebar").find("li").each(function(){
-                $(this).find("a").css("pointer-events","none");
-            });
-            $("li#back a,div.navbar-header a").css("pointer-events","none");
-        }
+       
     });
 </script>
 @stop

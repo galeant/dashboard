@@ -95,4 +95,7 @@ class Tour extends Model
     {
         return $this->hasMany('App\Models\Videos', 'product_id','id');
     }
+    public function log_statuses(){
+        return $this->hasMany('App\Models\ProductStatusLog','product_id','id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Tour;
+use App\Models\ProductStatusLog;
 use App\Models\Company;
 use App\Models\CompanyStatusLog;
 use App\Models\Schedule;
@@ -143,6 +144,7 @@ class TourController extends Controller
         $data = $request->except('_token','step','cover_img','format_pic_phone','image_resize');
         DB::beginTransaction();
         try {
+            // dd($data);
             $product = Tour::create($data);
             DB::commit();
             return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
@@ -313,14 +315,6 @@ class TourController extends Controller
                 $code = ($request->input('product_type') == 'private' ? '102' : '101');
                 $data['product_code'] = $code.substr($product->product_code,3,strlen($product->product_code));
                 $product->update($data);
-                // // STATUS COMPANY
-                // $statusCompany = Company::where('id',$request->company_id)->update(['status' => 2]);
-                // $statusCompanyLog = CompanyStatusLog::create([
-                //     'company_id' => $request->company_id,
-                //     'status' => 2,
-                //     'note' => 'insert product tour ke'.Tour::where('company_id', $request->company_id->count())
-                // ]); 
-                // // 
                 DB::commit();
                 return redirect('/product/tour-activity/'.$product->id.'/edit#step-h-1');
             } catch (Exception $e) {
@@ -491,6 +485,28 @@ class TourController extends Controller
                         ]);
                     }
                 }
+                // Status
+                $statusCompany = Company::select('status')->where('id', $data->company_id)->first();
+                if($statusCompany->status == 1){
+                    $status = Company::where('id', $data->company_id)->update([
+                        'status' => 2
+                    ]);
+                    
+                    $statusChangeLog = CompanyStatusLog::create([
+                        'company_id' => $data->company_id,
+                        'status' => 2,
+                        'note' => 'initial input product'
+                    ]);
+                }else{
+                    $status = Tour::where('id',$data->id)->update([
+                        'status' => 1
+                    ]);
+                    $statusChangeLog = ProductStatusLog::create([
+                        'product_id' => $data->id,
+                        'status' => 1,
+                        'note' => 'input product for first time, need kuration'
+                    ]);
+                }
                 DB::commit();
                 return redirect("/product/tour-activity/".$id.'/edit#step-h-3');
             } catch (Exception $e) {
@@ -539,25 +555,45 @@ class TourController extends Controller
         }
     }
  
-    public function changeStatus(Request $request, $status)
+    public function changeStatus(Request $request,$id)
     {
-        if($status == 'nonactive'){
-            $change = Tour::where('id',$request->id)
-                ->update([
-                    'status' => 0
-                ]);
-        }else if($status == 'active'){
-            $change =  Tour::where('id',$request->id)
-                ->update([
-                    'status' => 1
-                ]);
-        }else{
-            $change =  Tour::where('id',$request->id)
-                ->update([
-                    'status' => 2
-                ]);
+        $status = $request->input('status');
+        $note = $request->input('note');
+        $validation = Validator::make($request->all(), [
+            'status' => 'required'
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
         }
-        return response()->json('sukses',200);  
+        DB::beginTransaction();
+         try{
+            $data = Tour::find($id);
+            if($data->status != $status){
+                $data->status = $status;
+                // dd($data->save());
+                if($data->save()){
+                    $status = ProductStatusLog::create(['product_id' => $id,'status' => $status,'note' => $note]);
+                    // dd($status);
+                    // $data->note = $note;
+                    // Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                    DB::commit();
+                    return redirect('/product/tour-activity/'.$id.'/edit')->with('message','Change Status Successfully');
+                }else{
+                    return redirect('/product/tour-activity/'.$id.'/edit')->with('message','Change Status Failed');
+                }
+            }else{
+                return redirect('/product/tour-activity/'.$id.'/edit')->with('message','Latest Status is same');
+            }
+            
+         }catch (\Exception $exception){
+            dd($exception);
+             DB::rollBack();
+             \Log::info($exception->getMessage());
+             return redirect('/product/tour-activity/'.$id.'/edit')->with('error',$exception->getMessage());
+         }
+        
     }
     public function uploadImageAjax(Request $request)
     {
@@ -744,31 +780,45 @@ class TourController extends Controller
         return view('tour.schedule')->with(['data' => $data]);
     }
     public function scheduleSave(Request $request, $id, $type){
-        // 
-        // $request['start_date'] = 'qdwq';
-        if($request->end_date){
+        // dd($request->all());
+        if($type == 1){
+            $validation = Validator::make($request->all(), [
+                'start_date' => 'date_format:d-m-Y',
+                'end_date' => 'date_format:d-m-Y',
+                'max_booking_date_time' => 'date_format:d-m-Y',
+                'maximum_booking' => 'required',
+            ]);
             $request['end_date'] = date("Y-m-d",strtotime($request->end_date));   
-        }else{
-            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
-        }
-        // 
-        if($request->start_hours){
-            $request['start_hours'] = $request->start_hours;
-        }else{
             $request['start_hours'] = '00:00';
-        }
-        // 
-        if($request->end_hours){
-            $request['end_hours'] = $request->end_hours;
-        }else{
             $request['end_hours'] = '23:59';
-        }
-        // 
-        if($type != 2){
             $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' 00:00';
-        }else{
+        }else if($type == 2){
+            $validation = Validator::make($request->all(), [
+                'start_date' => 'date_format:d-m-Y',
+                'start_hours' => 'date_format:H:i',
+                'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
+                'max_booking_date_time' => 'date_format:d-m-Y',
+                'maximum_booking' => 'required',
+            ]);
+            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
+            $request['start_hours'] = $request->start_hours;
+            $request['end_hours'] = $request->end_hours;
             $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' '.$request->start_hours;
+        }else{
+            $validation = Validator::make($request->all(), [
+                'start_date' => 'date_format:d-m-Y',
+                'max_booking_date_time' => 'date_format:d-m-Y',
+                'maximum_booking' => 'required',
+            ]);
+            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
+            $request['start_hours'] = '00:00';
+            $request['end_hours'] = '23:59';
+            $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' 00:00';
         }
+        if( $validation->fails() ){
+            return redirect()->back()
+            ->with('errors', $validation->errors() );
+        } 
         $schedule = Schedule::create([
             'start_date' => date("Y-m-d",strtotime($request->start_date)),
             'end_date' => $request['end_date'],

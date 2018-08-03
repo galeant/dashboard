@@ -36,10 +36,30 @@
             <div class="header">
                 <h2>Edit Tour Activity</h2>
                 <ul class="header-dropdown m-r--5">
+                    <li>
+                        @if($data->status == 0)
+                        <span class="badge bg-purple">Draft</span>
+                        @elseif($data->status ==1)
+                        <span class="badge bg-blue">Awaiting Moderation</span>
+                        @elseif($data->status ==2)
+                        <span class="badge bg-green">Active</span>
+                        @elseif($data->status ==3)
+                        <span class="badge bg-red">Disabled</span>
+                        @elseif($data->status ==4)
+                        <span class="badge bg-pink">Edited</span>
+                        @else
+                        <span class="badge bg-red">Expired</span>
+                        @endif
+                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status</button>
+                    </li>
+                    @if($data->schedule_type != 0)
+                    <li>
+                        <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
+                    </li>
+                    @endif
                     <li id="backProduct">
                         <a href="/product/tour-activity" class="btn btn-waves">Back</a>
                     </li>
-                    
                 </ul>
             </div>
             <div class="body" id="content">
@@ -320,7 +340,7 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination->name @endif</option>
+                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination_name @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select Destination --</option>
                                                 @endif
@@ -728,7 +748,79 @@
         </div>
     </div>
 </div>
- <!-- #END# Advanced Validation -->
+<!-- #END# Advanced Validation -->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-header">
+                <div class="row">
+                <div class="col-md-6">
+                    <h4 class="modal-title" id="statusModalLabel">Status</h4>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
+                </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped log-status-list">
+                    <tbody>
+                        @if(!empty($data->log_statuses))
+                        @foreach($data->log_statuses as $test)
+                        
+                        <tr>
+                            <td>
+                                @if($test->status == 0)
+                                <span class="badge bg-purple">Draft</span>
+                                @elseif($test->status ==1)
+                                <span class="badge bg-blue">Awaiting Moderation</span>
+                                @elseif($test->status ==2)
+                                <span class="badge bg-green">Active</span>
+                                @elseif($test->status ==3)
+                                <span class="badge bg-pink">Disable</span>
+                                @elseif($test->status ==4)
+                                <span class="badge bg-orange">Edited</span>
+                                @else
+                                <span class="badge bg-gray">Expired</span>
+                                @endif
+                            </td>
+                            <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
+                            <td>{{$test->note}}</td>
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
+                <div class="change-status row clearfix" style="display: none">
+                    <div class="col-md-12">
+                        <div class="valid-info">
+                            <h5>Status:</h5>
+                            <select class="form-control" name="status" required>
+                                <option value="">-- Select Status --</option>
+                                @foreach(Helpers::statusProduct() as $value => $status)
+                                    <option value="{{$value}}" >{{$status}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="valid-info">
+                            <h5>Note:</h5>
+                            <textarea class="form-control" name="note" rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1099,6 +1191,7 @@
                     province_id: $(this).val()
                   }
                 }).done(function(response) {
+                    $('#'+id+'-destination option').remove();
                     $('#'+id+'-city option').remove();
                     $.each(response, function (index, value) {
                         $('#'+id+'-city').append(
@@ -1132,7 +1225,7 @@
                     $('#'+id+'-destination option').remove();
                     $.each(response, function (index, value) {
                         $('#'+id+'-destination').append(
-                            "<option value="+value.id+">"+value.name+"</option>"
+                            "<option value="+value.id+">"+value.destination_name+"</option>"
                         );
                     });
                 });
@@ -1320,6 +1413,35 @@
                 }
             });
         });
+         // EDIT BUTTON
+         $('.modal-header').delegate('.btn-back','click', function(e){
+            $(this).text('Change Status');
+            $(this).removeClass('btn-back');
+            $(this).addClass('btn-change-status');
+            $('.change-status').hide();
+            $('.btn-save').hide();
+            $('.log-status-list').show();
+        });
+        
+        $('.modal-header').delegate('.btn-change-status','click', function(e){
+            $(this).text('Back');
+            $(this).removeClass('btn-change-status');
+            $(this).addClass('btn-back');
+            $('.change-status').show();
+            $('.btn-save').show();
+            $('.log-status-list').hide();
+        });
+        $("button#edit").click(function(){
+            $(this).hide()
+            $("#sample").show();
+            $("#change-status").show();
+            $("#submit").show();
+            $("input").removeAttr("disabled");
+            $("select").removeAttr("disabled");
+            $("textarea").removeAttr("disabled");
+            $("button#change").closest(".caption").show();
+        });
+        
         
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
