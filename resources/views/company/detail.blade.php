@@ -45,7 +45,7 @@
                         </div>
                         <ul class="header-dropdown m-r--5">
                             <li >
-                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Status</button>
+                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Change Status</button>
                             </li>
                             <li>
                                 @if($company->status == 0)
@@ -70,7 +70,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="body">
+                <div class="body" style="padding-left:25px">
                 @include('errors.error_notification')
                 {{ Form::open(['route'=>['partner.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">   
@@ -274,8 +274,8 @@
                         <h5 style="padding-left:15px; padding-right:15px;">Accepted document format: PDF/JPG/JPEG/PNG. Maximum size is 5 MB per file</h5>
                         <div class="col-md-12" id="akta" style="margin-top: 10px;display: none; margin-left:15px; margin-right:15px;" >
                             <div class="row">
-                                <div class="col-md-4">
-                                    <li>Company Article of Association</li>
+                                <div class="col-md-12">
+                                    <p style="font-weight: bold">Company Article of Association</p>
                                     <p>Akta Pendirian Usaha</p>		
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -310,8 +310,8 @@
                         </div>
                         <div class="col-md-12" id="siup" style="display: none;margin:10px 15px 0px 15px;">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <li>SIUP/TDP</li>
+                                <div class="col-md-12">
+                                    <p style="font-weight: bold">SIUP/TDP</p>
                                     <p>Surat Izin Usaha Perdagangan/Tanda Daftar Perusahaan</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -346,8 +346,8 @@
                         </div>
                         <div class="col-md-12" id="npwp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <li id="npwp">Tax Number</li>
+                                <div class="col-md-12">
+                                    <p id="npwp" style="font-weight: bold"> Tax Number</p>
                                     <p id="npwp">NPWP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -382,8 +382,8 @@
                         </div>
                         <div class="col-md-12" id="ktp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <li id="ktp">Identity Card</li>
+                                <div class="col-md-12">
+                                    <p id="ktp" style="font-weight: bold">Identity Card</p>
                                     <p id="ktp">KTP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -418,8 +418,8 @@
                         </div>
                         <div class="col-md-12" id="evi" style="display: none; margin:10px 15px 0px 15px;">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <li>Evidence you have a product</li>
+                                <div class="col-md-12">
+                                    <p style="font-weight: bold">Evidence you have a product</p>
                                     <p>Contoh product/info product</p>
                                 </div>
                                 <div class="col-md-6" id="input" cat="evi" hidden>
@@ -457,7 +457,7 @@
                         @if($company->status == 1)
                         <div class="col-md-2 col-md-offset-8">
                             <a href="{{ url('/product/tour-activity/create') }}">
-                                <button type="button " class="btn btn-block bg-orange btn-lg waves-effect">Add product</button>
+                                <button type="button" class="btn btn-block bg-orange btn-lg waves-effect">Add product</button>
                             </a>
                         </div>
                         @endif
@@ -1169,7 +1169,6 @@
                                 <div class="valid-info">
                                     <h5>Status:</h5>
                                     <select class="form-control" name="status" required>
-                                        <option value="">-- Select Status --</option>
                                         @foreach(Helpers::statusCompany() as $value => $status)
                                             <option value="{{$value}}" >{{$status}}</option>
                                         @endforeach

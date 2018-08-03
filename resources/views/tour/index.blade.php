@@ -33,11 +33,9 @@
                                             <th>Code</th>
                                             <th>Company</th>
                                             <th>Product Name</th>
-                                            <th>PIC Name</th>
-                                            <th>Pic Phone</th>
-                                            <th>Product Type</th>
                                             <th>Min Person</th>
                                             <th>Max Person</th>
+                                            <th>Status</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,11 +68,9 @@
 	            {data: 'product_code'},
                 {data: 'company.company_name'},
 	            {data: 'product_name'},
-                {data: 'pic_name'},
-                {data: 'pic_phone'},
-                {data: 'product_type'},
                 {data: 'min_person'},
                 {data: 'max_person'},
+                {data: 'status'},
 	            {data: 'created_at'},
 	            {data: 'action'}
 	        ]
