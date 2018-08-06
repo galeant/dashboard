@@ -78,7 +78,7 @@ class CouponController extends Controller
         }
         DB::beginTransaction();
         try{
-         for($i = 1 ;$i < $request->input('number_of_generate') ; $i++)
+         for($i = 0 ;$i < $request->input('number_of_generate') ; $i++)
           {
               $data = new Coupons();
               $data->quantity = $request->input('quantity');
