@@ -24,7 +24,10 @@ class helpers{
 		return ['Kota'=> 'Kota','Kabupaten'=>'Kabupaten'];
 	}
 	public static function statusCompany(){
-		return [0 => 'Not verified',1 =>'Awaiting Submission',2 => 'Awaiting Moderation',3 => 'Insufficient Data',4=>'Rejected',5=>'Active',6=>'Disabled'];
+		return [/*0 => 'Not verified',1 =>'Awaiting Submission',2 => 'Awaiting Moderation',*/3 => 'Insufficient Data',4=>'Rejected',5=>'Active',6=>'Disabled'];
+	}
+	public static function statusProduct(){
+		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable',4=>'Edited',5=>'Expired'];
 	}
 	public static function encodeSpecialChar($string)
 	{

@@ -377,7 +377,7 @@
 						                                	<div class="input-group input-group-sm">
 						                                        <span class="input-group-addon">Rp</span>
 						                                        <div class="form-line">
-						                                            <input type="text" name="rate_per_day_{{$id}}" value="{{old('rate_per_day_'.$id)}}" class="form-control money-format" required ">
+						                                            <input type="text" name="rate_per_day_{{$id}}" value="{{old('rate_per_day_'.$id)}}" class="form-control money-format" required >
 						                                        </div>
 						                                        <span class="input-group-addon">per day.</span>
 						                                    </div>

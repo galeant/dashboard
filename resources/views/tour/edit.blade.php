@@ -37,16 +37,28 @@
                 <h2>Edit Tour Activity</h2>
                 <ul class="header-dropdown m-r--5">
                     <li>
-                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Kuration Status</button>
+                        @if($data->status == 0)
+                        <span class="badge bg-purple">Draft</span>
+                        @elseif($data->status ==1)
+                        <span class="badge bg-blue">Awaiting Moderation</span>
+                        @elseif($data->status ==2)
+                        <span class="badge bg-green">Active</span>
+                        @elseif($data->status ==3)
+                        <span class="badge bg-red">Disabled</span>
+                        @elseif($data->status ==4)
+                        <span class="badge bg-pink">Edited</span>
+                        @else
+                        <span class="badge bg-red">Expired</span>
+                        @endif
+                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status</button>
                     </li>
+                    @if($data->schedule_type != 0)
                     <li>
                         <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
                     </li>
+                    @endif
                     <li id="backProduct">
                         <a href="/product/tour-activity" class="btn btn-waves">Back</a>
-                    </li>
-                    <li id="backKuration">
-                        <a @if(session()->has('company')) href="{{ url('partner/'.session()->get('company')->id.'/edit') }}" @endif class="btn btn-waves">Back</a>
                     </li>
                 </ul>
             </div>
@@ -328,7 +340,7 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination->name @endif</option>
+                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination_name @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select Destination --</option>
                                                 @endif
@@ -736,22 +748,16 @@
         </div>
     </div>
 </div>
-<!-- #END# Basic Example | Horizontal Layout -->
-<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+<!-- #END# Advanced Validation -->
+<div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <form method="POST" 
-
-        @if(session()->has('company'))
-        action="{{ url('partner/'.session()->get('company')->id.'/change/status') }}" 
-        @endif
-        
-        enctype="multipart/form-data">
+        <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
             @csrf
             <div class="modal-header">
                 <div class="row">
                 <div class="col-md-6">
-                    <h4 class="modal-title" id="defaultModalLabel">Status</h4>
+                    <h4 class="modal-title" id="statusModalLabel">Status</h4>
                 </div>
                 <div class="col-md-6">
                     <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
@@ -761,25 +767,23 @@
             <div class="modal-body">
                 <table class="table table-striped log-status-list">
                     <tbody>
-                        @if(!empty(session()->get('company')->log_statuses))
-                        @foreach(session()->get('company')->log_statuses as $test)
+                        @if(!empty($data->log_statuses))
+                        @foreach($data->log_statuses as $test)
                         
                         <tr>
                             <td>
                                 @if($test->status == 0)
-                                <span class="badge bg-purple">Not Verified</span>
+                                <span class="badge bg-purple">Draft</span>
                                 @elseif($test->status ==1)
-                                <span class="badge bg-blue">Awaiting Submission</span>
+                                <span class="badge bg-blue">Awaiting Moderation</span>
                                 @elseif($test->status ==2)
-                                <span class="badge bg-cyan">Awaiting Moderation</span>
-                                @elseif($test->status ==3)
-                                <span class="badge bg-pink">Insufficient Data</span>
-                                @elseif($test->status ==4)
-                                <span class="badge bg-red">Rejected</span>
-                                @elseif($test->status ==5)
                                 <span class="badge bg-green">Active</span>
+                                @elseif($test->status ==3)
+                                <span class="badge bg-pink">Disable</span>
+                                @elseif($test->status ==4)
+                                <span class="badge bg-orange">Edited</span>
                                 @else
-                                <span class="badge bg-red">Disbaled</span>
+                                <span class="badge bg-gray">Expired</span>
                                 @endif
                             </td>
                             <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
@@ -795,8 +799,8 @@
                             <h5>Status:</h5>
                             <select class="form-control" name="status" required>
                                 <option value="">-- Select Status --</option>
-                                @foreach(Helpers::statusCompany() as $value => $status)
-                                    <option value="{{$value}}">{{$status}}</option>
+                                @foreach(Helpers::statusProduct() as $value => $status)
+                                    <option value="{{$value}}" >{{$status}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -810,10 +814,28 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="submit" style="display: none" class="btn btn-link waves-effect btn-save">SAVE CHANGES</button>
-                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                <button type="submit" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
             </div>
-        </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                    <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+            </div>
         </div>
     </div>
 </div>
@@ -931,12 +953,6 @@
             });
             $( "#step_4" ).validate({
               rules: {
-                "price[0][IDR]": {
-                  number: true
-                },
-                "price[0][USD]": {
-                  number: true
-                },
                 "max_cancellation_day":{
                     number:true
                 },
@@ -1175,6 +1191,7 @@
                     province_id: $(this).val()
                   }
                 }).done(function(response) {
+                    $('#'+id+'-destination option').remove();
                     $('#'+id+'-city option').remove();
                     $.each(response, function (index, value) {
                         $('#'+id+'-city').append(
@@ -1208,7 +1225,7 @@
                     $('#'+id+'-destination option').remove();
                     $.each(response, function (index, value) {
                         $('#'+id+'-destination').append(
-                            "<option value="+value.id+">"+value.name+"</option>"
+                            "<option value="+value.id+">"+value.destination_name+"</option>"
                         );
                     });
                 });
@@ -1424,17 +1441,7 @@
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();
         });
-        var condition = "{{session()->get('condition')}}";
-        if(condition == null || condition == ''){
-            $("button#change-status").closest("li").remove();
-            $("li#backKuration").remove();
-        }else{
-            $("li#backProduct").remove();
-            $("#leftsidebar").find("li").each(function(){
-                $(this).find("a").css("pointer-events","none");
-            });
-            $("div.navbar-header a").css("pointer-events","none");
-        }
+        
         
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->

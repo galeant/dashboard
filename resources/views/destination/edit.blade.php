@@ -59,7 +59,7 @@
                             <select name="province_id" id="province" class="form-control" required>
                                 <option value="">--Select Province--</option>
                                 @foreach($province as $p)
-                                <option value="{{$p->id}}">{{$p->name}}</option>
+                                <option value="{{$p->id}}" @if($destination->province_id == $p->id) selected @endif>{{$p->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -67,6 +67,9 @@
                             <h5>City*:</h5>
                             <select name="city_id" id="city"  class="form-control" required>
                                 <option value="">--Select City--</option>
+                                @if(!empty($destination->cities))
+                                    <option value="{{$destination->city_id}}" selected>{{$destination->cities->name}}</option>
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -75,12 +78,18 @@
                             <h5>District*:</h5>
                             <select name="district_id" id="district"  class="form-control" required>
                                 <option value="">--Select District-</option>
+                                @if(!empty($destination->districts))
+                                    <option value="{{$destination->district_id}}" selected>{{$destination->districts->name}}</option>
+                                @endif
                             </select>
                         </div>
                         <div class="col-md-3">
                             <h5>Village*:</h5>
                             <select name="village_id" id="village"  class="form-control" required>
                                 <option value="">--Select Village--</option>
+                                @if(!empty($destination->villages))
+                                    <option value="{{$destination->village_id}}" selected>{{$destination->villages->name}}</option>
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -484,59 +493,6 @@
 <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
 <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script>
 <script src="{{ asset('js/demo.js') }}"></script>
-    <script>
-        $(document).ready(function(){
-            $("select[name='province_id']").find("option[value='{{$destination->province_id}}']").attr('selected', 'selected')
-            $("select[name='destination_type_id']").find("option[value='{{$destination->destination_type_id}}']").attr('selected', 'selected')
-            $("select[name='city_id']").empty();
-            $("select[name='district_id']").empty();
-            $("select[name='village_id']").empty();
-            $.ajax({
-                method: "GET",
-                url: "{{ url('/json/city') }}",
-                data:{
-                    province_id : {{$destination->province_id}}
-                }
-            }).done(function(response) {
-                $.each(response.data, function (index, value) {
-                    $("select[name='city_id']").append(
-                        "<option value="+value.id+">"+value.name+"</option>"
-                    );
-                });
-                $("select[name='city']").find("option[value='{{$destination->city}}']").attr('selected', 'selected');
-                $.ajax({
-                    method: "GET",
-                    url: "{{ url('/json/district') }}",
-                    data:{
-                        city_id : {{$destination->city_id}}
-                    }
-                }).done(function(response) {
-                    $.each(response.data, function (index, value) {
-                        $("select[name='district_id']").append(
-                            "<option value="+value.id+">"+value.name+"</option>"
-                        );
-                    });
-                    $("select[name='district_id']").find("option[value='{{$destination->district}}']").attr('selected', 'selected');
-                    
-                    $.ajax({
-                        method: "GET",
-                        url: "{{ url('/json/village') }}",
-                        data:{
-                            district_id : {{$destination->district_id}}
-                        }
-                    }).done(function(response) {
-                        $.each(response.data, function (index, value) {
-                            $("select[name='village_id']").append(
-                                "<option value="+value.id+">"+value.name+"</option>"
-                            );
-                        });
-                        $("select[name='village_id']").find("option[value='{{$destination->village}}']").attr('selected', 'selected');
-                    });
-                });
-            });
-
-        });
-    </script>
     <script type="text/javascript">
     @if(count($destination->destination_tips) > 0)
     var i = "{{count($destination->destination_tips)}}";
