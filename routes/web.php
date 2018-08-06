@@ -97,15 +97,15 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
 		// DELETE SHCHEDULE
 		Route::get('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
+		// UPDATE PRICE
+		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
+		// DELETE SHCHEDULE
+		Route::get('tour-activity/price/{id}/delete', 'TourController@priceDelete');
+
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax');
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
-		Route::post('/productinfo/update1','TourController@update1');
-		Route::post('/productinfo/update2','TourController@update2');
-		Route::post('/productinfo/update3','TourController@update3');
-		Route::post('/productinfo/update4','TourController@update4');
-		Route::post('/productinfo/update5','TourController@update5');
 	});
 
  	Route::resource('members', 'MembersController');

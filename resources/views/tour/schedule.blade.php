@@ -127,7 +127,7 @@
                                     <td id="action">    
                                         <a href="#" id="update"><i class="material-icons">save</i></a>
                                         <a href="#" id="edit"><i class="material-icons">mode_edit</i></a>
-                                        <a href="{{ url('product/tour-activity/schedule/'.$schedule->id.'/delete') }}"><i class="material-icons">delete</i></a>
+                                        <a id="delete" href="{{ url('product/tour-activity/schedule/'.$schedule->id.'/delete') }}"><i class="material-icons">delete</i></a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -249,6 +249,8 @@
         $("td#action").each(function(){
             $(this).find("a#edit").click(function(){
                 var me = $(this).closest("td#action");
+                me.closest("tr#value").find("p").hide();
+                me.closest("tr#value").find("input").show();
                 me.find("a").hide();
                 me.find("a#update").show().click(function(){
                     var id = me.closest("tr#value").attr('data-id');
@@ -277,11 +279,22 @@
                             maximum_booking: maximum_booking
                         }
                     }).done(function(response) {
-                        location. reload();
+                        me.closest("tr#value").attr('data-id',response.data.id);
+                        var startDateGet = new Date(response.data.start_date);
+                        me.closest("tr#value").find("td#startDate p").text((startDateGet.getDate() + 1) + '-' + startDateGet.getMonth() + '-' +  startDateGet.getFullYear());
+                        var endDateGet = new Date(response.data.end_date);
+                        me.closest("tr#value").find("td#endDate p").text((endDateGet.getDate() + 1) + '-' + endDateGet.getMonth() + '-' +  endDateGet.getFullYear());
+                        me.closest("tr#value").find("td#startHours p").text(response.data.start_hours);
+                        me.closest("tr#value").find("td#endHours p").text(response.data.end_hours);
+                        var bookDateGet = new Date(response.data.max_booking_date_time);
+                        me.closest("tr#value").find("td#maxBookDate p").text((bookDateGet.getDate() + 1) + '-' + bookDateGet.getMonth() + '-' +  bookDateGet.getFullYear());
+                        me.closest("tr#value").find("td#maxBook p").text(response.data.maximum_booking);
+                        me.find("a#delete,a#edit").show();
+                        me.find("a#update").hide();
+                        me.closest("tr#value").find("p").show();
+                        me.closest("tr#value").find("input").hide();
                     });
                 });
-                me.closest("tr#value").find("p").hide();
-                me.closest("tr#value").find("input").show();
             });
         });
         $("td").find("#scheduleField5").each(function(){
@@ -300,7 +313,59 @@
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));
             });
         });
-       
+        var edited = "{{session()->get('schedule_edit')}}";
+        console.log(edited);
+        if(edited == 1){
+            $('tbody').find("td#action").each(function(){
+                $(this).find("a#edit").hide();
+                $(this).closest("tr#value").find("p").hide();
+                $(this).closest("tr#value").find("input").show();
+                $(this).find("a#update").show().click(function(){
+                    var me1 = $(this).closest("td#action");
+                    var id = me1.closest("tr#value").attr('data-id');
+                    var start_date = me1.closest("tr#value").find("input[name='start_date']").val();
+                    var end_date =  me1.closest("tr#value").find("input[name='end_date']").val();
+                    var start_hours = me1.closest("tr#value").find("input[name='start_hours']").val();
+                    var end_hours = me1.closest("tr#value").find("input[name='end_hours']").val();
+                    var max_booking_date_time = me1.closest("tr#value").find("input[name='max_booking_date_time']").val();
+                    var maximum_booking = me1.closest("tr#value").find("input[name='maximum_booking']").val();
+                    
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        method: "POST",
+                        url: "{{ url('product/tour-activity/schedule/update') }}",
+                        data: { 
+                            id: id,
+                            start_date: start_date,
+                            end_date: end_date,
+                            start_hours: start_hours, 
+                            end_hours: end_hours, 
+                            max_booking_date_time: max_booking_date_time, 
+                            maximum_booking: maximum_booking
+                        }
+                    }).done(function(response) {
+                        me1.closest("tr#value").attr('data-id',response.data.id);
+                        var startDateGet = new Date(response.data.start_date);
+                        me1.closest("tr#value").find("td#startDate p").text((startDateGet.getDate() + 1) + '-' + startDateGet.getMonth() + '-' +  startDateGet.getFullYear());
+                        var endDateGet = new Date(response.data.end_date);
+                        me1.closest("tr#value").find("td#endDate p").text((endDateGet.getDate() + 1) + '-' + endDateGet.getMonth() + '-' +  endDateGet.getFullYear());
+                        me1.closest("tr#value").find("td#startHours p").text(response.data.start_hours);
+                        me1.closest("tr#value").find("td#endHours p").text(response.data.end_hours);
+                        var bookDateGet = new Date(response.data.max_booking_date_time);
+                        me1.closest("tr#value").find("td#maxBookDate p").text((bookDateGet.getDate() + 1) + '-' + bookDateGet.getMonth() + '-' +  bookDateGet.getFullYear());
+                        me1.closest("tr#value").find("td#maxBook p").text(response.data.maximum_booking);
+                        me1.find("a#delete,a#edit").show();
+                        me1.find("a#update").hide();
+                        me1.closest("tr#value").find("p").show();
+                        me1.closest("tr#value").find("input").hide();
+                    });
+                });
+            });
+        }
     });
 </script>
 @stop

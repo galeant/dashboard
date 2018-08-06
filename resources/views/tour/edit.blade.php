@@ -297,7 +297,7 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
                                                 @if(count($data->destinations) !=0)
-                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->destination->name @endif</option>
+                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
                                                 @endif
@@ -340,7 +340,7 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination_name @endif</option>
+                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select Destination --</option>
                                                 @endif
@@ -463,114 +463,94 @@
                                     <label for="2p" style="font-size:15px">I want to add pricing in USD for international tourist</label>
                                 </div>
                             </div>
-                            <div class="row" id="price_row">
+                            <div class="row">
                                 <div class="col-md-3">
                                     <h5>Pricing Option</h5>
                                     <select name="price_type" id="priceType" class="form-control" required>
-                                        <option value="1" @if(count($data->prices) == 0)) selected @endif>Fixed Price</option>
-                                        <option value="2" @if(count($data->prices) != 0 ) selected @endif>Based on Number of Person</option>
+                                        <option value="1" @if(count($data->prices) == 1)) selected @endif>Fixed Price</option>
+                                        <option value="2" @if(count($data->prices) > 1 ) selected @endif>Based on Number of Person</option>
                                     </select>
-                                </div>
-                                <div id="price_fix">
-                                    <div class="col-md-3" id="price_idr">
-                                        <h5>Price (IDR)*:</h5>
-                                        <input type="hidden" name="price[0][people]" value="fixed"> 
-                                        <input type="text" value="{{(int)$data->price_idr}}" id="idr" name="price[0][IDR]" class="form-control" required />     
-                                    </div>
-                                    <div class="col-md-3 valid-info" id="price_usd" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) style="display: block"
-                                    @else style="display: block" @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) style="display: block" @else style="display: none" @endif >
-                                        <h5>Price (USD)*</h5>
-                                        <input type="text" id="usd" value="{{(int)$data->price_usd}}" name="price[0][USD]" class="form-control" />     
-                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-12" style="display: none" id="price_table_container">
+                        <div class="col-md-12" id="price_table_container">
                             <div class="row">
-                            <h4 class="dd-title m-t-20">
-                                Pricing Tables
-                            </h4>
-                                <div class="col-md-12" id="price_list" style="display: none">
-                                    <div class="row">
-                                        <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
+                                <h4 class="dd-title m-t-20">
+                                    Pricing Tables
+                                </h4>
+                                <div class="col-md-12" id="price_list">
+                                <!--  -->
+                                    <div class="row" id="price_row">
+                                        <div class="col-md-1" style="padding: 25px 0px 0px 0px;width:auto">
                                             <h5><i class="material-icons">person</i></h5>
                                         </div>
-                                        <div class="col-md-11">
+                                        <div class="col-md-11" style="margin-left:0px">
                                             <div class="row">
-                                                <div class="col-md-6 valid-info" id="price_idr">
+                                                <div class="col-md-3 valid-info" id="number_person">
+                                                    <h5>Person*</h5>
+                                                    <input id="price_list_field1" type="text"  class="form-control" 
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" @endif     
+                                                    required>  
+                                                </div>
+                                                <div class="col-md-3 valid-info" id="price_idr">
                                                     <h5>Price (IDR)*</h5>
-                                                    <input id="price_list_field1" type="hidden" required>  
-                                                    <input id="price_list_field2" type="text" class="form-control" required>     
+                                                    <input id="price_list_field2" type="text" class="form-control"  
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]" @endif 
+                                                    required>     
                                                 </div>
-                                                <div class="col-md-6 valid-info" id="price_usd" style="display: none">
+                                                <div class="col-md-3 valid-info" id="price_usd" style="display: none">
                                                     <h5>Price (USD)*</h5>
-                                                    <input id="price_list_field3" type="text" class="form-control" required />     
+                                                    <input id="price_list_field3" type="text" class="form-control" 
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][USD]" @else name="price[0][USD]" @endif 
+                                                    required />     
                                                 </div>
+                                                <div class="col-md-1" id="price_delete"></div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div id="price_list_container">
                                     <div class="row">
-                                        <div class="col-md-6" id="price_list_container_left">
-                                            @if(count($data->prices) != 0)
-                                            <?php $count = count($data->prices); ?>
-                                                @foreach($data->prices as $index => $val)
-                                                    @if($index < ceil($count/2))
-                                                    <div class="col-md-12" id="price_list{{$index}}">
-                                                        <div class="row">
-                                                            <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
-                                                                <h5><i class="material-icons">person</i></h5>
-                                                            </div>
-                                                            <div class="col-md-11">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 valid-info" id="price_idr">
-                                                                        <h5>Price (IDR)*</h5>
-                                                                        <input id="price_list_field1" type="hidden" name="price[{{$index}}][people]" value="{{$val->number_of_person}}" required>  
-                                                                        <input id="price_list_field2" type="text" name="price[{{$index}}][IDR]" class="form-control" value="{{(int)$val->price_idr}}" required>     
-                                                                    </div>
-                                                                    <div class="col-md-6 valid-info" id="price_usd" @if(!empty($price_usd))style="display: none" @endif>
-                                                                        <h5>Price (USD)*</h5>
-                                                                        <input id="price_list_field3" name="price[{{$index}}][USD]"  type="text" class="form-control" value="{{(int)$val->price_usd}}" required />     
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </div>
-                                        <div class="col-md-6" id="price_list_container_right">
-                                            @if(count($data->prices) != 0)
-                                                @foreach($data->prices as $index => $val)
-                                                    @if($index >= ceil($count/2))
-                                                    <div class="col-md-12" id="price_list{{$index}}">
-                                                        <div class="row">
-                                                            <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
-                                                                <h5><i class="material-icons">person</i></h5>
-                                                            </div>
-                                                            <div class="col-md-11">
-                                                                <div class="row">
-                                                                    <div class="col-md-6 valid-info" id="price_idr">
-                                                                        <h5>Price (IDR)*</h5>
-                                                                        <input id="price_list_field1" type="hidden" name="price[{{$index}}][people]" value="{{$val->number_of_person}}" required> 
-                                                                        <input id="price_list_field2" type="text" name="price[{{$index}}][IDR]" class="form-control" value="{{(int)$val->price_idr}}" required>     
-                                                                    </div>
-                                                                    <div class="col-md-6 valid-info" id="price_usd" @if(!empty($price_usd))style="display: none" @endif>
-                                                                        <h5>Price (USD)*</h5>
-                                                                        <input id="price_list_field3" name="price[{{$index}}][USD]"  type="text" class="form-control" value="{{(int)$val->price_usd}}" require />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    @endif
-                                                @endforeach
-                                            @endif
-                                        </div>
+                                        <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
                                     </div>
+                                </div>
+                                <!--  -->
+                                <div id="price_list_container">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th id="numberOfPerson">Number Of Person</th>
+                                                <th id="price_idr">Price IDR</th>
+                                                <th id="price_usd">Price USD</th>
+                                                <th id="action">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        @if(count($data->prices) != 0)
+                                            @foreach($data->prices as $index => $val)
+                                            <tr id="price_value" data-id="{{$val->id}}">
+                                                <td id="numberOfPerson">
+                                                    <p>{{$val->number_of_person}}</p>
+                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}" required>  
+                                                </td>
+                                                <td id="price_idr">
+                                                    <p>{{(int)$val->price_idr}}</p>
+                                                    <input style="display:none" id="price_list_field2" type="text" class="form-control"  value="{{(int)$val->price_idr}}" required>     
+                                                    
+                                                </td>
+                                                <td id="price_usd">
+                                                    <p>{{(int)$val->price_usd}}</p>
+                                                    <input style="display:none" id="price_list_field3" type="text" class="form-control" value="{{(int)$val->price_usd}}" required/>     
+                                                </td>
+                                                <td id="action">    
+                                                    <a style="display:none" id="price_update"><i class="material-icons">save</i></a>
+                                                    <a id="price_edit"><i class="material-icons">mode_edit</i></a>
+                                                    <a href="{{ url('product/tour-activity/price/'.$val->id.'/delete') }}" id="price_delete"><i class="material-icons">delete</i></a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endif
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -883,18 +863,21 @@
             // console.log(cancel);
             var tpPrice = $('#1p').prop("checked");
             var opPrice = $('#priceType').val();
+            
             if(tpPrice){
                 $("#price_usd, #price_list_container #price_usd").hide();
             }else{
                 $("#price_usd, #price_list_container #price_usd").show();
             }
             if(opPrice == 1){
-                $("#price_fix").show();
-                $("#price_table_container").hide();
-                $("#price_list_container_left,#price_list_container_right").empty();
+                @if(count($data->prices) > 0 )
+                    $("div#price_list").hide();
+                @else
+                    $("div#price_list").show();
+                    $("button#add_price_button").hide();
+                @endif
             }else{
-                $("#price_fix").hide();
-                $("#price_table_container").show(); 
+                $("button#add_price_button").show();
              }     
             var hash = location.hash;
             if(hash != ""){
@@ -984,7 +967,8 @@
             enableAllSteps: true,
             enablePagination: false
         });
-        $("#idr,#usd").each(function(){
+        $("input#idr,input#usd").mask('0.000.000.000', {reverse: true});
+        $("input#price_list_field2,input#price_list_field3").each(function(){
             $(this).mask('0.000.000.000', {reverse: true});
         });
         $("#PICPhone").mask('000-0000-00000');
@@ -1199,19 +1183,19 @@
                         );
                     });
                 });
-                $.ajax({
-                  method: "GET",
-                  url: "{{ url('json/destination') }}",
-                  data: {
-                    province_id: $(this).val()
-                  }
-                }).done(function(response) {
-                    $.each(response.data, function (index, value) {
-                        $('#'+id+'-destination').append(
-                            "<option value="+value.id+">"+value.name+"</option>"
-                        );
-                    });
-                });
+                // $.ajax({
+                //   method: "GET",
+                //   url: "{{ url('json/destination') }}",
+                //   data: {
+                //     province_id: $(this).val()
+                //   }
+                // }).done(function(response) {
+                //     $.each(response.data, function (index, value) {
+                //         $('#'+id+'-destination').append(
+                //             "<option value="+value.id+">"+value.name+"</option>"
+                //         );
+                //     });
+                // });
              });
             $('.dd-cli').delegate('.city-sel','change',function(e){
                 var id = $(this).attr('data-id');
@@ -1241,38 +1225,51 @@
                 }
             });
             $("#priceType").change(function () {
-                var maxPerson = $("#max_person").val();
-                var dif = Math.round(maxPerson/2)-1;
                 var prictType = $(this).val();
                 if(prictType == 1){
-                    $("#price_fix").show();
-                    $("#price_table_container").hide();
-                    $("#price_list_container_left,#price_list_container_right").empty();
+                    @if(count($data->prices) > 0 )
+                        $("div#price_list").hide();
+                    @else
+                        $("div#price_list").show();
+                    @endif
+                    $("button#add_price_button").hide();
+                    $("div#price_row:not(:eq(0))").remove()
+                    $("tr#price_value:not(:eq(0))").hide()
                 }else{
-                    $("#price_fix").hide();
-                    $("#price_table_container, #price_list").show();    
+                    $("div#price_list").show();
+                    $("tr#price_value").each(function(){
+                        $(this).show();
+                    });
+                    $("button#add_price_button").show();
                     // 
-                    for(var pric=0;pric<=dif;pric++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_left").attr("id","price_list"+pric);
-                        $("#price_list"+pric+" .col-md-1 h5").append((pric+1));
-                        $("#price_list"+pric+" #price_list_field1").val((pric+1));
-                        $("#price_list"+pric+" #price_list_field1").attr("name","price["+pric+"][people]");
-                        $("#price_list"+pric+" #price_list_field2").attr("name","price["+pric+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+pric+" #price_list_field3").attr("name","price["+pric+"][USD]").mask('0.000.000.000', {reverse: true});
-                    }
-                    // 
-                    for(var prik=(dif+1);prik<maxPerson;prik++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_right").attr("id","price_list"+prik);
-                        $("#price_list"+prik+" .col-md-1 h5").append((prik+1));
-                        $("#price_list"+prik+" #price_list_field1").val((prik+1));
-                        $("#price_list"+prik+" #price_list_field1").attr("name","price["+prik+"][people]");
-                        $("#price_list"+prik+" #price_list_field2").attr("name","price["+prik+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+prik+" #price_list_field3").attr("name","price["+prik+"][USD]").mask('0.000.000.000', {reverse: true});
-                    }
-                    $("#price_list").hide();
                 }
             });
-
+            // console.log($("div#price_row:not(:eq(1))").remove());
+            // PRICE ADD MORE
+            var priceC = {{count($data->prices)}};
+            $("#add_price_button").click(function(){
+                priceC++;
+                var me = $(this).closest("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
+                me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").val(null).mask('0000', {reverse: true}).change(function(){
+                    var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1");
+                    if($(this).val() < prev.val() ){
+                        $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
+                        $("button#add_price_button").attr("disabled","disabled");
+                    }else{
+                        $("div#number_person").each(function(){
+                            $(this).find("small").remove();
+                        });
+                        $("button#add_price_button").removeAttr("disabled");
+                    }
+                });
+                me.find("input#price_list_field2").removeAttr("name").attr("name","price["+priceC+"][IDR]").val(null).mask('0.000.000.000', {reverse: true});
+                me.find("input#price_list_field3").removeAttr("name").attr("name","price["+priceC+"][USD]").val(null).mask('0.000.000.000', {reverse: true});;
+                me.find("div#price_delete").empty().append('<button id="price_delete" type="button" class="btn bg-red waves-effect" style="margin-top:30px">Del</button>');
+            });
+            // DEL PRICE
+            $(document).on("click", "button#price_delete", function() {
+                $(this).closest("div#price_row").remove();
+            });
             // PRICE INCLUDE
             $("select[name='price_includes[]']").select2({
                 tags:true
@@ -1290,7 +1287,49 @@
                     $("#cancel_policy").hide();
                 }
             });
-
+            //Edit show
+            $("tr#price_value:first").find("a#price_delete").remove();
+            // EDIT MODE
+            $("tr#price_value").each(function(){
+                $(this).find("a#price_edit").click(function(){
+                    var me = $(this).closest("td#action");
+                    $(this).hide();
+                    $(this).closest("tr#price_value").find("p").hide();
+                    $(this).closest("tr#price_value").find("input").show();
+                    $(this).siblings("a#price_update").show().click(function(){
+                        var id = me.closest("tr#price_value").attr('data-id');
+                        var number_of_person = me.closest("tr#price_value").find("input#price_list_field1").val();
+                        var price_idr =  me.closest("tr#price_value").find("input#price_list_field2").val();
+                        var price_usd = me.closest("tr#price_value").find("input#price_list_field3").val();
+                        $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                        });
+                        $.ajax({
+                            method: "POST",
+                            url: "{{ url('product/tour-activity/price/update') }}",
+                            data: { 
+                                id: id,
+                                number_of_person: number_of_person,
+                                price_idr: price_idr,
+                                price_usd: price_usd, 
+                            }
+                        }).done(function(response) {
+                            me.closest("tr#price_value").attr('data-id',response.data.id);
+                            me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
+                            me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
+                            me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
+                            me.find("a#price_edit").show();
+                            me.find("a#price_update").hide();
+                            me.closest("tr#price_value").find("p").show();
+                            me.closest("tr#price_value").find("input").hide();
+                        });
+                    });
+                });
+            });
+            // 
+            
         });
         $(document).on('ready', function() {
             var url_activity = [];var url_accommodation = [];var url_other = [];var url_destination = [];
@@ -1441,8 +1480,6 @@
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();
         });
-        
-        
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop
