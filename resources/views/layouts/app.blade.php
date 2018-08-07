@@ -102,7 +102,7 @@
 		                    </li>
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
-		                            <span>Registration - Activity (5)</span>
+		                            <span>Registration - Activity</span>
 		                        </a>
 		                    </li>
 		                   <!--  <li {{{ (Request::is('admin/partner/accomodation*') ? 'class=active' : '') }}}>

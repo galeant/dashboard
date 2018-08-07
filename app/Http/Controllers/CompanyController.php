@@ -26,8 +26,11 @@ class CompanyController extends Controller
     {
         if($request->ajax())
         {
-            $model = Company::query();
-            return Datatables::eloquent($model)
+            $model = Company::with(['suppliers' => function($query){
+                $query->orderBy('created_at','desc');
+            }])
+            ->where('status',[5,6]);
+            return Datatables::of($model)
             ->addColumn('action', function(Company $data) {
                 return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
@@ -35,6 +38,12 @@ class CompanyController extends Controller
                     <a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
+            })
+            ->addColumn('pic_email', function(Company $data) {
+                return $data->suppliers[0]->email;
+            })
+            ->addColumn('pic_name', function(Company $data) {
+                return $data->suppliers[0]->fullname;
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->editColumn('status', function (Company $data){
@@ -49,12 +58,21 @@ class CompanyController extends Controller
     public function registrationList(Request $request){
         if($request->ajax())
         {
-            $model = Company::where('status',1);
-            return Datatables::eloquent($model)
+            $model = Company::with(['suppliers' => function($query){
+                $query->orderBy('created_at','desc');
+            }])
+            ->where('status','!=',[5,6]);
+            return Datatables::of($model)
             ->addColumn('action', function(Company $data) {
                 return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-success  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>';
+            })
+            ->addColumn('pic_email', function(Company $data) {
+                return $data->suppliers[0]->email;
+            })
+            ->addColumn('pic_name', function(Company $data) {
+                return $data->suppliers[0]->fullname;
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->editColumn('status', function (Company $data){

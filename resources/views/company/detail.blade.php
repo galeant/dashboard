@@ -64,8 +64,8 @@
                                 <span class="badge bg-red">Disabled</span>
                                 @endif
                                 <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
-                                <i class="material-icons">settings</i>
-                            </button>
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -468,6 +468,8 @@
                 {{ Form::close() }}
                 </div>
             </div>
+        @if($company->status != 5 && $company->status != 6)
+        
             @if($data != null)
             <div class="card" id="sample_product" >
                 <div class="header">
@@ -1116,13 +1118,14 @@
                 </div>
             </div>
             @endif
+        
+        @endif
         </div>
         <!-- Status Modal -->
         <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                <form method="POST" action="{{ url('partner/'.$company->id.'/change/status') }}" enctype="multipart/form-data">
-                    @csrf
+                
                     <div class="modal-header">
                         <div class="row">
                             <div class="col-md-6">
@@ -1165,13 +1168,21 @@
                             </tbody>
                         </table>
                         <div class="change-status row clearfix" style="display: none">
+                        <form method="POST" action="{{ url('partner/'.$company->id.'/change/status') }}" enctype="multipart/form-data">
+                        @csrf
                             <div class="col-md-12">
                                 <div class="valid-info">
                                     <h5>Status:</h5>
                                     <select class="form-control" name="status" required>
-                                        @foreach(Helpers::statusCompany() as $value => $status)
-                                            <option value="{{$value}}" >{{$status}}</option>
-                                        @endforeach
+                                        @if($company->status == 5 || $company->status == 6)
+                                            <option value="5" @if($company->status == 5) selected @endif>Active</option>
+                                            <option value="6" @if($company->status == 6) selected @endif>Disabled</option>
+                                        @else
+                                            <option value="2" @if($company->status == 2) selected @endif>Awaiting Moderation</option>
+                                            <option value="3" @if($company->status == 3) selected @endif>Insufisient Data</option>
+                                            <option value="4" @if($company->status == 4) selected @endif>Rejected</option>
+                                            <option value="5" @if($company->status == 5) selected @endif>Active</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>
