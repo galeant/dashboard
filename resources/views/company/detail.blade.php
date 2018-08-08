@@ -33,7 +33,7 @@
         <h2>
             Detail Partners
             <small>Data / Partners</small>
-        </h2>
+        </h2>   
     </div>
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -42,12 +42,6 @@
                     <div class="row">
                         <div class="col-md-3" style="margin-top:10px">
                             <h2>Detail Partners</h2>
-                        </div>
-                        <ul class="header-dropdown m-r--5">
-                            <li >
-                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Change Status</button>
-                            </li>
-                            <li>
                                 @if($company->status == 0)
                                 <span class="badge bg-purple">Not Verified</span>
                                 @elseif($company->status ==1)
@@ -63,6 +57,12 @@
                                 @else
                                 <span class="badge bg-red">Disabled</span>
                                 @endif
+                        </div>
+                        <ul class="header-dropdown m-r--5">
+                            <li >
+                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Change Status</button>
+                            </li>
+                            <li>
                                 <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
                                     <i class="material-icons">mode_edit</i>
                                 </button>
@@ -347,7 +347,7 @@
                         <div class="col-md-12" id="npwp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p id="npwp" style="font-weight: bold"> Tax Number</p>
+                                    <p id="npwp_eng" style="font-weight: bold"> Tax Number</p>
                                     <p id="npwp">NPWP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -383,7 +383,7 @@
                         <div class="col-md-12" id="ktp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p id="ktp" style="font-weight: bold">Identity Card</p>
+                                    <p id="ktp_eng" style="font-weight: bold">Identity Card</p>
                                     <p id="ktp">KTP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -1339,16 +1339,16 @@
                 var val = $(this).val();
                 if(val == "Company"){
                     $("#akta,#siup,#npwp,#ktp,#evi").show();
-                    $("#npwp").find("h5#npwp").text("Company's Tax Number");
-                    $("#npwp").find("p#npwp").text("NPWP Perusahaan");
-                    $("#ktp").find("h5#ktp").text("Company Owner Identity Card");
-                    $("#ktp").find("p#ktp").text("KTP Direksi Perusahaan");
+                    $("p#npwp_eng").text("Company's Tax Number");
+                    $("p#npwp").text("NPWP Perusahaan");
+                    $("p#ktp_eng").text("Company Owner Identity Card");
+                    $("p#ktp").text("KTP Direksi Perusahaan");
                 }else{
                     $("#npwp,#ktp").show();
-                    $("#npwp").find("h5#npwp").text("Tax Number");
-                    $("#npwp").find("p#npwp").text("NPWP");
-                    $("#ktp").find("h5#ktp").text("Identity Card");
-                    $("#ktp").find("p#ktp").text("KTP");
+                    $("p#npwp_eng").text("Tax Number");
+                    $("p#npwp").text("NPWP");
+                    $("p#ktp_eng").text("Identity Card");
+                    $("p#ktp").text("KTP");
                     $("#akta,#siup,#evi").hide();
                 }
             });

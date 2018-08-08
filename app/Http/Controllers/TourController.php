@@ -439,7 +439,7 @@ class TourController extends Controller
                 $data->save();
                 // PRICE TYPE
                 // dd($request->price[count($data->prices)]['people']);
-                if($request->price[count($data->prices)]['people'] != null){   
+                if($request->price[count($data->prices)]['people'] != null || $request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null){   
                     foreach($request->price as $price){
                         if($price['USD'] == null  || $price['USD'] == ''){
                             $price['USD'] = null;
@@ -503,15 +503,6 @@ class TourController extends Controller
                         'status' => 2,
                         'note' => 'initial input product'
                     ]);
-                }else{
-                    $status = Tour::where('id',$data->id)->update([
-                        'status' => 1
-                    ]);
-                    $statusChangeLog = ProductStatusLog::create([
-                        'product_id' => $data->id,
-                        'status' => 1,
-                        'note' => 'input product for first time, need kuration'
-                    ]);
                 }
                 DB::commit();
                 return redirect("/product/tour-activity/".$id.'/edit#step-h-3');
@@ -561,19 +552,19 @@ class TourController extends Controller
         }
     }
  
-    public function changeStatus(Request $request,$id)
+    public function changeStatus($id,$status)
     {
-        // dd($request->all());
-        $status = $request->input('status');
-        $note = $request->input('note');
-        $validation = Validator::make($request->all(), [
-            'status' => 'required'
-        ]);
-        // Check if it fails //
-        if( $validation->fails() ){
-            return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
-        }
+        // // dd($request->all());
+        // $status = $request->input('status');
+        // $note = $request->input('note');
+        // $validation = Validator::make($request->all(), [
+        //     'status' => 'required'
+        // ]);
+        // // Check if it fails //
+        // if( $validation->fails() ){
+        //     return redirect()->back()->withInput()
+        //     ->with('errors', $validation->errors() );
+        // }
         DB::beginTransaction();
          try{
             $data = Tour::find($id);
@@ -582,7 +573,7 @@ class TourController extends Controller
                 // dd($data->save());
                 if($data->save()){
                     $upStatus = Tour::where('id',$id)->update(['status' => $status]);
-                    $status = ProductStatusLog::create(['product_id' => $id,'status' => $status,'note' => $note]);
+                    $status = ProductStatusLog::create(['product_id' => $id,'status' => $status]);
                     // dd($status);
                     // $data->note = $note;
                     // Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));

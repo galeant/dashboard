@@ -19,17 +19,33 @@
             top:5px;
             margin-bottom: 10px;
         }
-        
+        a#status{
+            float:right;
+            margin:0px 5px;
+        }
+        #head_card{
+            float:left;
+            padding-bottom:10px;
+        }
         
     </style>
 @stop
 
 @section('main-content')
 <div class="block-header">
-    <h2>
+    <h2 id="head_card">
         Detail Tour Activity
         <small>Master Data / Tour Activity</small>
     </h2>
+    @if($data->status == 0 || $data->status == 3)
+        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/1') }}" class="btn bg-green waves-effect">Publish</a>
+    @elseif($data->status == 1)
+        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/0') }}" class="btn bg-red waves-effect">Unpublish</a>
+        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/2') }}" class="btn bg-green waves-effect">Active</a>
+    @else
+        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/3') }}" class="btn bg-red waves-effect">Disable</a>
+    @endif
+        <a id="status"> <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status Log</button></a>
 </div>
 <!-- Basic Example | Horizontal Layout -->
 <div class="row clearfix">
@@ -731,38 +747,6 @@
                 </div>
             </div>
         </div>
-        @if($data->status != 0)
-        <div class="card">
-            <div class="header">
-                <h2>Change Status</h2>
-                <ul class="header-dropdown m-r--5">
-                    <li>
-                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status Log</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="body">
-                <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
-                @csrf
-                    <input name="status" type="radio" id="ra" class="with-gap radio-col-green valid-info" value="2" @if($data->status == 2 || ($data->status != 2 && $data->status !=3)) checked @endif required>
-                    <label for="ra">Active</label>
-                    <input name="status" type="radio" id="rd" class="with-gap radio-col-red valid-info" value="3" @if($data->status == 3) checked @endif required>
-                    <label for="rd">Disabled</label>
-                    <div class="row valid-info margin-0">
-                        <div class="col-md-6">
-                            <h5>Note:</h5>
-                            <textarea class="form-control" name="note" rows="6"></textarea>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-block btn-lg btn-success waves-effect m-t-10">Save</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        @endif
     </div>
 </div>
 <!-- #END# Advanced Validation -->
@@ -799,7 +783,6 @@
                                 @endif
                             </td>
                             <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
-                            <td>{{$test->note}}</td>
                         </tr>
                         @endforeach
                         @endif
@@ -1023,10 +1006,11 @@
             }).done(function(response) {
                 $.each(response, function (index, value) {
                     var activity = [];
-                    activity["id"] = value["activityId"];
+                    activity["id"] = value["id"];
                     activity["text"] = value["name"];
                     activityTag.push(activity);
                 });
+                
                 $("#activity_tag").select2({
                     placeholder: "Start type here.",
                     data: activityTag,

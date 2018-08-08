@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
 		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
 		// change status
-		Route::post('tour-activity/{id}/change/status', 'TourController@changeStatus');
+		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus');
 		// UPDATE SHCHEDULE
 		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
 		// DELETE SHCHEDULE
