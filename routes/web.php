@@ -108,7 +108,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 	});
 
- 	Route::resource('members', 'MembersController');
+	Route::resource('members', 'MembersController');
+	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
