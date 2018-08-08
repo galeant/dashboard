@@ -35,6 +35,7 @@
                                             <th>Product Name</th>
                                             <th>Min Person</th>
                                             <th>Max Person</th>
+                                            <th>Schedule</th>
                                             <th>Status</th>
                                             <th>Created At</th>
                                             <th>Action</th>
@@ -70,6 +71,7 @@
 	            {data: 'product_name'},
                 {data: 'min_person'},
                 {data: 'max_person'},
+                {data: 'schedule'},
                 {data: 'status'},
 	            {data: 'created_at'},
 	            {data: 'action'}

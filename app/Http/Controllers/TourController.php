@@ -57,7 +57,23 @@ class TourController extends Controller
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
+            ->addColumn('schedule', function(Tour $data) {
+                return $data->schedules->count();
+            })
+            ->addColumn('status', function(Tour $data) {
+                if($data->status == 0 ){
+                    return '<span class="badge bg-purple">Draft</span>';
+                }else if($data->status == 1 ){
+                    return '<span class="badge bg-blue">Awaiting Moderation</span>';
+                }else if($data->status == 2 ){
+                    return '<span class="badge bg-green">Active</span>';
+                }else{
+                    return '<span class="badge bg-red">Disabled</span>';
+                }
+                
+            })
             ->editColumn('id', 'ID: {{$id}}')
+            ->rawColumns(['status','action'])
             ->make(true);        
         }
         return view('tour.index');
@@ -422,7 +438,8 @@ class TourController extends Controller
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
                 // PRICE TYPE
-                if($request->price_type == 1){
+                // dd($request->price[count($data->prices)]['people']);
+                if($request->price[count($data->prices)]['people'] != null){   
                     foreach($request->price as $price){
                         if($price['USD'] == null  || $price['USD'] == ''){
                             $price['USD'] = null;
@@ -441,75 +458,19 @@ class TourController extends Controller
                                 'product_id'=> $data->id
                             ]);
                     }
-                    
-                    // Price::where('product_id',$data->id)->delete();
-                    // Tour::where('id',$data->id)
-                    //     ->update([
-                    //         'price_idr'=> null,
-                    //         'price_usd'=> null,
-                    //     ]);
-                    // // dd($request->price);
-                    // foreach($request->price as $price){
-                    //     if($price['USD'] == null || $price['USD'] == ''){
-                    //         $price_usd = null;
-                    //     }else{
-                    //         if(strlen($price['USD']) > 3){
-                    //             $price_usd = str_replace(".", "", $price['USD']);    
-                    //         }else{
-                    //             $price_usd = $price['USD'];
-                    //         }
-                    //     }
-                    //     // dd("qdqwd");
-                    //     $priceList = Tour::where('id',$data->id)
-                    //     ->update([
-                    //         'price_idr'=> str_replace(".", "", $price['IDR']),
-                    //         'price_usd'=> $price_usd,
-                    //     ]);
-                    // }
-                }else{
-                    foreach($request->price as $price){
-                        if($price['USD'] == null  || $price['USD'] == ''){
-                            $price['USD'] = null;
-                        }else{
-                            if(strlen($price['USD']) > 3){
-                                $price['USD'] = str_replace(".", "", $price['USD']);    
-                            }
-                        }
-                        if(strlen($price['IDR']) > 3){
-                            $price['IDR'] = str_replace(".", "", $price['IDR']);    
-                        }   
-                        $priceList = Price::create([
-                            'number_of_person'=> $price['people'],
-                            'price_idr'=> $price['IDR'],
-                            'price_usd'=> $price['USD'],
-                            'product_id'=> $data->id
-                        ]);
-                    }
-                    // Price::where('product_id',$data->id)->delete();
-                    // Tour::where('id',$data->id)
-                    //     ->update([
-                    //         'price_idr'=> null,
-                    //         'price_usd'=> null,
-                    //     ]);
-                    //     // dd("kokoko");
-                    // foreach($request->price as $price){
-                    //     if($price['USD'] == null){
-                    //         $price_usd = null;
-                    //     }else{
-                    //         if(strlen($price['USD']) > 3){
-                    //             $price_usd = str_replace(".", "", $price['USD']);    
-                    //         }else{
-                    //             $price_usd = $price['USD'];
-                    //         }
-                    //     }
-                    //     $priceList = Price::create([
-                    //         'number_of_person' => $price['people'],
-                    //         'price_idr'=> str_replace(".", "", $price['IDR']),
-                    //         'price_usd'=> $price_usd,
-                    //         'product_id'=> $data->id
-                    //     ]);    
-                    // }
                 }
+                
+                if($request->price_type == 1){
+                    $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
+                    Price::whereNotIn('number_of_person',[$minPerson->number_of_person])->where('product_id',$data->id)->delete();
+                }
+                
+                if($request->price_kurs == 1){
+                    Price::where('product_id',$data->id)->update([
+                        'price_usd' => null
+                    ]);
+                }
+             
                 // INCLUDE
                 if($request->price_includes != null){
                     Includes::where('product_id',$data->id)->delete();
@@ -602,6 +563,7 @@ class TourController extends Controller
  
     public function changeStatus(Request $request,$id)
     {
+        // dd($request->all());
         $status = $request->input('status');
         $note = $request->input('note');
         $validation = Validator::make($request->all(), [
@@ -619,6 +581,7 @@ class TourController extends Controller
                 $data->status = $status;
                 // dd($data->save());
                 if($data->save()){
+                    $upStatus = Tour::where('id',$id)->update(['status' => $status]);
                     $status = ProductStatusLog::create(['product_id' => $id,'status' => $status,'note' => $note]);
                     // dd($status);
                     // $data->note = $note;

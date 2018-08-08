@@ -99,7 +99,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
 		// UPDATE PRICE
 		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
-		// DELETE SHCHEDULE
+		// DELETE PRICE
 		Route::get('tour-activity/price/{id}/delete', 'TourController@priceDelete');
 
 		Route::resource('tour-guide', 'TourGuideController');

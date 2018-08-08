@@ -19,6 +19,8 @@
             top:5px;
             margin-bottom: 10px;
         }
+        
+        
     </style>
 @stop
 
@@ -50,7 +52,6 @@
                         @else
                         <span class="badge bg-red">Expired</span>
                         @endif
-                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status</button>
                     </li>
                     @if($data->schedule_type != 0)
                     <li>
@@ -110,7 +111,7 @@
                                                         <div class="input-group dd-group">
                                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control']) !!}
                                                             <span class="input-group-addon">
-                                                                <a href="#" class="info-type" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
+                                                                <a href="#" class="info-type" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
                                                             </span>
                                                          </div>
                                                     </div>
@@ -194,7 +195,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4 class="dd-title m-t-20">
-                                             Activity Duration
+                                             Activity Schedule and Duration
                                         </h4>
                                         <h5>How long is the duration of your tour/activity ?</h5>
                                         <div class="col-md-3">
@@ -216,7 +217,6 @@
 
                                 <div class="row clearfix">
                                     <div class="col-md-12">
-                                        <h5>This is related with your itinerary.</h5>
                                         <div class="col-md-2 scheduleDays">
                                             <div class="form-group">
                                                 <h5>Day?* :</h5>
@@ -262,7 +262,7 @@
                                     Destination Details
                                 </h4>
                                 <h5>List down all destination related to your tour package / activity.</h5>
-                                <h5>The more accurate you list down the destinations, better your product's peformance in search result.</h5>
+                                <h5>The more accurate you list down the destinations,the better your product's peformance in search result.</h5>
                                 <div class="master-destinations">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-province">
@@ -444,7 +444,7 @@
                                 <div class="col-md-4">
                                     <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                     @if(count($data->prices) !== 0)
-                                        @if(empty($data->prices[0]->price_usd))
+                                        @if(empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd == 0.00)
                                             checked
                                         @endif
                                     @else
@@ -459,7 +459,15 @@
                                     <label for="1p" style="font-size:15px">I only have pricing in IDR</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) checked @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) checked @endif/>
+                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
+                                        @if(count($data->prices) !== 0)
+                                            @if(!empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd != 0)
+                                                checked 
+                                            @endif 
+                                        @endif 
+                                        @if(!empty($data->price_idr) && !empty($data->price_usd)) 
+                                            checked 
+                                        @endif/>
                                     <label for="2p" style="font-size:15px">I want to add pricing in USD for international tourist</label>
                                 </div>
                             </div>
@@ -490,20 +498,17 @@
                                                 <div class="col-md-3 valid-info" id="number_person">
                                                     <h5>Person*</h5>
                                                     <input id="price_list_field1" type="text"  class="form-control" 
-                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" @endif     
-                                                    required>  
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" required @endif />  
                                                 </div>
                                                 <div class="col-md-3 valid-info" id="price_idr">
                                                     <h5>Price (IDR)*</h5>
                                                     <input id="price_list_field2" type="text" class="form-control"  
-                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]" @endif 
-                                                    required>     
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]" required @endif />     
                                                 </div>
                                                 <div class="col-md-3 valid-info" id="price_usd" style="display: none">
                                                     <h5>Price (USD)*</h5>
                                                     <input id="price_list_field3" type="text" class="form-control" 
-                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][USD]" @else name="price[0][USD]" @endif 
-                                                    required />     
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][USD]" @else name="price[0][USD]" required @endif  />     
                                                 </div>
                                                 <div class="col-md-1" id="price_delete"></div>
                                             </div>
@@ -561,7 +566,7 @@
                                 </h4>
                                 <div class="col-md-6 valid-info">
                                     <h5>What's already included with pricing you have set?What will you provide?</h5>
-                                    <h5 style="font-size: 18px">Example: Meal 3 times a day, mineral water, driver as tour guide.</h5>
+                                    <h7 class="font-14">Example: Meal 3 times a day, mineral water, driver as tour guide.</h7>
                                     <select type="text" class="form-control" name="price_includes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->includes as $include)
                                             <option selected>{{$include->name}}</option>
@@ -579,8 +584,8 @@
                                     Pricing Exclude
                                 </h4>
                                 <div class="col-md-6 valid-info">
-                                    <h5>What's not included with pricing you have set?Any extra cost the costumer should be awere of?</h5>
-                                    <h5 style="font-size: 18px">Example: Entrance fee IDR 200,000, bicycle rental, etc</h5>
+                                    <h5>What's not included with pricing you have set?Any extra cost the costumer should be aware of?</h5>
+                                    <h7 class="font-14">Example: Entrance fee IDR 200,000, bicycle rental, etc</h7>
                                     <select class="form-control" name="price_excludes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->excludes as $exclude)
                                             <option value="{{$exclude->name}}" selected="">{{$exclude->name}}</option>
@@ -620,7 +625,7 @@
                                         <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" placeholder="Day" value="{{$data->max_cancellation_day}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
-                                        <h5>days from shcedule, cancellation fee is</h5>
+                                        <h5>days from schedule, cancellation fee is</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
                                         <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" placeholder="Percent" value="{{$data->cancellation_fee}}" required>
@@ -693,7 +698,7 @@
                         <div class="row" id="embed" style="display: block;margin-bottom: 10px">
                             
                             <div class="col-md-6" >
-                                <input type="url" class="form-control" name="videoUrl[]" value="@if(count($data->videos) !== 0){{$data->videos[0]->url}}@endif" />
+                                <input type="url" class="form-control" name="videoUrl[]" value="@if(count($data->videos) !== 0){{$data->videos[0]->url}}@endif" placeholder="https://www.youtube.com/productvideo"/>
                             </div>
                             <div class="col-md-3">                            
                                 <button type="button" class="btn btn-warning waves-effect" id="add_more_video">
@@ -726,22 +731,49 @@
                 </div>
             </div>
         </div>
+        @if($data->status != 0)
+        <div class="card">
+            <div class="header">
+                <h2>Change Status</h2>
+                <ul class="header-dropdown m-r--5">
+                    <li>
+                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status Log</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="body">
+                <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
+                @csrf
+                    <input name="status" type="radio" id="ra" class="with-gap radio-col-green valid-info" value="2" @if($data->status == 2 || ($data->status != 2 && $data->status !=3)) checked @endif required>
+                    <label for="ra">Active</label>
+                    <input name="status" type="radio" id="rd" class="with-gap radio-col-red valid-info" value="3" @if($data->status == 3) checked @endif required>
+                    <label for="rd">Disabled</label>
+                    <div class="row valid-info margin-0">
+                        <div class="col-md-6">
+                            <h5>Note:</h5>
+                            <textarea class="form-control" name="note" rows="6"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-block btn-lg btn-success waves-effect m-t-10">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 <!-- #END# Advanced Validation -->
 <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
-            @csrf
             <div class="modal-header">
                 <div class="row">
-                <div class="col-md-6">
-                    <h4 class="modal-title" id="statusModalLabel">Status</h4>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
-                </div>
+                    <div class="col-md-6">
+                        <h4 class="modal-title" id="statusModalLabel">Status</h4>
+                    </div>    
                 </div>
             </div>
             <div class="modal-body">
@@ -773,29 +805,6 @@
                         @endif
                     </tbody>
                 </table>
-                <div class="change-status row clearfix" style="display: none">
-                    <div class="col-md-12">
-                        <div class="valid-info">
-                            <h5>Status:</h5>
-                            <select class="form-control" name="status" required>
-                                <option value="">-- Select Status --</option>
-                                @foreach(Helpers::statusProduct() as $value => $status)
-                                    <option value="{{$value}}" >{{$status}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="valid-info">
-                            <h5>Note:</h5>
-                            <textarea class="form-control" name="note" rows="6"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
-                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
@@ -1006,37 +1015,54 @@
                 $("input#lat").val(result.geometry.location.lat());
                 $("input#lng").val(result.geometry.location.lng());
               });
-            $("#activity_tag").select2({
-                ajax: {
-                    url: "/json/activity",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                      return {
-                        name: params.term, // search term
-                        page: params.page,
-                      };
-                    },
-                    processResults: function (data, params) {
-                      // parse the results into the format expected by Select2
-                      // since we are using custom formatting functions we do not need to
-                      // alter the remote JSON data, except to indicate that infinite
-                      // scrolling can be used
-                      params.page = params.page || 1;
-                      return {
-                        results: data,
-                        pagination: {
-                          more: (params.page * 30) < data.total_count
-                        }
-                      };
-                    },
-                    cache: true
-                  },
-                  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                  minimumInputLength: 1,
-                  templateResult: formatRepo, // omitted for brevity, see the source of this page
-                  templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+
+            var activityTag = [];
+            $.ajax({
+                method: "GET",
+                url: "/json/activity",
+            }).done(function(response) {
+                $.each(response, function (index, value) {
+                    var activity = [];
+                    activity["id"] = value["activityId"];
+                    activity["text"] = value["name"];
+                    activityTag.push(activity);
+                });
+                $("#activity_tag").select2({
+                    placeholder: "Start type here.",
+                    data: activityTag,
+                });
             });
+            // $("#activity_tag").select2({
+            //     ajax: {
+            //         url: "/json/activity",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //           return {
+            //             name: params.term, // search term
+            //             page: params.page,
+            //           };
+            //         },
+            //         processResults: function (data, params) {
+            //           // parse the results into the format expected by Select2
+            //           // since we are using custom formatting functions we do not need to
+            //           // alter the remote JSON data, except to indicate that infinite
+            //           // scrolling can be used
+            //           params.page = params.page || 1;
+            //           return {
+            //             results: data,
+            //             pagination: {
+            //               more: (params.page * 30) < data.total_count
+            //             }
+            //           };
+            //         },
+            //         cache: true
+            //       },
+            //       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            //       minimumInputLength: 1,
+            //       templateResult: formatRepo, // omitted for brevity, see the source of this page
+            //       templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            // });
             $("#company_id").select2({
                 ajax: {
                     url: "/json/company",
@@ -1233,8 +1259,8 @@
                         $("div#price_list").show();
                     @endif
                     $("button#add_price_button").hide();
-                    $("div#price_row:not(:eq(0))").remove()
-                    $("tr#price_value:not(:eq(0))").hide()
+                    $("div#price_row:not(:eq(0))").remove();
+                    $("tr#price_value:not(:eq(0))").hide();
                 }else{
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
@@ -1479,6 +1505,16 @@
             $("select").removeAttr("disabled");
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();
+        });
+        $("select[name='product_type']").change(function(){
+            console.log($(this).val());
+            if($(this).val() == 'private'){
+                $(this).closest("div").find("a").attr("data-original-title","Private Group");
+                $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers.");
+            }else{
+                $(this).closest("div").find("a").attr("data-original-title","Open Group");
+                $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
+            }
         });
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->

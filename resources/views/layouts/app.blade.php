@@ -4,11 +4,11 @@
 	@section('head-meta')
 	<meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	@show
     <title>Pigijo | Travel Planner</title>
     <!-- Favicon-->
-    <!-- <link rel="icon" href="../../favicon.ico" type="image/x-icon"> -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
     @section('head-css')
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -102,7 +102,7 @@
 		                    </li>
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
-		                            <span>Registration - Activity (5)</span>
+		                            <span>Registration - Activity</span>
 		                        </a>
 		                    </li>
 		                   <!--  <li {{{ (Request::is('admin/partner/accomodation*') ? 'class=active' : '') }}}>
