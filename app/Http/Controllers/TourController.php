@@ -438,6 +438,7 @@ class TourController extends Controller
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
                 // PRICE TYPE
+                // dd($request->price[count($data->prices)]['people']);
                 if($request->price[count($data->prices)]['people'] != null){   
                     foreach($request->price as $price){
                         if($price['USD'] == null  || $price['USD'] == ''){
@@ -457,6 +458,11 @@ class TourController extends Controller
                                 'product_id'=> $data->id
                             ]);
                     }
+                }
+                
+                if($request->price_type == 1){
+                    $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
+                    Price::whereNotIn('number_of_person',[$minPerson->number_of_person])->where('product_id',$data->id)->delete();
                 }
              
                 // INCLUDE

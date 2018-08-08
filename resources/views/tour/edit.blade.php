@@ -1007,7 +1007,23 @@
                 $("input#lat").val(result.geometry.location.lat());
                 $("input#lng").val(result.geometry.location.lng());
               });
-            $("#activity_tag").select2();  
+
+            var activityTag = [];
+            $.ajax({
+                method: "GET",
+                url: "/json/activity",
+            }).done(function(response) {
+                $.each(response, function (index, value) {
+                    var activity = [];
+                    activity["id"] = value["activityId"];
+                    activity["text"] = value["name"];
+                    activityTag.push(activity);
+                });
+                $("#activity_tag").select2({
+                    placeholder: "Start type here.",
+                    data: activityTag,
+                });
+            });
             // $("#activity_tag").select2({
             //     ajax: {
             //         url: "/json/activity",
@@ -1235,8 +1251,8 @@
                         $("div#price_list").show();
                     @endif
                     $("button#add_price_button").hide();
-                    $("div#price_row:not(:eq(0))").remove()
-                    $("tr#price_value:not(:eq(0))").hide()
+                    $("div#price_row:not(:eq(0))").remove();
+                    $("tr#price_value:not(:eq(0))").hide();
                 }else{
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
