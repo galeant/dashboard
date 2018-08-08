@@ -444,7 +444,7 @@
                                 <div class="col-md-4">
                                     <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                     @if(count($data->prices) !== 0)
-                                        @if(empty($data->prices[0]->price_usd))
+                                        @if(empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd == 0.00)
                                             checked
                                         @endif
                                     @else
@@ -459,7 +459,15 @@
                                     <label for="1p" style="font-size:15px">I only have pricing in IDR</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd) && $data->prices[0]->price_usd == 0.00) checked @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) checked @endif/>
+                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
+                                        @if(count($data->prices) !== 0)
+                                            @if(!empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd != 0)
+                                                checked 
+                                            @endif 
+                                        @endif 
+                                        @if(!empty($data->price_idr) && !empty($data->price_usd)) 
+                                            checked 
+                                        @endif/>
                                     <label for="2p" style="font-size:15px">I want to add pricing in USD for international tourist</label>
                                 </div>
                             </div>

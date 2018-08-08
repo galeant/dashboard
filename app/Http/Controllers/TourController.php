@@ -464,6 +464,12 @@ class TourController extends Controller
                     $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
                     Price::whereNotIn('number_of_person',[$minPerson->number_of_person])->where('product_id',$data->id)->delete();
                 }
+                
+                if($request->price_kurs == 1){
+                    Price::where('product_id',$data->id)->update([
+                        'price_usd' => null
+                    ]);
+                }
              
                 // INCLUDE
                 if($request->price_includes != null){
