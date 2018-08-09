@@ -29,6 +29,9 @@ class Tour extends Model
         'schedule_interval',
         'cover_path',
         'cover_filename',
+        'always_available_for_sale',
+        'max_booking_day',
+        'max_booking_per_schedule',
         'price_idr',
         'price_usd',
         'status',
@@ -73,6 +76,10 @@ class Tour extends Model
     public function prices()
     {
         return $this->hasMany('App\Models\Price', 'product_id','id');
+    }
+    public function off_date()
+    {
+        return $this->hasMany('App\Models\CloseDate', 'product_id','id');
     }
     // 
     public function image_destination()

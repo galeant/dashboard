@@ -34,22 +34,24 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
             <div class="header">
-                <h2>Edit Tour Activity</h2>
+                <h2>Edit Tour Activity 
+                @if($data->status == 0)
+                <span class="badge bg-purple">Draft</span>
+                @elseif($data->status ==1)
+                <span class="badge bg-blue">Awaiting Moderation</span>
+                @elseif($data->status ==2)
+                <span class="badge bg-green">Active</span>
+                @elseif($data->status ==3)
+                <span class="badge bg-red">Disabled</span>
+                @elseif($data->status ==4)
+                <span class="badge bg-pink">Edited</span>
+                @else
+                <span class="badge bg-red">Expired</span>
+                @endif
+                </h2>
+
                 <ul class="header-dropdown m-r--5">
                     <li>
-                        @if($data->status == 0)
-                        <span class="badge bg-purple">Draft</span>
-                        @elseif($data->status ==1)
-                        <span class="badge bg-blue">Awaiting Moderation</span>
-                        @elseif($data->status ==2)
-                        <span class="badge bg-green">Active</span>
-                        @elseif($data->status ==3)
-                        <span class="badge bg-red">Disabled</span>
-                        @elseif($data->status ==4)
-                        <span class="badge bg-pink">Edited</span>
-                        @else
-                        <span class="badge bg-red">Expired</span>
-                        @endif
                         <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status</button>
                     </li>
                     @if($data->schedule_type != 0)
@@ -64,6 +66,7 @@
             </div>
             <div class="body" id="content">
                 <div id="step">
+
                     @include('errors.error_notification')
                     <h3>General Information</h3>
                     <section>
@@ -77,6 +80,9 @@
                             <div class="col-md-12">
                                 <div class="row clearfix">
                                     <div class="col-md-12">
+                                        <h4 class="dd-title m-t-20">
+                                             General information
+                                        </h4>
                                         <div class="col-md-4 cover-image">
                                             <label>Cover Product Image*</label>
                                             <div class="dd-main-image">
@@ -200,15 +206,15 @@
                                         <div class="col-md-3">
                                             <input name="schedule_type" type="radio" id="1d" class="radio-col-deep-orange schedule-type" value="1" sel="1" required @if($data->schedule_type == 1) checked @elseif($data->schedule_type == 0) 
                                             checked
-                                            @endif/>
+                                            @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="1d">Multiple days</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif/>
+                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="2d">A couple of hours</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif/>
+                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="3d">One day full</label>
                                         </div>
                                     </div>
@@ -220,7 +226,7 @@
                                         <div class="col-md-2 scheduleDays">
                                             <div class="form-group">
                                                 <h5>Day?* :</h5>
-                                                <select class="form-control" id="day" name="day"  required>
+                                                <select class="form-control" id="day" name="day"  required @if($data->schedule_type != 0) disabled @endif>
                                                     @for($i=2;$i<=24;$i++)
                                                     <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option>
                                                     @endfor
@@ -233,7 +239,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Hours?* :</label>
-                                                        <select class="form-control" id="hours" name="hours" required>
+                                                        <select class="form-control" id="hours" name="hours" required @if($data->schedule_type != 0) disabled @endif>
                                                             @for($i=1;$i<12;$i++)
                                                             <option values="{{$i}}" @if(old('hours') ==$i)selected @elseif($data->schedule_type == 2 &&
                                                             (int)substr($data->schedule_interval,0,2) == $i) selected @endif>{{$i}}</option>
@@ -245,7 +251,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Minutes?* :</label>
-                                                        <select class="form-control" id="minutes" name="minutes" required>
+                                                        <select class="form-control" id="minutes" name="minutes" required @if($data->schedule_type != 0) disabled @endif>
                                                             <option values="0" @if(old('minutes') ==0)selected @elseif($data->schedule_type == 2 &&
                                                             (int)substr($data->schedule_interval,3) == 0) selected @endif>0</option>
                                                             <option values="30" @if(old('minutes') ==30)selected @elseif($data->schedule_type == 2 &&
@@ -258,6 +264,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-12 schedule-activity" style="display: none">
+                                    <h5>How would you like to set your activity schedule ?</h5>
+                                    <div class="col-md-4">
+                                        <input name="always_available_for_sale" type="radio" id="free_sale_1" class="radio-col-deep-orange" value="1" sel="1" @if($data->always_available_for_sale == 1) checked @endif/>
+                                        <label for="free_sale_1">Always available for booking</label>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input name="always_available_for_sale" type="radio" id="free_sale_0" class="radio-col-deep-orange" value="0" sel="0" @if($data->always_available_for_sale == 0) checked @endif/>
+                                        <label for="free_sale_0">Only available on specific dates</label>
+                                    </div>
+                                </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-12">
+                                        <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','max'=>30]) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <h4 class="dd-title m-t-20">
                                     Destination Details
                                 </h4>
@@ -266,7 +293,6 @@
                                 <div class="master-destinations">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-province">
-
                                             <h5>Province*</h5>
                                             <select  class="form-control province-sel" name="place[0][province]" id="0-province" data-id="0" style="width: 100%" required>
                                                 <option value="" selected>-- Select Province --</option>
@@ -711,7 +737,6 @@
                         {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_5','enctype' =>'multipart/form-data']) }}
                         {{ Form::hidden('step',5)}}
                         <div class="row" id="embed" style="display: block;margin-bottom: 10px">
-                            
                             <div class="col-md-6" >
                                 <input type="url" class="form-control" name="videoUrl[]" value="@if(count($data->videos) !== 0){{$data->videos[0]->url}}@endif" />
                             </div>
@@ -870,12 +895,12 @@
     <script type="text/javascript">
         $( window ).on( "load", function() {
             if($('#3d').prop('checked')){
-                $(".scheduleDays, .scheduleHours").removeAttr("required").hide();;
+                $(".scheduleDays, .scheduleHours").removeAttr("required").hide();
+                $(".schedule-activity").show();
             }else if($('#2d').prop('checked')){
                 $(".scheduleHours").show();
                 $(".scheduleDays").removeAttr("required").hide();
             }
-            
             var cancel = $("#3c").prop("checked");
             if(cancel){
                 $("#cancel_policy").show();
@@ -1401,15 +1426,18 @@
                     $(this).attr('sel',scheduleType);
                     $(".scheduleDays").show();
                     $(".scheduleHours").removeAttr("required").hide();
+                    $(".schedule-activity").slideUp();
                     
                 }else if(scheduleType == 2){
                     $(this).attr('sel',scheduleType);
                     $(".scheduleHours").show();
                     $(".scheduleDays").removeAttr("required").hide();
+                    $(".schedule-activity").slideUp();
                     
                 }else{
                     $(this).attr('sel',scheduleType);
                     $(".scheduleDays, .scheduleHours").removeAttr("required").hide();;
+                    $(".schedule-activity").slideDown();
                 }
             });
         });

@@ -213,6 +213,7 @@ class TourGuideController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validate = [
             'company_id' => 'required',
             'fullname' => 'required',
@@ -267,7 +268,7 @@ class TourGuideController extends Controller
         $save->email = $request->input('email');
         $save->phone = $request->input('format').'-'.$request->input('phone');
         $save->company_id = $request->input('company_id');
-        $save->status = ($request->input('status') != 'on' ? 1 : 0);
+        $save->status = ($request->input('status') ? 1 : 0);
         $save->experience_year = $request->input('experience_year');
         $save->language = $request->input('language');
         $save->guide_license = $request->input('guide_license',null);

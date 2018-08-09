@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
+		Route::get('tour-activity/{id}/calendar', 'TourController@calendar');
 		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
 		// change status
 		Route::post('tour-activity/{id}/change/status', 'TourController@changeStatus');

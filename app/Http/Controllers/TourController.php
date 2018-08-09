@@ -324,23 +324,34 @@ class TourController extends Controller
             }
         }
         elseif($request->step == 2){
+            // dd($request->all());
             $data = Tour::find($id);
             DB::beginTransaction();
             try {
                 $changeType = ($data->schedule_type != $request->schedule_type ? true : false);
                 $changeInterval = false; 
-                $data->schedule_type = $request->schedule_type;
-                if($request->schedule_type == 1){
-                    $changeInterval = ($data->schedule_interval == $request->day ? false : true);
-                    $data->schedule_interval = $request->day;
-                }elseif($request->schedule_type == 2){
-                    $changeInterval = (((int)substr($data->schedule_interval,0,2) == $request->hours && (int)substr($data->schedule_interval,3) == $request->minutes) ? false : true);
-                    $data->schedule_interval = ($request->hours < 10 ? '0'.$request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes) : $request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes));
-                }else{
-                    $changeInterval = false;
-                    $data->schedule_interval = 1;
+                if(!empty($request->input('schedule_type'))){
+                    $data->schedule_type = $request->schedule_type;
+                    if($request->schedule_type == 1){
+                        $changeInterval = ($data->schedule_interval == $request->day ? false : true);
+                        $data->schedule_interval = $request->day;
+                        $data->always_available_for_sale = 0;
+                    }elseif($request->schedule_type == 2){
+                        $data->always_available_for_sale = 0;
+                        $changeInterval = (((int)substr($data->schedule_interval,0,2) == $request->hours && (int)substr($data->schedule_interval,3) == $request->minutes) ? false : true);
+                        $data->schedule_interval = ($request->hours < 10 ? '0'.$request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes) : $request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes));
+                        $data->always_available_for_sale = 0;
+                    }else{
+                        $changeInterval = false;
+                        $data->schedule_interval = 1;
+                        $data->always_available_for_sale = $request->always_available_for_sale;
+                    }
                 }
+                $data->max_booking_day = $request->max_booking_day;
+                
+
                 $data->save();
+                // dd($data);
                 if($changeType == true || $changeInterval == true){
                     Itinerary::where('product_id',$id)->delete();
                     if($request->schedule_type == 1){
@@ -777,7 +788,25 @@ class TourController extends Controller
     public function schedule(Request $request, $id)
     {
         $data = Tour::with('schedules'/*,'schedules.booking'*/)->find($id);
-        return view('tour.schedule')->with(['data' => $data]);
+        $event = [];
+        if($request->ajax())
+        {
+            if($data->always_available_for_sale == 1){
+                foreach($data->off_days as $i => $value){
+                    $event[$i]['title'] = 'Off';
+                    $event[$i]['start'] = $value->date;
+                    $event[$i]['backgroundColor'] = 'red';
+                }
+            }
+            return response()->json($event);
+        }
+        return view('tour.schedule')->with(['data' => $data,'event' => $event]);
+    }
+    public function calendar(Request $request, $id)
+    {
+        $data = Tour::with('schedules'/*,'schedules.booking'*/)->find($id);
+
+        return view('tour.calendar')->with(['data' => $data]);
     }
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
