@@ -491,19 +491,7 @@ class TourController extends Controller
                         ]);
                     }
                 }
-                // Status
-                $statusCompany = Company::select('status')->where('id', $data->company_id)->first();
-                if($statusCompany->status == 1){
-                    $status = Company::where('id', $data->company_id)->update([
-                        'status' => 2
-                    ]);
-                    
-                    $statusChangeLog = CompanyStatusLog::create([
-                        'company_id' => $data->company_id,
-                        'status' => 2,
-                        'note' => 'initial input product'
-                    ]);
-                }
+                
                 DB::commit();
                 return redirect("/product/tour-activity/".$id.'/edit#step-h-3');
             } catch (Exception $e) {
@@ -567,11 +555,27 @@ class TourController extends Controller
         // }
         DB::beginTransaction();
          try{
+             
             $data = Tour::find($id);
             if($data->status != $status){
                 $data->status = $status;
                 // dd($data->save());
                 if($data->save()){
+                    // Status
+                    if($status == 1){
+                        $statusCompany = Company::select('status')->where('id', $data->company_id)->first();
+                        if($statusCompany->status == 1){
+                            $status = Company::where('id', $data->company_id)->update([
+                                'status' => 2
+                            ]);
+                            
+                            $statusChangeLog = CompanyStatusLog::create([
+                                'company_id' => $data->company_id,
+                                'status' => 2,
+                                'note' => 'initial input product'
+                            ]);
+                        }
+                    }
                     $upStatus = Tour::where('id',$id)->update(['status' => $status]);
                     $status = ProductStatusLog::create(['product_id' => $id,'status' => $status]);
                     // dd($status);

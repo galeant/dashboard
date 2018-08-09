@@ -215,7 +215,7 @@ class CompanyController extends Controller
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
         
-        return redirect('partner');
+        return redirect('/partner/registration/activity');
     }
 
     /**
