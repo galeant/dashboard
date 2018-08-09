@@ -18,12 +18,7 @@
                         <div class="header">
                             <h2>
                                 All Partners
-                            </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li >
-                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">Add new Partner</a>
-                                </li>
-                            </ul>
+                            </h2>   
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -32,10 +27,8 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Company Email</th>
-                                            <th>Company Phone</th>
-                                            <th>Company Address</th>
-                                            <th>Created At</th>
+                                            <th>PIC Email</th>
+                                            <th>PIC Name</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -70,10 +63,8 @@
 	        columns: [
 	            {data: 'id'},
                 {data: 'company_name'},
-                {data: 'company_email'},
-                {data: 'company_phone'},
-	            {data: 'company_address'},
-	            {data: 'created_at'},
+                {data: 'pic_email'},
+                {data: 'pic_name'},
 	            {data: 'status'},
 	            {data: 'action'}
 	        ]

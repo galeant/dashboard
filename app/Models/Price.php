@@ -9,7 +9,7 @@ class Price extends Model
     protected $table = 'prices';
     protected $primaryKey = 'id';
 
-    protected $hidden = ['id','product_id', 'created_at', 'updated_at'];
+    protected $hidden = [/*'id',*/'product_id', 'created_at', 'updated_at'];
     protected $fillable = [
         'number_of_person',
         'price_idr',

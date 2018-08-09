@@ -4,18 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
-use App\Models\Tour;
 use App\Models\Supplier;
-use App\Models\SupplierRole;
 use App\Models\Province;
-use App\Models\CompanyStatusLog;
 use Datatables;
-use App\Mail\StatusCompany;
 use Validator;
 use Helpers;
-use Mail;
 use DB;
-class CompanyController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,62 +21,20 @@ class CompanyController extends Controller
     {
         if($request->ajax())
         {
-            $model = Company::with(['suppliers' => function($query){
-                $query->orderBy('created_at','desc');
-            }])
-            ->where('status',[5,6]);
-            return Datatables::of($model)
+            $model = Company::query();
+            return Datatables::eloquent($model)
             ->addColumn('action', function(Company $data) {
-                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="/master/company/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="/master/company/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/company/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
-            ->addColumn('pic_email', function(Company $data) {
-                return $data->suppliers[0]->email;
-            })
-            ->addColumn('pic_name', function(Company $data) {
-                return $data->suppliers[0]->fullname;
-            })
             ->editColumn('id', 'ID: {{$id}}')
-            ->editColumn('status', function (Company $data){
-                return view('company.status',['data' => $data]);
-            })
-            ->rawColumns(['status','action'])
             ->make(true);        
         }
-        return view('company.index');
-    }
-
-    public function registrationList(Request $request){
-        if($request->ajax())
-        {
-            $model = Company::with(['suppliers' => function($query){
-                $query->orderBy('created_at','desc');
-            }])
-            ->where('status','!=',[5,6]);
-            return Datatables::of($model)
-            ->addColumn('action', function(Company $data) {
-                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-success  waves-effect waves-circle waves-float">
-                        <i class="glyphicon glyphicon-eye-open"></i>
-                    </a>';
-            })
-            ->addColumn('pic_email', function(Company $data) {
-                return $data->suppliers[0]->email;
-            })
-            ->addColumn('pic_name', function(Company $data) {
-                return $data->suppliers[0]->fullname;
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->editColumn('status', function (Company $data){
-                return view('company.status',['data' => $data]);
-            })
-            ->rawColumns(['status','action'])
-            ->make(true);        
-        }
-        return view('company.registration-list');
+        return view('products.index');
     }
 
     /**
@@ -92,7 +45,7 @@ class CompanyController extends Controller
     public function create()
     {
         $province = Province::all();
-        return view('company.add',['provinces'=>$province]);
+        return view('products.add_product',['provinces'=>$province]);
     }
 
     /**
@@ -106,12 +59,13 @@ class CompanyController extends Controller
         $validation = Validator::make($request->all(), [
             'company_name' => 'required|unique:companies',
             'fullname' => 'required',
-            'email' => 'required|unique:suppliers',
+            'email' => 'required',
             'phone' => 'required',
             'company_phone' => 'required',
             'role' => 'required',
             'company_address' => 'required',
             'company_postal' => 'required|numeric',
+            'company_email' => 'required',
             'bank_name' => 'required',
             'bank_account_name' => 'required',
             'bank_account_number' => 'required',
@@ -185,7 +139,7 @@ class CompanyController extends Controller
                 return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
             }
-            $dataSave['siup_path'] = $siupPic['path_full'];
+            $dataSave['siup_path'] = $npwpPic['path_full'];
         }
         if(!empty($request->evi_pic)){
             $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
@@ -202,11 +156,6 @@ class CompanyController extends Controller
                     'role_id'=> $request->role,
                     'company_id' => $company->id,
                     'password' => '-']);
-        $companyStatusLog = CompanyStatusLog::create([
-            'company_id' => $company->id,
-            'status' => 1,
-            'note' => 'initial create' 
-        ]);
 
         DB::commit();
         } catch (Exception $e) {
@@ -214,8 +163,7 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        
-        return redirect('/partner/registration/activity');
+        return redirect('master/company');
     }
 
     /**
@@ -243,11 +191,9 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        $roles = SupplierRole::pluck('name','id');
         $province = Province::all();
         $company = Company::where('id',$id)->first();
-        $tour = Tour::with('schedules')->where('company_id',$company->id)->orderBy('created_at','asc')->first();
-        return view('company.detail',['company'=>$company,'data' => $tour,'provinces'=>$province,'roles' =>$roles]);
+        return view('company.detail',['company'=>$company,'provinces'=>$province]);
     }
 
     /**
@@ -269,6 +215,7 @@ class CompanyController extends Controller
             'role' => 'required',
             'company_address' => 'required',
             'company_postal' => 'required|numeric',
+            'company_email' => 'required',
             'bank_name' => 'required',
             'bank_account_name' => 'required',
             'bank_account_number' => 'required',
@@ -282,10 +229,11 @@ class CompanyController extends Controller
         // Check if it fails //
         if( $validation->fails() ){
             return redirect()->back()->withInput()
-            ->with('errors', $validation->errors());
+            ->with('errors', $validation->errors() );
         }
         DB::beginTransaction();
         try {
+            // dd($request->all());
         $dataSave = [
             'company_name'=> $request->company_name,
             'company_phone'=> $request->format_company.'-'.$request->company_phone,
@@ -299,11 +247,11 @@ class CompanyController extends Controller
             'bank_account_title'=> $request->bank_account_title,
             'bank_account_name' => $request->bank_account_name,
             'company_ownership' => $request->company_ownership,
+            'status'=> 1,
             // 
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
             ];
-
         if(!empty($request->bank_pic)){
             $bankPic = Helpers::saveImage($request->bank_pic,'company'/*Location*/);
             if($bankPic instanceof  MessageBag){
@@ -328,46 +276,38 @@ class CompanyController extends Controller
             }
             $dataSave['npwp_path'] = $npwpPic['path_full'];
         }
-        if($request->company_ownership == 'Company'){
-            if(!empty($request->akta_pic)){
-                $aktaPic = Helpers::saveImage($request->akta_pic,'company'/*Location*/);
-                if($aktaPic instanceof  MessageBag){
-                    return redirect()->back()->withInput()
-                ->with('errors', $validation->errors() );
-                }
-                $dataSave['akta_path'] = $aktaPic['path_full'];
+        if(!empty($request->akta_pic)){
+            $aktaPic = Helpers::saveImage($request->akta_pic,'company'/*Location*/);
+            if($aktaPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
             }
-            if(!empty($request->siup_pic)){
-                $siupPic = Helpers::saveImage($request->siup_pic,'company'/*Location*/);
-                if($siupPic instanceof  MessageBag){
-                    return redirect()->back()->withInput()
-                ->with('errors', $validation->errors() );
-                }
-                $dataSave['siup_path'] = $siupPic['path_full'];
-            }
-            if(!empty($request->evi_pic)){
-                $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
-                if($eviPic instanceof  MessageBag){
-                    return redirect()->back()->withInput()
-                ->with('errors', $validation->errors() );
-                }
-                $dataSave['evidance_path'] = $eviPic['path_full'];
-            }
-        }else{
-            $dataSave['evidance_path'] = null;
-            $dataSave['akta_path'] = null;
-            $dataSave['siup_path'] = null;
+            $dataSave['akta_path'] = $aktaPic['path_full'];
         }
-        // dd($dataSave);
+        if(!empty($request->siup_pic)){
+            $siupPic = Helpers::saveImage($request->siup_pic,'company'/*Location*/);
+            if($siupPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['siup_path'] = $npwpPic['path_full'];
+        }
+        if(!empty($request->evi_pic)){
+            $eviPic = Helpers::saveImage($request->evi_pic,'company'/*Location*/);
+            if($eviPic instanceof  MessageBag){
+                return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+            }
+            $dataSave['evidance_path'] = $eviPic['path_full'];
+        }
         $company = Company::where('id',$id)
                 ->update($dataSave);
-        $supplier = Supplier::where('company_id',$id)->orderBy('created_at','ASC')
+        $supplier = Supplier::where(['company_id' => $id, 'role_id'=>1])
                 ->update([
                     'fullname'=> $request->fullname,
                     'phone'=> $request->format.'-'.$request->phone,
                     'email'=> $request->email,
                     'password' => '-']);
-        
 
         DB::commit();
         } catch (Exception $e) {
@@ -375,8 +315,7 @@ class CompanyController extends Controller
             \Log::info($exception->getMessage());
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
-        return redirect()->back();
-        // return redirect('partner');
+        return redirect('master/company');
     }
 
     /**
@@ -403,75 +342,15 @@ class CompanyController extends Controller
          }
     }
 
-    public function changeStatus(Request $request,$id)
-    {
-        $status = $request->input('status');
-        $note = $request->input('note');
-        $validation = Validator::make($request->all(), [
-            'status' => 'required'
-        ]);
-        // Check if it fails //
-        if( $validation->fails() ){
-            return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
-        }
-        DB::beginTransaction();
-         try{
-            $data = Company::find($id);
-            if($data->status != $status){
-                $data->status = $status;
-                // dd($data->save());
-                if($data->save()){
-                    $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                    // dd($status);
-                    $data->note = $note;
-                    Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
-                    DB::commit();
-                    return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
-                }else{
-                    return redirect('partner/'.$id.'/edit')->with('message','Change Status Failed');
-                }
-            }else{
-                return redirect('partner/'.$id.'/edit')->with('message','Latest Status is same');
-            }
-            
-         }catch (\Exception $exception){
-            dd($exception);
-             DB::rollBack();
-             \Log::info($exception->getMessage());
-             return redirect('partner/'.$id.'/edit')->with('error',$exception->getMessage());
-         }
-        
-    }
-
     public function json(Request $request)
     {
         $data  =  new Company();
         $name     = ($request->input('name') ? $request->input('name') : '');
-        $id     = ($request->input('id') ? $request->input('id') : '');
         if($name)
         {
             $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
         }
-        if($id)
-        {
-            $data = $data->where('id',$id);
-        }
         $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
         return $this->sendResponse($data, "Company retrieved successfully", 200);
     }
-
-    //
-    // public function sample($id){
-    //     $company = Company::with('log_statuses')->where('id',$id)->first();
-    //     $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
-    //     session()->put('condition', 'kuration');
-    //     session()->put('company', $company);
-    //     if($product != null ){
-    //         return redirect('/product/tour-activity/'.$product->id.'/edit');
-    //     }else{
-    //         return redirect()->back();
-    //     }
-        
-    // }
 }

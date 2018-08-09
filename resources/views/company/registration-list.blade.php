@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="{{ url('partner') }}" class="btn bg-teal btn-block waves-effect">List Partners</a>
+                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">New Registration</a>
                                 </li>
                             </ul>
                         </div>
@@ -32,10 +32,8 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
-                                            <th>Company Email</th>
-                                            <th>Company Phone</th>
-                                            <th>Company Address</th>
-                                            <th>Created At</th>
+                                            <th>PIC Email</th>
+                                            <th>PIC Name</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -68,12 +66,10 @@
 	        serverSide: true,
 	        ajax: '/partner/registration/activity',
 	        columns: [
-	            {data: 'id'},
+                {data: 'id'},
                 {data: 'company_name'},
-                {data: 'company_email'},
-                {data: 'company_phone'},
-	            {data: 'company_address'},
-	            {data: 'created_at'},
+                {data: 'pic_email'},
+                {data: 'pic_name'},
 	            {data: 'status'},
 	            {data: 'action'}
 	        ]

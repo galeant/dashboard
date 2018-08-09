@@ -85,7 +85,7 @@
                                                         <div class="input-group dd-group">
                                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control']) !!}
                                                             <span class="input-group-addon">
-                                                                <a href="#" class="info-type" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
+                                                                <a href="#" class="info-type" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
                                                             </span>
                                                          </div>
                                                     </div>
@@ -322,37 +322,38 @@
                 $("input#lat").val(result.geometry.location.lat());
                 $("input#lng").val(result.geometry.location.lng());
               });
-            $("#activity_tag").select2({
-                ajax: {
-                    url: "/json/activity",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                      return {
-                        name: params.term, // search term
-                        page: params.page,
-                      };
-                    },
-                    processResults: function (data, params) {
-                      // parse the results into the format expected by Select2
-                      // since we are using custom formatting functions we do not need to
-                      // alter the remote JSON data, except to indicate that infinite
-                      // scrolling can be used
-                      params.page = params.page || 1;
-                      return {
-                        results: data,
-                        pagination: {
-                          more: (params.page * 30) < data.total_count
-                        }
-                      };
-                    },
-                    cache: true
-                  },
-                  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                  minimumInputLength: 1,
-                  templateResult: formatRepo, // omitted for brevity, see the source of this page
-                  templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-            });
+            $("#activity_tag").select2();
+            // $("#activity_tag").select2({
+            //     ajax: {
+            //         url: "/json/activity",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //           return {
+            //             name: params.term, // search term
+            //             page: params.page,
+            //           };
+            //         },
+            //         processResults: function (data, params) {
+            //           // parse the results into the format expected by Select2
+            //           // since we are using custom formatting functions we do not need to
+            //           // alter the remote JSON data, except to indicate that infinite
+            //           // scrolling can be used
+            //           params.page = params.page || 1;
+            //           return {
+            //             results: data,
+            //             pagination: {
+            //               more: (params.page * 30) < data.total_count
+            //             }
+            //           };
+            //         },
+            //         cache: true
+            //       },
+            //       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            //       minimumInputLength: 1,
+            //       templateResult: formatRepo, // omitted for brevity, see the source of this page
+            //       templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            // });
             $("#company_id").select2({
                 ajax: {
                     url: "/json/company",
@@ -537,6 +538,16 @@
                     });
                 });
              });
+            $("select[name='product_type']").change(function(){
+                console.log($(this).val());
+                if($(this).val() == 'private'){
+                    $(this).closest("div").find("a").attr("data-original-title","Private Group");
+                    $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers.");
+                }else{
+                    $(this).closest("div").find("a").attr("data-original-title","Open Group");
+                    $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
+                }
+            });
 
         });
 

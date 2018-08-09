@@ -57,7 +57,23 @@ class TourController extends Controller
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
+            ->addColumn('schedule', function(Tour $data) {
+                return $data->schedules->count();
+            })
+            ->addColumn('status', function(Tour $data) {
+                if($data->status == 0 ){
+                    return '<span class="badge bg-purple">Draft</span>';
+                }else if($data->status == 1 ){
+                    return '<span class="badge bg-blue">Awaiting Moderation</span>';
+                }else if($data->status == 2 ){
+                    return '<span class="badge bg-green">Active</span>';
+                }else{
+                    return '<span class="badge bg-red">Disabled</span>';
+                }
+                
+            })
             ->editColumn('id', 'ID: {{$id}}')
+            ->rawColumns(['status','action'])
             ->make(true);        
         }
         return view('tour.index');
@@ -391,7 +407,13 @@ class TourController extends Controller
                 }
                 $data->activities()->sync($request->activity_tag);
                 DB::commit();
-                return redirect('/product/tour-activity/'.$id.'/edit#step-h-1');
+                // dd($changeType);
+                // dd($changeInterval);
+                if($changeType == true || $changeInterval == true){
+                    return redirect('/product/tour-activity/'.$id.'/schedule')->with('schedule_edit',true);
+                }else{
+                    return redirect('/product/tour-activity/'.$id.'/edit#step-h-1');
+                }
             } catch (Exception $e) {
                 DB::rollBack();
                 \Log::info($exception->getMessage());
@@ -427,55 +449,39 @@ class TourController extends Controller
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
                 // PRICE TYPE
-                if($request->price_type == 1){
-                    Price::where('product_id',$data->id)->delete();
-                    Tour::where('id',$data->id)
-                        ->update([
-                            'price_idr'=> null,
-                            'price_usd'=> null,
-                        ]);
+                // dd($request->price[count($data->prices)]['people']);
+                if($request->price[count($data->prices)]['people'] != null || $request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null){   
                     foreach($request->price as $price){
-                        if($price['USD'] == null || $price['USD'] == ''){
-                            $price_usd = null;
+                        if($price['USD'] == null  || $price['USD'] == ''){
+                            $price['USD'] = null;
                         }else{
                             if(strlen($price['USD']) > 3){
-                                $price_usd = str_replace(".", "", $price['USD']);    
-                            }else{
-                                $price_usd = $price['USD'];
-                            }
-                            
-                        }
-                        $priceList = Tour::where('id',$data->id)
-                        ->update([
-                            'price_idr'=> str_replace(".", "", $price['IDR']),
-                            'price_usd'=> $price_usd,
-                        ]);
-                    }
-                }else{
-                    Price::where('product_id',$data->id)->delete();
-                    Tour::where('id',$data->id)
-                        ->update([
-                            'price_idr'=> null,
-                            'price_usd'=> null,
-                        ]);
-                    foreach($request->price as $price){
-                        if($price['USD'] == null){
-                            $price_usd = null;
-                        }else{
-                            if(strlen($price['USD']) > 3){
-                                $price_usd = str_replace(".", "", $price['USD']);    
-                            }else{
-                                $price_usd = $price['USD'];
+                                $price['USD'] = str_replace(".", "", $price['USD']);    
                             }
                         }
+                        if(strlen($price['IDR']) > 3){
+                            $price['IDR'] = str_replace(".", "", $price['IDR']);    
+                        }   
                         $priceList = Price::create([
-                            'number_of_person' => $price['people'],
-                            'price_idr'=> str_replace(".", "", $price['IDR']),
-                            'price_usd'=> $price_usd,
-                            'product_id'=> $data->id
-                        ]);    
+                                'number_of_person'=> $price['people'],
+                                'price_idr'=> $price['IDR'],
+                                'price_usd'=> $price['USD'],
+                                'product_id'=> $data->id
+                            ]);
                     }
                 }
+                
+                if($request->price_type == 1){
+                    $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
+                    Price::whereNotIn('number_of_person',[$minPerson->number_of_person])->where('product_id',$data->id)->delete();
+                }
+                
+                if($request->price_kurs == 1){
+                    Price::where('product_id',$data->id)->update([
+                        'price_usd' => null
+                    ]);
+                }
+             
                 // INCLUDE
                 if($request->price_includes != null){
                     Includes::where('product_id',$data->id)->delete();
@@ -496,28 +502,7 @@ class TourController extends Controller
                         ]);
                     }
                 }
-                // Status
-                $statusCompany = Company::select('status')->where('id', $data->company_id)->first();
-                if($statusCompany->status == 1){
-                    $status = Company::where('id', $data->company_id)->update([
-                        'status' => 2
-                    ]);
-                    
-                    $statusChangeLog = CompanyStatusLog::create([
-                        'company_id' => $data->company_id,
-                        'status' => 2,
-                        'note' => 'initial input product'
-                    ]);
-                }else{
-                    $status = Tour::where('id',$data->id)->update([
-                        'status' => 1
-                    ]);
-                    $statusChangeLog = ProductStatusLog::create([
-                        'product_id' => $data->id,
-                        'status' => 1,
-                        'note' => 'input product for first time, need kuration'
-                    ]);
-                }
+                
                 DB::commit();
                 return redirect("/product/tour-activity/".$id.'/edit#step-h-3');
             } catch (Exception $e) {
@@ -566,26 +551,44 @@ class TourController extends Controller
         }
     }
  
-    public function changeStatus(Request $request,$id)
+    public function changeStatus($id,$status)
     {
-        $status = $request->input('status');
-        $note = $request->input('note');
-        $validation = Validator::make($request->all(), [
-            'status' => 'required'
-        ]);
-        // Check if it fails //
-        if( $validation->fails() ){
-            return redirect()->back()->withInput()
-            ->with('errors', $validation->errors() );
-        }
+        // // dd($request->all());
+        // $status = $request->input('status');
+        // $note = $request->input('note');
+        // $validation = Validator::make($request->all(), [
+        //     'status' => 'required'
+        // ]);
+        // // Check if it fails //
+        // if( $validation->fails() ){
+        //     return redirect()->back()->withInput()
+        //     ->with('errors', $validation->errors() );
+        // }
         DB::beginTransaction();
          try{
+             
             $data = Tour::find($id);
             if($data->status != $status){
                 $data->status = $status;
                 // dd($data->save());
                 if($data->save()){
-                    $status = ProductStatusLog::create(['product_id' => $id,'status' => $status,'note' => $note]);
+                    // Status
+                    if($status == 1){
+                        $statusCompany = Company::select('status')->where('id', $data->company_id)->first();
+                        if($statusCompany->status == 1){
+                            $status = Company::where('id', $data->company_id)->update([
+                                'status' => 2
+                            ]);
+                            
+                            $statusChangeLog = CompanyStatusLog::create([
+                                'company_id' => $data->company_id,
+                                'status' => 2,
+                                'note' => 'initial input product'
+                            ]);
+                        }
+                    }
+                    $upStatus = Tour::where('id',$id)->update(['status' => $status]);
+                    $status = ProductStatusLog::create(['product_id' => $id,'status' => $status]);
                     // dd($status);
                     // $data->note = $note;
                     // Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
@@ -861,6 +864,18 @@ class TourController extends Controller
         return redirect()->back();
     }
     public function scheduleUpdate(Request $request){
+        if($request->end_date == null){
+            $request->end_date = date("Y-m-d",strtotime($request->start_date));
+        }else{
+            $request->end_date = date("Y-m-d",strtotime($request->end_date));
+        }
+
+        if($request->start_hours == null ){
+            $request->start_hours = '00:00';
+        }
+        if($request->end_hours == null ){
+            $request->end_hours = '23:59';
+        }
         $schedule = Schedule::where('id',$request->id)
         ->update([
             'start_date' => date("Y-m-d",strtotime($request->start_date)),
@@ -870,11 +885,45 @@ class TourController extends Controller
             'max_booking_date_time' => date("Y-m-d",strtotime($request->max_booking_date_time)),
             'maximum_booking' => $request->maximum_booking
         ]);
-        // dd($request->all());
-        return response()->json('success',200);
+        $data = Schedule::where('id',$request->id)->first();
+        $response = [
+            'message' => 'success',
+            'data' => $data
+        ];
+        return response()->json($response,200);
     }
     public function scheduleDelete($id){
         Schedule::where('id',$id)->delete();
+        return redirect()->back();
+    }
+    public function priceUpdate(Request $request){
+        
+        if($request->price_usd == null  || $request->price_usd == ''){
+            $request->price_usd = null;
+        }else{
+            if(strlen($request->price_usd) > 3){
+                $request->price_usd = str_replace(".", "", $request->price_usd);    
+            }
+        }
+        if(strlen($request->price_idr) > 3){
+            $request->price_idr = str_replace(".", "", $request->price_idr);    
+        }
+        
+        Price::where('id',$request->id)->update([
+            'number_of_person' => $request->number_of_person,
+            'price_idr' => $request->price_idr,
+            'price_usd' => $request->price_usd
+        ]);
+        
+        $response = [
+            'message' => 'success',
+            'data' => Price::where('id',$request->id)->first()
+        ];
+        return response()->json($response,200);
+    }
+    public function priceDelete($id){
+        // dd($id);
+        Price::where('id',$id)->delete();
         return redirect()->back();
     }
 }

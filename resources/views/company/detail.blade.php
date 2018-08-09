@@ -33,7 +33,7 @@
         <h2>
             Detail Partners
             <small>Data / Partners</small>
-        </h2>
+        </h2>   
     </div>
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -42,12 +42,6 @@
                     <div class="row">
                         <div class="col-md-3" style="margin-top:10px">
                             <h2>Detail Partners</h2>
-                        </div>
-                        <ul class="header-dropdown m-r--5">
-                            <li >
-                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Change Status</button>
-                            </li>
-                            <li>
                                 @if($company->status == 0)
                                 <span class="badge bg-purple">Not Verified</span>
                                 @elseif($company->status ==1)
@@ -63,9 +57,15 @@
                                 @else
                                 <span class="badge bg-red">Disabled</span>
                                 @endif
+                        </div>
+                        <ul class="header-dropdown m-r--5">
+                            <li >
+                                <button style="display: none" type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#defaultModal">Change Status</button>
+                            </li>
+                            <li>
                                 <button type="button" class="btn bg-deep-purple waves-effect" id="edit">
-                                <i class="material-icons">settings</i>
-                            </button>
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -347,7 +347,7 @@
                         <div class="col-md-12" id="npwp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p id="npwp" style="font-weight: bold"> Tax Number</p>
+                                    <p id="npwp_eng" style="font-weight: bold"> Tax Number</p>
                                     <p id="npwp">NPWP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -383,7 +383,7 @@
                         <div class="col-md-12" id="ktp" style="margin:10px 15px 0px 15px;">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <p id="ktp" style="font-weight: bold">Identity Card</p>
+                                    <p id="ktp_eng" style="font-weight: bold">Identity Card</p>
                                     <p id="ktp">KTP</p>
                                 </div>
                                 <div class="col-md-6" id="input" hidden>
@@ -468,6 +468,8 @@
                 {{ Form::close() }}
                 </div>
             </div>
+        @if($company->status != 5 && $company->status != 6)
+        
             @if($data != null)
             <div class="card" id="sample_product" >
                 <div class="header">
@@ -835,7 +837,7 @@
                                     <div class="col-md-4">
                                         <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                         @if(count($data->prices) !== 0)
-                                            @if(empty($data->prices[0]->price_usd))
+                                            @if(empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd == 0.00)
                                                 checked
                                             @endif
                                         @else
@@ -850,118 +852,62 @@
                                         <label for="1p" style="font-size:15px">I only have pricing in IDR</label>
                                     </div>
                                     <div class="col-md-6">
-                                        <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) checked @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) checked @endif/>
+                                        <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
+                                            @if(count($data->prices) !== 0)
+                                                @if(!empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd != 0)
+                                                    checked 
+                                                @endif 
+                                            @endif 
+                                            @if(!empty($data->price_idr) && !empty($data->price_usd)) 
+                                                checked 
+                                            @endif/>
                                         <label for="2p" style="font-size:15px">I want to add pricing in USD for international tourist</label>
                                     </div>
                                 </div>
-                                <div class="row" id="price_row">
+                                <div class="row">
                                     <div class="col-md-3">
                                         <h5>Pricing Option</h5>
                                         <select name="price_type" id="priceType" class="form-control" required>
-                                            <option value="1" @if(count($data->prices) == 0)) selected @endif>Fixed Price</option>
-                                            <option value="2" @if(count($data->prices) != 0 ) selected @endif>Based on Number of Person</option>
+                                            <option value="1" @if(count($data->prices) == 1)) selected @endif>Fixed Price</option>
+                                            <option value="2" @if(count($data->prices) > 1 ) selected @endif>Based on Number of Person</option>
                                         </select>
-                                    </div>
-                                    <div id="price_fix">
-                                        <div class="col-md-3" id="price_idr">
-                                            <h5>Price (IDR)*:</h5>
-                                            <input type="hidden" name="price[0][people]" value="fixed"> 
-                                            <input type="text" value="{{(int)$data->price_idr}}" id="idr" name="price[0][IDR]" class="form-control" required />     
-                                        </div>
-                                        <div class="col-md-3 valid-info" id="price_usd" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) style="display: block"
-                                        @else style="display: block" @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) style="display: block" @else style="display: none" @endif >
-                                            <h5>Price (USD)*</h5>
-                                            <input type="text" id="usd" value="{{(int)$data->price_usd}}" name="price[0][USD]" class="form-control" />     
-                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-12" style="display: none" id="price_table_container">
+                            <div class="col-md-12" id="price_table_container">
                                 <div class="row">
-                                <h4 class="dd-title m-t-20">
-                                    Pricing Tables
-                                </h4>
-                                    <div class="col-md-12" id="price_list" style="display: none">
-                                        <div class="row">
-                                            <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
-                                                <h5><i class="material-icons">person</i></h5>
-                                            </div>
-                                            <div class="col-md-11">
-                                                <div class="row">
-                                                    <div class="col-md-6 valid-info" id="price_idr">
-                                                        <h5>Price (IDR)*</h5>
-                                                        <input id="price_list_field1" type="hidden" required>  
-                                                        <input id="price_list_field2" type="text" class="form-control" required>     
-                                                    </div>
-                                                    <div class="col-md-6 valid-info" id="price_usd" style="display: none">
-                                                        <h5>Price (USD)*</h5>
-                                                        <input id="price_list_field3" type="text" class="form-control" required />     
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <h4 class="dd-title m-t-20">
+                                        Pricing Tables
+                                    </h4>
                                     <div id="price_list_container">
-                                        <div class="row">
-                                            <div class="col-md-6" id="price_list_container_left">
-                                                @if(count($data->prices) != 0)
-                                                <?php $count = count($data->prices); ?>
-                                                    @foreach($data->prices as $index => $val)
-                                                        @if($index < ceil($count/2))
-                                                        <div class="col-md-12" id="price_list{{$index}}">
-                                                            <div class="row">
-                                                                <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
-                                                                    <h5><i class="material-icons">person</i></h5>
-                                                                </div>
-                                                                <div class="col-md-11">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6 valid-info" id="price_idr">
-                                                                            <h5>Price (IDR)*</h5>
-                                                                            <input id="price_list_field1" type="hidden" name="price[{{$index}}][people]" value="{{$val->number_of_person}}" required>  
-                                                                            <input id="price_list_field2" type="text" name="price[{{$index}}][IDR]" class="form-control" value="{{(int)$val->price_idr}}" required>     
-                                                                        </div>
-                                                                        <div class="col-md-6 valid-info" id="price_usd" @if(!empty($price_usd))style="display: none" @endif>
-                                                                            <h5>Price (USD)*</h5>
-                                                                            <input id="price_list_field3" name="price[{{$index}}][USD]"  type="text" class="form-control" value="{{(int)$val->price_usd}}" required />     
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                            <div class="col-md-6" id="price_list_container_right">
-                                                @if(count($data->prices) != 0)
-                                                    @foreach($data->prices as $index => $val)
-                                                        @if($index >= ceil($count/2))
-                                                        <div class="col-md-12" id="price_list{{$index}}">
-                                                            <div class="row">
-                                                                <div class="col-md-1" style="padding: 20px 0px 0px 0px;">
-                                                                    <h5><i class="material-icons">person</i></h5>
-                                                                </div>
-                                                                <div class="col-md-11">
-                                                                    <div class="row">
-                                                                        <div class="col-md-6 valid-info" id="price_idr">
-                                                                            <h5>Price (IDR)*</h5>
-                                                                            <input id="price_list_field1" type="hidden" name="price[{{$index}}][people]" value="{{$val->number_of_person}}" required> 
-                                                                            <input id="price_list_field2" type="text" name="price[{{$index}}][IDR]" class="form-control" value="{{(int)$val->price_idr}}" required>     
-                                                                        </div>
-                                                                        <div class="col-md-6 valid-info" id="price_usd" @if(!empty($price_usd))style="display: none" @endif>
-                                                                            <h5>Price (USD)*</h5>
-                                                                            <input id="price_list_field3" name="price[{{$index}}][USD]"  type="text" class="form-control" value="{{(int)$val->price_usd}}" require />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </div>
-                                        </div>
+                                        <table class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th id="numberOfPerson">Number Of Person</th>
+                                                    <th id="price_idr">Price IDR</th>
+                                                    <th id="price_usd">Price USD</th>
+                                                    <th id="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            @if(count($data->prices) != 0)
+                                                @foreach($data->prices as $index => $val)
+                                                <tr id="price_value" data-id="{{$val->id}}">
+                                                    <td id="numberOfPerson">
+                                                        <p>{{$val->number_of_person}}</p>
+                                                    </td>
+                                                    <td id="price_idr">
+                                                        <p>{{(int)$val->price_idr}}</p>
+                                                    </td>
+                                                    <td id="price_usd">
+                                                        <p>{{(int)$val->price_usd}}</p>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -1116,13 +1062,14 @@
                 </div>
             </div>
             @endif
+        
+        @endif
         </div>
         <!-- Status Modal -->
         <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                <form method="POST" action="{{ url('partner/'.$company->id.'/change/status') }}" enctype="multipart/form-data">
-                    @csrf
+                
                     <div class="modal-header">
                         <div class="row">
                             <div class="col-md-6">
@@ -1165,13 +1112,21 @@
                             </tbody>
                         </table>
                         <div class="change-status row clearfix" style="display: none">
+                        <form method="POST" action="{{ url('partner/'.$company->id.'/change/status') }}" enctype="multipart/form-data">
+                        @csrf
                             <div class="col-md-12">
                                 <div class="valid-info">
                                     <h5>Status:</h5>
                                     <select class="form-control" name="status" required>
-                                        @foreach(Helpers::statusCompany() as $value => $status)
-                                            <option value="{{$value}}" >{{$status}}</option>
-                                        @endforeach
+                                        @if($company->status == 5 || $company->status == 6)
+                                            <option value="5" @if($company->status == 5) selected @endif>Active</option>
+                                            <option value="6" @if($company->status == 6) selected @endif>Disabled</option>
+                                        @else
+                                            <option value="2" @if($company->status == 2) selected @endif>Awaiting Moderation</option>
+                                            <option value="3" @if($company->status == 3) selected @endif>Insufisient Data</option>
+                                            <option value="4" @if($company->status == 4) selected @endif>Rejected</option>
+                                            <option value="5" @if($company->status == 5) selected @endif>Active</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -1328,16 +1283,16 @@
                 var val = $(this).val();
                 if(val == "Company"){
                     $("#akta,#siup,#npwp,#ktp,#evi").show();
-                    $("#npwp").find("h5#npwp").text("Company's Tax Number");
-                    $("#npwp").find("p#npwp").text("NPWP Perusahaan");
-                    $("#ktp").find("h5#ktp").text("Company Owner Identity Card");
-                    $("#ktp").find("p#ktp").text("KTP Direksi Perusahaan");
+                    $("p#npwp_eng").text("Company's Tax Number");
+                    $("p#npwp").text("NPWP Perusahaan");
+                    $("p#ktp_eng").text("Company Owner Identity Card");
+                    $("p#ktp").text("KTP Direksi Perusahaan");
                 }else{
                     $("#npwp,#ktp").show();
-                    $("#npwp").find("h5#npwp").text("Tax Number");
-                    $("#npwp").find("p#npwp").text("NPWP");
-                    $("#ktp").find("h5#ktp").text("Identity Card");
-                    $("#ktp").find("p#ktp").text("KTP");
+                    $("p#npwp_eng").text("Tax Number");
+                    $("p#npwp").text("NPWP");
+                    $("p#ktp_eng").text("Identity Card");
+                    $("p#ktp").text("KTP");
                     $("#akta,#siup,#evi").hide();
                 }
             });
@@ -1514,19 +1469,24 @@
             // console.log(cancel);
             var tpPrice = $('#1p').prop("checked");
             var opPrice = $('#priceType').val();
+            
             if(tpPrice){
                 $("#price_usd, #price_list_container #price_usd").hide();
             }else{
                 $("#price_usd, #price_list_container #price_usd").show();
             }
             if(opPrice == 1){
-                $("#price_fix").show();
-                $("#price_table_container").hide();
-                $("#price_list_container_left,#price_list_container_right").empty();
+                @if($data != null)
+                    @if(count($data->prices) > 0 )
+                        $("div#price_list").hide();
+                    @else
+                        $("div#price_list").show();
+                        $("button#add_price_button").hide();
+                    @endif
+                @endif
             }else{
-                $("#price_fix").hide();
-                $("#price_table_container").show(); 
-             }     
+                $("button#add_price_button").show();
+             }        
             var hash = location.hash;
             if(hash != ""){
                 $('#step').steps('setStep',location.hash.substring(location.hash.length-1));

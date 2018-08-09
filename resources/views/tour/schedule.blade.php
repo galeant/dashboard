@@ -97,6 +97,7 @@
                                     <th id="book">Number Of Booking</th>
                                     <th id="maxBook">Max Booking</th>
                                     <th id="action">Action</th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -247,6 +248,8 @@
         $("td#action").each(function(){
             $(this).find("a#edit").click(function(){
                 var me = $(this).closest("td#action");
+                me.closest("tr#value").find("p").hide();
+                me.closest("tr#value").find("input").show();
                 me.find("a").hide();
                 me.find("a#update").show().click(function(){
                     var id = me.closest("tr#value").attr('data-id');
@@ -275,15 +278,25 @@
                             maximum_booking: maximum_booking
                         }
                     }).done(function(response) {
-                        location. reload();
+                        me.closest("tr#value").attr('data-id',response.data.id);
+                        var startDateGet = new Date(response.data.start_date);
+                        me.closest("tr#value").find("td#startDate p").text((startDateGet.getDate() + 1) + '-' + startDateGet.getMonth() + '-' +  startDateGet.getFullYear());
+                        var endDateGet = new Date(response.data.end_date);
+                        me.closest("tr#value").find("td#endDate p").text((endDateGet.getDate() + 1) + '-' + endDateGet.getMonth() + '-' +  endDateGet.getFullYear());
+                        me.closest("tr#value").find("td#startHours p").text(response.data.start_hours);
+                        me.closest("tr#value").find("td#endHours p").text(response.data.end_hours);
+                        var bookDateGet = new Date(response.data.max_booking_date_time);
+                        me.closest("tr#value").find("td#maxBookDate p").text((bookDateGet.getDate() + 1) + '-' + bookDateGet.getMonth() + '-' +  bookDateGet.getFullYear());
+                        me.closest("tr#value").find("td#maxBook p").text(response.data.maximum_booking);
+                        me.find("a#delete,a#edit").show();
+                        me.find("a#update").hide();
+                        me.closest("tr#value").find("p").show();
+                        me.closest("tr#value").find("input").hide();
                     });
                 });
-                me.closest("tr#value").find("p").hide();
-                me.closest("tr#value").find("input").show();
             });
         });
-        
-       
+
     });
     @if($data->always_available_for_sale == 1)
     $(document).ready(function() {
