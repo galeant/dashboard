@@ -552,7 +552,7 @@ class TourController extends Controller
  
     public function changeStatus($id,$status)
     {
-        // // dd($request->all());
+        // dd($request->all());
         // $status = $request->input('status');
         // $note = $request->input('note');
         // $validation = Validator::make($request->all(), [

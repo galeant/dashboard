@@ -558,7 +558,9 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
+                                        <div class="col-md-3 m-t-20">
+                                        <button id="add_price_button" type="button" class="btn col-md-12 bg-deep-orange waves-effect">Add Price</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <!--  -->
@@ -1260,6 +1262,7 @@
                     $("#price_usd, #price_list_container #price_usd").show();
                 }
             });
+            
             $("#priceType").change(function () {
                 var prictType = $(this).val();
                 if(prictType == 1){
