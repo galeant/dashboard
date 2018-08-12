@@ -278,23 +278,26 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 schedule-activity" style="display: none">
-                                    <h5>How would you like to set your activity schedule ?</h5>
-                                    <div class="col-md-4">
-                                        <input name="always_available_for_sale" type="radio" id="free_sale_1" class="radio-col-deep-orange" value="1" sel="1" @if($data->always_available_for_sale == 1) checked @endif/>
-                                        <label for="free_sale_1">Always available for booking</label>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input name="always_available_for_sale" type="radio" id="free_sale_0" class="radio-col-deep-orange" value="0" sel="0" @if($data->always_available_for_sale == 0) checked @endif/>
-                                        <label for="free_sale_0">Only available on specific dates</label>
-                                    </div>
-                                </div>
                                 <div class="row clearfix">
+                                    <div class="col-md-12 schedule-activity" style="display: none">
+                                        <h5>How would you like to set your activity schedule ?</h5>
+                                        <div class="col-md-4">
+                                            <input name="always_available_for_sale" type="radio" id="free_sale_1" class="radio-col-deep-orange" value="1" sel="1" @if($data->always_available_for_sale == 1) checked @endif/>
+                                            <label for="free_sale_1">Always available for booking</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="always_available_for_sale" type="radio" id="free_sale_0" class="radio-col-deep-orange" value="0" sel="0" @if($data->always_available_for_sale == 0) checked @endif/>
+                                            <label for="free_sale_0">Only available on specific dates</label>
+                                        </div>
+                                    </div>
                                     <div class="col-md-12">
                                         <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
                                         <div class="row">
                                             <div class="col-md-2">
                                                {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','max'=>30]) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                            <p class="form-note">YourActivity is available booking until D-0 from activity Schedule</p>
                                             </div>
                                         </div>
                                     </div>
