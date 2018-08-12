@@ -420,12 +420,9 @@ class CompanyController extends Controller
             $data = Company::find($id);
             if($data->status != $status){
                 $data->status = $status;
-                // dd($data->save());
                 if($data->save()){
                     $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                    // dd($status);
-                    $data->note = $note;
-                    Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                    // Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
                 }else{
