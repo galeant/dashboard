@@ -18,4 +18,9 @@ class Schedule extends Model
         'maximum_booking',
         'product_id'
     ];
+
+    public function tour()
+    {
+        return $this->hasOne('App\Models\Tour','id','product_id');
+    }
 }

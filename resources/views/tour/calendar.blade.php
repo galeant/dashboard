@@ -73,13 +73,7 @@
 <script>
     $(document).ready(function() {
         $('#calendar').fullCalendar({
-          events: [
-            {
-              title: 'My Event',
-              start: '2018-08-07'
-            }
-            // other events here
-          ],
+          events: '/product/tour-activity/{{$data->id}}/calendar',
           eventClick: function(event) {
             console.log('here');
           },
@@ -93,7 +87,6 @@
 
             // change the day's background color just for fun
             $(this).css('background-color', 'red');
-
           }
         });
         function showAjaxLoaderMessage() {
