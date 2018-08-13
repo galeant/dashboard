@@ -40,8 +40,8 @@
             <div class="card" id="company_detail" >
                 <div class="header">
                     <div class="row">
-                        <div class="col-md-6" style="margin-top:10px">
-                            <h2>Detail Partners
+                        <div class="col-md-3" style="margin-top:10px">
+                            <h2>Detail Partners</h2>
                                 @if($company->status == 0)
                                 <span class="badge bg-purple">Not Verified</span>
                                 @elseif($company->status ==1)
@@ -57,8 +57,6 @@
                                 @else
                                 <span class="badge bg-red">Disabled</span>
                                 @endif
-                            </h2>
-                               
                         </div>
                         <ul class="header-dropdown m-r--5">
                             <li >
@@ -77,11 +75,7 @@
                 {{ Form::open(['route'=>['partner.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">   
                         <h4>Personal Information</h4>
-                        <div class="col-md-2 col-sm-3 col-xs-5 valid-info">
-                            <h5>Title*:</h5>
-                            {{ Form::select('account_title', Helpers::salutation(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
-                        </div>
-                        <div class="col-md-3" style="margin-top:0px;">
+                        <div class="col-md-5" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
                                 <input type="text" class="form-control" name="fullname" value="@if(!empty($company->pic)) {{$company->pic->fullname}} @endif">
@@ -460,6 +454,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        @if($company->status == 1)
+                        <div class="col-md-2 col-md-offset-8">
+                            <a href="{{ url('/product/tour-activity/create') }}">
+                                <button type="button" class="btn btn-block bg-orange btn-lg waves-effect">Add product</button>
+                            </a>
+                        </div>
+                        @endif
                         <div class="col-md-2" id="submit" hidden>
                             <button type="submit" class="btn btn-block bg-green btn-lg waves-effect">SAVE</button>
                         </div>
@@ -467,7 +468,7 @@
                 {{ Form::close() }}
                 </div>
             </div>
-        @if($company->status != 0 && $company->status != 1 && $company->status != 5 && $company->status != 6)
+        @if($company->status != 5 && $company->status != 6)
         
             @if($data != null)
             <div class="card" id="sample_product" >
@@ -710,7 +711,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
                                                     @if(count($data->destinations) !=0)
-                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
+                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->destination->name @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select City --</option>
                                                     @endif
@@ -753,7 +754,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                     @if(!empty($destination))
-                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
+                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination->destination_name @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select Destination --</option>
                                                     @endif
@@ -834,15 +835,9 @@
                             <div class="col-md-12">
                                 <div class="row valid-info">
                                     <div class="col-md-4">
-                                        @php 
-                                            if(count($data->prices) !== 0){
-                                                $u1 = json_decode($data->prices); 
-                                                $u2 = array_pluck($u1,'price_usd');
-                                            }
-                                        @endphp
                                         <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                         @if(count($data->prices) !== 0)
-                                            @if(!array_filter($u2)) 
+                                            @if(empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd == 0.00)
                                                 checked
                                             @endif
                                         @else
@@ -859,9 +854,9 @@
                                     <div class="col-md-6">
                                         <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
                                             @if(count($data->prices) !== 0)
-                                                @if(array_filter($u2)) 
-                                                    checked
-                                                @endif
+                                                @if(!empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd != 0)
+                                                    checked 
+                                                @endif 
                                             @endif 
                                             @if(!empty($data->price_idr) && !empty($data->price_usd)) 
                                                 checked 
@@ -879,7 +874,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(count($data->prices) != 0)
+
                             <div class="col-md-12" id="price_table_container">
                                 <div class="row">
                                     <h4 class="dd-title m-t-20">
@@ -892,10 +887,11 @@
                                                     <th id="numberOfPerson">Number Of Person</th>
                                                     <th id="price_idr">Price IDR</th>
                                                     <th id="price_usd">Price USD</th>
+                                                    <th id="action">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            
+                                            @if(count($data->prices) != 0)
                                                 @foreach($data->prices as $index => $val)
                                                 <tr id="price_value" data-id="{{$val->id}}">
                                                     <td id="numberOfPerson">
@@ -909,12 +905,12 @@
                                                     </td>
                                                 </tr>
                                                 @endforeach
+                                            @endif
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                            @endif
                             <div class="col-md-12">
                                 <div class="row">
                                     <h4 class="dd-title m-t-20">
@@ -1127,7 +1123,7 @@
                                             <option value="6" @if($company->status == 6) selected @endif>Disabled</option>
                                         @else
                                             <option value="2" @if($company->status == 2) selected @endif>Awaiting Moderation</option>
-                                            <option value="3" @if($company->status == 3) selected @endif>Insufficient Data</option>
+                                            <option value="3" @if($company->status == 3) selected @endif>Insufisient Data</option>
                                             <option value="4" @if($company->status == 4) selected @endif>Rejected</option>
                                             <option value="5" @if($company->status == 5) selected @endif>Active</option>
                                         @endif
@@ -1262,10 +1258,6 @@
             $("select").attr("disabled","disabled");
             $("textarea").attr("disabled","disabled");
             $("button#change").closest(".caption").hide();
-        // PIC TITLE
-        @if(!empty($company->pic))
-            $("select[name='account_title']").find("option[value='{{$company->pic->salutation}}']").attr("selected","selected");
-        @endif
         // BOOKING SYSTEM CHOICE
             $("input[name='bookingSystem']").change(function(){
                 var val = $(this).val();
@@ -1454,7 +1446,6 @@
                     $("#change-status").show();
                     $("#submit").show();
                     $("div#company_detail input,#company_detail select,#company_detail textarea").removeAttr("disabled");
-                    $("input[name='email']").attr("disabled","disabled");
                     $("#sample_product input,#sample_product select,#sample_product textarea").attr("disabled","disabled");
                     $("button#change").closest(".caption").show();
                 });

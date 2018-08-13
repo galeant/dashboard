@@ -105,15 +105,6 @@ class TourController extends Controller
      */
     public function store(Request $request)
     {
-        $company_id = $request->company_id;
-        $check = Company::with(['products' => function($query) use ($company_id){
-            $query->orderBy('created_at','asc');
-        }])->where(['id' => $company_id, 'status' => 1])->first();
-        if(!empty($check->products)){
-            if($check->products[0]->status == 0){
-                return redirect()->back()->withInput()->with('error', 'Already have product, please complete it!');
-            }
-        }
         $messages = [
                 'company_id' => 'Company filed is required.',
                 'image_resize.required' => 'Cover Image is required.'
@@ -138,10 +129,6 @@ class TourController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
-        
-        // if($req){
-
-        // }
         $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
         $code = ($request->input('product_type') == 'private' ? '102' : '101'); 
         $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? $code.($id->id+1) : $code.'1')]);
@@ -276,8 +263,6 @@ class TourController extends Controller
         $activities = ActivityTag::all();
         $provinces = Province::select('id','name')->get();
         $tour = Tour::find($id);
-        // $b = json_decode($tour->prices);
-        // dd(array_pluck($b,'price_usd'));
         return view('tour.edit')->with(['data' => $tour,'provinces' => $provinces,'activities' => $activities]);
     }
 
@@ -379,25 +364,27 @@ class TourController extends Controller
                     }
                 }
                 $data->max_booking_day = $request->max_booking_day;
+                
 
                 $data->save();
-                // if($changeType == true || $changeInterval == true){
-                //     Itinerary::where('product_id',$id)->delete();
-                //     if($request->schedule_type == 1){
-                //         Itinerary::where('product_id',$id)->delete();
-                //         $itnry = [];
-                //         for($i = 1; $i <= $request->day;$i++){
-                //             $itnry[] =['day' => $i , 'product_id' => $id];
-                //         }
-                //         Itinerary::insert($itnry);
-                //     }else{
-                //         if($request->schedule_type == 2){
-                //             Itinerary::create(['product_id' => $id,'day' => 1]);
-                //         }else{
-                //             Itinerary::create(['product_id' => $id,'day' => 1,'start_time' =>'00:00:01','end_time' => '23:59:59']);
-                //         }
-                //     }
-                // }
+                // dd($data);
+                if($changeType == true || $changeInterval == true){
+                    Itinerary::where('product_id',$id)->delete();
+                    if($request->schedule_type == 1){
+                        Itinerary::where('product_id',$id)->delete();
+                        $itnry = [];
+                        for($i = 1; $i <= $request->day;$i++){
+                            $itnry[] =['day' => $i , 'product_id' => $id];
+                        }
+                        Itinerary::insert($itnry);
+                    }else{
+                        if($request->schedule_type == 2){
+                            Itinerary::create(['product_id' => $id,'day' => 1]);
+                        }else{
+                            Itinerary::create(['product_id' => $id,'day' => 1,'start_time' =>'00:00:01','end_time' => '23:59:59']);
+                        }
+                    }
+                }
                 
                 if($request->place != null){
                     // dd($request->place);
@@ -463,10 +450,6 @@ class TourController extends Controller
                 $data->save();
                 // PRICE TYPE
                 // dd($request->price[count($data->prices)]['people']);
-                // dd($request->all());
-                if($request->price_kurs == 1){
-                    Price::where('product_id',$id)->update(['price_usd' =>null]);
-                }
                 if($request->price[count($data->prices)]['people'] != null || $request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null){   
                     foreach($request->price as $price){
                         if($price['USD'] == null  || $price['USD'] == ''){

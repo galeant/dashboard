@@ -18,12 +18,7 @@
                         <div class="header">
                             <h2>
                                 All Partners
-                            </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li >
-                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">Add New Partner</a>
-                                </li>
-                            </ul>   
+                            </h2>   
                         </div>
                         <div class="body">
                             <div class="table-responsive">
