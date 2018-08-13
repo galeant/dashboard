@@ -359,9 +359,9 @@ class TourController extends Controller
                     }else{
                         $changeInterval = false;
                         $data->schedule_interval = 1;
-                        $data->always_available_for_sale = $request->always_available_for_sale;
                     }
                 }
+                $data->always_available_for_sale = (!empty($request->input('always_available_for_sale')) ? 1 : 0);
                 $data->max_booking_day = $request->max_booking_day;
                 
 
