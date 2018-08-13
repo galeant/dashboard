@@ -895,6 +895,9 @@
                 $("button#add_price_button").hide();
                 @if(count($data->prices) > 0 )
                     $("div#price_list").hide();
+                    $("tr#price_value").each(function(){
+                        $(this).find("h9#price_info").hide();
+                    });
                 @else
                     $("div#price_row").find("#number_person").hide().find("#price_list_field1").val(1).removeAttr("min").removeAttr("max");
                     $("div#price_list").show();
@@ -1301,7 +1304,8 @@
                 var me = $(this).siblings("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
                 me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").val(null).mask('0000', {reverse: true}).change(function(){
                     var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1");
-                    if($(this).val() < prev.val() ){
+                    if($(this).val() <= prev.val() ){
+                        $(this).closest("div#number_person").find("small").remove();
                         $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
                         $("button#add_price_button").attr("disabled","disabled");
                     }else{
@@ -1337,7 +1341,7 @@
                 }
             });
             //Edit show
-            $("tr#price_value:first").find("a#price_delete").remove();
+            
             // EDIT MODE
             $("tr#price_value").each(function(){
                 $(this).find("a#price_edit").click(function(){
@@ -1366,8 +1370,8 @@
                             }
                         }).done(function(response) {
                             me.closest("tr#price_value").attr('data-id',response.data.id);
-                            me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
-                            me.closest("tr#price_value").find("td#price_idr p").text('>= '+parseInt(response.data.price_idr));
+                            me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.number_of_person);
+                            me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
                             if(response.data.price_usd == null){
                                 me.closest("tr#price_value").find("td#price_usd p").text(0);
                             }else{
@@ -1381,6 +1385,7 @@
                     });
                 });
             });
+            
             // 
             
         });
