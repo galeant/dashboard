@@ -41,11 +41,11 @@
         <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/1') }}" class="btn bg-green waves-effect">Publish</a>
     @elseif($data->status == 1)
         <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/0') }}" class="btn bg-red waves-effect">Unpublish</a>
-        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/2') }}" class="btn bg-green waves-effect">Active</a>
+        <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/2') }}" class="btn bg-green waves-effect">Activate Product</a>
     @else
         <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/3') }}" class="btn bg-red waves-effect">Disable</a>
     @endif
-        <a id="status"> <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status Log</button></a>
+        <a id="status"> <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">View Status Log</button></a>
 </div>
 <!-- Basic Example | Horizontal Layout -->
 <div class="row clearfix">
@@ -242,7 +242,8 @@
                                                 <h5>Day?* :</h5>
                                                 <select class="form-control" id="day" name="day"  required @if($data->schedule_type != 0) disabled @endif>
                                                     @for($i=2;$i<=24;$i++)
-                                                    <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option>
+                                                    <option values="{{$i}}" @if($data->schedule_interval == $i) selected @endif>{{$i}}</option>
+                                                    <!-- <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option> -->
                                                     @endfor
                                                 </select>
                                             </div>
@@ -482,9 +483,15 @@
                         <div class="col-md-12">
                             <div class="row valid-info">
                                 <div class="col-md-4">
+                                    @php 
+                                        if(count($data->prices) !== 0){
+                                            $u1 = json_decode($data->prices); 
+                                            $u2 = array_pluck($u1,'price_usd');
+                                        }
+                                    @endphp
                                     <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                     @if(count($data->prices) !== 0)
-                                        @if(empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd == 0.00)
+                                        @if(!array_filter($u2)) 
                                             checked
                                         @endif
                                     @else
@@ -501,9 +508,9 @@
                                 <div class="col-md-6">
                                     <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
                                         @if(count($data->prices) !== 0)
-                                            @if(!empty($data->prices[0]->price_usd) || $data->prices[0]->price_usd != 0)
-                                                checked 
-                                            @endif 
+                                            @if(array_filter($u2)) 
+                                                checked
+                                            @endif
                                         @endif 
                                         @if(!empty($data->price_idr) && !empty($data->price_usd)) 
                                             checked 
@@ -527,7 +534,7 @@
                                 <h4 class="dd-title m-t-20">
                                     Pricing Tables
                                 </h4>
-                                <div class="col-md-12" id="price_list">
+                                <div class="col-md-10" id="price_list">
                                 <!--  -->
                                     <div class="row" id="price_row">
                                         <div class="col-md-1" style="padding: 25px 0px 0px 0px;width:auto">
@@ -535,17 +542,17 @@
                                         </div>
                                         <div class="col-md-11" style="margin-left:0px">
                                             <div class="row">
-                                                <div class="col-md-3 valid-info" id="number_person">
+                                                <div class="col-md-2 valid-info" id="number_person" style="display:none">
                                                     <h5>Person*</h5>
-                                                    <input id="price_list_field1" type="text"  class="form-control" 
+                                                    <input id="price_list_field1" type="number" class="form-control"
                                                         @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" required @endif />  
                                                 </div>
-                                                <div class="col-md-3 valid-info" id="price_idr">
+                                                <div class="col-md-4 valid-info" id="price_idr">
                                                     <h5>Price (IDR)*</h5>
                                                     <input id="price_list_field2" type="text" class="form-control"  
                                                         @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]" required @endif />     
                                                 </div>
-                                                <div class="col-md-3 valid-info" id="price_usd" style="display: none">
+                                                <div class="col-md-4 valid-info" id="price_usd" style="display: none">
                                                     <h5>Price (USD)*</h5>
                                                     <input id="price_list_field3" type="text" class="form-control" 
                                                         @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][USD]" @else name="price[0][USD]" required @endif  />     
@@ -554,11 +561,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
-                                    </div>
                                 </div>
+                                <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
                                 <!--  -->
+                                @if(count($data->prices) != 0)
                                 <div id="price_list_container">
                                     <table class="table table-striped">
                                         <thead>
@@ -570,11 +576,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @if(count($data->prices) != 0)
+                                        
                                             @foreach($data->prices as $index => $val)
                                             <tr id="price_value" data-id="{{$val->id}}">
                                                 <td id="numberOfPerson">
-                                                    <p>{{$val->number_of_person}}</p>
+                                                    <p><h9 id="price_info" style="display:none">>= </h9>{{$val->number_of_person}}</p>
                                                     <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}" required>  
                                                 </td>
                                                 <td id="price_idr">
@@ -593,10 +599,11 @@
                                                 </td>
                                             </tr>
                                             @endforeach
-                                        @endif
+                                        
                                         </tbody>
                                     </table>
                                 </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -885,14 +892,19 @@
                 $("#price_usd, #price_list_container #price_usd").show();
             }
             if(opPrice == 1){
+                $("button#add_price_button").hide();
                 @if(count($data->prices) > 0 )
                     $("div#price_list").hide();
                 @else
+                    $("div#price_row").find("#number_person").hide().find("#price_list_field1").val(1).removeAttr("min").removeAttr("max");
                     $("div#price_list").show();
-                    $("button#add_price_button").hide();
                 @endif
             }else{
+                $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
                 $("button#add_price_button").show();
+                $("tr#price_value").each(function(){
+                    $(this).find("h9#price_info").show();
+                });
              }     
             var hash = location.hash;
             if(hash != ""){
@@ -1265,13 +1277,17 @@
                     @else
                         $("div#price_list").show();
                     @endif
+                    $("div#price_row").find("#number_person").hide().find("#price_list_field1").val(1).removeAttr("min").removeAttr("max");
                     $("button#add_price_button").hide();
                     $("div#price_row:not(:eq(0))").remove();
                     $("tr#price_value:not(:eq(0))").hide();
+                    $("tr#price_value").find("h9#price_info").hide();
                 }else{
+                    $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
                         $(this).show();
+                        $(this).find("h9#price_info").show();
                     });
                     $("button#add_price_button").show();
                     // 
@@ -1282,7 +1298,7 @@
             var priceC = {{count($data->prices)}};
             $("#add_price_button").click(function(){
                 priceC++;
-                var me = $(this).closest("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
+                var me = $(this).siblings("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
                 me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").val(null).mask('0000', {reverse: true}).change(function(){
                     var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1");
                     if($(this).val() < prev.val() ){
@@ -1351,8 +1367,12 @@
                         }).done(function(response) {
                             me.closest("tr#price_value").attr('data-id',response.data.id);
                             me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
-                            me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
-                            me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
+                            me.closest("tr#price_value").find("td#price_idr p").text('>= '+parseInt(response.data.price_idr));
+                            if(response.data.price_usd == null){
+                                me.closest("tr#price_value").find("td#price_usd p").text(0);
+                            }else{
+                                me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
+                            }
                             me.find("a#price_edit").show();
                             me.find("a#price_update").hide();
                             me.closest("tr#price_value").find("p").show();

@@ -74,6 +74,7 @@ class TourGuideController extends Controller
     public function store(Request $request)
     {
         //
+        // dd($request->all());
         $validate = [
             'company_id' => 'required',
             'fullname' => 'required',
@@ -135,7 +136,7 @@ class TourGuideController extends Controller
         $save->status = ($request->input('status') != 'on' ? 1 : 0);
         $save->experience_year = $request->input('experience_year');
         $save->language = $request->input('language');
-        $save->guide_license = $request->input('guide_license',null);
+        $save->guide_licence = $request->input('guide_license',null);
         $save->guide_association = $request->input('guide_association',null);
         $avatar = '';
             //upload Image
@@ -271,7 +272,7 @@ class TourGuideController extends Controller
         $save->status = ($request->input('status') ? 1 : 0);
         $save->experience_year = $request->input('experience_year');
         $save->language = $request->input('language');
-        $save->guide_license = $request->input('guide_license',null);
+        $save->guide_licence = $request->input('guide_license',null);
         $save->guide_association = $request->input('guide_association',null);
         
             //upload Image
@@ -309,7 +310,7 @@ class TourGuideController extends Controller
         DB::commit();
         
         return redirect("product/tour-guide/".$save->id."/edit")->with('message', 'Successfully Update Tour Guide');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             \Log::info($exception->getMessage());
              return redirect()->back()->withInput()->with('message', $exception->getMessage());

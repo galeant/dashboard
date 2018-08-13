@@ -19,11 +19,6 @@
                             <h2>
                                 Registration Activity
                             </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li >
-                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">New Registration</a>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
