@@ -922,7 +922,8 @@ class TourController extends Controller
         return response()->json($response,200);
     }
     public function priceDelete($id){
-        // dd($id);
+        dd($id);
+
         Price::where('id',$id)->delete();
         return redirect()->back();
     }

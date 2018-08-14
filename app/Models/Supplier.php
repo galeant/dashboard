@@ -22,7 +22,7 @@ class Supplier extends Model implements AuthenticatableContract, CanResetPasswor
 	 *
 	 * @var array
 	 */
-	protected $fillable = ['email', 'username', 'password', 'fullname', 'role_id', 'status','company_id', 'status','token','phone'];
+	protected $fillable = ['salutation','email', 'username', 'password', 'fullname', 'role_id', 'status','company_id', 'status','token','phone'];
 
 	/**
 	 * The attributes excluded from the model's JSON form.

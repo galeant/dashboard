@@ -42,7 +42,13 @@
                 @csrf
                     <div class="row">
                         <h4>Company PIC Personal Information</h4>
-                        <div class="col-md-5" style="margin-top:0px;">
+                        <div class="col-md-2" style="margin-top:0px;">
+                            <div class="valid-info">
+                                <h5>Salutation* :</h5>
+                                {{ Form::select('account_title', Helpers::salutation(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Fullname* :</h5>
                                 {{ Form::text('fullname', null, ['class' => 'form-control','id'=>'name','required'=>'required']) }}
