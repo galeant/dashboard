@@ -956,7 +956,7 @@ class TourController extends Controller
                 $event['id'] = $schedule->id;
                 $event['booked'] = 0;
                 $event['max_booking'] = $request->maximum_booking;
-                if($type == 1 && $type == 3){
+                if($type == 1 || $type == 3){
                 $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($request->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($request->end_date))."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($request->start_date))).' 23:59:59';
                     $event['end'] = date('Y-m-d', strtotime('+1 day', strtotime($schedule->end_date)));
                 }else{
@@ -989,7 +989,7 @@ class TourController extends Controller
         $id = $request->id;
         $schedule = Schedule::find($id);
         $product = $schedule->tour;
-        if($product->schedule_type == 1 && $product->schedule_type == 3){
+        if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){
                 $request->start_hours = '00:00';
             }

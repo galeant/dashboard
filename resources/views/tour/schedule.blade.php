@@ -181,7 +181,8 @@
         }
         
         if(proType != 'private'){
-            $(".maximum-booking").attr("readonly","readonly").val(1);
+            $(".maximum-booking").val(1);
+            $(".maximum-booking").parent().hide();
         }else{
             $(".maximum-booking").val(1);
         }
