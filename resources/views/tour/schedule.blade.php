@@ -80,8 +80,8 @@
                         <input type="text" class="form-control end-hours" name="end_hours" placeholder="HH:mm:ss" readonly/>
                     </div>
                     <div class="form-group form-float">
-                        <label class="form-label">Maximum Booking (person)</label>
-                        <input type="text" class="form-control maximum-booking" name="maximum_booking" required/>
+                        <label class="form-label">Maximum booking / trip</label>
+                        <input type="number" class="form-control maximum-booking" name="maximum_booking" min=1 required/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,8 +118,8 @@
                         <input type="text" class="form-control end-hours" name="end_hours" placeholder="HH:mm" readonly/>
                     </div>
                     <div class="form-group form-float">
-                        <label class="form-label">Maximum Booking (person)</label>
-                        <input type="text" class="form-control maximum-booking" name="maximum_booking" required/>
+                        <label class="form-label">Maximum booking / trip</label>
+                        <input type="number" class="form-control maximum-booking" name="maximum_booking" min=1 required/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -145,6 +145,7 @@
     <script src="{{asset('plugins/sweetalert/sweetalertnew.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-qtips/jquery.qtip.min.js')}}"></script>
 <script>
+    var eventOnClicked;
     $("body").keydown(function(e) {
       if(e.keyCode == 37) { // left
         $('.fc-prev-button').click();
@@ -155,7 +156,6 @@
     });
     $(document).ready(function(){
         // 
-
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -181,9 +181,9 @@
         }
         
         if(proType != 'private'){
-            $(".maximum-booking").attr("readonly","readonly").val(maxPep);
+            $(".maximum-booking").attr("readonly","readonly").val(1);
         }else{
-            $(".maximum-booking").val(maxPep);
+            $(".maximum-booking").val(1);
         }
         if(scheType == 1){
             $('.start-hours,.end-hours').parent().remove();
@@ -219,6 +219,7 @@
         });
         
         $('#form-schedule').submit(function(e){
+            // console.log()
             e.preventDefault();
             if(scheType == 1 || scheType == 3){
                 data = {
@@ -235,13 +236,15 @@
                     'end_hours':$('#form-schedule .end-hours').val(),
                     'id':$('#form-schedule input[name=id]').val()
                 };
-
             }
             $.ajax({
                 method: "POST",
                 url: "{{ url('product/tour-activity/schedule/update') }}",
                 data: data
             }).done(function(response){
+                eventOnClicked.max_booking = response.data.max_booking;
+                eventOnClicked.description = response.data.description;
+                $('#calendar').fullCalendar('updateEvent', eventOnClicked);
                 $('#defaultModal').modal('hide');
                 swal("Success", 'The Schedule was updated!', "success");   
             }).error(function(xhr, ajaxOptions, thrownError){
@@ -275,7 +278,7 @@
             }).done(function(response){
                 $('#addModal').modal('hide');
                 swal("Success", 'The Schedule was created!', "success");
-                $('#calendar').fullCalendar( 'renderEvent', response, true);
+                $('#calendar').fullCalendar( 'renderEvent', response, false);
             }).error(function(xhr, ajaxOptions, thrownError){
                 $('#addModal').modal('hide');
                 swal("Error", xhr.responseJSON.error, "error");
@@ -284,6 +287,7 @@
         $(document).delegate('.btn-delete', 'click', function(e){
             e.preventDefault();
             var thisElement = $(this);
+            console.log(thisElement);
             swal({
                 title: "Are you sure?",
                 text: "Delete this schedule",
@@ -303,13 +307,14 @@
                     }).done(function(response){
                         $('#addModal').modal('hide');
                         swal("Success", 'The Schedule was deleted!', "success");
-                        $('#calendar').fullCalendar( 'renderEvent', response, true);
+                        $('#calendar').fullCalendar( 'renderEvent', response, false);
+                        $('#calendar').fullCalendar('removeEvents',thisElement.attr('data-event-id'));
                     }).error(function(xhr, ajaxOptions, thrownError){
                         $('#addModal').modal('hide');
                         swal("Error", xhr.responseJSON.error, "error");
                     });
                     $('.schedule-'+thisElement.attr('data-id')).remove();
-                    thisElement.parent().parent().parent().remove();
+                    
                 }
             });
         });
@@ -342,10 +347,14 @@
     @else
         $('#calendar').fullCalendar({
           header: {
-            left: 'prev,next today',
+            left: 'today',
             center: 'title',
-            right: 'month,basicDay,listMonth'
-          },  
+            right: 'prev,month,next'
+          },
+          axisFormat: 'HH:mm',
+           timeFormat: 'HH:mm',
+           minTime: 0,
+           maxTime: 24,  
           events: '/product/tour-activity/{{$data->id}}/schedule',
           eventClick: function(event) {
             $('#form-schedule .start-date').val(event.start.format('YYYY-MM-DD'));
@@ -355,14 +364,14 @@
             $('#form-schedule .maximum-booking').val(event.max_booking);
             $('#form-schedule input[name=id]').val(event.id);
             $('#form-schedule .start-hours').attr('start-date',event.start.format('YYYY-MM-DD'));
-            $('#defaultModal').modal('show'); 
+            $('#defaultModal').modal('show');
+            eventOnClicked = event;
           },
           editable: true,
           eventDragStart: function(){
             $('.qtip').hide();
           },
           eventDrop: function(event, delta, revertFunc) {
-            console.log(event);
             swal({
                 title: "Are you sure?",
                 text: "You will change the schedule!",
@@ -375,7 +384,9 @@
                 closeOnClickOutside: false
             }).then(function (isConfirm) {
                 if (isConfirm) {
-                    // console.log(event.end.subtract(1, 'days').format())
+                    if(event.end == null){
+                        event.end = event.start;
+                    }
                     var data ={
                         'maximum_booking':event.max_booking,
                         'start_date': event.start.format(),
@@ -389,7 +400,8 @@
                         url: "{{ url('product/tour-activity/schedule/update') }}",
                         data: data
                     }).done(function(response){
-
+                        $('#calendar').fullCalendar('removeEvents',event._id);
+                        $('#calendar').fullCalendar( 'renderEvent', response.data, true);
                         swal("Success", 'The Schedule was Changed', "success");   
                     }).error(function(xhr, ajaxOptions, thrownError){
                         swal("Error", xhr.responseJSON.message, "error");
@@ -413,12 +425,12 @@
             $('#addModal').modal('show');
           },
           eventRender: function(event, element) {
-            element.find('.fc-title').prepend('<span class="badge bg-clay">'+event.booked+'</span> ');
+            element.find('.fc-title').append(' <span class="badge bg-clay">'+event.booked+'</span> ');
             element.addClass('schedule-'+event.id);
             // console.log(event);
             element.qtip({
                 content: {    
-                    title: { text: event.title+' <span class="badge bg-clay">'+event.booked+'</span><a class="badge bg-red btn-delete" data-id="'+event.id+'">X</a>' },
+                    title: { text: event.title+' <span class="badge bg-clay">'+event.booked+'</span><a class="badge bg-red btn-delete" data-id="'+event.id+'" data-event-id='+event._id+'>X</a>' },
                     text: event.description       
                 },
                 hide: { 

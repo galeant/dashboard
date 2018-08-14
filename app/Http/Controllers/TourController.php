@@ -339,7 +339,6 @@ class TourController extends Controller
             }
         }
         elseif($request->step == 2){
-            // dd($request->all());
             $data = Tour::find($id);
             DB::beginTransaction();
             try {
@@ -804,7 +803,8 @@ class TourController extends Controller
             foreach($data->schedules as $i => $value){
                 $event[$i]['title'] = $data->product_name;
                 $event[$i]['start'] = $value->start_date;
-                $event[$i]['end'] = date('Y-m-d', strtotime('+1 day', strtotime($value->end_date)));
+
+                
                 $event[$i]['start_hours'] = $value->start_hours;
                 $event[$i]['end_hours'] = $value->end_hours;
                 $event[$i]['end_date'] = $value->end_date;
@@ -812,13 +812,17 @@ class TourController extends Controller
                 $event[$i]['id'] = $value->id;
                 $event[$i]['booked'] = 0;
                 $event[$i]['max_booking'] = $value->maximum_booking;
+
                 if($data->schedule_type == 1 || $data->schedule_type == 3){
-                    $event[$i]['description'] = 'Start Date : '.date('d-m-Y',strtotime($value->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($value->end_date))."<br>".'Max Booking Person: '.$value->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$data->max_booking_day.' day', strtotime($value->start_date))).' 23:59:59';
+                    $event[$i]['description'] = 'Start Date : '.date('d-m-Y',strtotime($value->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($value->end_date))."<br>".'Max Booking : '.$value->maximum_booking.' / trip<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$data->max_booking_day.' day', strtotime($value->start_date))).' 23:59:59';
+                    $event[$i]['end'] = date('Y-m-d', strtotime('+1 day', strtotime($value->end_date)));
                 }
                 else{
                     $event[$i]['description'] = 'Start Hours : '.$value->start_hours."<br>".'End Hours : '.$value->end_hours."<br>".'Max Booking Person: '.$value->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$data->max_booking_day.' day', strtotime($value->start_date))).' '.$value->start_hours;
+                    $event[$i]['end'] = ($value->end_date == $value->start_date ? $value->end_date : date('Y-m-d', strtotime('+1 day', strtotime($value->end_date))));
                 }
             }
+            // dd($event);
             return response()->json($event);
         }
         return view('tour.schedule')->with(['data' => $data,'view' => $view]);
@@ -875,8 +879,8 @@ class TourController extends Controller
                 return response()->json($response,400);
             }
             $request['end_date'] = date("Y-m-d",strtotime($request->end_date));   
-            $request['start_hours'] = '00:00';
-            $request['end_hours'] = '23:59';
+            $request['start_hours'] = '00:00:00';
+            $request['end_hours'] = '23:59:00';
             $request['max_booking_date_time'] = date("Y-m-d",strtotime($request->max_booking_date_time)).' 00:00';
         }else if($type == 2){
             $validation = Validator::make($request->all(), [
@@ -954,8 +958,10 @@ class TourController extends Controller
                 $event['max_booking'] = $request->maximum_booking;
                 if($type == 1 && $type == 3){
                 $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($request->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($request->end_date))."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($request->start_date))).' 23:59:59';
+                    $event['end'] = date('Y-m-d', strtotime('+1 day', strtotime($schedule->end_date)));
                 }else{
                     $event['description'] = 'Start Hours : '.$request->start_hours."<br>".'End Hours : '.$request->end_hours."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($request->start_date))).' '.$request->start_hours;
+                    $event['end'] = ($schedule->end_date == $schedule->start_date ? $schedule->end_date : date('Y-m-d', strtotime('+1 day', strtotime($schedule->end_date))));
                 }
 
                 return response()->json($event,200);
@@ -1047,9 +1053,25 @@ class TourController extends Controller
         $schedule->end_hours = $request->end_hours;
         $schedule->maximum_booking = $request->maximum_booking;
         $schedule->save();
+        $event['title'] = $product->product_name;
+        $event['start'] = $schedule->start_date;
+        $event['end'] = date('Y-m-d', strtotime('+1 day', strtotime($schedule->end_date)));
+        $event['start_hours'] = $schedule->start_hours;
+        $event['end_hours'] = $schedule->end_hours;
+        $event['end_date'] = $schedule->end_date;
+        $event['backgroundColor'] = '#e5730d';
+        $event['id'] = $schedule->id;
+        $event['booked'] = 0;
+        $event['max_booking'] = $schedule->maximum_booking;
+        if($product->schedule_type == 1 || $product->schedule_type == 3){
+            $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($schedule->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($schedule->end_date))."<br>".'Max Booking Person: '.$schedule->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($schedule->start_date))).' 23:59:59';
+        }else{
+            $event['description'] = 'Start Hours : '.$schedule->start_hours."<br>".'End Hours : '.$schedule->end_hours."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($schedule->start_date)));
+        }
+        // dd($event);
         $response = [
             'message' => 'success',
-            'data' => $schedule
+            'data' => $event
         ];
 
         return response()->json($response,200);
