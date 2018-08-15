@@ -710,7 +710,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
                                                     @if(count($data->destinations) !=0)
-                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->destination->name @endif</option>
+                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select City --</option>
                                                     @endif
@@ -753,7 +753,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                     @if(!empty($destination))
-                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination->destination_name @endif</option>
+                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select Destination --</option>
                                                     @endif
