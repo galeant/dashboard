@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		// UPDATE PRICE
 		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
 		// DELETE PRICE
-		Route::get('tour-activity/price/{id}/delete', 'TourController@priceDelete');
+		Route::get('tour-activity/{product_id}/price/{id}/delete', 'TourController@priceDelete');
 
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');

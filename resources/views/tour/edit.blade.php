@@ -30,7 +30,9 @@
         #price_list small, #price_list_container small{
             color:red;
         }
-        
+        .extended-button{
+            margin-top:35px;
+        }
     </style>
 @stop
 
@@ -537,6 +539,9 @@
                                 <h4 class="dd-title m-t-20">
                                     Pricing Tables
                                 </h4>
+                                <div class="alert alert-danger alert-price" style="display:none">
+                                    <strong>Oh snap!</strong> Please edit price list table.
+                                </div>
                                 <div class="col-md-10" id="price_list">
                                 <!--  -->
                                     <div class="row" id="price_row">
@@ -548,24 +553,24 @@
                                                 <div class="col-md-2 valid-info" id="number_person" style="display:none">
                                                     <h5>Person*</h5>
                                                     <input id="price_list_field1" type="number" class="form-control"
-                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" required @endif />  
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][people]" @else name="price[0][people]" required @endif  />  
                                                 </div>
                                                 <div class="col-md-4 valid-info" id="price_idr">
                                                     <h5>Price (IDR)*</h5>
                                                     <input id="price_list_field2" type="text" class="form-control"  
-                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]" required @endif />     
+                                                        @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][IDR]" @else name="price[0][IDR]"  required @endif />     
                                                 </div>
                                                 <div class="col-md-4 valid-info" id="price_usd" style="display: none">
                                                     <h5>Price (USD)*</h5>
                                                     <input id="price_list_field3" type="text" class="form-control" 
                                                         @if(count($data->prices) > 0) name="price[{{count($data->prices)}}][USD]" @else name="price[0][USD]" required @endif  />     
                                                 </div>
-                                                <div class="col-md-1" id="price_delete"></div>
+                                                <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect extended-button">Add Price</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
+                                
                                 <!--  -->
                                 @if(count($data->prices) != 0)
                                 <div id="price_list_container">
@@ -584,7 +589,7 @@
                                             <tr id="price_value" data-id="{{$val->id}}">
                                                 <td id="numberOfPerson">
                                                     <p><h9 id="price_info" style="display:none">>= </h9>{{$val->number_of_person}}</p>
-                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}" required>  
+                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}"  required>  
                                                 </td>
                                                 <td id="price_idr">
                                                     <p>{{(int)$val->price_idr}}</p>
@@ -598,7 +603,7 @@
                                                 <td id="action">    
                                                     <a style="display:none" id="price_update"><i class="material-icons">save</i></a>
                                                     <a id="price_edit"><i class="material-icons">mode_edit</i></a>
-                                                    <a href="{{ url('product/tour-activity/price/'.$val->id.'/delete') }}" id="price_delete"><i class="material-icons">delete</i></a>
+                                                    <a href="{{ url('product/tour-activity/'.$data->id.'/price/'.$val->id.'/delete') }}" id="price_delete"><i class="material-icons">delete</i></a>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -689,7 +694,7 @@
                         <div class=" col-md-4 m-t-20 m-b-20">
                             <div class="row clearfix">
                                 <div class="col-md-6">
-                                    <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
+                                    <button type="submit" id="submit_price" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
                                 </div>
                             </div>
                         </div>
@@ -906,7 +911,11 @@
                     $("div#price_list").show();
                 @endif
             }else{
-                $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
+                @if(count($data->prices) > 0)
+                    $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                @else
+                    $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
+                @endif
                 $("button#add_price_button").show();
                 $("tr#price_value").each(function(){
                     $(this).find("h9#price_info").show();
@@ -1269,14 +1278,42 @@
             //  PRICE KURS
             $("input[name='price_kurs']").change(function () {
                 var priceKurs = $(this).val();
-                $("#price_row").show();
+                // $("#price_row").show();
                 if(priceKurs == 1){
                     $("#price_usd, #price_list_container #price_usd").hide();
                     $("#price_usd input, #price_list_container #price_usd input").val(null);
+                    @if(count($data->prices) > 0)
+                        @if($data->prices[0]->price_usd == null ||$data->prices[0]->price_usd != 0.00)
+                            $(this).closest("section").find("#submit_price").removeAttr("disabled");
+                            $(".alert-price").hide();
+                        @endif
+                    @endif
                 }else{
+                    @if(count($data->prices) > 0)
+                        @if($data->prices[0]->price_usd == null)
+                            $(this).closest("section").find("#submit_price").attr("disabled","disabled");
+                            $(".alert-price").show();
+                            $("tr#price_value").each(function(){
+                                $(this).find("td#price_usd p,td#action a#price_edit").hide();
+                                $(this).find("td#price_usd #price_list_field3,td#action a#price_update").show();
+                            });
+                        @endif
+                    @endif
                     $("#price_usd, #price_list_container #price_usd").show();
                 }
             });
+            // PRICE
+            // var a = {{count(array_unique($u2))}};
+            // console.log(a);
+            // @if(count($data->prices) != count(array_unique($u2))) 
+            //         $("input[name='price_kurs']").closest("section").find("#submit_price").attr("disabled","disabled");
+            //         $(".alert-price").show();
+            //         $("tr#price_value").each(function(){
+            //             $(this).find("td#price_usd p,td#action a#price_edit").hide();
+            //             $(this).find("td#price_usd #price_list_field3,td#action a#price_update").show();
+            //         });
+                
+            // @endif
             // PRICE TYPE
             $("#priceType").change(function () {
                 var prictType = $(this).val();
@@ -1292,7 +1329,11 @@
                     $("tr#price_value:not(:eq(0))").hide();
                     $("tr#price_value").find("h9#price_info").hide();
                 }else{
-                    $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
+                    @if(count($data->prices) > 0)
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @else
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
+                    @endif
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
                         $(this).show();
@@ -1304,126 +1345,138 @@
             });
             // VALIDATE INPUT PERSON
             var priceL = [];
-            $("tr#price_value").each(function(){
-                var pi = $(this).find("td#numberOfPerson #price_list_field1").val();
-                priceL.push(pi); 
+            $("#price_list").on('change','input#price_list_field1', function(){
+                var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1").val();
+                $("tr#price_value").each(function(){
+                    var pi = $(this).find("td#numberOfPerson #price_list_field1").val();
+                    priceL.push(pi); 
+                });
+                if(parseInt($(this).val()) <= parseInt(prev) ){
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else if(priceL.indexOf($(this).val()) != -1){
+                    console.log("ga ada");
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Already have number of person</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else if($(this).val() <= Math.max.apply(Math,priceL)){
+                    console.log("kekecilan");
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else{
+                    console.log('bener');
+                    $("div#number_person").each(function(){
+                        $(this).find("small").remove();
+                    });
+                    $(this).closest("section").find("button[type='submit']").removeAttr('disabled');
+                    $("button#add_price_button").removeAttr("disabled");
+                }
             });
-            // $("#price_list_field1").each(function(){
-                $("#price_list").on('change','input#price_list_field1', function(){
-                    
-                    if(priceL.indexOf($(this).val()) != -1){
-                        $(this).closest("div#number_person").find("small").remove();
-                        $(this).closest("div#number_person").append("<small>Already have number of person</small>");
-                        $("button#add_price_button").attr("disabled","disabled");
-                        $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
-                    }else if($(this).val() <= Math.max.apply(Math,priceL)){
-                        $(this).closest("div#number_person").find("small").remove();
-                        $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
-                        $("button#add_price_button").attr("disabled","disabled");
-                        $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
-                    }else{
-                        $(this).closest("div#number_person").find("small").remove();
-                        $("button#add_price_button").removeAttr("disabled");
-                        $(this).closest("section").find("button[type='submit']").removeAttr('disabled');
-                    }
+            // 
+            $("#price_list_container").on('change','input#price_list_field1', function(){
+                $("tr#price_value").each(function(){
+                    var pi = $(this).find("td#numberOfPerson #price_list_field1").attr("late-data");
+                    priceL.push(pi); 
                 });
-                $("#price_list_container").on('change','input#price_list_field1', function(){
-                    if(priceL.indexOf($(this).val()) != -1){
-                        $(this).closest("td#numberOfPerson").find("small").remove();
-                        $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
-                        $(this).closest("tr#price_value").find("a#price_update").hide();
-                    // }else if($(this).val() <= Math.max.apply(Math,priceL)){
-                    //     $(this).closest("td#numberOfPerson").find("small").remove();
-                    //     $(this).closest("td#numberOfPerson").append("<small>Please insert higher number</small>");
-                    //     $(this).closest("tr#price_value").find("a#price_update").hide();
-                    }else{
-                        $(this).closest("td#numberOfPerson").find("small").remove();
-                        $(this).closest("tr#price_value").find("a#price_update").show();
-                    }
-                });
-            // });
-            console.log(priceL);
+                console.log(priceL);
+                if(priceL.indexOf($(this).val()) != -1){
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
+                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                // }else if($(this).val() <= Math.max.apply(Math,priceL)){
+                //     $(this).closest("td#numberOfPerson").find("small").remove();
+                //     $(this).closest("td#numberOfPerson").append("<small>Please insert higher number</small>");
+                //     $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else{
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("tr#price_value").find("a#price_update").show();
+                }
+            });
             // PRICE ADD MORE
             var priceC = {{count($data->prices)}};
             $("#add_price_button").click(function(){
                 priceC++;
-                var me = $(this).siblings("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
-                me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").val(null).mask('0000', {reverse: true}).change(function(){
-                    var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1");
-                    if(parseInt($(this).val()) <= parseInt(prev.val()) ){
-                        $(this).closest("div#number_person").find("small").remove();
-                        $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
-                        $("button#add_price_button").attr("disabled","disabled");
-                        $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
-                        
-                        // console.log('bener');
-                    }else{
-                        // console.log('salah');
-                        $("div#number_person").each(function(){
-                            $(this).find("small").remove();
-                        });
-                        $(this).closest("section").find("button[type='submit']").removeAttr('disabled');
-                        $("button#add_price_button").removeAttr("disabled");
-                    }
-                });
+                var me = $(this).closest("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
+                me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").mask('0000', {reverse: true});
                 me.find("input#price_list_field2").removeAttr("name").attr("name","price["+priceC+"][IDR]").val(null).mask('0.000.000.000', {reverse: true});
                 me.find("input#price_list_field3").removeAttr("name").attr("name","price["+priceC+"][USD]").val(null).mask('0.000.000.000', {reverse: true});;
-                me.find("div#price_delete").empty().append('<button id="price_delete" type="button" class="btn bg-red waves-effect" style="margin-top:30px">Del</button>');
+                me.find("button#add_price_button").removeAttr("id").attr("id","price_delete").text("Del").removeAttr("class").addClass("col-md-2 btn bg-red waves-effect extended-button");
             });
             // FIRST ROW COSTUME
             $("tr#price_value").eq(0).find("a#price_delete").remove();
             // EDIT MODE
             $("tr#price_value").each(function(){
                 $(this).find("a#price_edit").click(function(){
-                    var me = $(this).closest("td#action");
                     $(this).hide();
+                    $(this).siblings("a#price_update").show();
                     $(this).closest("tr#price_value").find("p").hide();
                     $(this).closest("tr#price_value").find("input").show();
-                    $(this).siblings("a#price_update").show().click(function(){
-                        var id = me.closest("tr#price_value").attr('data-id');
-                        var number_of_person = me.closest("tr#price_value").find("input#price_list_field1").val();
-                        var price_idr =  me.closest("tr#price_value").find("input#price_list_field2").val();
-                        var price_usd = me.closest("tr#price_value").find("input#price_list_field3").val();
-                        $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                        });
-                        $.ajax({
-                            method: "POST",
-                            url: "{{ url('product/tour-activity/price/update') }}",
-                            data: { 
-                                id: id,
-                                number_of_person: number_of_person,
-                                price_idr: price_idr,
-                                price_usd: price_usd, 
-                            }
-                        }).done(function(response) {
-                            me.closest("tr#price_value").attr('data-id',response.data.id);
-                            me.closest("tr#price_value").find("input#price_list_field1").attr('value',response.data.number_of_person);
-                            if($("#priceType").val() == 1){
-                                me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
-                            }else{
-                                me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.number_of_person);
-                            }
-                            
-                            me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
-                            if(response.data.price_usd == null){
-                                me.closest("tr#price_value").find("td#price_usd p").text(0);
-                            }else{
-                                me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
-                            }
-                            me.find("a#price_edit").show();
-                            me.find("a#price_update").hide();
-                            me.closest("tr#price_value").find("p").show();
-                            me.closest("tr#price_value").find("input").hide();
-                        });
-                    });
                 });
+            });
+            // UPDATE PRICE
+            $(document).on("click","a#price_update",function(){
+                var me = $(this).closest("td#action");
+                var id = $(this).closest("tr#price_value").attr('data-id');
+                var number_of_person = $(this).closest("tr#price_value").find("input#price_list_field1").val();
+                var price_idr =  $(this).closest("tr#price_value").find("input#price_list_field2").val();
+                var price_usd = $(this).closest("tr#price_value").find("input#price_list_field3").val();
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url('product/tour-activity/price/update') }}",
+                    data: { 
+                        id: id,
+                        number_of_person: number_of_person,
+                        price_idr: price_idr,
+                        price_usd: price_usd, 
+                    }
+                }).done(function(response) {
+                    me.closest("tr#price_value").attr('data-id',response.data.id);
+                    me.closest("tr#price_value").find("input#price_list_field1").attr('value',response.data.number_of_person);
+                    if($("#priceType").val() == 1){
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
+                    }else{
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.number_of_person);
+                    }
+                    
+                    me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
+                    if(response.data.price_usd == null){
+                        me.closest("tr#price_value").find("td#price_usd p").text(0);
+                    }else{
+                        me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
+                    }
+                    me.find("a#price_edit").show();
+                    me.find("a#price_update").hide();
+                    me.closest("tr#price_value").find("p").show();
+                    me.closest("tr#price_value").find("input").hide();
+                });
+                // validate price_usd
+                var priceU = [];
+                $("tr#price_value").each(function(){
+                    var pU = $(this).find("td#price_usd #price_list_field3").val();
+                    priceU.push(pU); 
+                });
+                console.log(priceU);
+                console.log(priceU.indexOf("0"));
+                if(priceU.indexOf("0") == -1){
+                    $("#submit_price").removeAttr("disabled");
+                    $(".alert-price").hide();
+                }
             });
             // DEL PRICE
             $(document).on("click", "button#price_delete", function() {
                 $(this).closest("div#price_row").remove();
+                $("button#submit_price").removeAttr('disabled');
+                $("button#add_price_button").removeAttr("disabled");
             });
             // PRICE INCLUDE
             $("select[name='price_includes[]']").select2({
