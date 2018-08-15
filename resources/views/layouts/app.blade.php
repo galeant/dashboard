@@ -25,7 +25,7 @@
 
 	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
     <!-- Custom Css -->
-    <link href="{{asset('css/style.css?v=1.2')}}" rel="stylesheet">
+    <link href="{{asset('css/style.css?v=1.3')}}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{asset('css/themes/all-themes.css')}}" rel="stylesheet" />

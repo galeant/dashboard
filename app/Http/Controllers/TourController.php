@@ -43,40 +43,41 @@ class TourController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $requestuest)
+    public function index(Request $request)
     {
-        if($requestuest->ajax())
-        {
-            $model = Tour::with('company')->select('products.*');;
-            return Datatables::eloquent($model)
-            ->addColumn('action', function(Tour $data) {
-                return '<a href="/product/tour-activity/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
-                        <i class="glyphicon glyphicon-edit"></i>
-                    </a>
-                    <a href="/product/tour-activity/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
-                        <i class="glyphicon glyphicon-trash"></i>
-                    </a>';
-            })
-            ->addColumn('schedule', function(Tour $data) {
-                return $data->schedules->count();
-            })
-            ->addColumn('status', function(Tour $data) {
-                if($data->status == 0 ){
-                    return '<span class="badge bg-purple">Draft</span>';
-                }else if($data->status == 1 ){
-                    return '<span class="badge bg-blue">Awaiting Moderation</span>';
-                }else if($data->status == 2 ){
-                    return '<span class="badge bg-green">Active</span>';
-                }else{
-                    return '<span class="badge bg-red">Disabled</span>';
-                }
-                
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->rawColumns(['status','action'])
-            ->make(true);        
+        $sort = $request->input('sort','created_at');
+        $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
+        $data = new Tour;
+        $data = $data->orderBy($sort,$orderby);
+        if($request->input('status',2) != 99){
+            $data = $data->where('status',$request->input('status',2));
         }
-        return view('tour.index');
+        if(!empty($request->input('product_type'))){
+            $data = $data->where('product_type',$request->input('product_type'));
+        }
+        if(!empty($request->input('company'))){
+            $data = $data->whereHas('company', function ($query) use ($request) {
+                $query->where('company_name', 'like', '%'.$request->input('company').'%');
+            });
+        }
+        if(!empty($request->input('province_id'))){
+            $data = $data->whereHas('destinations', function ($query) use ($request) {
+                $query->where('province_id', $request->input('province_id'));
+            });
+        }
+        if(!empty($request->input('product'))){
+            $data = $data->whereRaw('(`products`.`product_name` LIKE "%'.$request->input('product').'%" OR `products`.`product_code` LIKE "%'.$request->input('product').'%")');
+        }
+        $request->request->add([
+                'sort_created' => request()->fullUrlWithQuery(["sort"=>"created_at","order"=>$orderby]),
+                'sort_min_person' => request()->fullUrlWithQuery(["sort"=>"min_person","order"=>$orderby]),
+                'sort_max_person' => request()->fullUrlWithQuery(["sort"=>"max_person","order"=>$orderby]),
+                'sort_code' => request()->fullUrlWithQuery(["sort"=>"product_code","order"=>$orderby]),
+                'sort_product_name' => request()->fullUrlWithQuery(["sort"=>"product_name","order"=>$orderby])
+                ]);
+        // dd($request->all());
+        $data = $data->paginate(10);
+        return view('tour.view',['data' => $data]);
     }
 
     /**
