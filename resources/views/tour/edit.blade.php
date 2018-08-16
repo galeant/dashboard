@@ -71,7 +71,11 @@
                 <ul class="header-dropdown m-r--5">
                     @if($data->schedule_type != 0)
                     <li>
+                        @if($data->always_available_for_sale == 0)
                         <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
+                        @else
+                        <a href="/product/tour-activity/{{$data->id}}/off-day" class="btn bg-black btn-block waves-effect">Off Day</a>
+                        @endif
                     </li>
                     @endif
                     <li id="backProduct">

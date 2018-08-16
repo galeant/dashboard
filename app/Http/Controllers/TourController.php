@@ -21,6 +21,8 @@ use App\Models\ImageAccommodation;
 use App\Models\ImageOther;
 use App\Models\Videos;
 
+use App\Models\CloseDate;
+
 use App\Models\Country;
 use App\Models\Province;
 use App\Models\City;
@@ -832,30 +834,70 @@ class TourController extends Controller
         }
         return view('tour.schedule')->with(['data' => $data,'view' => $view]);
     }
-    public function calendar(Request $request, $id)
+    public function offDayCheck(Request $request,$productId)
     {
-        $view = $request->input('view','list');
-        $data = Tour::with(['schedules' => function($query) use ($request){
+        $data = CloseDate::where('product_id',$productId)->where('date','=',$request->input('date',null))->first();
+        if(!empty($data)){
+           return response()->json(true,200);
+        }        
+        return response()->json(false,204);
+    }
+    public function offDayUpdate(Request $request,$productId)
+    {
+        if($request->action == 'delete'){
+            if(!empty($request->input('date'))){
+                $data = CloseDate::where('product_id',$productId)->where('date','=',$request->input('date'))->delete();
+                if($data){
+                    return response()->json(true,200);
+                }
+            }
+            else{
+                return response()->json(['message' => 'Date is required !'],400);
+            }
+        }else{
+            if(!empty($request->input('date'))){
+                if(strtotime($request->date) < strtotime(date('Y-m-d'))){
+                    $response = [
+                        'message' => 'Can\'t change the off-day past the current date !'
+                    ];
+                    return response()->json($response,400);
+                }
+                $data = new CloseDate;
+                $data->product_id = $productId;
+                $data->date = $request->input('date');
+                if($data->save()){
+                    return response()->json(true,200);
+                }
+            }
+            else{
+                return response()->json(['message' => 'Date is required !'],400);
+            }
+        }
+        return response()->json(['message' => 'Error internal server !'],500);
+        
+    }
+    public function offDay(Request $request, $id)
+    {
+        $data = Tour::with(['off_date' => function($query) use ($request){
             if($request->ajax()){
-                if(!empty($request->input('start')) && !empty($request->input('end'))){
-                    $query->whereRaw(DB::raw("(`schedules`.`start_date` >='".date('Y-m-d',strtotime($request->input('start')))."')"));
-                    $query->whereRaw(DB::raw("(`schedules`.`end_date` <= '".date('Y-m-d',strtotime($request->input('end')))."')"));
+                if(!empty($request->input('start'))){
+                    $query->whereRaw(DB::raw("(`close_dates`.`date` >='".date('Y-m-d',strtotime($request->input('start')))."')"));
+                    $query->whereRaw(DB::raw("(`close_dates`.`date` <= '".date('Y-m-d',strtotime($request->input('end')))."')"));
                 }
             }
         }])->find($id);
         $event = [];
         if($request->ajax())
         {
-            foreach($data->schedules as $i => $value){
+            foreach($data->off_date as $i => $value){
                 $event[$i]['title'] = $data->product_name.' ('.$value->maximum_booking.')';
-                $event[$i]['start'] = $value->start_date;
-                $event[$i]['end'] = date('Y-m-d', strtotime('+1 day', strtotime($value->end_date)));
-                $event[$i]['backgroundColor'] = 'green';
-                // $event[$i]['rendering'] = 'background';
+                $event[$i]['start'] = $value->date;
+                $event[$i]['backgroundColor'] = 'red';
+                $event[$i]['rendering'] = 'background';
             }
             return response()->json($event);
         }
-        return view('tour.calendar')->with(['data' => $data,'view' => $view]);
+        return view('tour.calendar')->with(['data' => $data]);
     }
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
