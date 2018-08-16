@@ -375,7 +375,6 @@ class TourController extends Controller
                 $data->save();
                 // dd($changeInterval);
                 if($changeType == true || $changeInterval == true){
-                    dd('here');
                     Itinerary::where('product_id',$id)->delete();
                     if($request->schedule_type == 1){
                         Itinerary::where('product_id',$id)->delete();
