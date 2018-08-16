@@ -1581,8 +1581,8 @@
             });
             var i = {{count($data->videos)}};
             $("#add_more_video").click(function(){
-                    i++;
-                $(this).closest("#embed").clone().appendTo("#clone_dinamic_video").addClass("row dinamic_video"+i);
+                i++
+                $(this).closest("#embed").clone().appendTo("#clone_dinamic_video").addClass("row dinamic_video"+i).find("input").val(null);
                 $(".dinamic_video"+i+" .col-md-3").empty().append('<button type="button" id="delete_video" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>');
             });
             $(document).on("click", "#delete_video", function() {
