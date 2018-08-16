@@ -1,7 +1,7 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html>
 <head>
-
+<title>A Responsive Email Template</title>
 <!--
 
     An email present from your friends at Litmus (@litmusapp)
@@ -180,7 +180,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 15px 0;" class="logo">
                         <a href="#" target="_blank">
-                            <img alt="Logo" src="./assets/logo.png" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
+                            <img alt="Logo" src="{{ asset('images/logo.png') }}" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
                         </a>
                         <hr class="width-80-mobile" />
                     </td>
@@ -232,7 +232,7 @@
                                         
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi, {{$supplier['email']}}. <span>Pigijo team has done reviewing your registration data and we are saddened to let you go but <span style="color:#E17306;"><b>your partner registration has been declined</b></span>.</span></p>
+                                                <p>Hi, {{$data->suppliers[0]->fullname}}. <span>Pigijo team has done reviewing your registration data and we are saddened to let you go but <span style="color:#E17306;"><b>your partner registration has been declined</b></span>.</span></p>
                                                 <p>For detailed information on why you can't proceed with the partner registration, you may contact our Partner Acquisition team via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</p>
                                                 <p>We sincerely thank you for your interest in Pigijo.</p>
                                             </td>
@@ -281,19 +281,19 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table mobile-hide">
                 <tr>
                     <td align="left" style="padding-left: 20px;">
-                        <img src="./assets/logo-white.png" alt="logo white">
+                        <img src="{{ asset('images/logo-white.png') }}" alt="logo white">
                     </td>
                     <td align="right" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; padding-right: 10px;">
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="./assets/facebook.png" alt="fb-button"></a> 
+                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{ asset('images/facebook.png') }}" alt="fb-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="./assets/twitter.png" alt="twitter-button"></a> 
+                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{ asset('images/twitter.png') }}" alt="twitter-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="./assets/instagram.png" alt="instagram-button"></a> 
+                            <a href="https://www.instagram.com/pigijoo/" target="_blank"><img src="{{ asset('images/instagram.png') }}" alt="instagram-button"></a> 
                         </button>
-                    </td>  
+                    </td>    
                 </tr>
             </table>
             <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">

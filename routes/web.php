@@ -60,16 +60,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 		//Activity Tag
 		Route::resource('activity-tag', 'ActivityTagController');
 
-		Route::group(['prefix' => 'supplier'],function($id){
-			Route::get('password_reset/{id}','SupplierController@password_reset')->name('supplier.password_reset');
-		});
-		//Supplier
-		Route::resource('supplier', 'SupplierController');
-
-		// 
-		
-
 	});
+	//Supplier
+	Route::resource('supplier', 'SupplierController');
+	Route::group(['prefix' => 'supplier'],function($id){
+		Route::get('password_reset/{id}','SupplierController@password_reset')->name('supplier.password_reset');
+	});
+	// 
 	Route::group(['prefix' => 'json'], function(){
 		Route::get('country','CountryController@json');
 		Route::get('language','LanguageController@json');
@@ -97,7 +94,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		// UPDATE SHCHEDULE
 		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
 		// DELETE SHCHEDULE
-		Route::get('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
+		Route::post('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
 		// UPDATE PRICE
 		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
 		// DELETE PRICE

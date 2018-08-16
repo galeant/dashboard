@@ -5,11 +5,28 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\MessageBag;
 use Config;
+use DB;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 // use
 class helpers{
 	public static function salutation(){
 		return ['Mr'=> 'Mr.','Mrs'=>'Mrs.','Ms'=>'Ms.'];
+	}
+	public static function provinces(){
+		$data = DB::table('provinces')->pluck('name','id');
+		$temp[0]= '-Please Select-';
+		foreach($data as $dt){
+			array_push($temp,$dt);
+		}
+		return $temp;
+	}
+	public static function cities(){
+		$data = DB::table('cities')->pluck('name','id');
+		$temp[0]= '-Please Select-';
+		foreach($data as $dt){
+			array_push($temp,$dt);
+		}
+		return $temp;
 	}
 	public static function productCategory(){
 		return ['Activity'=> 'Activity'];
@@ -27,7 +44,7 @@ class helpers{
 		return [0 => 'Not verified',1 =>'Awaiting Submission',2 => 'Awaiting Moderation',3 => 'Insufficient Data',4=>'Rejected',5=>'Active',6=>'Disabled'];
 	}
 	public static function statusProduct(){
-		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable',4=>'Edited',5=>'Expired'];
+		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'];
 	}
 	public static function encodeSpecialChar($string)
 	{

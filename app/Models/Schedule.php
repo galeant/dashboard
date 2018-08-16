@@ -14,8 +14,12 @@ class Schedule extends Model
         'end_date',
         'start_hours',
         'end_hours',
-        'max_booking_date_time',
         'maximum_booking',
         'product_id'
     ];
+
+    public function tour()
+    {
+        return $this->hasOne('App\Models\Tour','id','product_id');
+    }
 }
