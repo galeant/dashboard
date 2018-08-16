@@ -431,16 +431,13 @@ class CompanyController extends Controller
                 $data->status = $status;
                 if($data->save()){
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                    if($status == 3){
-                        // dd('insu');
-                        Mail::to($data->company_email)->send(new InsufficientMail($data));    
-                    }else if($status == 4){
-                        // dd('rejec');
-                        Mail::to($data->company_email)->send(new RejectedMail($data));    
-                    }else if($status == 5){
-                        // dd('accep');
-                        Mail::to($data->company_email)->send(new AcceptMail($data));    
-                    }
+                    // if($status == 3){
+                    //     Mail::to($data->company_email)->send(new InsufficientMail($data));    
+                    // }else if($status == 4){
+                    //     Mail::to($data->company_email)->send(new RejectedMail($data));    
+                    // }else if($status == 5){
+                    //     Mail::to($data->company_email)->send(new AcceptMail($data));    
+                    // }
                     
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
