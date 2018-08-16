@@ -63,8 +63,12 @@ class TourController extends Controller
         if(!empty($request->input('province_id'))){
             $data = $data->whereHas('destinations', function ($query) use ($request) {
                 $query->where('province_id', $request->input('province_id'));
+                if($request->input('city_id') != 0){
+                    $query->where('city_id', $request->input('city_id'));
+                }
             });
         }
+        
         if(!empty($request->input('product'))){
             $data = $data->whereRaw('(`products`.`product_name` LIKE "%'.$request->input('product').'%" OR `products`.`product_code` LIKE "%'.$request->input('product').'%")');
         }
