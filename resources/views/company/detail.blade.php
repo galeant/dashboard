@@ -49,7 +49,7 @@
                                 @elseif($company->status ==2)
                                 <span class="badge bg-cyan">Awaiting Moderation</span>
                                 @elseif($company->status ==3)
-                                <span class="badge bg-pink">Insufficient Data</span>
+                                <span class="sbadge bg-pink">Insufficient Data</span>
                                 @elseif($company->status ==4)
                                 <span class="badge bg-red">Rejected</span>
                                 @elseif($company->status ==5)
@@ -75,7 +75,13 @@
                 {{ Form::open(['route'=>['partner.update', $company->id], 'method'=>'PUT','enctype' => 'multipart/form-data']) }}
                     <div class="row">   
                         <h4>Personal Information</h4>
-                        <div class="col-md-5" style="margin-top:0px;">
+                        <div class="col-md-2" style="margin-top:0px;">
+                            <div class="valid-info">
+                                <h5>Salutation* :</h5>
+                                {{ Form::select('account_title', Helpers::salutation(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="margin-top:0px;">
                             <div class="valid-info">
                                 <h5>Full Name* :</h5>
                                 <input type="text" class="form-control" name="fullname" value="@if(!empty($company->pic)) {{$company->pic->fullname}} @endif">
@@ -454,13 +460,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        @if($company->status == 1)
-                        <div class="col-md-2 col-md-offset-8">
-                            <a href="{{ url('/product/tour-activity/create') }}">
-                                <button type="button" class="btn btn-block bg-orange btn-lg waves-effect">Add product</button>
-                            </a>
-                        </div>
-                        @endif
                         <div class="col-md-2" id="submit" hidden>
                             <button type="submit" class="btn btn-block bg-green btn-lg waves-effect">SAVE</button>
                         </div>
@@ -468,7 +467,7 @@
                 {{ Form::close() }}
                 </div>
             </div>
-        @if($company->status != 5 && $company->status != 6)
+        @if($company->status != 0 && $company->status != 1 && $company->status != 5 && $company->status != 6)
         
             @if($data != null)
             <div class="card" id="sample_product" >
@@ -711,7 +710,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
                                                     @if(count($data->destinations) !=0)
-                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->destination->name @endif</option>
+                                                    <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select City --</option>
                                                     @endif
@@ -754,7 +753,7 @@
                                                 <h5>Destination</h5>
                                                 <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                     @if(!empty($destination))
-                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination->destination_name @endif</option>
+                                                    <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
                                                     @else
                                                     <option value="" selected>-- Select Destination --</option>
                                                     @endif
@@ -1085,7 +1084,6 @@
                             <tbody>
                                 @if(!empty($company->log_statuses))
                                 @foreach($company->log_statuses as $test)
-                                
                                 <tr>
                                     <td>
                                         @if($test->status == 0)
@@ -1123,7 +1121,7 @@
                                             <option value="6" @if($company->status == 6) selected @endif>Disabled</option>
                                         @else
                                             <option value="2" @if($company->status == 2) selected @endif>Awaiting Moderation</option>
-                                            <option value="3" @if($company->status == 3) selected @endif>Insufisient Data</option>
+                                            <option value="3" @if($company->status == 3) selected @endif>Insufficient Data</option>
                                             <option value="4" @if($company->status == 4) selected @endif>Rejected</option>
                                             <option value="5" @if($company->status == 5) selected @endif>Active</option>
                                         @endif
@@ -1296,6 +1294,8 @@
                     $("#akta,#siup,#evi").hide();
                 }
             });
+        // TITLE 
+            $("select[name='account_title']").find("option[value='{{$company->pic->salutation}}']").attr('selected','selected');
         // CITY
         $("select[name='province_id']").change(function(){
                 var idProvince = $(this).val();
@@ -2029,6 +2029,7 @@
             $("#change-status").show();
             $("#submit").show();
             $("input").removeAttr("disabled");
+            $("input[name='email']").attr("readonly",'readonly');
             $("select").removeAttr("disabled");
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();

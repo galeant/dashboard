@@ -269,7 +269,8 @@ class TourController extends Controller
         $activities = ActivityTag::all();
         $provinces = Province::select('id','name')->get();
         $tour = Tour::find($id);
-        return view('tour.edit')->with(['data' => $tour,'provinces' => $provinces,'activities' => $activities]);
+        $maxPeople = Price::where('product_id',$id)->max('number_of_person');
+        return view('tour.edit')->with(['data' => $tour,'provinces' => $provinces,'activities' => $activities,'max_pep'=> $maxPeople]);
     }
 
     /**
@@ -454,29 +455,26 @@ class TourController extends Controller
                 $data->max_cancellation_day = $request->max_cancellation_day;
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
+                // dd($request->price);
                 // PRICE TYPE
-                // dd($request->price[count($data->prices)]['people']);
-                if($request->price[count($data->prices)]['people'] != null || $request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null){   
+                if(($request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null) && $request->price[count($data->prices)]['people'] != null){   
                     foreach($request->price as $price){
-                        if($price['USD'] == null  || $price['USD'] == ''){
-                            $price['USD'] = null;
-                        }else{
-                            if(strlen($price['USD']) > 3){
+                        $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
+                        // dd($validate);
+                        if($validate == null){
+                            if(!empty($price['USD'])){
                                 $price['USD'] = str_replace(".", "", $price['USD']);    
                             }
-                        }
-                        if(strlen($price['IDR']) > 3){
                             $price['IDR'] = str_replace(".", "", $price['IDR']);    
-                        }   
-                        $priceList = Price::create([
-                                'number_of_person'=> $price['people'],
-                                'price_idr'=> $price['IDR'],
-                                'price_usd'=> $price['USD'],
-                                'product_id'=> $data->id
-                            ]);
+                            $priceList = Price::create([
+                                    'number_of_person'=> $price['people'],
+                                    'price_idr'=> $price['IDR'],
+                                    'price_usd'=> $price['USD'],
+                                    'product_id'=> $data->id
+                                ]);
+                        }
                     }
                 }
-                
                 if($request->price_type == 1){
                     $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
                     Price::whereNotIn('number_of_person',[$minPerson->number_of_person])->where('product_id',$data->id)->delete();
@@ -487,7 +485,6 @@ class TourController extends Controller
                         'price_usd' => null
                     ]);
                 }
-             
                 // INCLUDE
                 if($request->price_includes != null){
                     Includes::where('product_id',$data->id)->delete();
@@ -1133,28 +1130,33 @@ class TourController extends Controller
         if($request->price_usd == null  || $request->price_usd == ''){
             $request->price_usd = null;
         }else{
-            if(strlen($request->price_usd) > 3){
-                $request->price_usd = str_replace(".", "", $request->price_usd);    
-            }
+            $request->price_usd = str_replace(".", "", $request->price_usd);    
         }
-        if(strlen($request->price_idr) > 3){
-            $request->price_idr = str_replace(".", "", $request->price_idr);    
-        }
+        $request->price_idr = str_replace(".", "", $request->price_idr);    
         
-        Price::where('id',$request->id)->update([
+        $price = Price::where('id',$request->id)->first();
+        $price->update([
             'number_of_person' => $request->number_of_person,
             'price_idr' => $request->price_idr,
             'price_usd' => $request->price_usd
         ]);
-        
+        $maxPeople = $price->where('product_id',$price->product_id)->max('number_of_person');
         $response = [
             'message' => 'success',
-            'data' => Price::where('id',$request->id)->first()
+            'data' => [
+                'price'=> Price::where('id',$request->id)->first(),
+                'max_pep' => $maxPeople
+            ]
         ];
         return response()->json($response,200);
     }
-    public function priceDelete($id){
+    public function priceDelete($product_id,$id){
+        $product = Tour::with('prices')->where('id',$product_id)->first();
         Price::where('id',$id)->delete();
-        return redirect()->back();
+        // dd(count($product->prices));
+        if(count($product->prices) == 2){
+            Price::where('product_id',$product_id)->update(['number_of_person' =>1]);
+        } 
+        return redirect("/product/tour-activity/".$product_id.'/edit#step-h-3');
     }
 }

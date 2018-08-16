@@ -270,8 +270,8 @@
 		                    </li>
 		                </ul>
 		            </li>
-		            <li>
-		                <a href="{{ URL('/master/supplier') }}">
+		            <li {{{ (Request::is('supplier*') ? 'class=active' : '') }}}>
+		                <a href="{{ URL('supplier') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Supplier</span>
 		                </a>

@@ -29,10 +29,10 @@ class SupplierController extends Controller
             $model = Supplier::with('companies')->get();
             return Datatables::of($model)
             ->addColumn('action', function(Supplier $data) {
-                return '<a href="/master/supplier/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                return '<a href="supplier/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
                     </a>
-                    <a href="/master/supplier/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/supplier/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                    <a href="supplier/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/supplier/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
             })
@@ -106,14 +106,14 @@ class SupplierController extends Controller
             if($data->save()){
                 // Mail::to($request->input('email'))->send(new PasswordResetMail($data));
                 DB::commit();
-                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
+                return redirect("supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
             }else{
-                return redirect("master/supplier/create")->with('message', 'Error Database;');
+                return redirect("supplier/create")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return redirect("master/supplier/create")->with('message', $exception->getMessage());
+            return redirect("supplier/create")->with('message', $exception->getMessage());
         }
     }
 
@@ -194,15 +194,15 @@ class SupplierController extends Controller
             $data->role_id = $request->input('role_id');
             if($data->save()){
                 DB::commit();
-                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
+                return redirect("supplier/".$data->id."/edit")->with('message', 'Successfully saved Supplier');
             }else{
-                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("supplier/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
             return $data;
-            return redirect("master/supplier/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("supplier/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 
@@ -241,15 +241,15 @@ class SupplierController extends Controller
             if($data->save()){
                 Mail::to($data->email)->send(new PasswordResetMail($data));
                 DB::commit();
-                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Successfully Send Password Reset Supplier');
+                return redirect("supplier/".$data->id."/edit")->with('message', 'Successfully Send Password Reset Supplier');
             }else{
-                return redirect("master/supplier/".$data->id."/edit")->with('message', 'Error Database;');
+                return redirect("supplier/".$data->id."/edit")->with('message', 'Error Database;');
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
             // return $data;
-            return redirect("master/supplier/".$data->id."/edit")->with('message', $exception->getMessage());
+            return redirect("supplier/".$data->id."/edit")->with('message', $exception->getMessage());
         }
     }
 }

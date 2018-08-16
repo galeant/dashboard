@@ -148,9 +148,6 @@
                                 <div class=" col-md-4">
                                     <div class="row clearfix">
                                         <div class="col-md-6">
-                                            <button type="submit" value="0" class="btn btn-block btn-lg btn-warning waves-effect">Save As Draft</button>
-                                        </div>
-                                        <div class="col-md-6">
                                             <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
                                         </div>
                                     </div>

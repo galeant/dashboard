@@ -10,7 +10,9 @@ use App\Models\SupplierRole;
 use App\Models\Province;
 use App\Models\CompanyStatusLog;
 use Datatables;
-use App\Mail\StatusCompany;
+use App\Mail\AcceptMail;
+use App\Mail\InsufficientMail;
+use App\Mail\RejectedMail;
 use Validator;
 use Helpers;
 use Mail;
@@ -104,6 +106,7 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $validation = Validator::make($request->all(), [
+            'account_title' => 'required',
             'company_name' => 'required|unique:companies',
             'fullname' => 'required',
             'email' => 'required|unique:suppliers',
@@ -142,7 +145,7 @@ class CompanyController extends Controller
             'bank_account_title'=> $request->bank_account_title,
             'bank_account_name' => $request->bank_account_name,
             'company_ownership' => $request->company_ownership,
-            'status'=> 1,
+            'status'=> 5,
             // 
             'province_id'=> $request->province_id,
             'city_id'=> $request->city_id
@@ -196,7 +199,10 @@ class CompanyController extends Controller
             $dataSave['evidance_path'] = $eviPic['path_full'];
         }
         $company = Company::create($dataSave);
-        $supplier = Supplier::create(['fullname'=> $request->fullname,
+        // dd($request->account_title);
+        $supplier = Supplier::create([
+                    'salutation'=> $request->account_title,
+                    'fullname'=> $request->fullname,
                     'phone'=> $request->format.'-'.$request->phone,
                     'email'=> $request->email,
                     'role_id'=> $request->role,
@@ -204,7 +210,7 @@ class CompanyController extends Controller
                     'password' => '-']);
         $companyStatusLog = CompanyStatusLog::create([
             'company_id' => $company->id,
-            'status' => 1,
+            'status' => 5,
             'note' => 'initial create' 
         ]);
 
@@ -215,7 +221,7 @@ class CompanyController extends Controller
             return redirect("master/company/create")->with('message', $exception->getMessage());
         }
         
-        return redirect('/partner/registration/activity');
+        return redirect('/partner');
     }
 
     /**
@@ -261,6 +267,7 @@ class CompanyController extends Controller
     {
         // dd($request->all());
         $validation = Validator::make($request->all(), [
+            'account_title' => 'required',
             'company_name' => 'required',
             'fullname' => 'required',
             'email' => 'required',
@@ -363,10 +370,10 @@ class CompanyController extends Controller
                 ->update($dataSave);
         $supplier = Supplier::where('company_id',$id)->orderBy('created_at','ASC')
                 ->update([
+                    'salutation'=> $request->account_title,
                     'fullname'=> $request->fullname,
                     'phone'=> $request->format.'-'.$request->phone,
-                    'email'=> $request->email,
-                    'password' => '-']);
+                    'email'=> $request->email]);
         
 
         DB::commit();
@@ -417,12 +424,21 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
          try{
-            $data = Company::find($id);
+            $data = Company::where('id',$id)->with(['suppliers' => function($query){
+                $query->orderBy('created_at','asc')->first();
+            }])->first();
             if($data->status != $status){
                 $data->status = $status;
                 if($data->save()){
-                    $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                    // Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                    CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                    // if($status == 3){
+                    //     Mail::to($data->company_email)->send(new InsufficientMail($data));    
+                    // }else if($status == 4){
+                    //     Mail::to($data->company_email)->send(new RejectedMail($data));    
+                    // }else if($status == 5){
+                    //     Mail::to($data->company_email)->send(new AcceptMail($data));    
+                    // }
+                    
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
                 }else{
@@ -448,27 +464,13 @@ class CompanyController extends Controller
         $id     = ($request->input('id') ? $request->input('id') : '');
         if($name)
         {
-            $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )');
+            $data = $data->whereRaw('(company_name LIKE "%'.$name.'%" )')->where('status',5)->orWhere('status',6);
         }
         if($id)
         {
-            $data = $data->where('id',$id);
+            $data = $data->where(['id' => $id,'status' => 5])->orWhere('status',6);
         }
         $data = $data->select('id',DB::raw('`company_name` as name'))->get()->toArray();
         return $this->sendResponse($data, "Company retrieved successfully", 200);
     }
-
-    //
-    // public function sample($id){
-    //     $company = Company::with('log_statuses')->where('id',$id)->first();
-    //     $product = Tour::where('company_id',$id)->orderBy('created_at','asc')->first();
-    //     session()->put('condition', 'kuration');
-    //     session()->put('company', $company);
-    //     if($product != null ){
-    //         return redirect('/product/tour-activity/'.$product->id.'/edit');
-    //     }else{
-    //         return redirect()->back();
-    //     }
-        
-    // }
 }
