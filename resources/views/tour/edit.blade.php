@@ -592,7 +592,7 @@
                                             <tr id="price_value" data-id="{{$val->id}}">
                                                 <td id="numberOfPerson">
                                                     <p><h9 id="price_info" style="display:none">>= </h9>{{$val->number_of_person}}</p>
-                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}"  required>  
+                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}"  late-data="{{$val->number_of_person}}" required>  
                                                 </td>
                                                 <td id="price_idr">
                                                     <p>{{(int)$val->price_idr}}</p>
@@ -916,7 +916,11 @@
                 @endif
             }else{
                 @if(count($data->prices) > 0)
-                    $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @if($max_pep == $data->max_person)
+                        $("div#price_list").hide();
+                    @else
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @endif
                 @else
                     $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
                 @endif
@@ -1321,7 +1325,11 @@
                     $("tr#price_value").find("h9#price_info").hide();
                 }else{
                     @if(count($data->prices) > 0)
-                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                        @if(($data->prices[(count($data->prices)-1)]->number_of_person+1) < $data->max_person)
+                            $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{($data->min_person)}}");
+                        @else
+                            $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                        @endif
                     @else
                         $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
                     @endif
@@ -1375,9 +1383,14 @@
                     priceL.push(pi); 
                 });
                 console.log(priceL);
+                console.log({{$data->max_person}});
                 if(priceL.indexOf($(this).val()) != -1){
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
+                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else if($(this).val() > {{$data->max_person}}){
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
                 // }else if($(this).val() <= Math.max.apply(Math,priceL)){
                 //     $(this).closest("td#numberOfPerson").find("small").remove();
@@ -1431,20 +1444,28 @@
                         price_usd: price_usd, 
                     }
                 }).done(function(response) {
-                    me.closest("tr#price_value").attr('data-id',response.data.id);
-                    me.closest("tr#price_value").find("input#price_list_field1").attr('value',response.data.number_of_person);
+                    me.closest("tr#price_value").attr('data-id',response.data.price.id);
+                    me.closest("tr#price_value").find("input#price_list_field1").attr('late-data',response.data.price.number_of_person);
+                    me.closest("tr#price_value").find("input#price_list_field1").attr('value',response.data.price.number_of_person);
                     if($("#priceType").val() == 1){
-                        me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.number_of_person);
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.price.number_of_person);
                     }else{
-                        me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.number_of_person);
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.price.number_of_person);
                     }
                     
-                    me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price_idr));
-                    if(response.data.price_usd == null){
+                    me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price.price_idr));
+                    if(response.data.price.price_usd == null){
                         me.closest("tr#price_value").find("td#price_usd p").text(0);
                     }else{
-                        me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price_usd));
+                        me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
                     }
+                    var max_pep = {{$data->max_person}};
+                    if(response.data.max_pep == max_pep){
+                        $("#price_list").hide();
+                    }else{
+                        $("#price_list").show();
+                    }
+                    priceL =[];
                     me.find("a#price_edit").show();
                     me.find("a#price_update").hide();
                     me.closest("tr#price_value").find("p").show();
