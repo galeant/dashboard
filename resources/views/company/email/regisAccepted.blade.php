@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<title>A Responsive Email Template</title>
 <!--
 
     An email present from your friends at Litmus (@litmusapp)
@@ -180,7 +180,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 15px 0;" class="logo">
                         <a href="#" target="_blank">
-                            <img alt="Logo" src="./assets/logo.png" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
+                            <img alt="Logo" src="{{ asset('images/logo.png') }}" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
                         </a>
                         <hr class="width-80-mobile" />
                     </td>
@@ -223,18 +223,22 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Registration Status Update</b></td>
+                                            <td align="left" style="padding-bottom: 30px;  font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Welcome on board, {{$data->suppliers[0]->fullname}} !</b></td>
                                         </tr>
                                         <tr>
                                             <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"></td>
                                             </td>
                                         </tr>
-                                        
+                                        <tr style="">                                           
+                                            <td align="center" style="padding: 0px 0 0 0; font-size: 16px; line-height: 10px; font-family: Helvetica, Arial, sans-serif; color: #666666; background-color: lightgray;" class="padding">
+                                                <p>Registration Status :</p>
+                                                <p  style="text-decoration: underline;color: #E17306; font-size: 24px;">Accepted</p>
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi, {{$supplier['email']}}. <span>Pigijo team has done reviewing your registration data and we are saddened to let you go but <span style="color:#E17306;"><b>your partner registration has been declined</b></span>.</span></p>
-                                                <p>For detailed information on why you can't proceed with the partner registration, you may contact our Partner Acquisition team via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</p>
-                                                <p>We sincerely thank you for your interest in Pigijo.</p>
+                                                <p>Hi, {{$data->suppliers[0]->fullname}}, <span>we are very excited to inform you that your registration for Pigijo Partner has been <span><b>accepted</b>!</span> Now you can start listing your product via Pigijo Partner Dashboard.</span></p>
+                                                <p>Login now to Partner Dashboard with your account to get started. If you need help with that, feel free to reach us anytime via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span></p>
                                             </td>
                                         </tr>
                                     </table>
@@ -246,11 +250,11 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="left" style="padding-top: 25px;" class="padding">
-                                                <!-- <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
+                                                <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
                                                     <tr>
-                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="https://litmus.com" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Login Now</a></td>
+                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="http://tour.pigijo.id/login" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Go to Partner Dashboard</a></td>
                                                     </tr>
-                                                </table> -->
+                                                </table>
 
                                                 <hr class="" style="margin-top: 40px;"/>
                                                 <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
@@ -281,17 +285,17 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table mobile-hide">
                 <tr>
                     <td align="left" style="padding-left: 20px;">
-                        <img src="./assets/logo-white.png" alt="logo white">
+                        <img src="{{ asset('images/logo-white.png') }}" alt="logo white">
                     </td>
                     <td align="right" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; padding-right: 10px;">
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="./assets/facebook.png" alt="fb-button"></a> 
+                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{ asset('images/facebook.png') }}" alt="fb-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="./assets/twitter.png" alt="twitter-button"></a> 
+                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{ asset('images/twitter.png') }}" alt="twitter-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="./assets/instagram.png" alt="instagram-button"></a> 
+                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="{{ asset('images/instagram.png') }}" alt="instagram-button"></a> 
                         </button>
                     </td>  
                 </tr>

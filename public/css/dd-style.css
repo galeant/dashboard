@@ -107,3 +107,76 @@
     background-color: hsla(0, 100%, 50%, 1);
     color: #fff;
 }
+.fc-day-grid-event .fc-content{
+    padding: 5px !important;
+}
+.fc-day-grid-event:hover{
+    opacity: 1;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+.fc-day-grid-event{
+    opacity: 0.7;
+    filter: alpha(opacity=70);
+}
+.fc-event{
+    border: 1px solid #e5730d !important;
+}
+.bg-green .swal-text{
+    color:#fff;
+}
+.bg-red .swal-text{
+    color:#fff;
+}
+.bg-cyan .swal-text{
+    color:#fff;
+}
+.fc-future:hover,.fc-today:hover{
+    background: #fcf8e3;
+    content:"Add New Schedule";
+}
+.qtip-title .btn-delete{
+    position: absolute;
+    right: 5px;
+}
+.low-zindex{
+    z-index: 3 !important;
+}
+.form-note{
+    position: relative;
+    color:#7f7f7faa;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+.fc-title span{
+    float: right;
+}
+.search-box{
+    z-index: 1;
+    content: "";
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border-bottom: 1px solid #ddd;
+}
+.button-search{
+    margin-top: 20px;
+}
+a#more{
+    text-align: center;
+    width: 200px;
+}
+a#more i{
+    position: relative;
+    top: 6px;
+}
+a#more{
+    cursor: pointer;
+    color: black;
+    position: relative;
+    z-index: 2;
+    top: -10px;
+    left: 45%
+}
+a#more:hover{
+    color:black;
+    text-decoration: none;
+}

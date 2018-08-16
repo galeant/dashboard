@@ -10,7 +10,9 @@ use App\Models\SupplierRole;
 use App\Models\Province;
 use App\Models\CompanyStatusLog;
 use Datatables;
-use App\Mail\StatusCompany;
+use App\Mail\AcceptMail;
+use App\Mail\InsufficientMail;
+use App\Mail\RejectedMail;
 use Validator;
 use Helpers;
 use Mail;
@@ -422,12 +424,24 @@ class CompanyController extends Controller
         }
         DB::beginTransaction();
          try{
-            $data = Company::find($id);
+            $data = Company::where('id',$id)->with(['suppliers' => function($query){
+                $query->orderBy('created_at','asc')->first();
+            }])->first();
             if($data->status != $status){
                 $data->status = $status;
                 if($data->save()){
-                    $status = CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
-                    Mail::to('r3naldi.didi@gmail.com')->send(new StatusCompany($data));
+                    CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                    if($status == 3){
+                        // dd('insu');
+                        Mail::to($data->company_email)->send(new InsufficientMail($data));    
+                    }else if($status == 4){
+                        // dd('rejec');
+                        Mail::to($data->company_email)->send(new RejectedMail($data));    
+                    }else if($status == 5){
+                        // dd('accep');
+                        Mail::to($data->company_email)->send(new AcceptMail($data));    
+                    }
+                    
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
                 }else{
