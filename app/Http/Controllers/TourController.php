@@ -448,14 +448,16 @@ class TourController extends Controller
                 $data->max_cancellation_day = $request->max_cancellation_day;
                 $data->cancellation_fee = $request->cancel_fee;
                 $data->save();
+                // dd($request->price);
                 // PRICE TYPE
                 if(($request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null) && $request->price[count($data->prices)]['people'] != null){   
                     foreach($request->price as $price){
                         $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
+                        // dd($validate);
                         if($validate == null){
-                            // if($price['USD'] != null  || $price['USD'] != ''){
+                            if(!empty($price['USD'])){
                                 $price['USD'] = str_replace(".", "", $price['USD']);    
-                            // }
+                            }
                             $price['IDR'] = str_replace(".", "", $price['IDR']);    
                             $priceList = Price::create([
                                     'number_of_person'=> $price['people'],

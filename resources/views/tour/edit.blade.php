@@ -595,12 +595,12 @@
                                                     <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}"  late-data="{{$val->number_of_person}}" required>  
                                                 </td>
                                                 <td id="price_idr">
-                                                    <p>{{(int)$val->price_idr}}</p>
+                                                    <p>{{number_format((int)$val->price_idr)}}</p>
                                                     <input style="display:none" id="price_list_field2" type="text" class="form-control"  value="{{(int)$val->price_idr}}" required>     
                                                     
                                                 </td>
                                                 <td id="price_usd">
-                                                    <p>{{(int)$val->price_usd}}</p>
+                                                    <p>{{number_format((int)$val->price_usd)}}</p>
                                                     <input style="display:none" id="price_list_field3" type="text" class="form-control" value="{{(int)$val->price_usd}}" required/>     
                                                 </td>
                                                 <td id="action">    
@@ -1325,13 +1325,7 @@
                     $("tr#price_value").find("h9#price_info").hide();
                 }else{
                     @if(count($data->prices) > 0)
-                        @if(($data->prices[(count($data->prices)-1)]->number_of_person+1) < $data->max_person)
-                            $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{($data->min_person)}}");
-                        @else
-                            $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
-                        @endif
-                    @else
-                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}").val("{{$data->min_person}}");
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
                     @endif
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
@@ -1477,8 +1471,6 @@
                     var pU = $(this).find("td#price_usd #price_list_field3").val();
                     priceU.push(pU); 
                 });
-                console.log(priceU);
-                console.log(priceU.indexOf("0"));
                 if(priceU.indexOf("0") == -1){
                     $("#submit_price").removeAttr("disabled");
                     $(".alert-price").hide();
