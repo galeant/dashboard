@@ -349,7 +349,8 @@ class TourController extends Controller
             $data = Tour::find($id);
             DB::beginTransaction();
             try {
-                $changeType = ($data->schedule_type != $request->schedule_type ? true : false);
+                $changeType = ($data->schedule_type != $request->input('schedule_type',$data->schedule_type) ? true : false);
+                // dd($changeType);
                 $changeInterval = false; 
                 if(!empty($request->input('schedule_type'))){
                     $data->schedule_type = $request->schedule_type;
@@ -372,8 +373,9 @@ class TourController extends Controller
                 
 
                 $data->save();
-                // dd($data);
+                // dd($changeInterval);
                 if($changeType == true || $changeInterval == true){
+                    dd('here');
                     Itinerary::where('product_id',$id)->delete();
                     if($request->schedule_type == 1){
                         Itinerary::where('product_id',$id)->delete();
