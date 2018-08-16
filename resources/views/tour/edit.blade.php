@@ -684,13 +684,13 @@
                                         <h5>Cancellation less than</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
-                                        <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" placeholder="Day" value="{{$data->max_cancellation_day}}" required>
+                                        <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" value="{{$data->max_cancellation_day}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
                                         <h5>days from schedule, cancellation fee is</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
-                                        <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" placeholder="Percent" value="{{$data->cancellation_fee}}" required>
+                                        <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" value="{{$data->cancellation_fee}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
                                         <h5>percent(%)</h5>
