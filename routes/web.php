@@ -112,6 +112,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
+	Route::group(['prefix' => 'bookings'],function(){
+		Route::resource('tour', 'BookingTourController');
+	});
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
 

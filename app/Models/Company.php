@@ -52,5 +52,8 @@ class Company extends Model {
     public function pic(){
         return $this->hasOne('App\Models\Supplier')->orderBy('created_at','ASC');
     }
+    public function tours(){
+        return $this->hasMany('App\Models\Tour','company_id','id');
+    }
 }
 
