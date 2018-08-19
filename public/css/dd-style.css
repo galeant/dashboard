@@ -180,3 +180,22 @@ a#more:hover{
     color:black;
     text-decoration: none;
 }
+ul.p-info{
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 0;
+}
+ul.p-info .desk {
+    float:left;
+    width: 60%;
+    color: #65cea7;
+}
+ul.p-info .title {
+    width: 40%;
+    float:left;
+}
+ul.p-info li {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10px;
+}

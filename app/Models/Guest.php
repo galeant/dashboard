@@ -3,7 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Members extends Model {
+class Guest extends Model {
     /**
      * The attributes that should be mutated to dates.
      *
@@ -14,6 +14,6 @@ class Members extends Model {
      *
      * @var stringA
      */
-    protected $table = 'users';
-    protected $fillable = ['salutation','firstname','lastname','username','email','phone','status'];
+    protected $table = 'guests';
+    protected $fillable = ['tiket_token'];
 }

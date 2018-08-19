@@ -46,6 +46,9 @@ class helpers{
 	public static function statusProduct(){
 		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'];
 	}
+	public static function statusTransaction(){
+		return [2 => 'Payment Accepted',5 =>'Cancelled',6 => 'Refunded'];
+	}
 	public static function encodeSpecialChar($string)
 	{
 	    $replace  = str_replace(' ', '-', $string);

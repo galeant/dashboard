@@ -26,8 +26,9 @@ class BookingTourController extends Controller
             ->get();
             return Datatables::of($booking_tour)
             ->addColumn('status',function(BookingTour $booking_tour){
-                return 
-                    '<span class="badge" style="backgroud-color:'.$booking_tour->transactions->transaction_status->color.'">'.$booking_tour->transactions->transaction_status->name.'</span>';
+                if(!empty($booking_tour->transactions)){
+                    return '<span class="badge" style="background-color:'.$booking_tour->transactions->transaction_status->color.'">'.$booking_tour->transactions->transaction_status->name.'</span>';
+                } 
             })
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
