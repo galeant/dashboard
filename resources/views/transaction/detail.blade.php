@@ -12,10 +12,10 @@
     </h2>
     <div class="row clearfix">
     	<div class="col-md-12 m-t-20">
-    		<button type="button" class="btn btn-info waves-effect pull-left">
+    		<a href="/transaction/{{$data->transaction_number}}/print/PDF" class="btn btn-info waves-effect pull-left">
                 <i class="material-icons">local_printshop</i>
                 <span>Invoice</span>
-            </button>
+            </a>
     	</div>
     	<div class="col-md-12 m-t-20">
     		<div class="card">

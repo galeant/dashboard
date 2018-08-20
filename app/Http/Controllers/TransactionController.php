@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
-
 use DB;
 use Datatables;
+use App\Http\Libraries\PDF\PDF;
 
 class TransactionController extends Controller
 {
@@ -121,5 +121,36 @@ class TransactionController extends Controller
     public function destroy(Transaction $transaction)
     {
         //
+    }
+
+    public function print(Request $request, $tr_number,$type = 'PDF')
+    {
+
+        // return view('print.pdf.invoice');
+        $data = Transaction::where('transaction_number',$tr_number)->first();
+        $pdf = new PDF;
+        $pdf->AddPage();
+        $addpage = 1;
+        $pdf->Code128($pdf->GetPageWidth()-60,55,$data->transaction_number,50,15);
+        $pdf->Header($data->transaction_number,$data->paid_at,$data->customer);
+        for($i = 1;$i < 60 ; $i++)
+        {
+            $pdf->Cell($pdf->GetPageWidth(),10,'Hello World!',0,0,'',false);
+            $pdf->Ln(5);
+            if(($i%37) == 0){
+                $pdf->AddPage();
+                $pdf->Code128($pdf->GetPageWidth()-60,55,$data->transaction_number,50,15);
+                $pdf->Header($data->transaction_number,$data->paid_at,$data->customer);
+            }
+        }
+        $pdf->Output();
+        // if(!empty($data)){
+            // if($type == 'PDF'){
+            //     $view    =  \View::make('print.pdf.invoice')->render();
+            //     $pdf     = \App::make('dompdf.wrapper');
+            //     $pdf->loadHTML($view);
+            //     return $pdf->stream();
+            // }
+        // }
     }
 }
