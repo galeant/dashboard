@@ -10,13 +10,16 @@ use App\Models\SupplierRole;
 use App\Models\Province;
 use App\Models\CompanyStatusLog;
 use Datatables;
-use App\Mail\AcceptMail;
-use App\Mail\InsufficientMail;
-use App\Mail\RejectedMail;
+use App\Mail\StatusCompany;
+// use App\Mail\InsufficientMail;
+// use App\Mail\RejectedMail;
 use Validator;
 use Helpers;
 use Mail;
 use DB;
+use App\Jobs\SendEmail;
+use App\Jobs\SendEmailTest;
+
 class CompanyController extends Controller
 {
     /**
@@ -431,6 +434,19 @@ class CompanyController extends Controller
                 $data->status = $status;
                 if($data->save()){
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
+                    if($status == 3 || $status == 4||  $status == 5){
+                        
+                        // dispatch(new SendEmail($data));
+                        // dd("a");
+                        
+                        // $details['email'] = 'ilham.rach.f@gmail.com';
+                        SendEmail::dispatch($data);
+                        // SendEmailTest::dispatch($details)->delay(now()->addSeconds(10));
+                        
+                        // dispatch(new SendEmailTest($details));
+                        // dd('done');   
+                        // Mail::to('ilham.rach.f@gmail.com')->send(new StatusCompany($data));       
+                    }
                     // if($status == 3){
                     //     Mail::to($data->company_email)->send(new InsufficientMail($data));    
                     // }else if($status == 4){

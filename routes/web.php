@@ -111,6 +111,12 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('coupon', 'CouponController');
 
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
+	// Route::get('/emailTest', function(){
+	// 	$details['email'] = 'ilham.rach.f@gmail.com';
+	// 	dispatch(new App\Jobs\SendEmailTest($details));
+	// 	dd('done');
+	// });
 });
+
 
 
