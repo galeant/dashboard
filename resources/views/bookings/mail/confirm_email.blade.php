@@ -2,16 +2,6 @@
 <html>
 <head>
 <title>Reciept Booking Number</title>
-<!--
-
-    An email present from your friends at Litmus (@litmusapp)
-
-    Email is surprisingly hard. While this has been thoroughly tested, your mileage may vary.
-    It's highly recommended that you test using a service like Litmus (http://litmus.com) and your own devices.
-
-    Enjoy!
-
- -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -222,7 +212,7 @@
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Dear, {{$supplier['fullname']}}. <span>your booking with Booking Number 1011101010111 has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
+                                                <p>Dear, {{$data->customer->salutation}}. {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}. <span>your booking with Booking Number {{$data->transaction_number}} has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
                                             </td>
                                         </tr>
                                     </table>
@@ -275,7 +265,7 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table mobile-hide">
                 <tr>
                     <td align="left" style="padding-left: 20px;">
-                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo.svg" width="75" alt="logo white">
+                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-white.png" width="75" alt="logo white">
                     </td>
                     <td align="right" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; padding-right: 10px;">
                         <button class="btn-socmed bg-transparent">
@@ -288,28 +278,6 @@
                             <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/instagram.png" alt="instagram-button"></a> 
                         </button>
                     </td>  
-                </tr>
-            </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
-                <tr>
-                    <td cellpadding:"30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/facebook.png" alt="fb-button"></a> 
-                        </button>
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/twitter.png" alt="twitter-button"></a> 
-                        </button>
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/instagram.png" alt="instagram-button"></a> 
-                        </button>
-                    </td> 
-                </tr>
-            </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="" style="max-width: 500px;" class="responsive-table tab-none">
-                <tr>
-                    <td align="center" style="">
-                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo.svg" alt="logo white" width="75">
-                    </td>
                 </tr>
             </table>
             <!--[if (gte mso 9)|(IE)]>

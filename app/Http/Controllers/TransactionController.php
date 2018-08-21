@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use App\Http\Libraries\PDF\PDF;
-
+use App\Mail\TransactionMail;
+use Mail;
+use Storage;
+use Config;
 
 class TransactionController extends Controller
 {
@@ -105,8 +108,8 @@ class TransactionController extends Controller
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
+        // dd();
         $listStat = array_pluck($data->transaction_log_status, 'transaction_status_id');
-        dd($listStat);
         if(!in_array($request->status, $listStat)){
             if($request->status == 2){
                 if(in_array(1, $listStat)){
@@ -119,6 +122,9 @@ class TransactionController extends Controller
                             'transaction_status_id' => $request->status,
                             'transaction_id' => $id
                         ]);
+                        //save pdf path pdf/transaction_number.pdf
+                        $pdf = $this->print($request,$data->transaction_number,'PDF',1);
+                        Mail::to($data->customer->email)->send(new TransactionMail($data));
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
@@ -143,7 +149,6 @@ class TransactionController extends Controller
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
-                        dd($exception);
                         DB::rollBack();
                         \Log::info($exception->getMessage());
                         return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
@@ -194,7 +199,7 @@ class TransactionController extends Controller
         //
     }
 
-    public function print(Request $request, $tr_number,$type = 'PDF')
+    public function print(Request $request, $tr_number,$type = 'PDF',$download = 0)
     {
         $data = Transaction::where('transaction_number',$tr_number)->first();
         $pdf = new PDF;
@@ -294,19 +299,20 @@ class TransactionController extends Controller
                 $pdf->Ln();
             }
         }
-
+        // dd()
         $pdf->Cell(30,10);
         $pdf->Cell(75,10);
         $pdf->SetFont('Arial','',10);
         $pdf->Cell(55,10,'Total Price','B');
-        $pdf->Cell(30,10,'Rp '.number_format($data->total_price),'B');
+        $pdf->Cell(30,10,'Rp '.number_format($data->total_price),'B',0,'R');
         $pdf->Ln();
         $pdf->Cell(30,10);
         $pdf->Cell(75,10);
         $pdf->Cell(55,10,'Total Amount','B');
-        $pdf->Cell(30,10,'Rp '.number_format($data->total_paid),'B');
+        $pdf->Cell(30,10,'Rp '.number_format((int)$data->total_paid ? $data->total_paid : $data->total_price),'B',0,'R');
         $pdf->Ln();
-        $pdf->Output();
+        $pdf->Output(($download ? 'F' : 'I'), ($download ? 'pdf/'.$data->transaction_number.'.pdf' : $data->transaction_number.'.pdf'));
+        return $pdf;
         // for($i = 1;$i < 60 ; $i++)
         // {
         //     $pdf->Cell($pdf->GetPageWidth(),10,'Hello World!',0,0,'',false);
