@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 
 class PasswordResetMail extends Mailable
 {
@@ -28,6 +29,8 @@ class PasswordResetMail extends Mailable
      */
     public function build()
     {
-        return $this->view('supplier.email.password_reset');
+        return $this->view('supplier.email.password_reset')
+                    ->subject('Change Password Request');
+        
     }
 }
