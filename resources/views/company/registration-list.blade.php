@@ -29,6 +29,7 @@
                                             <th>Name</th>
                                             <th>PIC Email</th>
                                             <th>PIC Name</th>
+                                            <th>Created at</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -65,7 +66,8 @@
                 {data: 'company_name'},
                 {data: 'pic_email'},
                 {data: 'pic_name'},
-	            {data: 'status'},
+	            {data: 'created_at'},
+                {data: 'status'},
 	            {data: 'action'}
 	        ]
 	    });
