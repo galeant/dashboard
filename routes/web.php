@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -117,6 +116,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 	// 	dd('done');
 	// });
 });
+// FOR EMAIL TESTING
+// Route::get('/mailable', function () {
+//     $company = App\Models\Company::where('id',9)->with(['suppliers' => function($query){
+// 		$query->orderBy('created_at','asc')->first();
+// 	}])->first();
 
+//     return new App\Mail\StatusCompany($company);
+// });
 
 

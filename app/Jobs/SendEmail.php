@@ -34,7 +34,9 @@ class SendEmail implements ShouldQueue
     {
         $email = new StatusCompanyMail($this->data);
         // $email = new SendEmailTestMail();
-        Mail::to($this->data->suppliers[0]->email)->send($email);
+        Mail::to($this->data->suppliers[0]->email)
+                // ->subject('Confirm your account...')
+                ->send($email);
         // Mail::to('ilham.rach.f@gmail.com')
         //         // ->subject('Confirm your account...')
         //         ->send($email);

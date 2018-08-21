@@ -155,6 +155,10 @@
         .im{
             color:#666666;
         }
+        b.name{
+            color:red;
+            /* text-transform: capitalize; */
+        }
     }
 
     /* ANDROID CENTER FIX */
@@ -165,6 +169,18 @@
 
 <!-- HIDDEN PREHEADER TEXT -->
     <!-- <hr class="hr-header" /> -->
+    <div style="display:none;max-height:0px;overflow:hidden">
+        @if($data->status == 3)
+            You are required to recheck and complete your registration form to continue.
+        @elseif($data->status == 4)
+            We are sorry to inform you that your partner registration has been declined.
+        @elseif($data->status == 5)
+            Congratulation and welcome on board! Let's start listing your products in Pigijo.
+        @endif
+    </div>
+    <div style="display:none;max-height:0px;overflow:hidden">
+        &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp; &nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;‌&nbsp;
+    </div>
 
 <div class="bg-orange" style="width: 100%; height: 15px;">
     
@@ -227,7 +243,7 @@
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
                                         <tr>
                                             @if($data->status == 5)
-                                                <td align="left" style="padding-bottom: 30px;  font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Welcome on board, {{$data->suppliers[0]->fullname}} !</b></td>
+                                                <td align="left" style="padding-bottom: 30px;  font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;float:left" class="padding"><b>Welcome on board,<span style="text-transform: capitalize;">{{$data->suppliers[0]->fullname}}!</span></b></td>
                                             @else
                                                 <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Registration Status Update</b></td>    
                                             @endif
@@ -254,18 +270,18 @@
                                         <tr>
                                             @if($data->status == 5)
                                                 <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                    <p>Hi, {{$data->suppliers[0]->fullname}}, <span>we are very excited to inform you that your registration for Pigijo Partner has been <span><b>accepted</b>!</span> Now you can start listing your product via Pigijo Partner Dashboard.</span></p>
+                                                    <p>Hi <span style="text-transform: capitalize;">{{$data->suppliers[0]->fullname}}</span>, <span>we are very excited to inform you that your registration for Pigijo Partner has been <span><b>accepted</b>!</span> Now you can start listing your product via Pigijo Partner Dashboard.</span></p>
                                                     <p>Login now to Partner Dashboard with your account to get started. If you need help with that, feel free to reach us anytime via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span></p>
                                                 </td>
                                             @elseif($data->status == 3)
                                                 <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                    <p>Hi, {{$data->suppliers[0]->fullname}} ! <span>Pigijo team has done reviewing your registration data and deemed that the data you sent is still insufficient/incomplete.</span></p>
+                                                    <p>Hi <span style="text-transform: capitalize;">{{$data->suppliers[0]->fullname}}</span>, <span>Pigijo team has done reviewing your registration data and deemed that the data you sent is still insufficient/incomplete.</span></p>
                                                     <p>Therefore, we need your kind cooperation to log into Pigijo Partner Registration Portal again and complet the registration form as instructed</p>
                                                 </td>
                                             @elseif($data->status == 4)
                                                 <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                    <p>Hi, {{$data->suppliers[0]->fullname}}. <span>Pigijo team has done reviewing your registration data and we are saddened to let you go but <span style="color:#E17306;"><b>your partner registration has been declined</b></span>.</span></p>
-                                                    <p>For detailed information on why you can't proceed with the partner registration, you may contact our Partner Acquisition team via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</p>
+                                                    <p>Hi <span style="text-transform: capitalize;">{{$data->suppliers[0]->fullname}}</span>, <span>Pigijo team has done reviewing your registration data and we are saddened to let you go but <span style="color:#E17306;"><b>your partner registration has been declined</b></span>.</span></p>
+                                                    <p>For detailed information on why you can't proceed with the partner registration, you may contact our Partner Acquisition Team via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</p>
                                                     <p>We sincerely thank you for your interest in Pigijo.</p>
                                                 </td>
                                             @endif
