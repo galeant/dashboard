@@ -1330,6 +1330,8 @@
                 }else{
                     @if(count($data->prices) > 0)
                         $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @else
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}");
                     @endif
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
