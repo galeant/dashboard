@@ -47,7 +47,7 @@ class helpers{
 		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'];
 	}
 	public static function statusTransaction(){
-		return [2 => 'Payment Accepted',5 =>'Cancelled',6 => 'Refunded'];
+		return [2 => 'Payment Accepted',5 =>'Cancelled',6 => 'Refunded'];	
 	}
 	public static function encodeSpecialChar($string)
 	{

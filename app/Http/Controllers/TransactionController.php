@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\TransactionLogStatus;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use App\Http\Libraries\PDF\PDF;
+
 
 class TransactionController extends Controller
 {
@@ -103,13 +105,84 @@ class TransactionController extends Controller
     public function update(Request $request,  $id)
     {
         //
-
         $data = Transaction::find($id);
-        foreach($data->transaction_log_status as $log){
-            if($log->transaction_status_id == $request->input('status')){
-                return redirect()->back()->with('error','Can`t change status because status is duplicated' );
+        $listStat = array_pluck($data->transaction_log_status, 'transaction_status_id');
+        if(!in_array($request->status, $listStat)){
+            if($request->status == 2){
+                if(in_array(1, $listStat)){
+                    DB::beginTransaction();
+                    try{
+                        Transaction::where('id',$id)->update([
+                            'status_id' => $request->status
+                        ]);
+                        TransactionLogStatus::create([
+                            'transaction_status_id' => $request->status,
+                            'transaction_id' => $id
+                        ]);
+                        DB::commit();
+                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                    }catch (\Exception $exception){
+                        dd($exception);
+                        DB::rollBack();
+                        \Log::info($exception->getMessage());
+                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                    }
+                }else{
+                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
+                }
+            }else if($request->status == 5){
+                if(in_array(2, $listStat)){
+                    DB::beginTransaction();
+                    try{
+                        Transaction::where('id',$id)->update([
+                            'status_id' => $request->status
+                        ]);
+                        TransactionLogStatus::create([
+                            'transaction_status_id' => $request->status,
+                            'transaction_id' => $data->id
+                        ]);
+                        DB::commit();
+                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                    }catch (\Exception $exception){
+                        dd($exception);
+                        DB::rollBack();
+                        \Log::info($exception->getMessage());
+                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                    }
+                }else{
+                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
+                }
+            }else if($request->status == 6){
+                if(in_array(5, $listStat)){
+                    DB::beginTransaction();
+                    try{
+                        Transaction::where('id',$id)->update([
+                            'status_id' => $request->status
+                        ]);
+                        TransactionLogStatus::create([
+                            'transaction_status_id' => $request->status,
+                            'transaction_id' => $id
+                        ]);
+                        DB::commit();
+                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                    }catch (\Exception $exception){
+                        dd($exception);
+                        DB::rollBack();
+                        \Log::info($exception->getMessage());
+                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                    }
+                }else{
+                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
+                }
             }
+        }else{
+            return redirect()->back()->with('error','Can`t change status because status is duplicated' );
         }
+        // foreach($data->transaction_log_status as $log){
+        //     if($log->transaction_status_id == $request->input('status')){
+        //         return redirect()->back()->with('error','Can`t change status because status is duplicated' );
+        //     }
+        // }
     }
 
     /**
