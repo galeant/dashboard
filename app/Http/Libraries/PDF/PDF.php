@@ -171,8 +171,8 @@ class PDF extends Fpdf
 		// dd($transactionNumber);
 		// $this->Write(5,'A set: "'.''.'"');
 	    // Logo
-	    $this->setFillColor(227,114,13); 
-		$this->Cell($this->GetPageWidth()-20,1,'',0,0,'L',true);
+	    // $this->setFillColor(227,114,13); 
+		// $this->Cell($this->GetPageWidth()-20,1,'',0,0,'L',true);
 		$this->Ln(5);
 	    $this->Image("https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.jpg",10,16.5,25,0,'','https://www.pigijo.id');
 	    // Arial bold 15
@@ -206,6 +206,20 @@ class PDF extends Fpdf
 	    if(!empty($transactionNumber)){
 	    	$this->Code128($this->GetPageWidth()-60,55,$transactionNumber,50,15);
 	    }
+	    $this->SetFont('Arial','B',15);
+	    $this->Cell(50,10,'Booking Sumary');
+	    $this->Ln();
+	    $header=['Item','Item Description','Qty','Unit Price(Rp)','Total Price(Rp)'];
+	    $this->SetFillColor(200,200,200);
+	    $this->SetTextColor(0);
+	    $this->SetDrawColor(200,200,200);
+	    $this->SetLineWidth(.3);
+	    $this->SetFont('Arial','',10);
+	    // Header
+	    $w = array(30, 75, 25, 30,30);
+	    for($i=0;$i<count($header);$i++)
+	        $this->Cell($w[$i],10,$header[$i],0,0,'L',true);
+	    $this->Ln();
 
 	}
 
@@ -234,6 +248,7 @@ class PDF extends Fpdf
 	        return true;
 	    }
 	}
+
 	function customerDetail($customer)
 	{
 		$this->Cell(35,5,'Name');
@@ -249,6 +264,7 @@ class PDF extends Fpdf
 	// Page footer
 	function Footer()
 	{
+		$this->SetFont('Arial','',12);
 		$this->SetY(-27);
 		$this->Cell(70,5,'For further inquiries, please contact us');
 		$this->Ln(7);
@@ -257,6 +273,50 @@ class PDF extends Fpdf
 		$this->Cell(70,5,'Email: info@pigijo.com');
 	    $this->Image("https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.jpg",$this->GetPageWidth()-35,$this->GetPageHeight()-21.5,25);
 	}
+
+	function CellFitScale($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='')
+    {
+        $this->CellFit($w,$h,$txt,$border,$ln,$align,$fill,$link,true,false);
+    }
+
+	function CellFit($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='', $scale=false, $force=true)
+    {
+        //Get string width
+        $str_width=$this->GetStringWidth($txt);
+
+        //Calculate ratio to fit cell
+        if($w==0)
+            $w = $this->w-$this->rMargin-$this->x;
+        $ratio = ($w-$this->cMargin*2)/$str_width;
+
+        $fit = ($ratio < 1 || ($ratio > 1 && $force));
+        if ($fit)
+        {
+            if ($scale)
+            {
+                //Calculate horizontal scaling
+                $horiz_scale=$ratio*100.0;
+                //Set horizontal scaling
+                $this->_out(sprintf('BT %.2F Tz ET',$horiz_scale));
+            }
+            else
+            {
+                //Calculate character spacing in points
+                $char_space=($w-$this->cMargin*2-$str_width)/max($this->MBGetStringLength($txt)-1,1)*$this->k;
+                //Set character spacing
+                $this->_out(sprintf('BT %.2F Tc ET',$char_space));
+            }
+            //Override user alignment (since text will fill up cell)
+            $align='';
+        }
+
+        //Pass on to Cell method
+        $this->Cell($w,$h,$txt,$border,$ln,$align,$fill,$link);
+
+        //Reset character spacing/horizontal scaling
+        if ($fit)
+            $this->_out('BT '.($scale ? '100 Tz' : '0 Tc').' ET');
+    }
 
 	function Code128($x, $y, $code, $w, $h) {
 	    $Aguid = "";                                                                      // Création des guides de choix ABC

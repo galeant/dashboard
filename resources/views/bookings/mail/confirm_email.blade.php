@@ -218,37 +218,18 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Your Next Trip Awaits You!</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Your Booking Reciept</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Dear, {{$supplier['fullname']}}. <span>your booking with Booking Number 1011101010111 has been succesfully confirmed, and now you are all set and ready to get on your next trip.</span></p>
-                                                <p>Please find itinerary handy to confirm your booking receipt and your trip itinerary details.</p>
+                                                <p>Dear, {{$supplier['fullname']}}. <span>your booking with Booking Number 1011101010111 has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
                                             </td>
                                         </tr>
-                                        
-                                        <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0"></table>
-                                            <tr style="border: 1px solid lightgray; border-radius: 3px;">
-                                                <td align="left "style="padding: 15px;">
-                                                    <i class="fas fa-exclamation-circle" style="color: lightgray;"></i>
-                                                </td>
-                                                <td align="justify" class="padding">
-                                                    <span>
-                                                        With Pigijo, all your booking details are being kept in one place. Simply keep your trip itinerary handy to confirm your booking at the location.
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                        </table> -->
                                     </table>
-                                    <table>
-                                        <tr style="border: 2px solid lightgray; border-radius: 3px;">
-                                            <td align="left "style="padding-left: 15px;">
-                                                <i class="fas fa-exclamation-circle" style="color: lightgray;"></i>
-                                            </td>
-                                            <td align="justify" style="padding: 10px;">
-                                                <small style="color:gray;">
-                                                    With Pigijo, all your booking details are being kept in one place. Simply keep your trip itinerary handy to confirm your booking at the location.
-                                                </small>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
+                                                <p>You may get asked to show your booking receipt upon arrival at the location. Please keep your booking receipt handy</p>
                                             </td>
                                         </tr>
                                     </table>
