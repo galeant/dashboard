@@ -116,18 +116,24 @@ class TransactionController extends Controller
                     DB::beginTransaction();
                     try{
                         Transaction::where('id',$id)->update([
-                            'status_id' => $request->status
+                            'status_id' => $request->status,
+                            'paid_at' => date('Y-m-d H:i:s'),
+                            'total_paid' => $request->input('gross_amount',($data->total_price-$data->total_discount))
                         ]);
                         TransactionLogStatus::create([
                             'transaction_status_id' => $request->status,
                             'transaction_id' => $id
                         ]);
                         //save pdf path pdf/transaction_number.pdf
+                        if (!is_dir(base_path('public/pdf'))) {
+                            mkdir(base_path('public/pdf'),0777,true);         
+                        }
                         $pdf = $this->print($request,$data->transaction_number,'PDF',1);
-                        Mail::to($data->customer->email)->send(new TransactionMail($data));
+                        Mail::to('r3naldi.didi@gmail.com')->send(new TransactionMail($data));
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
+                        dd($exception);
                         DB::rollBack();
                         \Log::info($exception->getMessage());
                         return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
@@ -181,11 +187,6 @@ class TransactionController extends Controller
         }else{
             return redirect()->back()->with('error','Can`t change status because status is duplicated' );
         }
-        // foreach($data->transaction_log_status as $log){
-        //     if($log->transaction_status_id == $request->input('status')){
-        //         return redirect()->back()->with('error','Can`t change status because status is duplicated' );
-        //     }
-        // }
     }
 
     /**
@@ -299,7 +300,6 @@ class TransactionController extends Controller
                 $pdf->Ln();
             }
         }
-        // dd()
         $pdf->Cell(30,10);
         $pdf->Cell(75,10);
         $pdf->SetFont('Arial','',10);
@@ -313,24 +313,5 @@ class TransactionController extends Controller
         $pdf->Ln();
         $pdf->Output(($download ? 'F' : 'I'), ($download ? 'pdf/'.$data->transaction_number.'.pdf' : $data->transaction_number.'.pdf'));
         return $pdf;
-        // for($i = 1;$i < 60 ; $i++)
-        // {
-        //     $pdf->Cell($pdf->GetPageWidth(),10,'Hello World!',0,0,'',false);
-        //     $pdf->Ln(5);
-        //     if(($i%37) == 0){
-        //         $pdf->AddPage();
-        //         $pdf->Code128($pdf->GetPageWidth()-60,55,$data->transaction_number,50,15);
-        //         $pdf->Header($data->transaction_number,$data->paid_at,$data->customer);
-        //     }
-        // }
-        // $pdf->Output();
-        // if(!empty($data)){
-            // if($type == 'PDF'){
-            //     $view    =  \View::make('print.pdf.invoice')->render();
-            //     $pdf     = \App::make('dompdf.wrapper');
-            //     $pdf->loadHTML($view);
-            //     return $pdf->stream();
-            // }
-        // }
     }
 }

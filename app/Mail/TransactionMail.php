@@ -29,7 +29,7 @@ class TransactionMail extends Mailable
      */
     public function build()
     {
-        return $this->view('bookings.mail.confirm_email')->with(['data' => $this->transaction])->attach(base_path('public/pdf/'.$this->transaction->transaction_number.'.pdf'), [
+        return $this->view('bookings.mail.confirm_email')->with(['data' => $this->transaction])->subject('Booking Receipt '.$this->transaction->transaction_number)->attach(base_path('public/pdf/'.$this->transaction->transaction_number.'.pdf'), [
                         'as' => $this->transaction->transaction_number.'.pdf',
                         'mime' => 'application/pdf',
                     ]);
