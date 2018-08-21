@@ -1,20 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>A Responsive Email Template</title>
-<!--
-
-    An email present from your friends at Litmus (@litmusapp)
-
-    Email is surprisingly hard. While this has been thoroughly tested, your mileage may vary.
-    It's highly recommended that you test using a service like Litmus (http://litmus.com) and your own devices.
-
-    Enjoy!
-
- -->
+<title>Reciept Booking Number</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/solid.css" integrity="sha384-wnAC7ln+XN0UKdcPvJvtqIH3jOjs9pnKnq9qX68ImXvOGz2JuFoEiCjT8jyZQX2z" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+
 <style type="text/css">
     /* CLIENT-SPECIFIC STYLES */
     body, table, td, a{-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
@@ -87,7 +81,7 @@
         /* ALLOWS FOR FLUID TABLES */
         .wrapper {
           width: 100% !important;
-        	max-width: 100% !important;
+            max-width: 100% !important;
         }
 
         /* ADJUSTS LAYOUT OF LOGO IMAGE */
@@ -180,7 +174,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 15px 0;" class="logo">
                         <a href="#" target="_blank">
-                            <img alt="Logo" src="{{asset('images/logo.png')}}" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
+                            <img alt="Logo" src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.png" width="75" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
                         </a>
                         <hr class="width-80-mobile" />
                     </td>
@@ -207,19 +201,25 @@
                         <!-- HERO IMAGE -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                              	
+                                
                             </tr>
                             <tr>
                                 <td>
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Change Password Request</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Your Booking Reciept</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi, {{$supplier['fullname']}}. <span>We have received your request to change your account password and here you go, simply click on the button bellow to set up a new password.</span></p>
-                                                <p>If you didn't  request the password change, please ignore this.</p>
+                                                <p>Dear, {{$data->customer->salutation}}. {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}. <span>your booking with Booking Number {{$data->transaction_number}} has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
+                                                <p>You may get asked to show your booking receipt upon arrival at the location. Please keep your booking receipt handy</p>
                                             </td>
                                         </tr>
                                     </table>
@@ -230,15 +230,14 @@
                                     <!-- BULLETPROOF BUTTON -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="padding-top: 25px;" class="padding">
-                                                <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
-                                                    <tr>
-                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="{{ env('APP_URL_SUPPLIER').('/password/reset/'. $supplier['token']) }}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Set New Password</a></td>
-                                                    </tr>
-                                                </table>
-
-                                                <hr class="" style="margin-top: 40px;"/>
-                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Change%20Password%20Request" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
+                                            <hr class="" style="margin-top: 40px;"/>
+                                            <td align="left" class="mobile-hide">
+                                                <!-- <img src="/assets/maskot.png" alt="" width="125" height="125"> -->
+                                            </td>
+                                            <td align="justify" style="padding-left: 20px;" class="padding">
+                                                <!-- <img src="./assets/logo.png" alt=""> -->
+                                                <p>Need Help?</p>
+                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Booking%20Receip" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
                                             </td>
                                         </tr>
                                     </table>
@@ -266,41 +265,19 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table mobile-hide">
                 <tr>
                     <td align="left" style="padding-left: 20px;">
-                        <img src="{{asset('images/logo-white.png')}}" alt="logo white">
+                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-white.png" width="75" alt="logo white">
                     </td>
                     <td align="right" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; padding-right: 10px;">
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{asset('images/facebook.png')}}" alt="fb-button"></a> 
+                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/facebook.png" alt="fb-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{asset('images/twitter.png')}}" alt="twitter-button"></a> 
+                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/twitter.png" alt="twitter-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="{{asset('images/instagram.png')}}" alt="instagram-button"></a> 
+                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/instagram.png" alt="instagram-button"></a> 
                         </button>
                     </td>  
-                </tr>
-            </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
-                <tr>
-                    <td cellpadding: "30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{asset('images/facebook.png')}}" alt="fb-button"></a> 
-                        </button>
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{asset('images/twitter.png')}}" alt="twitter-button"></a> 
-                        </button>
-                        <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="{{asset('images/instagram.png')}}" alt="instagram-button"></a> 
-                        </button>
-                    </td> 
-                </tr>
-            </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="" style="max-width: 500px;" class="responsive-table tab-none">
-                <tr>
-                    <td align="center" style="">
-                        <img src="{{asset('images/logo-white.png')}}" alt="logo white">
-                    </td>
                 </tr>
             </table>
             <!--[if (gte mso 9)|(IE)]>

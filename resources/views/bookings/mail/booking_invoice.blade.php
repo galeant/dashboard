@@ -15,6 +15,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
 <style type="text/css">
     /* CLIENT-SPECIFIC STYLES */
     body, table, td, a{-webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;} /* Prevent WebKit and Windows mobile changing default text sizes */
@@ -214,12 +215,53 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Change Password Request</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Complete Your Payment</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi, {{$supplier['fullname']}}. <span>We have received your request to change your account password and here you go, simply click on the button bellow to set up a new password.</span></p>
-                                                <p>If you didn't  request the password change, please ignore this.</p>
+                                                <p>Hi {{$supplier['fullname']}}, <span>we have receipt your booking order. Please complete your payment within the given time limit. Your order will be proceed only after you have completed your payment</span></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <p><b>Payment Details</b></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="background-color: lightgray; width:100%;">
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
+                                                <p>Booking number</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                                <p>: 101101010010100</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
+                                                <p>Complete payment before</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                                <p>: <b>Today, 22:00</b></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
+                                                <p>Total pay amount</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                                <p>: <b>IDR 1,950,000</b></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table>
+                                        <tr>
+                                            <td align="justify" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                                <p>
+                                                    Your booking order detail can be found on this email attachment. Your receipt and e-tickets will be sent to you shortly after you have completed your payment
+                                                </p>
                                             </td>
                                         </tr>
                                     </table>
@@ -230,15 +272,14 @@
                                     <!-- BULLETPROOF BUTTON -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="padding-top: 25px;" class="padding">
-                                                <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
-                                                    <tr>
-                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="{{ env('APP_URL_SUPPLIER').('/password/reset/'. $supplier['token']) }}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Set New Password</a></td>
-                                                    </tr>
-                                                </table>
-
-                                                <hr class="" style="margin-top: 40px;"/>
-                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Change%20Password%20Request" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
+                                            <hr class="" style="margin-top: 40px;"/>
+                                            <td align="left" class="mobile-hide">
+                                                <img src="./assets/maskot.png" alt="" width="125" height="125">
+                                            </td>
+                                            <td align="justify" style="padding-left: 20px;" class="padding">
+                                                <!-- <img src="./assets/logo.png" alt=""> -->
+                                                <p>Need Help?</p>
+                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Booking%20Receip" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
                                             </td>
                                         </tr>
                                     </table>
@@ -283,7 +324,7 @@
             </table>
             <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
                 <tr>
-                    <td cellpadding: "30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
+                    <td cellpadding:"30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
                         <button class="btn-socmed bg-transparent">
                             <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{asset('images/facebook.png')}}" alt="fb-button"></a> 
                         </button>

@@ -116,6 +116,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour', 'BookingTourController');
 	});
 	Route::resource('transaction', 'TransactionController');
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
