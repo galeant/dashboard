@@ -34,6 +34,7 @@
                                 </tbody>
                             </table>
                     	</div>
+						@if($data->status_id != 6)
                     	<div class="col-md-6">
                     		{{ Form::model($data, ['route' => ['transaction.update', $data->id], 'method'=>'PUT','class'=>'m-t-20']) }}
                     			<div class="input-group">
@@ -46,6 +47,7 @@
                                 </div>
                     		</form>
                     	</div>
+						@endif
                     </div>
                 </div>
             </div>
