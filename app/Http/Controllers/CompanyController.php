@@ -436,15 +436,12 @@ class CompanyController extends Controller
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
                     if($status == 3 || $status == 4||  $status == 5){
                         
-                        // dispatch(new SendEmail($data));
-                        // dd("a");
-                        
-                        // $details['email'] = 'ilham.rach.f@gmail.com';
-                        SendEmail::dispatch($data);
+                       
+                        SendEmail::dispatch($data)
+                                ->delay(now()->addSeconds(15));
                         // SendEmailTest::dispatch($details)->delay(now()->addSeconds(10));
                         
                         // dispatch(new SendEmailTest($details));
-                        // dd('done');   
                         // Mail::to('ilham.rach.f@gmail.com')->send(new StatusCompany($data));       
                     }
                     // if($status == 3){
