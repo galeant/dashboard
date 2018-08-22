@@ -129,11 +129,10 @@ class TransactionController extends Controller
                             mkdir(base_path('public/pdf'),0777,true);         
                         }
                         $pdf = $this->print($request,$data->transaction_number,'PDF',1);
-                        Mail::to('r3naldi.didi@gmail.com')->send(new TransactionMail($data));
+                        Mail::to($data->customer->email)->send(new TransactionMail($data));
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
-                        dd($exception);
                         DB::rollBack();
                         \Log::info($exception->getMessage());
                         return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
