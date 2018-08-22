@@ -35,6 +35,7 @@
                                             <th>PIC Email</th>
                                             <th>PIC Name</th>
                                             <th>Status</th>
+                                            <th>Created at</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -71,7 +72,8 @@
                 {data: 'pic_email'},
                 {data: 'pic_name'},
 	            {data: 'status'},
-	            {data: 'action'}
+	            {data: 'created_at'},
+                {data: 'action'}
 	        ]
 	    });
     </script>
