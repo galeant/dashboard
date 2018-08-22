@@ -21,6 +21,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 
 	Route::resource('partner', 'CompanyController');
+	
+	Route::resource('partner-product-type', 'CompanyProductTypeController');
+	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete');
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');

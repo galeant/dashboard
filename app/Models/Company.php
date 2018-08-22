@@ -55,5 +55,9 @@ class Company extends Model {
     public function tours(){
         return $this->hasMany('App\Models\Tour','company_id','id');
     }
+    public function product_types()
+    {
+        return $this->belongsToMany('App\Models\ProductType', 'company_product_types','company_id', 'product_type_id')->withPivot('created_at', 'updated_at');
+    }
 }
 
