@@ -31,9 +31,11 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Created At</th>
-                                            <th>Updated At</th>
+                                            <th>Email Address</th>
+                                            <th>Fullname</th>
+                                            <th>Phone Number</th>
+                                            <th>Member Since</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -66,9 +68,11 @@
 	        ajax: '/members',
 	        columns: [
               {data: 'id'},
-              {data: 'firstname'},
-              {data: 'created_at'},
-              {data: 'updated_at'},
+              {data: 'email'},
+              {data: 'fullname'},
+              {data: 'phone'},
+              {data: 'join_date'},
+              {data: 'status'},
               {data: 'action'}
 	        ]
 	    });

@@ -126,3 +126,4 @@ Route::group(['middleware' => ['auth:web']], function () {
 // });
 
 
+Route::get('look','MembersController@look');

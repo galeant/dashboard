@@ -16,4 +16,8 @@ class Members extends Model {
      */
     protected $table = 'users';
     protected $fillable = ['gendre','firstname','lastname','username','email','phone','status'];
+
+    public function trans(){
+        return $this->belongsTo('App\Models\Company', 'company_id','id');
+    }
 }
