@@ -138,12 +138,51 @@
 
 		                </ul>
 		            </li>
-
-		            <li>
-		                <a href="{{ URL('/admin/members') }}">
-		                    <i class="material-icons">person</i>
+					<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
+		                <a  class="menu-toggle waves-effect waves-block toggled">
+		                    <i class="material-icons">money</i>
 		                    <span>Transaction & Bookings</span>
 		                </a>
+						<ul class="ml-menu" style="display: block;">
+							<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
+								<a  class="menu-toggle waves-effect waves-block toggled">
+									<span>Bookings</span>
+								</a>
+								<ul class="ml-menu" style="display: block;">
+									<li {{{ (Request::is('bookings/tour*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/tour') }}" class=" waves-effect waves-block">
+											<span>Tour</span>
+											{{-- <span class="badge bg-orange">
+												<b class="font-bold col-white" id="sidebar_count_bookings">
+													999
+												</b>
+											</span> --}}
+										</a>
+									</li>
+									<li {{{ (Request::is('bookings/uhotel*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/uhotel') }}" class=" waves-effect waves-block">
+											<span>Accomodation uHotel</span>
+										</a>
+									</li>
+									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
+											<span>Accomodation Tiket</span>
+										</a>
+									</li>
+									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
+											<span>Car Rental</span>
+										</a>
+									</li>
+								</ul>
+							</li>
+		                    <li {{{ (Request::is('transactions*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
+		                            <span>Transaction</span>
+		                        </a>
+		                    </li>
+
+		                </ul>
 		            </li>
 
 		            {{-- <li>

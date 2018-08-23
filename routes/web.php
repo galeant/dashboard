@@ -86,7 +86,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
-		Route::get('tour-activity/{id}/calendar', 'TourController@calendar');
+		Route::get('tour-activity/{id}/off-day', 'TourController@offDay');
+		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck');
+		Route::post('tour-activity/{id}/off-day/save', 'TourController@offDayUpdate');
 		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
 		// change status
 		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus');
@@ -109,6 +111,12 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
+	Route::group(['prefix' => 'bookings'],function(){
+		Route::resource('tour', 'BookingTourController');
+	});
+	Route::resource('transaction', 'TransactionController');
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
+	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 	// Route::get('/emailTest', function(){
 	// 	$details['email'] = 'ilham.rach.f@gmail.com';

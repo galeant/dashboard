@@ -536,7 +536,7 @@
                 });
              });
             $("select[name='product_type']").change(function(){
-                console.log($(this).val());
+                // console.log($(this).val());
                 if($(this).val() == 'private'){
                     $(this).closest("div").find("a").attr("data-original-title","Private Group");
                     $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers.");

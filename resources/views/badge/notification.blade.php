@@ -1,0 +1,5 @@
+@if(!)
+<script>
+
+@endif
+</script>

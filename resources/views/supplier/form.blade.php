@@ -76,7 +76,7 @@
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-4 col-lg-offset-5">
 										@if(isset($data))
-										<a href="{{ url('/master/supplier/password_reset/'.$data->id) }}">
+										<a href="{{ url('/supplier/password_reset/'.$data->id) }}">
 											<button type="button" class="btn btn-block btn-lg btn-primary waves-effect">Send Email Password</button>
 										</a>											
 										@endif

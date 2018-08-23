@@ -105,4 +105,8 @@ class Tour extends Model
     public function log_statuses(){
         return $this->hasMany('App\Models\ProductStatusLog','product_id','id');
     }
+    public function booking_tours()
+    {
+        return $this->hasMany('App\Models\BookingTour','product_id','id');
+    }
 }

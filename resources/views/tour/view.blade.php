@@ -55,7 +55,7 @@
                                                     <div class="col-sm-3 col-xs-6">
                                                         <div class="form-group">
                                                             <label>City</label>
-                                                            {!! Form::select('city_id',[0 => '-Please Select-'],null,['class' => 'form-control']) !!}
+                                                            {!! Form::select('city_id',[0 => '-Please Select-'],null,['class' => 'form-control','id' => 'city_id']) !!}
                                                         </div>
                                                     </div> 
                                                     <div class="col-sm-3 col-xs-6">
@@ -116,6 +116,8 @@
                                             @endif
                                         </th>
                                         <th>Company</th>
+                                        <th>Province</th>
+                                        <th>City</th>
                                         <th width="70">
                                         @if (Request::input('sort') == 'min_person')
                                                 <a href="{!! Request::input('sort_min_person') !!}" >
@@ -156,11 +158,26 @@
                                 </thead>
                                 <tbody>
                                    @foreach($data as $dt)
+
                                    <tr>
                                        <td>{{$dt->product_code}}</td>
                                        <td><img src="{{cdn($dt->cover_path.'/xsmall/'.$dt->cover_filename)}}" width="50" height="50"></td>
                                        <td>{{$dt->product_name}}</td>
                                        <td>{{(!empty($dt->company) ? $dt->company->company_name : '-')}}</td>
+                                       <td>
+                                            @if(count($dt->destinations) > 0)
+                                                @foreach($dt->destinations as $dst)
+                                                    <span class="badge">{{$dst->province->name}}</span>
+                                                @endforeach
+                                            @endif
+                                       </td>
+                                       <td>
+                                           @if(count($dt->destinations) > 0)
+                                                @foreach($dt->destinations as $dst)
+                                                    <span class="badge">{{$dst->city->name}}</span>
+                                                @endforeach
+                                            @endif
+                                       </td>
                                        <td>{{$dt->min_person}}</td>
                                        <td>{{$dt->max_person}}</td>
                                        <td>{{count($dt->schedules)}}</td>
@@ -209,6 +226,35 @@
             return objURL;
         };
         var params = parseQueryString();
+        $( window ).on( "load", function() {
+            var province_id = $('Select[name="province_id"]').val();
+            if(province_id != 0){
+                $.ajax({
+                  method: "GET",
+                  url: "{{ url('json/findCity') }}",
+                  data: {
+                    province_id: province_id
+                  }
+                }).done(function(response) {
+                    $('#city_id option').remove();
+                    $('#city_id').append(
+                    "<option value=0>-Please Select-</option>"
+                    );
+                    $.each(response, function (index, value) {
+                        if(params['city_id'] == value.id){
+                            $('#city_id').append(
+                            "<option value="+value.id+" selected>"+value.name+"</option>"
+                            );
+                        }else{
+                            $('#city_id').append(
+                            "<option value="+value.id+">"+value.name+"</option>"
+                            );
+                        }
+                        
+                    });
+                });
+            }
+        });
         if(params["status"] !=2 && params['status'] != undefined){
             $('#advance-search').show();
             $('#more').html("<i class='material-icons'>keyboard_arrow_up</i><span>LESS</span>");
@@ -241,6 +287,25 @@
             $('#more').attr('on','hide');
         }
         $( document ).ready(function() {
+            $('Select[name="province_id"]').change(function(){
+                $.ajax({
+                  method: "GET",
+                  url: "{{ url('json/findCity') }}",
+                  data: {
+                    province_id: $(this).val()
+                  }
+                }).done(function(response) {
+                    $('#city_id option').remove();
+                    $('#city_id').append(
+                    "<option value=0>-Please Select-</option>"
+                    );
+                    $.each(response, function (index, value) {
+                        $('#city_id').append(
+                            "<option value="+value.id+">"+value.name+"</option>"
+                        );
+                    });
+                });
+            });
             $( "#more" ).click(function(e) {
                 e.preventDefault();
                 if($(this).attr('on') == 'hide'){

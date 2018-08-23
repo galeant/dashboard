@@ -76,7 +76,11 @@
                 <ul class="header-dropdown m-r--5">
                     @if($data->schedule_type != 0)
                     <li>
+                        @if($data->always_available_for_sale == 0)
                         <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
+                        @else
+                        <a href="/product/tour-activity/{{$data->id}}/off-day" class="btn bg-black btn-block waves-effect">Off Day</a>
+                        @endif
                     </li>
                     @endif
                     <li id="backProduct">
@@ -680,13 +684,13 @@
                                         <h5>Cancellation less than</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
-                                        <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" placeholder="Day" value="{{$data->max_cancellation_day}}" required>
+                                        <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" value="{{$data->max_cancellation_day}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
                                         <h5>days from schedule, cancellation fee is</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
-                                        <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" placeholder="Percent" value="{{$data->cancellation_fee}}" required>
+                                        <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" value="{{$data->cancellation_fee}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
                                         <h5>percent(%)</h5>

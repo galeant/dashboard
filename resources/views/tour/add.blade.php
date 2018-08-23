@@ -659,7 +659,7 @@
 			$('#mapModal').modal('toggle');
 		}
 	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXELYNJkxo43slp8y_FFng0KL4YXSsOo4&libraries=places&callback=initAutocomplete" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places&callback=initAutocomplete" async defer></script>
 
     <script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>  
 

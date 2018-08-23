@@ -451,7 +451,6 @@ class CompanyController extends Controller
                     // }else if($status == 5){
                     //     Mail::to($data->company_email)->send(new AcceptMail($data));    
                     // }
-                    
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
                 }else{

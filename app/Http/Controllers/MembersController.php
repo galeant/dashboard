@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Members;
+use App\Models\Transaction;
 use Validator;
 use Datatables;
 use DB;
@@ -117,9 +118,12 @@ class MembersController extends Controller
      */
     public function show($id)
     {
-        $data = Members::find($id);
-        dd($data->bookings);
-        dd($id);
+        $data = Members::where('id',$id)->with(['transactions' => function($uqery){
+            $uqery->limit(5);
+        }])->first();
+        return view('members.detail',['data' => $data]);
+        
+        // dd($id);
     }
 
     /**

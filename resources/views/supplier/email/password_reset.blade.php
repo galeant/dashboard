@@ -233,7 +233,7 @@
                                             <td align="left" style="padding-top: 25px;" class="padding">
                                                 <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
                                                     <tr>
-                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="{{ env('APP_URL_SUPPLIER').('password/reset/'. $supplier['token']) }}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Set New Password</a></td>
+                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="{{ env('APP_URL_SUPPLIER').('/password/reset/'. $supplier['token']) }}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Set New Password</a></td>
                                                     </tr>
                                                 </table>
 
