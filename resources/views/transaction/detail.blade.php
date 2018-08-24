@@ -15,6 +15,10 @@
     		<a target="_blank" href="/transaction/{{$data->transaction_number}}/print/PDF" class="btn btn-info waves-effect pull-left">
                 <i class="material-icons">local_printshop</i>
                 <span>Invoice</span>
+			</a>
+			<a target="_blank" href="/transaction/{{$data->transaction_number}}/print/itinerary/PDF" class="btn btn-info waves-effect m-l-20">
+                <i class="material-icons">local_printshop</i>
+                <span>Itinerary</span>
             </a>
     	</div>
     	<div class="col-md-12 m-t-20">
