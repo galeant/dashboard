@@ -68,7 +68,7 @@
                                                     <div class="col-sm-3 col-xs-6">
                                                         <div class="form-group">
                                                             <label>Status Product</label>
-                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status',2),['class' => 'form-control']) !!}
+                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status'),['class' => 'form-control']) !!}
                                                             
                                                         </div>
                                                     </div>
@@ -203,7 +203,7 @@
                                    @endforeach
                                 </tbody>
                             </table>
-                            <div>{{$data->appends(['province_id' => Request::input('province_id',0),'city_id' => Request::input('city_id',0),'status' => Request::input('status',2),'product' => Request::input('product'),'company' => Request::input('company'),'product_type' => Request::input('product_type'),'sort' => Request::input('sort'),'order' => Request::input('order')])->links('vendor.pagination.default-material')}}
+                            <div>{{$data->appends(['province_id' => Request::input('province_id',0),'city_id' => Request::input('city_id',0),'status' => Request::input('status'),'product' => Request::input('product'),'company' => Request::input('company'),'product_type' => Request::input('product_type'),'sort' => Request::input('sort'),'order' => Request::input('order')])->links('vendor.pagination.default-material')}}
                             </div>
                         </div>
                     </div>

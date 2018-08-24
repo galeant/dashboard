@@ -51,8 +51,8 @@ class TourController extends Controller
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
         $data = new Tour;
         $data = $data->orderBy($sort,$orderby);
-        if($request->input('status',2) != 99){
-            $data = $data->where('status',$request->input('status',2));
+        if($request->input('status') != null && $request->input('status') != 99){
+            $data = $data->where('status',$request->input('status'));
         }
         if(!empty($request->input('product_type'))){
             $data = $data->where('product_type',$request->input('product_type'));
