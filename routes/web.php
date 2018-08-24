@@ -132,6 +132,3 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 //     return new App\Mail\StatusCompany($company);
 // });
-
-
-Route::get('look','MembersController@look');

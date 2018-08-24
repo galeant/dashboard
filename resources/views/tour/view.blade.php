@@ -68,7 +68,7 @@
                                                     <div class="col-sm-3 col-xs-6">
                                                         <div class="form-group">
                                                             <label>Status Product</label>
-                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status',2),['class' => 'form-control']) !!}
+                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status',99),['class' => 'form-control']) !!}
                                                             
                                                         </div>
                                                     </div>

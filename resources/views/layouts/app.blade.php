@@ -83,7 +83,7 @@
 		                    <span>Overview</span>
 		                </a>
 		            </li>
-		            <li>
+		            <li {{{ (Request::is('members*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/members') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Members</span>
