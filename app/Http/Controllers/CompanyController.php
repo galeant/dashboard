@@ -11,14 +11,10 @@ use App\Models\Province;
 use App\Models\CompanyStatusLog;
 use Datatables;
 use App\Mail\StatusCompany;
-// use App\Mail\InsufficientMail;
-// use App\Mail\RejectedMail;
 use Validator;
 use Helpers;
 use Mail;
 use DB;
-use App\Jobs\SendEmail;
-use App\Jobs\SendEmailTest;
 
 class CompanyController extends Controller
 {
@@ -368,7 +364,6 @@ class CompanyController extends Controller
             $dataSave['akta_path'] = null;
             $dataSave['siup_path'] = null;
         }
-        // dd($dataSave);
         $company = Company::where('id',$id)
                 ->update($dataSave);
         $supplier = Supplier::where('company_id',$id)->orderBy('created_at','ASC')
@@ -435,22 +430,10 @@ class CompanyController extends Controller
                 if($data->save()){
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
                     if($status == 3 || $status == 4||  $status == 5){
-                        
-                       
-                        SendEmail::dispatch($data)
-                                ->delay(now()->addSeconds(15));
-                        // SendEmailTest::dispatch($details)->delay(now()->addSeconds(10));
-                        
-                        // dispatch(new SendEmailTest($details));
-                        // Mail::to('ilham.rach.f@gmail.com')->send(new StatusCompany($data));       
+                       Mail::to($data->company_email)->send(new StatusCompany($data));    
+                        // SendEmail::dispatch($data)
+                                // ->delay(now()->addSeconds(15));     
                     }
-                    // if($status == 3){
-                    //     Mail::to($data->company_email)->send(new InsufficientMail($data));    
-                    // }else if($status == 4){
-                    //     Mail::to($data->company_email)->send(new RejectedMail($data));    
-                    // }else if($status == 5){
-                    //     Mail::to($data->company_email)->send(new AcceptMail($data));    
-                    // }
                     DB::commit();
                     return redirect('partner/'.$id.'/edit')->with('message','Change Status Successfully');
                 }else{
@@ -461,7 +444,6 @@ class CompanyController extends Controller
             }
             
          }catch (\Exception $exception){
-            dd($exception);
              DB::rollBack();
              \Log::info($exception->getMessage());
              return redirect('partner/'.$id.'/edit')->with('error',$exception->getMessage());
