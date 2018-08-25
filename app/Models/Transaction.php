@@ -35,11 +35,8 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BookingActivity', 'transaction_id','id');
     }
-<<<<<<< HEAD
-=======
     public function contact_list()
     {
         return $this->belongsToMany('App\Models\MemberContact','user_contact_transaction','transaction_id','user_contact_id');
     }
->>>>>>> member-fix
 }
