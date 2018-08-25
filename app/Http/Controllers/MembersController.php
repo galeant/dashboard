@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Members;
+use App\Models\Transaction;
 use Validator;
 use Datatables;
 use DB;
@@ -18,22 +19,66 @@ class MembersController extends Controller
     public function index(Request $request)
     {
         //
-        if($request->ajax())
-        {
-            $model = Members::query();
-            return Datatables::eloquent($model)
-            ->addColumn('action', function(Members $data) {
-                return '<a href="/members/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
-                        <i class="glyphicon glyphicon-edit"></i>
-                    </a>
-                    <a href="/members/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/members/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
-                        <i class="glyphicon glyphicon-trash"></i>
-                    </a>';
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->make(true);
+        // if($request->ajax())
+        // {
+        //     $model = Members::query();
+        //     return Datatables::eloquent($model)
+        //     ->addColumn('action', function(Members $data) {
+        //         return '<a href="/members/'.$data->id.'" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+        //                 <i class="glyphicon glyphicon-eye-open"></i>
+        //             </a>';
+        //     })
+        //     ->addColumn('fullname', function(Members $data) {
+        //         return $data->firstname.' '.$data->lastname;
+        //     })
+        //     ->addColumn('join_date', function(Members $data) {
+        //         return date('j F Y',strtotime($data->created_at));
+        //     })
+        //     ->addColumn('status', function(Members $data) {
+        //         if($data->password != null){
+        //             if($data->status == 1){
+        //                 return '<span class="label bg-green">Active</span>';
+        //             }else{
+        //                 return '<span class="label bg-red">Not Verified</span>';
+        //             }
+        //         }else{
+        //             return '<span class="label bg-red">Not Verified</span>';
+        //         }
+        //     })
+        //     ->editColumn('id', 'ID: {{$id}}')
+        //     ->rawColumns(['action', 'status'])
+        //     ->make(true);
+        // }
+        // dd($request->keyword);
+        if($request->status != null){
+            $stat = $request->status;
+        }else{
+            $stat = null;
         }
-        return view('members.index');
+        if($request->keyword != null){
+            $keyword = $request->keyword;
+        }else{
+            $keyword = null;
+        }
+        $member = Members::where(function($query) use($keyword){
+                $query->where('id','like','%'.$keyword.'%')
+                    ->orWhere('email','like','%'.$keyword.'%')
+                    ->orWhere('firstname','like','%'.$keyword.'%')
+                    ->orWhere('lastname','like','%'.$keyword.'%')
+                    ->orWhere('phone','like','%'.$keyword.'%');
+                });
+        if($stat != null && $stat != 99){
+            if($stat == 1){
+                $response = $member->whereRaw('(password != null or password !="") and status = 1')->get();
+            }else{
+                $response = $member->whereRaw('(password = null or password ="") or status = 0')->get();
+            }
+        }else{
+            $response = $member->get();
+        }
+        // dd($request->all());
+        // dd($response);
+        return view('members.index',['data'=>$response,'request' => $request->all()]);
     }
 
     /**
@@ -102,7 +147,13 @@ class MembersController extends Controller
      */
     public function show($id)
     {
-
+        $data = Members::where('id',$id)->with(['transactions' => function($query){
+            $query->limit(5)->orderBy('created_at','desc');
+        }])->first();
+        // dd($data->transactions->cont);
+        return view('members.detail',['data' => $data]);
+        
+        // dd($id);
     }
 
     /**
@@ -189,5 +240,19 @@ class MembersController extends Controller
           \Log::info($exception->getMessage());
           return $this->sendResponse($data, $exception->getMessage() , 200);
       }
+    }
+    public function filter(Request $request){
+        $keyword = $request->keyword;
+        $data = Members::where('status',$request->status)
+                ->where(function($query) use($keyword){
+                    $query->where('id','like','%'.$keyword.'%')
+                        ->orWhere('email','like','%'.$keyword.'%')
+                        ->orWhere('firstname','like','%'.$keyword.'%')
+                        ->orWhere('lastname','like','%'.$keyword.'%')
+                        ->orWhere('phone','like','%'.$keyword.'%');
+                })
+                ->get();
+        // dd($data);
+        return view('members.index',['data'=>$data]);
     }
 }

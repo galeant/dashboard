@@ -19,12 +19,29 @@
             top:5px;
             margin-bottom: 10px;
         }
+        a#status{
+            float:right;
+            margin:0px 5px;
+        }
+        #head_card{
+            float:left;
+            padding-bottom:10px;
+        }
+        #price_list small, #price_list_container small{
+            color:red;
+        }
+        .extended-button{
+            margin-top:35px;
+        }
+        .kv-file-upload,.kv-file-remove{
+            display:none;
+        }
     </style>
 @stop
 
 @section('main-content')
 <div class="block-header">
-    <h2>
+    <h2 id="head_card">
         Detail Tour Activity
         <small>Master Data / Tour Activity</small>
     </h2>
@@ -34,36 +51,25 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
             <div class="header">
-                <h2>Edit Tour Activity</h2>
-                <ul class="header-dropdown m-r--5">
-                    <li>
-                        @if($data->status == 0)
-                        <span class="badge bg-purple">Draft</span>
-                        @elseif($data->status ==1)
-                        <span class="badge bg-blue">Awaiting Moderation</span>
-                        @elseif($data->status ==2)
-                        <span class="badge bg-green">Active</span>
-                        @elseif($data->status ==3)
-                        <span class="badge bg-red">Disabled</span>
-                        @elseif($data->status ==4)
-                        <span class="badge bg-pink">Edited</span>
-                        @else
-                        <span class="badge bg-red">Expired</span>
-                        @endif
-                        <button type="button" class="btn btn-warning waves-effect" id="change-status" data-toggle="modal" data-target="#statusModal">Change Status</button>
-                    </li>
-                    @if($data->schedule_type != 0)
-                    <li>
-                        <a href="/product/tour-activity/{{$data->id}}/schedule" class="btn bg-teal btn-block waves-effect">Schedule</a>
-                    </li>
-                    @endif
-                    <li id="backProduct">
-                        <a href="/product/tour-activity" class="btn btn-waves">Back</a>
-                    </li>
-                </ul>
+                <h2>Edit Tour Activity 
+                @if($data->status == 0)
+                <span class="badge bg-purple">Draft</span>
+                @elseif($data->status ==1)
+                <span class="badge bg-blue">Awaiting Moderation</span>
+                @elseif($data->status ==2)
+                <span class="badge bg-green">Active</span>
+                @elseif($data->status ==3)
+                <span class="badge bg-red">Disabled</span>
+                @elseif($data->status ==4)
+                <span class="badge bg-pink">Edited</span>
+                @else
+                <span class="badge bg-red">Expired</span>
+                @endif
+                </h2>
             </div>
             <div class="body" id="content">
                 <div id="step">
+
                     @include('errors.error_notification')
                     <h3>General Information</h3>
                     <section>
@@ -77,14 +83,15 @@
                             <div class="col-md-12">
                                 <div class="row clearfix">
                                     <div class="col-md-12">
+                                        <h4 class="dd-title m-t-20">
+                                             General information
+                                        </h4>
                                         <div class="col-md-4 cover-image">
                                             <label>Cover Product Image*</label>
                                             <div class="dd-main-image">
                                                 <img style="width: 100%" src="{{(!empty($data)? cdn($data->cover_path.'/'.$data->cover_filename) : 'http://via.placeholder.com/400x300' )}}" id="cover-img">
                                             </div>
                                             {{ Form::hidden('image_resize', null, ['class' => 'form-control','required'=>'required']) }}
-                                            <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Upload Cover Image</a>
-                                            <input name="cover_img" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="form-group m-b-20">
@@ -110,7 +117,7 @@
                                                         <div class="input-group dd-group">
                                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control']) !!}
                                                             <span class="input-group-addon">
-                                                                <a href="#" class="info-type" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
+                                                                <a href="#" class="info-type" data-trigger="hover" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers." data-original-title="Private Group"><i class="material-icons">info_outline</i></a>
                                                             </span>
                                                          </div>
                                                     </div>
@@ -169,13 +176,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class=" col-md-4">
-                                    <div class="row clearfix">
-                                        <div class="col-md-6">
-                                            <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                         {{Form::close()}}
                         </div>
@@ -194,21 +194,21 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h4 class="dd-title m-t-20">
-                                             Activity Duration
+                                             Activity Schedule and Duration
                                         </h4>
                                         <h5>How long is the duration of your tour/activity ?</h5>
                                         <div class="col-md-3">
                                             <input name="schedule_type" type="radio" id="1d" class="radio-col-deep-orange schedule-type" value="1" sel="1" required @if($data->schedule_type == 1) checked @elseif($data->schedule_type == 0) 
                                             checked
-                                            @endif/>
+                                            @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="1d">Multiple days</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif/>
+                                            <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="2d">A couple of hours</label>
                                         </div>
                                         <div class="col-md-3">
-                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif/>
+                                            <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                             <label for="3d">One day full</label>
                                         </div>
                                     </div>
@@ -216,13 +216,13 @@
 
                                 <div class="row clearfix">
                                     <div class="col-md-12">
-                                        <h5>This is related with your itinerary.</h5>
                                         <div class="col-md-2 scheduleDays">
                                             <div class="form-group">
                                                 <h5>Day?* :</h5>
-                                                <select class="form-control" id="day" name="day"  required>
+                                                <select class="form-control" id="day" name="day"  required @if($data->schedule_type != 0) disabled @endif>
                                                     @for($i=2;$i<=24;$i++)
-                                                    <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option>
+                                                    <option values="{{$i}}" @if($data->schedule_interval == $i) selected @endif>{{$i}}</option>
+                                                    <!-- <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option> -->
                                                     @endfor
                                                 </select>
                                             </div>
@@ -233,7 +233,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Hours?* :</label>
-                                                        <select class="form-control" id="hours" name="hours" required>
+                                                        <select class="form-control" id="hours" name="hours" required @if($data->schedule_type != 0) disabled @endif>
                                                             @for($i=1;$i<12;$i++)
                                                             <option values="{{$i}}" @if(old('hours') ==$i)selected @elseif($data->schedule_type == 2 &&
                                                             (int)substr($data->schedule_interval,0,2) == $i) selected @endif>{{$i}}</option>
@@ -245,7 +245,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>Minutes?* :</label>
-                                                        <select class="form-control" id="minutes" name="minutes" required>
+                                                        <select class="form-control" id="minutes" name="minutes" required @if($data->schedule_type != 0) disabled @endif>
                                                             <option values="0" @if(old('minutes') ==0)selected @elseif($data->schedule_type == 2 &&
                                                             (int)substr($data->schedule_interval,3) == 0) selected @endif>0</option>
                                                             <option values="30" @if(old('minutes') ==30)selected @elseif($data->schedule_type == 2 &&
@@ -258,15 +258,38 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row clearfix">
+                                    <div class="col-md-12 schedule-activity" style="display: none">
+                                        <h5>How would you like to set your activity schedule ?</h5>
+                                        <div class="col-md-4">
+                                            <input name="always_available_for_sale" type="radio" id="free_sale_1" class="radio-col-deep-orange" value="1" sel="1" @if($data->always_available_for_sale == 1) checked @endif/>
+                                            <label for="free_sale_1">Always available for booking</label>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input name="always_available_for_sale" type="radio" id="free_sale_0" class="radio-col-deep-orange" value="0" sel="0" @if($data->always_available_for_sale == 0) checked @endif/>
+                                            <label for="free_sale_0">Only available on specific dates</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','min'=> 0,'max'=>30]) }}
+                                            </div>
+                                            <div class="col-md-6">
+                                            <p class="form-note">Your activity is available for booking until D-@if($data->max_booking_day != 0 )<b>{{$data->max_booking_day}}</b>@else <b>0</b>@endif from activity schedule.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <h4 class="dd-title m-t-20">
                                     Destination Details
                                 </h4>
                                 <h5>List down all destination related to your tour package / activity.</h5>
-                                <h5>The more accurate you list down the destinations, better your product's peformance in search result.</h5>
+                                <h5>The more accurate you list down the destinations,the better your product's peformance in search result.</h5>
                                 <div class="master-destinations">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-province">
-
                                             <h5>Province*</h5>
                                             <select  class="form-control province-sel" name="place[0][province]" id="0-province" data-id="0" style="width: 100%" required>
                                                 <option value="" selected>-- Select Province --</option>
@@ -297,7 +320,7 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
                                                 @if(count($data->destinations) !=0)
-                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) $data->destinations[0]->dest->destination_name @endif</option>
+                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
                                                 @endif
@@ -340,26 +363,17 @@
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) $destination->destination_name @endif</option>
+                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
                                                 @else
                                                 <option value="" selected>-- Select Destination --</option>
                                                 @endif
                                             </select>
                                             <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                         </div>
-                                        <button type="button" class="btn btn-xs btn-danger waves-effect btn-delete-des" data-id="{{$index}}"><i class="material-icons">clear</i></button>
                                     </div>
                                         @endif
                                         @endforeach
                                     @endif
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <button type="button" class="btn btn-warning waves-effect" id="add_more_destination">
-                                            <i class="material-icons icon-align">add</i>
-                                            Add Destination
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-12" >
@@ -375,14 +389,6 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class=" col-md-4 m-t-30">
-                                <div class="row clearfix">
-                                    <div class="col-md-6">
-                                        <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                                
                         </div>
                         {{Form::close()}}
                         </div>
@@ -421,11 +427,6 @@
                             </div>
 
                         </div>
-                        <div class=" col-md-4 m-t-20 m-b-20">
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
-                            </div>
-                        </div>
                     {{ Form::close() }}
                     </section>
                     <h3>Pricing</h3>
@@ -442,9 +443,15 @@
                         <div class="col-md-12">
                             <div class="row valid-info">
                                 <div class="col-md-4">
+                                    @php 
+                                        if(count($data->prices) !== 0){
+                                            $u1 = json_decode($data->prices); 
+                                            $u2 = array_pluck($u1,'price_usd');
+                                        }
+                                    @endphp
                                     <input name="price_kurs" type="radio" id="1p" class="radio-col-deep-orange" value="1" required
                                     @if(count($data->prices) !== 0)
-                                        @if(empty($data->prices[0]->price_usd))
+                                        @if(!array_filter($u2)) 
                                             checked
                                         @endif
                                     @else
@@ -459,90 +466,73 @@
                                     <label for="1p" style="font-size:15px">I only have pricing in IDR</label>
                                 </div>
                                 <div class="col-md-6">
-                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) checked @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) checked @endif/>
+                                    <input name="price_kurs" type="radio" id="2p" class="radio-col-deep-orange" value="2" 
+                                        @if(count($data->prices) !== 0)
+                                            @if(array_filter($u2)) 
+                                                checked
+                                            @endif
+                                        @endif 
+                                        @if(!empty($data->price_idr) && !empty($data->price_usd)) 
+                                            checked 
+                                        @endif/>
                                     <label for="2p" style="font-size:15px">I want to add pricing in USD for international tourist</label>
                                 </div>
                             </div>
-                            <div class="row" id="price_row">
+                            <div class="row">
                                 <div class="col-md-3">
                                     <h5>Pricing Option</h5>
                                     <select name="price_type" id="priceType" class="form-control" required>
-                                        <option value="1" @if(count($data->prices) == 0)) selected @endif>Fixed Price</option>
-                                        <option value="2" @if(count($data->prices) != 0 ) selected @endif>Based on Number of Person</option>
+                                        <option value="1" @if(count($data->prices) == 1)) selected @endif>Fixed Price</option>
+                                        <option value="2" @if(count($data->prices) > 1 ) selected @endif>Based on Number of Person</option>
                                     </select>
-                                </div>
-                                <div id="price_fix">
-                                    <div class="col-md-3" id="price_idr">
-                                        <h5>Price (IDR)*:</h5>
-                                        <input type="hidden" name="price[0][people]" value="fixed"> 
-                                        <input type="text" value="{{(int)$data->price_idr}}" id="idr" name="price[0][IDR]" class="form-control" required />     
-                                    </div>
-                                    <div class="col-md-3 valid-info" id="price_usd" @if(count($data->prices) !== 0)@if(!empty($data->prices[0]->price_usd)) style="display: block"
-                                    @else style="display: block" @endif @endif @if(!empty($data->price_idr) && !empty($data->price_usd)) style="display: block" @else style="display: none" @endif >
-                                        <h5>Price (USD)*</h5>
-                                        <input type="text" id="usd" value="{{(int)$data->price_usd}}" name="price[0][USD]" class="form-control" />     
-                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="col-md-12" style="display: none" id="price_table_container">
+                        <div class="col-md-12" id="price_table_container">
                             <div class="row">
                                 <h4 class="dd-title m-t-20">
                                     Pricing Tables
                                 </h4>
-                                <div class="col-md-12" id="price_list">
+                                <div class="alert alert-danger alert-price" style="display:none">
+                                    <strong>Oh snap!</strong> Please edit price list table.
+                                </div>    
                                 <!--  -->
-                                    <div class="row" id="price_row">
-                                        <div class="col-md-1" style="padding: 25px 0px 0px 0px;width:auto">
-                                            <h5><i class="material-icons">person</i></h5>
-                                        </div>
-                                        <div class="col-md-11" style="margin-left:0px">
-                                            <div class="row">
-                                                <div class="col-md-3 valid-info" id="number_person">
-                                                    <h5>Person*</h5>
-                                                    <input id="price_list_field1" type="text"  class="form-control"  name="price[0][people]" required>  
-                                                </div>
-                                                <div class="col-md-3 valid-info" id="price_idr">
-                                                    <h5>Price (IDR)*</h5>
-                                                    <input id="price_list_field2" type="text" class="form-control" name="price[0][IDR]" required>     
-                                                </div>
-                                                <div class="col-md-3 valid-info" id="price_usd" style="display: none">
-                                                    <h5>Price (USD)*</h5>
-                                                    <input id="price_list_field3" type="text" class="form-control" name="price[0][USD]"required />     
-                                                </div>
-                                                <div class="col-md-1" id="price_delete">
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <button id="add_price_button" type="button" class="col-md-2 btn bg-deep-orange waves-effect">Add Price</button>
-                                    </div>
-                                <!--  -->
-                                </div>
+                                @if(count($data->prices) != 0)
                                 <div id="price_list_container">
-                                    @foreach()
-                                    <div class="row">
-                                        <div class="col-md-3 valid-info" id="number_person">
-                                            <h5>Person*</h5>
-                                            <input id="price_list_field1" type="text"  class="form-control"  name="price[0][people]" required>  
-                                        </div>
-                                        <div class="col-md-3 valid-info" id="price_idr">
-                                            <h5>Price (IDR)*</h5>
-                                            <input id="price_list_field2" type="text" class="form-control" name="price[0][IDR]" required>     
-                                        </div>
-                                        <div class="col-md-3 valid-info" id="price_usd" style="display: none">
-                                            <h5>Price (USD)*</h5>
-                                            <input id="price_list_field3" type="text" class="form-control" name="price[0][USD]"required />     
-                                        </div>
-                                        <div class="col-md-1" id="price_delete">
-                                            
-                                        </div>
-                                    </div>
-                                    @endforeach
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th id="numberOfPerson">Number Of Person</th>
+                                                <th id="price_idr">Price IDR</th>
+                                                <th id="price_usd">Price USD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        
+                                            @foreach($data->prices as $index => $val)
+                                            <tr id="price_value" data-id="{{$val->id}}">
+                                                <td id="numberOfPerson">
+                                                    <p><h9 id="price_info" style="display:none">>= </h9>{{$val->number_of_person}}</p>
+                                                    <input style="display:none" id="price_list_field1" type="text"  class="form-control" value="{{$val->number_of_person}}"  late-data="{{$val->number_of_person}}" required>  
+                                                </td>
+                                                <td id="price_idr">
+                                                    <p>{{number_format((int)$val->price_idr)}}</p>
+                                                    <input style="display:none" id="price_list_field2" type="text" class="form-control"  value="{{(int)$val->price_idr}}" required>     
+                                                    
+                                                </td>
+                                                <td id="price_usd">
+                                                    <p>{{number_format((int)$val->price_usd)}}</p>
+                                                    <input style="display:none" id="price_list_field3" type="text" class="form-control" value="{{(int)$val->price_usd}}" required/>     
+                                                </td>
+                                                
+                                            </tr>
+                                            @endforeach
+                                        
+                                        </tbody>
+                                    </table>
                                 </div>
+                                @endif
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -552,7 +542,7 @@
                                 </h4>
                                 <div class="col-md-6 valid-info">
                                     <h5>What's already included with pricing you have set?What will you provide?</h5>
-                                    <h5 style="font-size: 18px">Example: Meal 3 times a day, mineral water, driver as tour guide.</h5>
+                                    <h7 class="font-14">Example: Meal 3 times a day, mineral water, driver as tour guide.</h7>
                                     <select type="text" class="form-control" name="price_includes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->includes as $include)
                                             <option selected>{{$include->name}}</option>
@@ -570,8 +560,8 @@
                                     Pricing Exclude
                                 </h4>
                                 <div class="col-md-6 valid-info">
-                                    <h5>What's not included with pricing you have set?Any extra cost the costumer should be awere of?</h5>
-                                    <h5 style="font-size: 18px">Example: Entrance fee IDR 200,000, bicycle rental, etc</h5>
+                                    <h5>What's not included with pricing you have set?Any extra cost the costumer should be aware of?</h5>
+                                    <h7 class="font-14">Example: Entrance fee IDR 200,000, bicycle rental, etc</h7>
                                     <select class="form-control" name="price_excludes[]" multiple="multiple" style="width: 100%">
                                         @foreach($data->excludes as $exclude)
                                             <option value="{{$exclude->name}}" selected="">{{$exclude->name}}</option>
@@ -611,7 +601,7 @@
                                         <input type="text" id="cancellationDay" name="max_cancellation_day" class="form-control" placeholder="Day" value="{{$data->max_cancellation_day}}" required>
                                     </div>
                                     <div class="col-md-2" style="margin:5px;padding:0px;width:auto">
-                                        <h5>days from shcedule, cancellation fee is</h5>
+                                        <h5>days from schedule, cancellation fee is</h5>
                                     </div>
                                     <div class="col-md-1 valid-info" style="margin:5px;padding:0px">
                                         <input type="text" id="cancellationFee" name="cancel_fee" class="form-control" placeholder="Percent" value="{{$data->cancellation_fee}}" required>
@@ -622,21 +612,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class=" col-md-4 m-t-20 m-b-20">
-                            <div class="row clearfix">
-                                <div class="col-md-6">
-                                    <button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Continue</button>
-                                </div>
-                            </div>
-                        </div>
                     {{Form::close()}}
                     </section>
                     <h3>Images</h3>
                     <section>
-                        <div class="alert alert-warning alert-dismissible" role="alert">
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                            Attention Please! When the image is uploaded. <b>Button delete</b> doesn't work before refresh this page !
-                        </div>
                         <h4 class="dd-title m-t-20">
                             Activity Image
                         </h4>
@@ -682,20 +661,10 @@
                         {{ Form::model($data, ['route' => ['tour-activity.update', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'step_5','enctype' =>'multipart/form-data']) }}
                         {{ Form::hidden('step',5)}}
                         <div class="row" id="embed" style="display: block;margin-bottom: 10px">
-                            
                             <div class="col-md-6" >
-                                <input type="url" class="form-control" name="videoUrl[]" value="@if(count($data->videos) !== 0){{$data->videos[0]->url}}@endif" />
+                                <input type="url" class="form-control" name="videoUrl[]" value="@if(count($data->videos) !== 0){{$data->videos[0]->url}}@endif" placeholder="https://www.youtube.com/productvideo"/>
                             </div>
-                            <div class="col-md-3">                            
-                                <button type="button" class="btn btn-warning waves-effect" id="add_more_video">
-                                    <i class="material-icons">add</i>
-                                    <span>Add link</span>
-                                </button>
-                                <button type="submit" class="btn btn-success waves-effect" id="add_more_video">
-                                    <i class="material-icons">save</i>
-                                    <span>Save</span>
-                                </button>
-                            </div>
+                            
                         </div>
                         <div id="clone_dinamic_video">
                             @if(count($data->videos) !== 0)
@@ -705,7 +674,7 @@
                                         <div class="col-md-6">
                                             <input type="url" class="form-control" name="videoUrl[]" value="{{$vid->url}}">
                                         </div>
-                                        <div class="col-md-3"><button type="button" id="delete_video" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button></div>
+                                        
                                     </div>
                                 @endif
                                 @endforeach
@@ -723,16 +692,11 @@
 <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-        <form method="POST" action="{{ url('product/tour-activity/'.$data->id.'/change/status') }}" enctype="multipart/form-data">
-            @csrf
             <div class="modal-header">
                 <div class="row">
-                <div class="col-md-6">
-                    <h4 class="modal-title" id="statusModalLabel">Status</h4>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-sm btn-warning right btn-change-status">Change Status</button>
-                </div>
+                    <div class="col-md-6">
+                        <h4 class="modal-title" id="statusModalLabel">Status</h4>
+                    </div>    
                 </div>
             </div>
             <div class="modal-body">
@@ -758,35 +722,11 @@
                                 @endif
                             </td>
                             <td>{{date_format($test->created_at,"d/M/Y H:i:s")}}</td>
-                            <td>{{$test->note}}</td>
                         </tr>
                         @endforeach
                         @endif
                     </tbody>
                 </table>
-                <div class="change-status row clearfix" style="display: none">
-                    <div class="col-md-12">
-                        <div class="valid-info">
-                            <h5>Status:</h5>
-                            <select class="form-control" name="status" required>
-                                <option value="">-- Select Status --</option>
-                                @foreach(Helpers::statusProduct() as $value => $status)
-                                    <option value="{{$value}}" >{{$status}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="valid-info">
-                            <h5>Note:</h5>
-                            <textarea class="form-control" name="note" rows="6"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
-                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
@@ -824,7 +764,7 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script> 
     <!-- Mask js -->
     <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAWlnymqJ5QiPRrM_NIvEMg9eQLuPzS4rE&libraries=places"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
 
     <!-- Light Gallery Plugin Js -->
     <script src="{{asset('plugins/light-gallery/js/lightgallery-all.js')}}"></script>
@@ -840,33 +780,20 @@
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript">
         $( window ).on( "load", function() {
+            $(".file-input-ajax-new").find(".btn-file").remove();
+            $(".kv-file-zoom").removeAttr('disabled');
             if($('#3d').prop('checked')){
-                $(".scheduleDays, .scheduleHours").removeAttr("required").hide();;
+                $(".scheduleDays, .scheduleHours").removeAttr("required").hide();
+                $(".schedule-activity").show();
             }else if($('#2d').prop('checked')){
                 $(".scheduleHours").show();
                 $(".scheduleDays").removeAttr("required").hide();
             }
-            
             var cancel = $("#3c").prop("checked");
             if(cancel){
                 $("#cancel_policy").show();
             }
-            // console.log(cancel);
-            var tpPrice = $('#1p').prop("checked");
-            var opPrice = $('#priceType').val();
-            if(tpPrice){
-                $("#price_usd, #price_list_container #price_usd").hide();
-            }else{
-                $("#price_usd, #price_list_container #price_usd").show();
-            }
-            if(opPrice == 1){
-                $("#price_fix").show();
-                $("#price_table_container").hide();
-                $("#price_list_container_left,#price_list_container_right").empty();
-            }else{
-                $("#price_fix").hide();
-                $("#price_table_container").show(); 
-             }     
+            
             var hash = location.hash;
             if(hash != ""){
                 $('#step').steps('setStep',location.hash.substring(location.hash.length-1));
@@ -911,7 +838,7 @@
 
         });
         $(document).ready(function () {
-            
+            $("input,button,select,textarea").attr("disabled","disabled");
             $( "#product_form" ).validate({
               rules: {
                 min_person: {
@@ -955,7 +882,8 @@
             enableAllSteps: true,
             enablePagination: false
         });
-        $("#idr,#usd").each(function(){
+        $("input#idr,input#usd").mask('0.000.000.000', {reverse: true});
+        $("input#price_list_field2,input#price_list_field3").each(function(){
             $(this).mask('0.000.000.000', {reverse: true});
         });
         $("#PICPhone").mask('000-0000-00000');
@@ -993,37 +921,55 @@
                 $("input#lat").val(result.geometry.location.lat());
                 $("input#lng").val(result.geometry.location.lng());
               });
-            $("#activity_tag").select2({
-                ajax: {
-                    url: "/json/activity",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                      return {
-                        name: params.term, // search term
-                        page: params.page,
-                      };
-                    },
-                    processResults: function (data, params) {
-                      // parse the results into the format expected by Select2
-                      // since we are using custom formatting functions we do not need to
-                      // alter the remote JSON data, except to indicate that infinite
-                      // scrolling can be used
-                      params.page = params.page || 1;
-                      return {
-                        results: data,
-                        pagination: {
-                          more: (params.page * 30) < data.total_count
-                        }
-                      };
-                    },
-                    cache: true
-                  },
-                  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-                  minimumInputLength: 1,
-                  templateResult: formatRepo, // omitted for brevity, see the source of this page
-                  templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+
+            var activityTag = [];
+            $.ajax({
+                method: "GET",
+                url: "/json/activity",
+            }).done(function(response) {
+                $.each(response, function (index, value) {
+                    var activity = [];
+                    activity["id"] = value["id"];
+                    activity["text"] = value["name"];
+                    activityTag.push(activity);
+                });
+                
+                $("#activity_tag").select2({
+                    placeholder: "Start type here.",
+                    data: activityTag,
+                });
             });
+            // $("#activity_tag").select2({
+            //     ajax: {
+            //         url: "/json/activity",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //           return {
+            //             name: params.term, // search term
+            //             page: params.page,
+            //           };
+            //         },
+            //         processResults: function (data, params) {
+            //           // parse the results into the format expected by Select2
+            //           // since we are using custom formatting functions we do not need to
+            //           // alter the remote JSON data, except to indicate that infinite
+            //           // scrolling can be used
+            //           params.page = params.page || 1;
+            //           return {
+            //             results: data,
+            //             pagination: {
+            //               more: (params.page * 30) < data.total_count
+            //             }
+            //           };
+            //         },
+            //         cache: true
+            //       },
+            //       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            //       minimumInputLength: 1,
+            //       templateResult: formatRepo, // omitted for brevity, see the source of this page
+            //       templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            // });
             $("#company_id").select2({
                 ajax: {
                     url: "/json/company",
@@ -1170,20 +1116,21 @@
                         );
                     });
                 });
-                $.ajax({
-                  method: "GET",
-                  url: "{{ url('json/destination') }}",
-                  data: {
-                    province_id: $(this).val()
-                  }
-                }).done(function(response) {
-                    $.each(response.data, function (index, value) {
-                        $('#'+id+'-destination').append(
-                            "<option value="+value.id+">"+value.name+"</option>"
-                        );
-                    });
-                });
+                // $.ajax({
+                //   method: "GET",
+                //   url: "{{ url('json/destination') }}",
+                //   data: {
+                //     province_id: $(this).val()
+                //   }
+                // }).done(function(response) {
+                //     $.each(response.data, function (index, value) {
+                //         $('#'+id+'-destination').append(
+                //             "<option value="+value.id+">"+value.name+"</option>"
+                //         );
+                //     });
+                // });
              });
+            //  CITY AJAX
             $('.dd-cli').delegate('.city-sel','change',function(e){
                 var id = $(this).attr('data-id');
                 $.ajax({
@@ -1201,63 +1148,208 @@
                     });
                 });
              });
+            //  PRICE KURS
             $("input[name='price_kurs']").change(function () {
                 var priceKurs = $(this).val();
-                $("#price_row").show();
+                // $("#price_row").show();
                 if(priceKurs == 1){
                     $("#price_usd, #price_list_container #price_usd").hide();
                     $("#price_usd input, #price_list_container #price_usd input").val(null);
+                    @if(count($data->prices) > 0)
+                        @if($data->prices[0]->price_usd == null ||$data->prices[0]->price_usd != 0.00)
+                            $(this).closest("section").find("#submit_price").removeAttr("disabled");
+                            $(".alert-price").hide();
+                        @endif
+                    @endif
                 }else{
+                    @if(count($data->prices) > 0)
+                        @if($data->prices[0]->price_usd == null)
+                            $(this).closest("section").find("#submit_price").attr("disabled","disabled");
+                            $(".alert-price").show();
+                            $("tr#price_value").each(function(){
+                                $(this).find("td#price_usd p,td#action a#price_edit").hide();
+                                $(this).find("td#price_usd #price_list_field3,td#action a#price_update").show();
+                            });
+                        @endif
+                    @endif
                     $("#price_usd, #price_list_container #price_usd").show();
                 }
             });
             $("#priceType").change(function () {
-                var maxPerson = $("#max_person").val();
-                var dif = Math.round(maxPerson/2)-1;
                 var prictType = $(this).val();
                 if(prictType == 1){
-                    $("#price_fix").show();
-                    $("#price_table_container").hide();
-                    $("#price_list_container_left,#price_list_container_right").empty();
+                    @if(count($data->prices) > 0 )
+                        $("div#price_list").hide();
+                    @else
+                        $("div#price_list").show();
+                    @endif
+                    $("div#price_row").find("#number_person").hide().find("#price_list_field1").val(1).removeAttr("min").removeAttr("max");
+                    $("button#add_price_button").hide();
+                    $("div#price_row:not(:eq(0))").remove();
+                    $("tr#price_value:not(:eq(0))").hide();
+                    $("tr#price_value").find("h9#price_info").hide();
                 }else{
-                    $("#price_fix").hide();
-                    $("#price_table_container, #price_list").show();    
+                    @if(count($data->prices) > 0)
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @else
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}");
+                    @endif
+                    
+                    $("div#price_list").show();
+                    $("tr#price_value").each(function(){
+                        $(this).show();
+                        $(this).find("h9#price_info").show();
+                    });
+                    $("button#add_price_button").show();
                     // 
-                    for(var pric=0;pric<=dif;pric++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_left").attr("id","price_list"+pric);
-                        $("#price_list"+pric+" .col-md-1 h5").append((pric+1));
-                        $("#price_list"+pric+" #price_list_field1").val((pric+1));
-                        $("#price_list"+pric+" #price_list_field1").attr("name","price["+pric+"][people]");
-                        $("#price_list"+pric+" #price_list_field2").attr("name","price["+pric+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+pric+" #price_list_field3").attr("name","price["+pric+"][USD]").mask('0.000.000.000', {reverse: true});
-                    }
-                    // 
-                    for(var prik=(dif+1);prik<maxPerson;prik++){ 
-                        $("#price_list").clone().appendTo("#price_list_container_right").attr("id","price_list"+prik);
-                        $("#price_list"+prik+" .col-md-1 h5").append((prik+1));
-                        $("#price_list"+prik+" #price_list_field1").val((prik+1));
-                        $("#price_list"+prik+" #price_list_field1").attr("name","price["+prik+"][people]");
-                        $("#price_list"+prik+" #price_list_field2").attr("name","price["+prik+"][IDR]").mask('0.000.000.000', {reverse: true});
-                        $("#price_list"+prik+" #price_list_field3").attr("name","price["+prik+"][USD]").mask('0.000.000.000', {reverse: true});
-                    }
-                    $("#price_list").hide();
+                }
+            });
+            // VALIDATE INPUT PERSON
+            var priceL = [];
+            $("#price_list").on('change','input#price_list_field1', function(){
+                var prev = $(this).closest("div#price_row").prev().find("input#price_list_field1").val();
+                $("tr#price_value").each(function(){
+                    var pi = $(this).find("td#numberOfPerson #price_list_field1").val();
+                    priceL.push(pi); 
+                });
+                if(parseInt($(this).val()) <= parseInt(prev) ){
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else if(priceL.indexOf($(this).val()) != -1){
+                    console.log("ga ada");
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Already have number of person</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else if($(this).val() <= Math.max.apply(Math,priceL)){
+                    console.log("kekecilan");
+                    $(this).closest("div#number_person").find("small").remove();
+                    $(this).closest("div#number_person").append("<small>Please insert higher number</small>");
+                    $("button#add_price_button").attr("disabled","disabled");
+                    $(this).closest("section").find("button[type='submit']").attr('disabled','disabled');
+                }else{
+                    console.log('bener');
+                    $("div#number_person").each(function(){
+                        $(this).find("small").remove();
+                    });
+                    $(this).closest("section").find("button[type='submit']").removeAttr('disabled');
+                    $("button#add_price_button").removeAttr("disabled");
+                }
+            });
+            // 
+            $("#price_list_container").on('change','input#price_list_field1', function(){
+                $("tr#price_value").each(function(){
+                    var pi = $(this).find("td#numberOfPerson #price_list_field1").attr("late-data");
+                    priceL.push(pi); 
+                });
+                console.log(priceL);
+                console.log({{$data->max_person}});
+                if(priceL.indexOf($(this).val()) != -1){
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
+                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else if($(this).val() > {{$data->max_person}}){
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
+                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                // }else if($(this).val() <= Math.max.apply(Math,priceL)){
+                //     $(this).closest("td#numberOfPerson").find("small").remove();
+                //     $(this).closest("td#numberOfPerson").append("<small>Please insert higher number</small>");
+                //     $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else{
+                    $(this).closest("td#numberOfPerson").find("small").remove();
+                    $(this).closest("tr#price_value").find("a#price_update").show();
                 }
             });
             // PRICE ADD MORE
-            var priceC = 0
+            var priceC = {{count($data->prices)}};
             $("#add_price_button").click(function(){
                 priceC++;
                 var me = $(this).closest("div#price_list").find("div#price_row:last").clone().insertAfter("div#price_row:last");
-                me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]");
-                me.find("input#price_list_field2").removeAttr("name").attr("name","price["+priceC+"][IDR]");
-                me.find("input#price_list_field3").removeAttr("name").attr("name","price["+priceC+"][USD]");
-                me.find("div#price_delete").empty().append('<button id="price_delete" type="button" class="btn bg-red waves-effect" style="margin-top:30px">Del</button>');
+                me.find("input#price_list_field1").removeAttr("name").attr("name","price["+priceC+"][people]").mask('0000', {reverse: true});
+                me.find("input#price_list_field2").removeAttr("name").attr("name","price["+priceC+"][IDR]").val(null).mask('0.000.000.000', {reverse: true});
+                me.find("input#price_list_field3").removeAttr("name").attr("name","price["+priceC+"][USD]").val(null).mask('0.000.000.000', {reverse: true});;
+                me.find("button#add_price_button").removeAttr("id").attr("id","price_delete").text("Del").removeAttr("class").addClass("col-md-2 btn bg-red waves-effect extended-button");
+            });
+            // FIRST ROW COSTUME
+            $("tr#price_value").eq(0).find("a#price_delete").remove();
+            // EDIT MODE
+            $("tr#price_value").each(function(){
+                $(this).find("a#price_edit").click(function(){
+                    $(this).hide();
+                    $(this).siblings("a#price_update").show();
+                    $(this).closest("tr#price_value").find("p").hide();
+                    $(this).closest("tr#price_value").find("input").show();
+                });
+            });
+            // UPDATE PRICE
+            $(document).on("click","a#price_update",function(){
+                var me = $(this).closest("td#action");
+                var id = $(this).closest("tr#price_value").attr('data-id');
+                var number_of_person = $(this).closest("tr#price_value").find("input#price_list_field1").val();
+                var price_idr =  $(this).closest("tr#price_value").find("input#price_list_field2").val();
+                var price_usd = $(this).closest("tr#price_value").find("input#price_list_field3").val();
+                $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+                });
+                $.ajax({
+                    method: "POST",
+                    url: "{{ url('product/tour-activity/price/update') }}",
+                    data: { 
+                        id: id,
+                        number_of_person: number_of_person,
+                        price_idr: price_idr,
+                        price_usd: price_usd, 
+                    }
+                }).done(function(response) {
+                    me.closest("tr#price_value").attr('data-id',response.data.price.id);
+                    me.closest("tr#price_value").find("input#price_list_field1").attr('late-data',response.data.price.number_of_person);
+                    me.closest("tr#price_value").find("input#price_list_field1").attr('value',response.data.price.number_of_person);
+                    if($("#priceType").val() == 1){
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text(response.data.price.number_of_person);
+                    }else{
+                        me.closest("tr#price_value").find("td#numberOfPerson p").text('>= '+response.data.price.number_of_person);
+                    }
+                    
+                    me.closest("tr#price_value").find("td#price_idr p").text(parseInt(response.data.price.price_idr));
+                    if(response.data.price.price_usd == null){
+                        me.closest("tr#price_value").find("td#price_usd p").text(0);
+                    }else{
+                        me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
+                    }
+                    var max_pep = {{$data->max_person}};
+                    if(response.data.max_pep == max_pep){
+                        $("#price_list").hide();
+                    }else{
+                        $("#price_list").show();
+                    }
+                    priceL =[];
+                    me.find("a#price_edit").show();
+                    me.find("a#price_update").hide();
+                    me.closest("tr#price_value").find("p").show();
+                    me.closest("tr#price_value").find("input").hide();
+                });
+                // validate price_usd
+                var priceU = [];
+                $("tr#price_value").each(function(){
+                    var pU = $(this).find("td#price_usd #price_list_field3").val();
+                    priceU.push(pU); 
+                });
+                if(priceU.indexOf("0") == -1){
+                    $("#submit_price").removeAttr("disabled");
+                    $(".alert-price").hide();
+                }
             });
             // DEL PRICE
             $(document).on("click", "button#price_delete", function() {
                 $(this).closest("div#price_row").remove();
+                $("button#submit_price").removeAttr('disabled');
+                $("button#add_price_button").removeAttr("disabled");
             });
-
             // PRICE INCLUDE
             $("select[name='price_includes[]']").select2({
                 tags:true
@@ -1275,7 +1367,10 @@
                     $("#cancel_policy").hide();
                 }
             });
-
+            
+            
+            // 
+            
         });
         $(document).on('ready', function() {
             var url_activity = [];var url_accommodation = [];var url_other = [];var url_destination = [];
@@ -1367,8 +1462,8 @@
             });
             var i = {{count($data->videos)}};
             $("#add_more_video").click(function(){
-                    i++;
-                $(this).closest("#embed").clone().appendTo("#clone_dinamic_video").addClass("row dinamic_video"+i);
+                i++
+                $(this).closest("#embed").clone().appendTo("#clone_dinamic_video").addClass("row dinamic_video"+i).find("input").val(null);
                 $(".dinamic_video"+i+" .col-md-3").empty().append('<button type="button" id="delete_video" class="btn btn-danger waves-effect"><i class="material-icons">clear</i></button>');
             });
             $(document).on("click", "#delete_video", function() {
@@ -1386,15 +1481,18 @@
                     $(this).attr('sel',scheduleType);
                     $(".scheduleDays").show();
                     $(".scheduleHours").removeAttr("required").hide();
+                    $(".schedule-activity").slideUp();
                     
                 }else if(scheduleType == 2){
                     $(this).attr('sel',scheduleType);
                     $(".scheduleHours").show();
                     $(".scheduleDays").removeAttr("required").hide();
+                    $(".schedule-activity").slideUp();
                     
                 }else{
                     $(this).attr('sel',scheduleType);
                     $(".scheduleDays, .scheduleHours").removeAttr("required").hide();;
+                    $(".schedule-activity").slideDown();
                 }
             });
         });
@@ -1426,7 +1524,19 @@
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();
         });
-        
+        $("select[name='product_type']").change(function(){
+            console.log($(this).val());
+            if($(this).val() == 'private'){
+                $(this).closest("div").find("a").attr("data-original-title","Private Group");
+                $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers can book for their own private group. They won't be grouped with another customers.");
+            }else{
+                $(this).closest("div").find("a").attr("data-original-title","Open Group");
+                $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
+            }
+        });
+        $("input[name='max_booking_day']").change(function(){
+            $("p.form-note").find("b").text($(this).val());
+        });
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop

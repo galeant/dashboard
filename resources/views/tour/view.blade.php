@@ -69,7 +69,6 @@
                                                         <div class="form-group">
                                                             <label>Status Product</label>
                                                             {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status'),['class' => 'form-control']) !!}
-                                                            
                                                         </div>
                                                     </div>
                                                 </div>
@@ -194,10 +193,11 @@
                                        </td>
                                        <td>{{$dt->created_at}}</td>
                                        <td>
-                                           <a href="/product/tour-activity/{{$dt->id}}/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-edit"></i></a>
-                                           <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/{{$dt->id}}" data-id="{{$dt->id}}" id="data-{{$dt->id}}">
+                                            <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs bg-green waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                            <a href="/product/tour-activity/{{$dt->id}}/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-edit"></i></a>
+                                           <!-- <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/{{$dt->id}}" data-id="{{$dt->id}}" id="data-{{$dt->id}}">
                                              <i class="glyphicon glyphicon-trash"></i>
-                                            </a>
+                                            </a> -->
                                        </td>
                                    </tr>
                                    @endforeach

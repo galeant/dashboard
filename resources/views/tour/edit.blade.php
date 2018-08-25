@@ -304,10 +304,10 @@
                                         <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
                                         <div class="row">
                                             <div class="col-md-2">
-                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','max'=>30]) }}
+                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','min'=> 0,'max'=>30]) }}
                                             </div>
                                             <div class="col-md-6">
-                                            <p class="form-note">YourActivity is available booking until D-0 from activity Schedule</p>
+                                            <p class="form-note">Your activity is available for booking until D-<b>0</b> from activity schedule.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1333,6 +1333,7 @@
                     @else
                         $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}");
                     @endif
+                    
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
                         $(this).show();
@@ -1671,6 +1672,9 @@
                 $(this).closest("div").find("a").attr("data-original-title","Open Group");
                 $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
             }
+        });
+        $("input[name='max_booking_day']").change(function(){
+            $("p.form-note").find("b").text($(this).val());
         });
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
