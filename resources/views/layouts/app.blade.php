@@ -189,17 +189,16 @@
 
 		                </ul>
 		            </li>
-
+					<li {{{ (Request::is('settlement*') ? 'class=active' : '') }}}>
+		                <a href="{{ URL('settlement') }}">
+		                    <i class="material-icons">account_balance</i>
+		                    <span>Partner Settlement</span>
+		                </a>
+		            </li>
 		            {{-- <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">money</i>
 		                    <span>Refunds</span>
-		                </a>
-		            </li>
-		            <li>
-		                <a href="{{ URL('/admin/members') }}">
-		                    <i class="material-icons">person</i>
-		                    <span>Partner Settlement</span>
 		                </a>
 		            </li>
 		            <li>

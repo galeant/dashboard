@@ -110,7 +110,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::post('/upload/image', 'TourController@uploadImageAjax');
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 	});
-
+	Route::resource('settlement', 'SettlementController');
+	Route::post('settlement/filter', 'SettlementController@filter');
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
