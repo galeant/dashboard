@@ -20,6 +20,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 
 	Route::resource('partner', 'CompanyController');
+	
+	Route::resource('partner-product-type', 'CompanyProductTypeController');
+	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete');
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');
@@ -116,6 +119,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
+	
+	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 	// Route::get('/emailTest', function(){

@@ -99,6 +99,11 @@
 		                        <a href="{{ URL('partner') }}" class=" waves-effect waves-block">
 		                            <span>Partner List</span>
 		                        </a>
+							</li>
+							<li {{{ (Request::is('partner-product-type') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('partner-product-type') }}" class=" waves-effect waves-block">
+		                            <span>Partner Type List</span>
+		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
