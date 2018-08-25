@@ -228,6 +228,7 @@
                             <tr>
                                 <td align="center">
                                     <!-- BULLETPROOF BUTTON -->
+                                    
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <td align="left" style="padding-top: 25px;" class="padding">
@@ -239,6 +240,19 @@
 
                                                 <hr class="" style="margin-top: 40px;"/>
                                                 <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Change%20Password%20Request" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <hr class="" style="margin-top: 40px;"/>
+                                            <td align="left" class="mobile-hide">
+                                                <img src="./assets/maskot.png" alt="" width="125" height="125">
+                                            </td>
+                                            <td align="justify" style="padding-left: 20px;" class="padding">
+                                                <!-- <img src="./assets/logo.png" alt=""> -->
+                                                <p>Need Help?</p>
+                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Booking%20Receip" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
                                             </td>
                                         </tr>
                                     </table>
