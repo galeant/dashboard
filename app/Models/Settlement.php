@@ -13,7 +13,7 @@ class Settlement extends Model
         'booking_number',
         'product_type',
         'product_name',
-        'number_of_day',
+        'qty',
         'unit_price',
         'total_discount',
         'total_price',

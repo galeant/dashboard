@@ -96,8 +96,8 @@ class SettlementController extends Controller
     public function filter(Request $request){
         $start = date("Y-m-d", strtotime($request->start));
         $end = date("Y-m-d", strtotime($request->end));
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where('status',2)->get();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('tour.company')->get();
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->get();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tour.company')->get();
         $dataCar = BookingCarRental::whereBetween('start_date', [$start, $end])->where('status',2)->get();
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
             $countHotel = count($dataHotel);
@@ -110,7 +110,6 @@ class SettlementController extends Controller
             $totalPriceCar = array_sum(array_pluck($dataCar, 'total_price'));
             $totalPrice = $totalPriceHotel+$totalPriceTour+$totalPriceCar;
 
-            // $commissionHotel = ($totalPriceHotel*$commissionHotelVal->percentage)/100;
             $commissionHotel = array_sum(array_pluck($dataHotel, 'commission'));
             $commissionTour = array_sum(array_pluck($dataTour, 'commission'));
             $commissionCar = array_sum(array_pluck($dataCar, 'commission'));
@@ -149,7 +148,6 @@ class SettlementController extends Controller
                 $product_name = $d->hotel_name.'-'.$d->room_name;
                 $qty = $d->number_of_rooms;
                 $unit_price = $d->price_per_night;
-                $total_price = $d->total_paid;
                 $bank_account_name = null;
                 $bank_account_number = null;
                 $book = BookingHotel::where('booking_number',$d->booking_number);
@@ -182,7 +180,7 @@ class SettlementController extends Controller
                     'total_commission' => $d->commission,
                     'bank_account_name' => $bank_account_name,
                     'bank_account_number' => $bank_account_number,
-                    'total_paid' => ($d->total_price - $d->total_discount)
+                    'total_paid' => $d->total_price - $d->commission
                 ]);
                 $book->update([
                     'status' => 4
