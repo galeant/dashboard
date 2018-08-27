@@ -455,7 +455,8 @@ class CompanyController extends Controller
 
     public function json(Request $request)
     {
-        $name     = ($request->input('name') ? $request->input('name') : '');
+        $data   = new Company;
+        $name   = ($request->input('name') ? $request->input('name') : '');
         $id     = ($request->input('id') ? $request->input('id') : '');
         if($name)
         {
