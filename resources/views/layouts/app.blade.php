@@ -190,10 +190,22 @@
 		                </ul>
 		            </li>
 					<li {{{ (Request::is('settlement*') ? 'class=active' : '') }}}>
-		                <a href="{{ URL('settlement') }}">
-		                    <i class="material-icons">account_balance</i>
+						<a  class="menu-toggle waves-effect waves-block toggled">
+							<i class="material-icons">account_balance</i>
 		                    <span>Partner Settlement</span>
 		                </a>
+						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('settlement/all') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/all') }}" class=" waves-effect waves-block">
+		                            <span>Settlement List</span>
+		                        </a>
+							</li>
+							<li {{{ (Request::is('settlement/generate') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/generate') }}" class=" waves-effect waves-block">
+		                            <span>Settlement Generate</span>
+		                        </a>
+		                    </li>
+		                </ul>
 		            </li>
 		            {{-- <li>
 		                <a href="{{ URL('/admin/members') }}">

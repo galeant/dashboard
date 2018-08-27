@@ -10,6 +10,7 @@ use App\Models\BookingCarRental;
 use App\Models\Settlement;
 use App\Models\SettlementGroup;
 use App\Models\CompanyLevelCommission;
+use DB;
 
 class SettlementController extends Controller
 {
@@ -20,7 +21,8 @@ class SettlementController extends Controller
      */
     public function index()
     {
-        return view('settlement.index');
+        $data = SettlementGroup::all();
+        return view('settlement.index',['data' => $data]);
     }
 
     /**
@@ -88,12 +90,15 @@ class SettlementController extends Controller
     {
         //
     }
+    public function generate(){
+        return view('settlement.generate');
+    }
     public function filter(Request $request){
         $start = date("Y-m-d", strtotime($request->start));
         $end = date("Y-m-d", strtotime($request->end));
         $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where('status',2)->get();
         $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tour.company')->get();
-        $dataCar = BookingCarRental::whereBetween('start_date', [$start, $end])->where('status',2)->get();;
+        $dataCar = BookingCarRental::whereBetween('start_date', [$start, $end])->where('status',2)->get();
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
             $countHotel = count($dataHotel);
             $countTour = count($dataTour);
@@ -116,22 +121,26 @@ class SettlementController extends Controller
                 $group = SettlementGroup::create([
                     'total_price' => $totalPrice,
                     'total_commission' => $totalCommission,
-                    'total_paid' => $totalPrice,
+                    'total_paid' => $totalPrice - $totalCommission,
                     'note' => $request->note,
                     'status' => 1
                 ]);
                 $hotel = $this->bookingListInsert($dataHotel,$group->id,'hotel',$commissionHotelVal);
                 $tour = $this->bookingListInsert($dataTour,$group->id,'tour',$commissionHotelVal);
                 $car = $this->bookingListInsert($dataCar,$group->id,'car',$commissionHotelVal);
-                DB::commit();
-                // return redirect("/product/tour-activity/".$id.'/edit#step-h-2')->with('message', $exception->getMessage());
+                if(($hotel && $tour && $car) == true){
+                    DB::commit();
+                    // return redirect("/product/tour-activity/".$id.'/edit#step-h-2')->with('message', $exception->getMessage());
+                }else{
+                    return redirect()->back()->with('message', 'Something wrong please contact admin');
+                }
             } catch (Exception $e) {
                 DB::rollBack();
                 \Log::info($exception->getMessage());
-                // return redirect("/product/tour-activity/".$id.'/edit#step-h-2')->with('message', $exception->getMessage());
+                return redirect()->back()->with('message', $exception->getMessage());
             }
         }else{
-            // return redirect()->back()->with('message', 'Nothing generate for'..);
+            return redirect()->back()->with('message', 'Nothing generate for '.date("d M Y", strtotime($request->start)).' - '.date("d M Y", strtotime($request->end)));
         }
     }
     public function bookingListInsert($data,$group_id,$type,$com){
@@ -143,6 +152,7 @@ class SettlementController extends Controller
                 $total_commission = ($d->total_price*$com->percentage)/100;
                 $bank_account_name = null;
                 $bank_account_number = null;
+                $book = BookingHotel::where('booking_number',$d->booking_number);
             }else if($type == 'tour'){
                 $product_name = $d->tour_name;
                 $qty = $d->number_of_person;
@@ -150,6 +160,7 @@ class SettlementController extends Controller
                 $total_commission = $d->commission;
                 $bank_account_name = $d->tour->company->bank_account_name;
                 $bank_account_number = $d->tour->company->bank_account_number;
+                $book = BookingTour::where('booking_number',$d->booking_number);
             }else if($type == 'car'){
                 $product_name = $d->vehicle_name.'-'.$d->vehicle_type.'-'.$d->vehicle_brand;
                 $qty = $d->number_of_day;
@@ -157,6 +168,7 @@ class SettlementController extends Controller
                 $total_commission = $d->commission;
                 $bank_account_name = null;
                 $bank_account_number = null;
+                $book = BookingCarRental::where('booking_number',$d->booking_number);
             }
             DB::beginTransaction();
             try{
@@ -174,13 +186,16 @@ class SettlementController extends Controller
                     'bank_account_number' => $bank_account_number,
                     'total_paid' => ($d->total_price - $d->total_discount)
                 ]);
+                $book->update([
+                    'status' => 4
+                ]);
                 DB::commit();
-                return true;
             } catch (Exception $e) {
                 DB::rollBack();
                 \Log::info($exception->getMessage());
-                // return redirect("/product/tour-activity/".$id.'/edit#step-h-2')->with('message', $exception->getMessage());
+                return redirect()->back()->with('message', $exception->getMessage());
             }
         }
+        return true;
     }
 }
