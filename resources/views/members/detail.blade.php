@@ -83,19 +83,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                @if(count($data->transactions) > 0)
                                     @foreach($data->transactions as $trans)
                                     <tr>
                                         <td>{{$trans->transaction_number}}</td>
-                                        <td>
-                                            @foreach($trans->contact_list as $con)
-                                                <span class="label bg-black">{{$con->firstname}} {{$con->lastname}}</span>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach($trans->contact_list as $con)
-                                                <span class="label bg-black">{{$con->email}}</span>
-                                            @endforeach
-                                        </td>
+                                        @if($trans->contact != null)
+                                            <td>{{$trans->contact->firstname}} {{$trans->contact->lastname}}</td>
+                                            <td>{{$trans->contact->email}}</td>
+                                        @else   
+                                            <td>{{$trans->user->firstname}} {{$trans->user->lastname}}</td>
+                                            <td>{{$trans->user->email}}</td>
+                                        @endif
                                         <td>{{Helpers::idr($trans->total_paid)}}</td>
                                         <td>{{date('j F Y',strtotime($trans->updated_at))}}</td>
                                         <td><span class="label" style="background-color:{{$trans->transaction_status->color}}">{{$trans->transaction_status->name}}</span></td>
@@ -106,6 +104,7 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>

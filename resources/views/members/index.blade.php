@@ -39,7 +39,7 @@
                                         <select name="status" class="form-control">
                                             <option value="99" @if($request != null) selected @endif>All</option>
                                             <option value="1" @if($request != null) @if($request['status'] == 1) selected @endif @endif>Active</option>
-                                            <option value="0" @if($request != null) @if($request['status'] == 0) selected @endif @endif>No-Verified</option>
+                                            <option value="0" @if($request != null) @if($request['status'] == 0) selected @endif @endif>Not Verified</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">

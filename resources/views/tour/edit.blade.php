@@ -1280,7 +1280,8 @@
                   }
                 }).done(function(response) {
                     $('#'+id+'-destination option').remove();
-                    $.each(response, function (index, value) {
+                    $('#'+id+'-destination').append('<option value=""></option>');
+                    $.each(response, function (index, value) {  
                         $('#'+id+'-destination').append(
                             "<option value="+value.id+">"+value.destination_name+"</option>"
                         );
@@ -1464,7 +1465,9 @@
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{
-                        $("#price_list").show();
+                        if($("#priceType").val() != 1){
+                            $("#price_list").show();
+                        }
                     }
                     priceL =[];
                     me.find("a#price_edit").show();
