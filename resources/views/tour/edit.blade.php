@@ -1460,10 +1460,13 @@
                         me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
                     }
                     var max_pep = {{$data->max_person}};
+
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{
-                        $("#price_list").show();
+                        if($("#priceType").val() != 1){
+                            $("#price_list").show();
+                        }
                     }
                     priceL =[];
                     me.find("a#price_edit").show();

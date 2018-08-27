@@ -2029,7 +2029,7 @@
             $("#change-status").show();
             $("#submit").show();
             $("input").removeAttr("disabled");
-            $("input[name='email']").attr("readonly",'readonly');
+            // $("input[name='email']").attr("readonly",'readonly');
             $("select").removeAttr("disabled");
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();

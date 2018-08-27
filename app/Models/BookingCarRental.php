@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BookingCarRental extends Model
 {
-    protected $table = 'booking_car_rents';
+    protected $table = 'booking_rent_cars';
     
     public function transactions()
     {

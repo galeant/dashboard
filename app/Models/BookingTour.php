@@ -12,7 +12,7 @@ class BookingTour extends Model
     {
         return $this->belongsTo('App\Models\Transaction', 'transaction_id','id');
     }
-    public function tours()
+    public function tour()
     {
         return $this->belongsTo('App\Models\Tour', 'product_id','id');
     }

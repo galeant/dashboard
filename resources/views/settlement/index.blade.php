@@ -25,6 +25,7 @@
                             
                         </div>
                         <div class="body settlement">
+                            @include('errors.error_notification')
                             <div class="row">
                                 <form method="POST" action="{{url('settlement/filter')}}">
                                 @csrf
