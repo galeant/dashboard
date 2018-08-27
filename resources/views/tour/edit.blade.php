@@ -1280,7 +1280,8 @@
                   }
                 }).done(function(response) {
                     $('#'+id+'-destination option').remove();
-                    $.each(response, function (index, value) {
+                    $('#'+id+'-destination').append('<option value=""></option>');
+                    $.each(response, function (index, value) {  
                         $('#'+id+'-destination').append(
                             "<option value="+value.id+">"+value.destination_name+"</option>"
                         );
