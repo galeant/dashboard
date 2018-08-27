@@ -63,7 +63,6 @@
                             </div>
                         </div>
                     </div>
-                    @if(count($data->transactions) > 0)
                     <div class="card">
                         <div class="header">
                             <h2>
@@ -84,7 +83,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                
+                                @if(count($data->transactions) > 0)
                                     @foreach($data->transactions as $trans)
                                     <tr>
                                         <td>{{$trans->transaction_number}}</td>
@@ -108,11 +107,11 @@
                                         </td>
                                     </tr>
                                     @endforeach
+                                @endif
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    @endif
                 </div>
             </div>
 
