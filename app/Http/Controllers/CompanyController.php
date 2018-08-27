@@ -425,13 +425,14 @@ class CompanyController extends Controller
             $data = Company::where('id',$id)->with(['suppliers' => function($query){
                 $query->orderBy('created_at','asc')->first();
             }])->first();
+            // dd($data->pic->email);
             if($data->status != $status){
                 $data->status = $status;
                 if($data->save()){
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
 
                     if($status == 3 || $status == 4||  $status == 5){
-                       Mail::to($data->company_email)->send(new StatusCompany($data));    
+                       Mail::to($data->pic->email)->send(new StatusCompany($data));    
                         // SendEmail::dispatch($data)
                                 // ->delay(now()->addSeconds(15));     
                     }
