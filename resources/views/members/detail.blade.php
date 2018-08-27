@@ -87,16 +87,8 @@
                                     @foreach($data->transactions as $trans)
                                     <tr>
                                         <td>{{$trans->transaction_number}}</td>
-                                        <td>
-                                            @foreach($trans->contact_list as $con)
-                                                <span class="label bg-black">{{$con->firstname}} {{$con->lastname}}</span>
-                                            @endforeach
-                                        </td>
-                                        <td>
-                                            @foreach($trans->contact_list as $con)
-                                                <span class="label bg-black">{{$con->email}}</span>
-                                            @endforeach
-                                        </td>
+                                        <td>{{$trans->user->firstname}} {{$trans->user->lastname}}</td>
+                                        <td>{{$trans->user->email}}</td>
                                         <td>{{Helpers::idr($trans->total_paid)}}</td>
                                         <td>{{date('j F Y',strtotime($trans->updated_at))}}</td>
                                         <td><span class="label" style="background-color:{{$trans->transaction_status->color}}">{{$trans->transaction_status->name}}</span></td>

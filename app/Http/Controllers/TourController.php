@@ -1059,7 +1059,7 @@ class TourController extends Controller
     }
     public function priceUpdate(Request $request){
         
-        if($request->price_usd == null  || $request->price_usd == ''){
+        if($request->price_usd == null  || $request->price_usd == 0){
             $request->price_usd = null;
         }else{
             $request->price_usd = str_replace(".", "", $request->price_usd);    

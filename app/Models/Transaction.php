@@ -39,4 +39,8 @@ class Transaction extends Model
     {
         return $this->belongsToMany('App\Models\MemberContact','user_contact_transaction','transaction_id','user_contact_id');
     }
+    public function user()
+    {
+        return $this->belongsTo('App\Models\Members','user_id','id');
+    }
 }
