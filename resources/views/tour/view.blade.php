@@ -4,6 +4,7 @@
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{asset('plugins/jquery-qtips/jquery.qtip.min.css')}}" rel="stylesheet"/>
 @stop
 @section('main-content')
 			<div class="block-header">
@@ -179,7 +180,16 @@
                                        </td>
                                        <td>{{$dt->min_person}}</td>
                                        <td>{{$dt->max_person}}</td>
-                                       <td>{{count($dt->schedules)}}</td>
+                                       <td>
+                                            @if($dt->always_available_for_sale == 1)
+                                                <span class="badge bg-green badge-freesale"><i class="material-icons font-12">done</i></span>
+                                                <div class="tooltiptext">
+                                                    Always available for booking
+                                                </div>
+                                            @else
+                                                {{count($dt->schedules)}}
+                                            @endif
+                                       </td>
                                        <td>
                                              @if($dt->status == 0 )
                                                  <span class="badge bg-purple">Draft</span>
@@ -212,6 +222,7 @@
 @stop
 @section('head-js')
 @parent
+    <script src="{{asset('plugins/jquery-qtips/jquery.qtip.min.js')}}"></script>
     <script type="text/javascript">
         var parseQueryString = function() {
             var str = window.location.search;
@@ -286,6 +297,13 @@
             $('#more').attr('on','hide');
         }
         $( document ).ready(function() {
+            $('.badge-freesale').each(function() {
+                 $(this).qtip({
+                     content: {
+                         text: $(this).next('.tooltiptext')
+                     }
+                 });
+             });
             $('Select[name="province_id"]').change(function(){
                 $.ajax({
                   method: "GET",
