@@ -149,11 +149,8 @@ class MembersController extends Controller
     {
         $data = Members::where('id',$id)->with(['transactions' => function($query){
             $query->limit(5)->orderBy('created_at','desc');
-        }])->first();
-        // dd($data->transactions->cont);
+        }])->with('transactions.contact')->first();
         return view('members.detail',['data' => $data]);
-        
-        // dd($id);
     }
 
     /**
