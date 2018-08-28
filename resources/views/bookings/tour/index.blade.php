@@ -32,6 +32,7 @@
                                 <tr>
                                     <th>Transaction ID</th>
                                     <th>Booking Number</th>
+                                    <th>Company</th>
                                     <th>Tour Name</th>
                                     <th>Product Code</th>
                                     <th>Total Booking</th>
@@ -67,6 +68,7 @@
                 columns: [
                     {data: 'transaction_id'},
                     {data: 'booking_number'},
+                    {data: 'company_name'},
                     {data: 'tour_name'},
                     {data: 'product_code'},
                     {data: 'number_of_person'},

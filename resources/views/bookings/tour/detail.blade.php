@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-md-4 col-md-offset-2">
                         <div class="col-md-6">Booked By</div>
-                        <div class="col-md-6">: {{$data->booking_number}}</div>
+                        <div class="col-md-6">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
                     </div>
                 </div>
                 <div class="row">
@@ -35,7 +35,9 @@
                     </div>
                     <div class="col-md-4 col-md-offset-2">
                         <div class="col-md-6">Booked Status</div>
-                        <div class="col-md-6">: {{$data->transactions->transaction_status->name}}</div>
+                        <div class="col-md-6">: 
+                                <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
+                        </div>
                     </div>
                 </div>
                 <br>
@@ -118,13 +120,13 @@
             <div class="header">
                 <h4>Customer Contact Detail</h4>
             </div>
-            <div class="body">
+            <div class="body m-l-20">
                 <div class="row" style="margin-top: 20px">
                     <div class="col-md-2">
                         Full Name
                     </div>
                     <div class="col-md-2">
-                        : <span>{{$data->product_code}}</span>
+                        : <span>{{$data->transactions->customer->salutation}}. {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</span>
                     </div>
                 </div>
                 <div class="row" style="margin-top: 20px">
@@ -132,7 +134,7 @@
                         Phone Number
                     </div>
                     <div class="col-md-2">
-                            : <span>{{$data->product_code}}</span>
+                            : <span>{{$data->transactions->customer->phone}}</span>
                     </div>
                 </div>
                 <div class="row" style="margin-top: 20px; margin-bottom: 20px">
@@ -140,7 +142,7 @@
                         Email Address
                     </div>
                     <div class="col-md-2">
-                            : <span>{{$data->product_code}}</span>
+                            : <span>{{$data->transactions->customer->email}}</span>
                     </div>
                 </div>
             </div>

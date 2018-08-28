@@ -164,7 +164,7 @@
 											</span> --}}
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/uhotel*') ? 'class=active' : '') }}}>
+									{{-- <li {{{ (Request::is('bookings/uhotel*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/uhotel') }}" class=" waves-effect waves-block">
 											<span>Accomodation uHotel</span>
 										</a>
@@ -178,7 +178,7 @@
 										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
 											<span>Car Rental</span>
 										</a>
-									</li>
+									</li> --}}
 								</ul>
 							</li>
 		                    <li {{{ (Request::is('transactions*') ? 'class=active' : '') }}}>
