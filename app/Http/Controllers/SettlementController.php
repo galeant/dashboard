@@ -10,6 +10,7 @@ use App\Models\BookingCarRental;
 use App\Models\Settlement;
 use App\Models\SettlementGroup;
 use App\Models\CompanyLevelCommission;
+use App\Exports\SettlementExport;
 use DB;
 
 class SettlementController extends Controller
@@ -203,6 +204,9 @@ class SettlementController extends Controller
             \Log::info($exception->getMessage());
             return redirect()->back()->with('message', $exception->getMessage());
         }
+    }
+    public function exportExcel($id){
+        return (new SettlementExport($id))->download('settlement.xlsx');
     }
     // 
     public function bookingListInsert($data,$group_id,$type){

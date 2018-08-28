@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('/all', 'SettlementController@index');
 		Route::get('/detail/{id}', 'SettlementController@detail');
 		Route::get('/generate', 'SettlementController@generate');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel');
 		Route::post('/filter', 'SettlementController@filter');
 		Route::post('/paid', 'SettlementController@paid');
 		Route::post('/update-notes', 'SettlementController@notes');
@@ -132,5 +133,3 @@ Route::group(['middleware' => ['auth:web']], function () {
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
-
-

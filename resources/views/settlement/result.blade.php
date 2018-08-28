@@ -24,7 +24,7 @@
                     Settlment {{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }}
                     <small>Admin Data / Settlement</small>
                 </h2>
-                <a id="export" href="#" class="btn bg-deep-orange waves-effect">Generate Excel</a>
+                <a id="export" href="{{ url('settlement/excel/'.$data->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
                 <a id="export" href="#" class="btn bg-orange waves-effect">Generate PDF</a>
             </div>
             <!-- Basic Examples -->
