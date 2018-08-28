@@ -245,15 +245,14 @@
                                     <!-- BULLETPROOF BUTTON -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="padding-top: 25px;" class="padding">
-                                                <!-- <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
-                                                    <tr>
-                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="https://litmus.com" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Login Now</a></td>
-                                                    </tr>
-                                                </table> -->
-
-                                                <hr class="" style="margin-top: 40px;"/>
-                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Hello%20again" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
+                                            <hr class="" style="margin-top: 40px;"/>
+                                            <td align="left" class="mobile-hide">
+                                                <img src="./assets/maskot.png" alt="" width="125" height="125">
+                                            </td>
+                                            <td align="justify" style="padding-left: 20px;" class="padding">
+                                                <!-- <img src="./assets/logo.png" alt=""> -->
+                                                <p>Need Help?</p>
+                                                <small style="color: gray;">If you are having any issue with your account, please don't be hesitate to contact us via <span><a href="mailto:info@pigijo.com?Subject=Booking%20Receip" style="color: #E17306;text-decoration: none;">info@pigijo.com</a></span>.</small>
                                             </td>
                                         </tr>
                                     </table>

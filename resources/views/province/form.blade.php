@@ -5,6 +5,9 @@
 <link href="{{asset('plugins/sweetalert/sweetalert.css')}}" rel="stylesheet" />
 
 <link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
+
+<link href="{{ asset('plugins/cropper/cropper.min.css') }}" rel="stylesheet">
+<link href="{{ asset('plugins/bootstrap-file-input/css/fileinput.css') }}" rel="stylesheet">
 @stop
 @section('main-content')
 	<div class="block-header">
@@ -51,9 +54,17 @@
 						                @endif
 		                            </select>
 					            </div>
-
+					            <div class="form-group m-b-20 cover-image">
+                                    <label>Cover Image*</label>
+                                    <div class="dd-main-image">
+                                        <img style="width: 100%" src="{{(!empty($data)? cdn($data->cover_image.'/large/'.$data->cover_filename) : 'http://via.placeholder.com/500x500' )}}" id="cover-img">
+                                    </div>
+                                    {{ Form::hidden('image_resize', null, ['class' => 'form-control','required'=>'required']) }}
+                                    <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Upload Cover Image</a>
+                                    <input name="cover_img" id="c_p_file" type='file' style="display: none" accept="image/x-png,image/gif,image/jpeg">
+                                </div>
 						    	<div class="form-group m-b-20">
-					                <label>Name</label>
+					                <label>Name*</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
 					            </div>
 					            <div class="form-group m-b-20">
@@ -69,68 +80,150 @@
     	</div>
     </div>
     <!-- #END# Advanced Validation -->
-
+<!-- #END# Basic Example | Horizontal Layout -->
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Cropper Image</h4>
+            </div>
+            <div class="modal-body">
+                <div class="img-container">
+                  <img id="crop-image" src="" alt="Picture" class="img-responsive">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link waves-effect btn-img-save">SAVE CHANGES</button>
+                <button type="button" class="btn btn-link waves-effect btn-img-close" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('head-js')
 @parent
     <!-- Sweet Alert Plugin Js -->
 <script src="{{asset('plugins/sweetalert/sweetalert.min.js')}}"></script>
-
 <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
 <script src="{{asset('js/pages/forms/form-validation.js')}}"></script>
+<script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>
     <script type="text/javascript">
 		$(function(){
 		    $("#country_id").select2({
-		            ajax: {
-		                url: "/json/country",
-		                dataType: 'json',
-		                delay: 250,
-		                data: function (params) {
-		                  return {
-		                    name: params.term, // search term
-		                    page: params.page,
-		                  };
-		                },
-		                processResults: function (data, params) {
-		                  // parse the results into the format expected by Select2
-		                  // since we are using custom formatting functions we do not need to
-		                  // alter the remote JSON data, except to indicate that infinite
-		                  // scrolling can be used
-		                  params.page = params.page || 1;
-		                  return {
-		                    results: data.data,
-		                    pagination: {
-		                      more: (params.page * 30) < data.total_count
-		                    }
-		                  };
-		                },
-		                cache: true
-		              },
-		              escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-		              minimumInputLength: 1,
-		              templateResult: formatRepo, // omitted for brevity, see the source of this page
-		              templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-		        });
-		        function formatRepo (repo) {
-		              if (repo.loading) return repo.text;
+	            ajax: {
+	                url: "/json/country",
+	                dataType: 'json',
+	                delay: 250,
+	                data: function (params) {
+	                  return {
+	                    name: params.term, // search term
+	                    page: params.page,
+	                  };
+	                },
+	                processResults: function (data, params) {
+	                  // parse the results into the format expected by Select2
+	                  // since we are using custom formatting functions we do not need to
+	                  // alter the remote JSON data, except to indicate that infinite
+	                  // scrolling can be used
+	                  params.page = params.page || 1;
+	                  return {
+	                    results: data.data,
+	                    pagination: {
+	                      more: (params.page * 30) < data.total_count
+	                    }
+	                  };
+	                },
+	                cache: true
+	              },
+	              escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+	              minimumInputLength: 1,
+	              templateResult: formatRepo, // omitted for brevity, see the source of this page
+	              templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+	        });
+	        function formatRepo (repo) {
+	              if (repo.loading) return repo.text;
 
-		              var markup = "<div class='select2-result-repository clearfix'>" +
+	              var markup = "<div class='select2-result-repository clearfix'>" +
 
-		                "<div class='select2-result-repository__meta'>" +
-		                  "<div class='select2-result-repository__title'>" + repo.name + "</div>";
+	                "<div class='select2-result-repository__meta'>" +
+	                  "<div class='select2-result-repository__title'>" + repo.name + "</div>";
 
-		              "</div></div>";
+	              "</div></div>";
 
-		              return markup;
-		            }
+	              return markup;
+	            }
 
-		        function formatRepoSelection (repo) {
-		          if(typeof repo.name !== "undefined"){
-		            $('#country_id').val(repo.id);
-		          }
-		          return repo.name || repo.text;
-		        }
+	        function formatRepoSelection (repo) {
+	          if(typeof repo.name !== "undefined"){
+	            $('#country_id').val(repo.id);
+	          }
+	          return repo.name || repo.text;
+	        }
+	        window.addEventListener('DOMContentLoaded', function () {
+                var image = document.getElementById('crop-image');
+                var cropBoxData;
+                var canvasData;
+                var cropper;
+
+                $('#defaultModal').on('shown.bs.modal', function () {
+                    cropper = new Cropper(image, {
+                        autoCropArea: 1,
+                        aspectRatio: 1,
+                        strict: false,
+                        guides: false,
+                        highlight: false,
+                        dragCrop: false,
+                        zoomable: false,
+                        scalable: false,
+                        rotatable: false,
+                        cropBoxMovable: true,
+                        cropBoxResizable: false,
+                        responsive: true,
+                        viewMode: 1,
+                        ready: function () {
+                            // Strict mode: set crop box data first
+                            cropper.setCropBoxData(cropBoxData).setCanvasData(canvasData);
+                        }
+                    });
+                    
+                }).on('hidden.bs.modal', function () {
+                    cropBoxData = cropper.getCropBoxData();
+                    canvasData = cropper.getCanvasData();
+                    originalData = cropper.getCroppedCanvas();
+                    cropper.destroy();
+                });
+                $('.btn-img-save').click(function(){
+                    data = originalData = cropper.getCroppedCanvas();
+                    $('input[name="image_resize"]').val(originalData.toDataURL('image/jpeg'));
+                    $('#cover-img').attr('src',originalData.toDataURL('image/jpeg'));
+                    $('.btn-img-close').click();
+                });
+            });
+
+            $('#c_p_picture').click(function(e){
+                e.preventDefault();
+                $('input[name="cover_img"]').click();
+
+            });
+            function readURL(input) {
+            if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('img#crop-image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $(document).delegate('#c_p_file', 'change', function(e){
+                e.preventDefault();
+                $('#defaultModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+                readURL(this);
+            });
+
 		});
     </script>
 @stop

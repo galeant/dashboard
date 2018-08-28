@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -124,6 +123,17 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
+	// Route::get('/emailTest', function(){
+	// 	$details['email'] = 'ilham.rach.f@gmail.com';
+	// 	dispatch(new App\Jobs\SendEmailTest($details));
+	// 	dd('done');
+	// });
 });
+// FOR EMAIL TESTING
+// Route::get('/mailable', function () {
+//     $company = App\Models\Company::where('id',9)->with(['suppliers' => function($query){
+// 		$query->orderBy('created_at','asc')->first();
+// 	}])->first();
 
-
+//     return new App\Mail\StatusCompany($company);
+// });

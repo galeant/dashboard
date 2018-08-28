@@ -51,8 +51,8 @@ class TourController extends Controller
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
         $data = new Tour;
         $data = $data->orderBy($sort,$orderby);
-        if($request->input('status',2) != 99){
-            $data = $data->where('status',$request->input('status',2));
+        if(!empty($request->input('status')) && $request->input('status') != 99){
+            $data = $data->where('status',$request->input('status'));
         }
         if(!empty($request->input('product_type'))){
             $data = $data->where('product_type',$request->input('product_type'));
@@ -81,7 +81,6 @@ class TourController extends Controller
                 'sort_code' => request()->fullUrlWithQuery(["sort"=>"product_code","order"=>$orderby]),
                 'sort_product_name' => request()->fullUrlWithQuery(["sort"=>"product_name","order"=>$orderby])
                 ]);
-        // dd($request->all());
         $data = $data->paginate(10);
         return view('tour.view',['data' => $data]);
     }
@@ -193,76 +192,9 @@ class TourController extends Controller
      */
     public function show($id)
     {
-        $product = Tour::with(
-			'prices',
-            'image_destination',
-            'image_activity',
-            'image_accommodation',
-            'image_other',
-            'videos',
-            'itineraries',
-            'schedules',
-			'destinations',
-			'destinations.province',
-			'destinations.city',
-			'destinations.dest',
-            'activities',
-            'includes',
-            'excludes'
-			)
-			->where('id',$id)
-            ->first();
-        $company = Company::all();
-        $province = Province::all();
-        $activities = ActivityTag::all();
-		$city = City::all();
-		$destination = ProductDestination::all();
-		// DAY
-		$startDate = strtotime($product->schedules[0]->start_date);
-		$endDate = strtotime($product->schedules[0]->end_date);
-		// HOUR
-		$startTime = strtotime($product->schedules[0]->start_hours);
-        $endTime = strtotime($product->schedules[0]->end_hours);
-        // PRICE TYPE
-        if(count($product->prices) != 0){
-            // PRICE KURS
-            if($product->prices[0]->price_usd == null){
-                $price_kurs = 'one';
-            }else{
-                $price_kurs = 'both';
-            }
-            $price_type = 'based';
-        }else{
-            $price_type = 'fix';
-            if($product->price_usd == null){
-                $price_kurs = 'one';
-            }else{
-                $price_kurs = 'both';
-            }
-        }
-		$day = round(($endDate - $startDate)/(60 * 60 * 24))+1;
-		$hours = floor(($endTime - $startTime)/(60 * 60));
-		$minutes = (($endTime - $startTime)/60)%60;
-		$pushToBlade = [
-			'product'=>$product,
-			'product2'=>  new ProductDestination,
-			'provinces'=> $province,
-			'cities'=>$city,
-			'cities2'=> new City,
-			'destinations'=>$destination,
-			'destination2' => new Destination,
-			'day' => $day,
-			'hours' => $hours,
-            'minutes' => $minutes,
-            'companies'=>$company,
-            'activities'=>$activities,
-            'price_kurs' => $price_kurs,
-            'price_type' => $price_type
-        ];
-
-        // dd($pushToBlade);
-        
-        return view('tour.test',$pushToBlade);
+        $data = Tour::find($id);
+        $provinces = Province::select('id','name')->get();
+        return view('tour.detail',['data' => $data,'provinces' => $provinces]);
     }
 
     /**
@@ -1134,7 +1066,7 @@ class TourController extends Controller
     }
     public function priceUpdate(Request $request){
         
-        if($request->price_usd == null  || $request->price_usd == ''){
+        if($request->price_usd == null  || $request->price_usd == 0){
             $request->price_usd = null;
         }else{
             $request->price_usd = str_replace(".", "", $request->price_usd);    

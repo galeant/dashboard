@@ -4,6 +4,7 @@
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="{{asset('plugins/jquery-qtips/jquery.qtip.min.css')}}" rel="stylesheet"/>
 @stop
 @section('main-content')
 			<div class="block-header">
@@ -68,8 +69,7 @@
                                                     <div class="col-sm-3 col-xs-6">
                                                         <div class="form-group">
                                                             <label>Status Product</label>
-                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status',2),['class' => 'form-control']) !!}
-                                                            
+                                                            {!! Form::select('status',[99 => 'All',0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'],Request::input('status'),['class' => 'form-control']) !!}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -180,7 +180,16 @@
                                        </td>
                                        <td>{{$dt->min_person}}</td>
                                        <td>{{$dt->max_person}}</td>
-                                       <td>{{count($dt->schedules)}}</td>
+                                       <td>
+                                            @if($dt->always_available_for_sale == 1)
+                                                <span class="badge bg-green badge-freesale"><i class="material-icons font-12">done</i></span>
+                                                <div class="tooltiptext">
+                                                    Always available for booking
+                                                </div>
+                                            @else
+                                                {{count($dt->schedules)}}
+                                            @endif
+                                       </td>
                                        <td>
                                              @if($dt->status == 0 )
                                                  <span class="badge bg-purple">Draft</span>
@@ -194,16 +203,17 @@
                                        </td>
                                        <td>{{$dt->created_at}}</td>
                                        <td>
-                                           <a href="/product/tour-activity/{{$dt->id}}/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-edit"></i></a>
-                                           <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/{{$dt->id}}" data-id="{{$dt->id}}" id="data-{{$dt->id}}">
+                                            <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs bg-green waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                            <a href="/product/tour-activity/{{$dt->id}}/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-edit"></i></a>
+                                           <!-- <a href="/product/tour-activity/{{$dt->id}}" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/{{$dt->id}}" data-id="{{$dt->id}}" id="data-{{$dt->id}}">
                                              <i class="glyphicon glyphicon-trash"></i>
-                                            </a>
+                                            </a> -->
                                        </td>
                                    </tr>
                                    @endforeach
                                 </tbody>
                             </table>
-                            <div>{{$data->appends(['province_id' => Request::input('province_id',0),'city_id' => Request::input('city_id',0),'status' => Request::input('status',2),'product' => Request::input('product'),'company' => Request::input('company'),'product_type' => Request::input('product_type'),'sort' => Request::input('sort'),'order' => Request::input('order')])->links('vendor.pagination.default-material')}}
+                            <div>{{$data->appends(['province_id' => Request::input('province_id',0),'city_id' => Request::input('city_id',0),'status' => Request::input('status'),'product' => Request::input('product'),'company' => Request::input('company'),'product_type' => Request::input('product_type'),'sort' => Request::input('sort'),'order' => Request::input('order')])->links('vendor.pagination.default-material')}}
                             </div>
                         </div>
                     </div>
@@ -212,6 +222,7 @@
 @stop
 @section('head-js')
 @parent
+    <script src="{{asset('plugins/jquery-qtips/jquery.qtip.min.js')}}"></script>
     <script type="text/javascript">
         var parseQueryString = function() {
             var str = window.location.search;
@@ -286,6 +297,13 @@
             $('#more').attr('on','hide');
         }
         $( document ).ready(function() {
+            $('.badge-freesale').each(function() {
+                 $(this).qtip({
+                     content: {
+                         text: $(this).next('.tooltiptext')
+                     }
+                 });
+             });
             $('Select[name="province_id"]').change(function(){
                 $.ajax({
                   method: "GET",

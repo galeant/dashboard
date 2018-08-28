@@ -35,4 +35,19 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BookingActivity', 'transaction_id','id');
     }
+    // TRAVELLER
+    public function contact_list()
+    {
+        return $this->belongsToMany('App\Models\MemberContact','user_contact_transaction','transaction_id','user_contact_id');
+    }
+    // USER
+    public function user()
+    {
+        return $this->belongsTo('App\Models\Members','user_id','id');
+    }
+    // CONTACT
+    public function contact()
+    {
+        return $this->belongsTo('App\Models\Members','user_contact_id','id');
+    }
 }

@@ -199,3 +199,6 @@ ul.p-info li {
     width: 100%;
     margin-bottom: 10px;
 }
+.tooltiptext{
+    display: none;
+}
