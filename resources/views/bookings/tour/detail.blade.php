@@ -125,7 +125,7 @@
                     <div class="col-md-2">
                         Full Name
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                         : <span>{{$data->transactions->customer->salutation}}. {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</span>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                     <div class="col-md-2">
                         Phone Number
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                             : <span>{{$data->transactions->customer->phone}}</span>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                     <div class="col-md-2">
                         Email Address
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                             : <span>{{$data->transactions->customer->email}}</span>
                     </div>
                 </div>
