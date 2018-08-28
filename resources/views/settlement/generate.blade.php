@@ -18,30 +18,49 @@
             </div>
             <!-- Basic Examples -->
             <div class="row clearfix">
-                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
                             <h2>Search all booking who want to processed</h2>
-                            
+                            <ul class="header-dropdown">
+                                <!-- <li>
+                                    <button type="button" class="btn bg-deep-orange waves-effect" start="{{ date('d-m-Y')}}" end="{{ date('d-m-Y')}}" data-toggle="modal" data-target="#myModal" id="period">Generate Settlement Today</button>
+                                </li> -->
+                            </ul>
                         </div>
                         <div class="body settlement">
                             @include('errors.error_notification')
                             <div class="row">
-                                <form method="POST" action="{{url('settlement/filter')}}">
+                                <div class="col-md-12">
+                                    <label>Start Date</label>
+                                    <input type="text" class="form-control" id="start"/>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>End Date</label>
+                                    <input type="text" class="form-control" id="end"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="button" class="btn bg-green waves-effect" data-toggle="modal" data-target="#myModal" id="opener">
+                                        <i class="material-icons">search</i>
+                                        <span>Cari</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                                <form method="POST" action="{{url('settlement/filter')}}" id="filter">
                                 @csrf
-                                    <div class="col-md-12">
-                                        <label>Start Date</label>
-                                        <input type="text" class="form-control" name="start"/>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label>End Date</label>
-                                        <input type="text" class="form-control" name="end"/>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn bg-green waves-effect">
-                                            <i class="material-icons">search</i>
-                                            <span>Cari</span>
-                                        </button>
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="start" value=""/>
+                                            <input type="hidden" name="end" value=""/>
+                                            Notes : <textarea rows="5" class="form-control no-resize" name="notes"></textarea>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-link waves-effect">Proced</button>
+                                            <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -70,9 +89,10 @@
             maxDate: moment().add(359, 'days'),
             opens: "right"
         };
-        $('input[name="start"]').daterangepicker(options).on('apply.daterangepicker', function(ev, picker) {
+        $('input#start').daterangepicker(options).on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY')); 
-            $('input[name="end"]').daterangepicker({
+            $("#opener").attr('start',picker.startDate.format('DD-MM-YYYY'));
+            $('input#end').daterangepicker({
             autoUpdateInput: false,
             singleDatePicker: true,
             autoApply: true,
@@ -84,6 +104,7 @@
                 opens: "right"
             }).on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('DD-MM-YYYY'));
+                $("#opener").attr('end',picker.startDate.format('DD-MM-YYYY'));
             });
         })
         $('input[name="end"]').daterangepicker({
@@ -97,6 +118,17 @@
             opens: "right"
         }).on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY'));
+            $("#opener").attr('end',picker.startDate.format('DD-MM-YYYY'));
+        });
+        $('#myModal').on('show.bs.modal', function (e) {
+
+            //we get details from attributes
+            var start=$("#opener").attr('start');
+            var end=$("#opener").attr('end');
+
+            //set what we got to our form
+            $('form#filter').find("input[name='start']").val(start);
+            $('form#filter').find("input[name='end']").val(end);
         });
     });
 </script>

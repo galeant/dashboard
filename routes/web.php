@@ -112,9 +112,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::group(['prefix' => 'settlement'],function(){
 		Route::get('/all', 'SettlementController@index');
-		Route::get('/detail', 'SettlementController@detail');
+		Route::get('/detail/{id}', 'SettlementController@detail');
 		Route::get('/generate', 'SettlementController@generate');
 		Route::post('/filter', 'SettlementController@filter');
+		Route::post('/paid', 'SettlementController@paid');
+		Route::post('/update-notes', 'SettlementController@notes');
 	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');

@@ -18,6 +18,7 @@ class Settlement extends Model
         'total_discount',
         'total_price',
         'total_commission',
+        'bank_name',
         'bank_account_name',
         'bank_account_number',
         'total_paid'
