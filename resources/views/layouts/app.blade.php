@@ -123,10 +123,9 @@
  -->
 		                </ul>
 		            </li>
-
 		            <li {{{ (Request::is('product*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
-		                    <i class="material-icons">people</i>
+		                    <i class="material-icons">camera_enhance</i>
 		                    <span>Products</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
@@ -149,6 +148,11 @@
 		                    <span>Transaction & Bookings</span>
 		                </a>
 						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('transaction*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
+		                            <span>Transaction</span>
+		                        </a>
+		                    </li>
 							<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 								<a  class="menu-toggle waves-effect waves-block toggled">
 									<span>Bookings</span>
@@ -181,12 +185,6 @@
 									</li> --}}
 								</ul>
 							</li>
-		                    <li {{{ (Request::is('transactions*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
-		                            <span>Transaction</span>
-		                        </a>
-		                    </li>
-
 		                </ul>
 		            </li>
 
@@ -238,7 +236,7 @@
 		                            <span>Language</span>
 		                        </a>
 		                    </li>
-							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
+							<li {{{ (Request::is('coupon*') ? 'class=active' : '') }}}>
 								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
 										<span>Coupon</span>
 								</a>
