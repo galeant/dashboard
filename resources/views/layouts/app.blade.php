@@ -168,21 +168,21 @@
 											</span> --}}
 										</a>
 									</li>
-									{{-- <li {{{ (Request::is('bookings/uhotel*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/uhotel') }}" class=" waves-effect waves-block">
+									<li {{{ (Request::is('bookings/accomodation-uhotel*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/accomodation-uhotel') }}" class=" waves-effect waves-block">
 											<span>Accomodation uHotel</span>
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
+									<li {{{ (Request::is('bookings/accomodation-tiket*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/accomodation-tiket') }}" class=" waves-effect waves-block">
 											<span>Accomodation Tiket</span>
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
-											<span>Car Rental</span>
+									<li {{{ (Request::is('bookings/rent-car*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/rent-car') }}" class=" waves-effect waves-block">
+											<span>Rent Car</span>
 										</a>
-									</li> --}}
+									</li>
 								</ul>
 							</li>
 		                </ul>

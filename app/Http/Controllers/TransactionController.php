@@ -348,21 +348,20 @@ class TransactionController extends Controller
 	    $pdf->Cell(190,15,'Itinerary Information',0,0,'L',true);
 	    $pdf->Ln(15);
 	    $pdf->SetFont('Arial','',11);
-	    $pdf->Cell(40,10,'Booking Number',0,0,'L',true);
-		$pdf->Cell(50,10,':  '.$data->transaction_number,0,0,'L',true);
-	    $pdf->Cell(40,10,'Email Address',0,0,'L',true);
-	    $pdf->Cell(60,10,':  '.$data->customer->email,0,0,'L',true);
+	    $pdf->Cell(35,10,'Booking Number',0,0,'L',true);
+		$pdf->Cell(60,10,':  '.$data->transaction_number,0,0,'L',true);
+	    $pdf->Cell(32,10,'Email Address',0,0,'L',true);
+	    $pdf->Cell(63,10,':  '.$data->customer->email,0,0,'L',true);
 	    $pdf->Ln(10);
 	    $pdf->SetFont('Arial','',11);
-	    $pdf->Cell(40,15,'Contact Person',0,0,'L',true);
-		$pdf->Cell(50,15,':  '.$data->customer->firstname.' '.$data->customer->lastname,0,0,'L',true);
-	    $pdf->Cell(40,15,'Phone Number',0,0,'L',true);
-	    $pdf->Cell(60,15,':  '.$data->customer->phone,0,0,'L',true);
+	    $pdf->Cell(35,10,'Contact Person',0,0,'L',true);
+		$pdf->Cell(60,10,':  '.$data->customer->firstname.' '.$data->customer->lastname,0,0,'L',true);
+	    $pdf->Cell(32,10,'Phone Number',0,0,'L',true);
+	    $pdf->Cell(63,10,':  '.$data->customer->phone,0,0,'L',true);
 	    $pdf->Ln(20);
 		$pdf->SetCellMargin(0);
         $this->side_line_first_x = $pdf->getX();
         $this->side_line_first_y = $pdf->getY()+3;
-        
         $row = 0;
         if(count($data->booking_tours)){
             for($day_at=1; $day_at<= $data->booking_tours->max('day_at'); $day_at++){
@@ -551,6 +550,7 @@ class TransactionController extends Controller
                                 $this->bottom_right_y = $pdf->getY()+5;
 
                                 $this->set_border($pdf);
+                                $pdf->Ln(100);
                             // }
                         }
                     // }
@@ -630,6 +630,7 @@ class TransactionController extends Controller
                                 $this->bottom_right_y = $pdf->getY()+5;
 
                                 $this->set_border($pdf);
+                                $pdf->Ln(100);
                             // }
                         }
                     // }
@@ -824,6 +825,7 @@ class TransactionController extends Controller
                                 $this->bottom_right_y = $pdf->getY()+5;
 
                                 $this->set_border($pdf);
+                                $pdf->Ln(100);
                             // }
                         }
                     // }
@@ -905,6 +907,8 @@ class TransactionController extends Controller
                                 $this->bottom_right_y = $pdf->getY()+5;
 
                                 $this->set_border($pdf);
+
+                                $pdf->Ln(100);
                             // }
                         }
                     // }
