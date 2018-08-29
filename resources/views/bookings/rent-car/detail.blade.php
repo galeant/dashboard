@@ -8,7 +8,7 @@
 <div class="card">
     <div class="body">
         <div class="col-md-10 font-20">
-            <span>Booking Tour > {{$data->booking_number}}</span>
+            <span>Booking Rent Car > {{$data->booking_number}}</span>
         </div>
     </div>
 </div>
@@ -19,24 +19,24 @@
         </div>
         <div class="body">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-6">Booking Number</div>
-                    <div class="col-md-6">: {{$data->booking_number}}</div>
+                <div class="col-md-6">
+                    <div class="col-md-4">Booking Number</div>
+                    <div class="col-md-8">: {{$data->booking_number}}</div>
                 </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="col-md-6">Booked By</div>
-                    <div class="col-md-6">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="col-md-4">Booked By</div>
+                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-6">Transaction Date</div>
-                    <div class="col-md-6">: {{date('d-F-Y', strtotime($data->created_at))}}</div>
+                <div class="col-md-6">
+                    <div class="col-md-4">Transaction Date</div>
+                    <div class="col-md-8">: {{date('d-F-Y', strtotime($data->created_at))}}</div>
                 </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="col-md-6">Booking Status</div>
-                    <div class="col-md-6">: 
-                            <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="col-md-4">Booking Status</div>
+                    <div class="col-md-8">: 
+                        <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
                     </div>
                 </div>
             </div>
@@ -48,51 +48,58 @@
                 <div class="panel-body">
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <span>Product Category</span>
+                            <span>Company Name</span>
                         </div>
                         <div class="col-md-6">
-                            : <span><b>{{$data->tours->product_category}} - {{$data->tours->product_type}}</b></span>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-md-6">
-                            <span>Product Name</span>
-                        </div>
-                        <div class="col-md-6">
-                            : <span><b>{{$data->tour_name}}</b></span>
+                            : <span><b>{{$data->vehicle_company_name}}</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <span>Schedule</span>
+                            <span>Vehicle Brand</span>
                         </div>
                         <div class="col-md-6">
-                            :
-                            @if($data->start_date == $data->end_date)
-                                @if($data->end_hours == "23:59:00")
-                                    {{date('d M Y', strtotime($data->start_date))}}
-                                @else
-                                    {{date('d M Y', strtotime($data->start_date))}}, {{date('h:i', strtotime($data->start_hours))}} - {{date('h:i', strtotime($data->end_hours))}}
-                                @endif
-                            @else
-                            {{date('d M Y', strtotime($data->start_date))}} - {{date('d M Y', strtotime($data->end_date))}}
-                            @endif
+                            : <span><b>{{$data->vehicle_brand}}</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <span>Total Person</span>
+                            <span>Vehicle Name</span>
                         </div>
                         <div class="col-md-6">
-                            : <span><b>{{$data->number_of_person}} person(s)</b></span>
+                            : <span><b>{{$data->vehicle_name}}</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
                         <div class="col-md-6">
-                            <span>Item Price</span>
+                            <span>Vehicle Type</span>
                         </div>
                         <div class="col-md-6">
-                            : <span>{{Helpers::idr($data->price_per_person)}}</span>
+                            : <span><b>{{$data->vehicle_type}}</b></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span>Number of day</span>
+                        </div>
+                        <div class="col-md-6">
+                            : {{$data->number_of_day}} day(s)
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span>Start Rent</span>
+                        </div>
+                        <div class="col-md-6">
+                            : {{date('d M Y', strtotime($data->start_date))}}
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span>End Rent</span>
+                        </div>
+                        <div class="col-md-6">
+                            : {{date('d M Y', strtotime($data->end_date))}}
                         </div>
                     </div>
                     <div class="row form-group">
@@ -121,7 +128,7 @@
                             <span>Your Net Sales</span>
                         </div>
                         <div class="col-md-6">
-                            : <span>{{Helpers::idr(($data->total_price)-$data->commission)}}</span>
+                            : <span>{{Helpers::idr(($data->net_price))}}</span>
                         </div>
                     </div>
                 </div>

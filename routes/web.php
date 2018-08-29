@@ -129,6 +129,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
+		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
+		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
+		Route::resource('rent-car', 'BookingRentCarController');
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
