@@ -115,9 +115,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('/detail/{id}', 'SettlementController@detail');
 		Route::get('/generate', 'SettlementController@generate');
 		Route::get('/excel/{id}', 'SettlementController@exportExcel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
 		Route::post('/filter', 'SettlementController@filter');
 		Route::post('/paid', 'SettlementController@paid');
 		Route::post('/update-notes', 'SettlementController@notes');
+		Route::post('/update-bank', 'SettlementController@bank');
 	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');

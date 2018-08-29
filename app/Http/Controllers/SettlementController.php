@@ -12,6 +12,7 @@ use App\Models\SettlementGroup;
 use App\Models\CompanyLevelCommission;
 use App\Exports\SettlementExport;
 use DB;
+use PDF;
 
 class SettlementController extends Controller
 {
@@ -151,6 +152,13 @@ class SettlementController extends Controller
         $data = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
             $query->where('settlement_group_id',$id);
         }])->first();
+        $u2 = array_pluck($data->settlement,'bank_account_number');
+        if(in_array(null,$u2)){
+            $data['complete'] = 0;
+        }else{
+            $data['complete'] = 1;
+        }
+        // dd($data);
         return view('settlement.result',['data'=>$data]);
     }
     public function paid(Request $request){
@@ -205,8 +213,51 @@ class SettlementController extends Controller
             return redirect()->back()->with('message', $exception->getMessage());
         }
     }
+    public function bank(Request $request){
+        DB::beginTransaction();
+        try{
+            Settlement::where('id',$request->id)->update([
+                'bank_name' => $request->bank_name,
+                'bank_account_name' => $request->bank_account_name,
+                'bank_account_number' => $request->bank_account_number
+            ]);
+            DB::commit();
+            return redirect()->back()->with('message', 'Bank Account success updated');
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
+    }
     public function exportExcel($id){
         return (new SettlementExport($id))->download('settlement.xlsx');
+    }
+    public function exportPdf($id){
+        $settlement = SettlementGroup::query()->where('id',$id)->with(['settlement' => function($query) use($id){
+            $query->where('settlement_group_id',$id);
+        }])->first();
+        $hotel = count(Settlement::where([
+            'settlement_group_id' =>  $id,
+            'product_type' => 'hotel'
+        ])->get());
+        $tour = count(Settlement::where([
+            'settlement_group_id' =>  $id,
+            'product_type' => 'tour'
+        ])->get());
+        $car = count(Settlement::where([
+            'settlement_group_id' =>  $id,
+            'product_type' => 'car'
+        ])->get());
+        $data = [
+            'data' => $settlement,
+            'sum_book_hotel' => $hotel,
+            'sum_book_tour' => $tour,
+            'sum_book_car' => $car
+        ];
+        // dd($data['sum_book_hotel']);
+        $pdf = PDF::loadView('settlement.pdf', array('data' =>$data));
+        return $pdf->stream('invoice.pdf');
+        // return (new SettlementExport($id))->download('settlement.xlsx');
     }
     // 
     public function bookingListInsert($data,$group_id,$type){

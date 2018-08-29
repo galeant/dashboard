@@ -24,8 +24,10 @@
                     Settlment {{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }}
                     <small>Admin Data / Settlement</small>
                 </h2>
-                <a id="export" href="{{ url('settlement/excel/'.$data->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
-                <a id="export" href="#" class="btn bg-orange waves-effect">Generate PDF</a>
+                @if($data->status != 1)
+                    <a id="export" href="{{ url('settlement/excel/'.$data->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
+                    <a id="export" href="{{ url('settlement/pdf/'.$data->id) }}" class="btn bg-orange waves-effect">Generate PDF</a>
+                @endif
             </div>
             <!-- Basic Examples -->
             <div class="row clearfix">
@@ -38,13 +40,17 @@
                             <ul class="header-dropdown">
                                 <li>
                                     @if($data->status == 1)
-                                    <form method="POST" action="{{ url('settlement/paid') }}" id="paid">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{$data->id}}"/>
-                                        <a id="paid" class="btn bg-teal btn-block waves-effect">Paid</a>
-                                    <form>
+                                        @if($data['complete'] == 1)
+                                            <form method="POST" action="{{ url('settlement/paid') }}" id="paid">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{$data->id}}"/>
+                                                <a id="paid" class="btn bg-teal btn-block waves-effect">Paid</a>
+                                            <form>
+                                        @else
+                                            <a class="btn bg-red btn-block waves-effect">Data Not Complete</a>
+                                        @endif
                                     @else
-                                        <a class="btn bg-deep-orange btn-block waves-effect">Clear</a>
+                                        <a class="btn bg-deep-orange btn-block waves-effect">Settled</a>
                                     @endif
                                     <p><span class="badge bg-cyan">{{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }}</span></p>
                                 </li>
@@ -79,19 +85,53 @@
                                             <td>{{Helpers::idr($set->total_commission)}}</td>
                                             
                                             <td>
-                                                @if($set->bank_account_number != null)
+                                            @if($data->status != 1)
                                                 <button type="button" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set->bank_name}} : {{$set->bank_account_number}}" data-original-title="{{$set->bank_account_name}}">
                                                     {{$set->bank_account_number}}
                                                 </button>
+                                            @else
+                                                @if($set->bank_account_number != null)
+                                                <button class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" data-toggle="modal" data-target="#myModal">
+                                                    {{$set->bank_account_number}}
+                                                </button>
                                                 @else
-                                                    Bank account not inserted
+                                                <button class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
+                                                    Add Account Bank
+                                                </button>
                                                 @endif     
+                                            @endif
                                             </td>
                                         </tr>
                                         @endforeach
                                     @endif
                                     </tbody>
                                 </table>
+                                 <!-- Modal -->
+                                <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog" role="document">
+                                        <form id="notesForm" method="POST" action="{{ url('settlement/update-bank') }}">
+                                        @csrf
+                                            <div class="modal-content">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id" value=""/>
+                                                    <!-- Bank Name : <input type="text" class="form-control" name="bank_name"> -->
+                                                    Bank Name : 
+                                                    <select class="form-control" name="bank_name">
+                                                        <option value="BCA">BCA</option>
+                                                        <option value="Mandiri">Mandiri</option>
+                                                        <option value="CIMB">CIMB</option>
+                                                    <select>
+                                                    Bank Account Name : <input type="text" class="form-control" name="bank_account_name">
+                                                    Bank Account Number : <input type="text" class="form-control" name="bank_account_number">
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-link waves-effect">SAVE CHANGES</button>
+                                                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,6 +142,8 @@
 @section('head-js')
 @parent
     <script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
+    <!-- Mask js -->
+    <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
     <script>
     $(document).ready(function(){
         $("#paid").click(function(){
@@ -119,6 +161,27 @@
             });
         });
         $('[data-toggle="popover"]').popover();
+        $('#myModal').on('show.bs.modal', function (e) {
+            // get information to update quickly to modal view as loading begins
+            var opener=e.relatedTarget;//this holds the element who called the modal
+
+            //we get details from attributes
+            var id=$(opener).attr('data-id');
+            var bank_name=$(opener).attr('bank-name');
+            var bank_account_name=$(opener).attr('bank-account-name');
+            var bank_number=$(opener).attr('bank-number');
+            console.log(id);
+            console.log(bank_name);
+            console.log(bank_account_name);
+            console.log(bank_number);
+            // //set what we got to our form
+            $('#notesForm').find('[name="id"]').val(id);
+            $('#notesForm').find('[name="bank_name"]').val(bank_name);
+            $('#notesForm').find('[name="bank_account_name"]').val(bank_account_name);
+            $('#notesForm').find('[name="bank_account_number"]').val(bank_number).mask('0000000000000000');
+
+        });
+        
     });
    </script>
 @stop
