@@ -26,7 +26,7 @@
                 </h2>
                 @if($data->status != 1)
                     <a id="export" href="{{ url('settlement/excel/'.$data->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
-                    <a id="export" href="{{ url('settlement/pdf/'.$data->id) }}" class="btn bg-orange waves-effect">Generate PDF</a>
+                    <!-- <a id="export" href="{{ url('settlement/pdf/'.$data->id) }}" class="btn bg-orange waves-effect">Generate PDF</a> -->
                 @endif
             </div>
             <!-- Basic Examples -->
