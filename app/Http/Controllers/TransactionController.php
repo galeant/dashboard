@@ -441,18 +441,13 @@ class TransactionController extends Controller
                         $pdf->Cell(180,5,'Activity Participant:','',0);
                         $pdf->SetFont('Arial','',10);
                         $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->SetTopMargin(0);
-                        $pdf->Cell(180,5,'Nama Participant','',0);
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0); 
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0); 
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0);
+                        // dd($tour->transactions->contact_list);
+                        foreach($tour->transactions->contact_list as $contact){
+                            $pdf->Cell(10, 5, '','',0,'');
+                            $pdf->SetTopMargin(0);
+                            $pdf->Cell(180,5,$contact->firstname.' '.$contact->lastname,'',0);
+                            $pdf->Ln();
+                        }
                         $pdf->Ln(5);
                         $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
                         // $this->new_page($pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
@@ -484,7 +479,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(5,7, $pdf->Circle_Activity($pdf->getX(), $pdf->getY()+3, 1, 1),'',0,'');
                                 $pdf->SetDrawColor(255,140,0);
                                 $pdf->SetFont('Arial','',11);
-                                $pdf->Cell(30,7, 'Stay the night at','',0,'C');
+                                $pdf->Cell(40,7, 'Stay the night at','',0,'C');
                                 $pdf->SetFont('Arial','B',11);
                                 $pdf->Cell(48,7,$hotel->hotel_name,'',0,'C');
                                 $pdf->Ln(10);
@@ -499,14 +494,11 @@ class TransactionController extends Controller
                                 $pdf->Cell(70,5,'Room Type: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(30,5, $hotel->number_of_rooms. ' room(s)','',0);
-                                $pdf->Cell(10,5, '|','',0, 'C');
-                                $pdf->Cell(120,5, $hotel->room_name,'',0);
+                                $pdf->Cell(30,5, $hotel->number_of_rooms. ' room(s)   |  ','',0);
+                                $pdf->Cell(1,5, $hotel->room_name,'',0);
                                 // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
                                 $pdf->Ln(10);
-
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-                                
                                 $pdf->SetCellMargin(15);
                                 $pdf->SetFont('Arial','B',10);
                                 $pdf->Cell(70,5,'Check-in \ Check-out Date: ','',0);
@@ -522,7 +514,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(120,5,'Location: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
+                                $pdf->Cell(120,5, $hotel->locations,'',0);
                                 $pdf->Ln(10);
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
 
@@ -531,7 +523,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(120,5,'Accomodation Contact Number: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
+                                $pdf->Cell(120,5, $hotel->hotel_contact_number,'',0);
                                 $pdf->Ln(10);
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
                                 
@@ -559,77 +551,80 @@ class TransactionController extends Controller
                     // for($day_at=1; $day_at<= $data->booking_hotels->max('day_at'); $day_at++){
                         foreach($data->booking_activities as $activities){
                             // if($day_at==$tour->day_at){
+                                
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
                                 $pdf->SetFont('Arial','',11);
                                 $pdf->Cell(5,7, $pdf->Circle_Activity($pdf->getX(), $pdf->getY()+3, 1, 1),'',0,'');
                                 $pdf->SetDrawColor(255,140,0);
-                                $pdf->SetFont('Arial','',11);
-                                $pdf->Cell(30,7, 'Stay the night at','',0,'C');
+                                $pdf->Cell(20,7, Carbon::parse($activities->schedule->destination_schedule_start_hours)->format('h:i'),'',0,'C');
+                                $start_time = Carbon::parse($activities->schedule->destination_schedule_start_hours);
+                                $end_time = Carbon::parse($activities->schedule->destination_schedule_end_hours);
+                                $pdf->Cell(5,7,'|','',0,'C');
+                                $pdf->Cell(20,7,$end_time->diffInHours($start_time). ' hours','',0,'C');
+                                $pdf->Cell(5,7,'|','',0,'C');
                                 $pdf->SetFont('Arial','B',11);
-                                $pdf->Cell(48,7,$hotel->hotel_name,'',0,'C');
+                                $pdf->Cell(48,7,$activities->tour_name,'',0,'C');
                                 $pdf->Ln(10);
+
+                                
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-                                $pdf->SetCellMargin(15);
+                                
                                 $this->top_left_x = $pdf->getX()+7.5;
                                 $this->top_left_y = $pdf->getY()-2.5;
                                 $this->top_right_x = 200;
                                 $this->top_right_y = $pdf->getY()-2.5;
                                 $pdf->Ln(3);
+                                $pdf->SetCellMargin(15);
                                 $pdf->SetFont('Arial','B',10);
-                                $pdf->Cell(70,5,'Room Type: ','',0);
+                                $pdf->Cell(70,5,'About this place: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(30,5, $hotel->number_of_rooms. ' room(s)','',0);
-                                $pdf->Cell(10,5, '|','',0, 'C');
-                                $pdf->Cell(120,5, $hotel->room_name,'',0);
+                                $pdf->Cell(180,5,  $pdf->drawTextBox($activities->activities->description, 180, 10,  'L', 'M', false),'',0);
                                 // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
-                                $pdf->Ln(10);
+                                $pdf->Ln(5);
 
-                                $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
+                                $pdf->SetFont('Arial','B',10);
+                                $pdf->Cell(70,5,'Location: ','',0);
+                                $pdf->Ln();
+                                $pdf->SetFont('Arial','',10);
+                                $pdf->Cell(180,5,  
+                                    $activities->activities->cities->name .','.
+                                    $activities->activities->provinces->name
+                                ,'',0);
+                                $pdf->Ln();
+                                if( $activities->activities->address != NULL || $activities->activities->address != "" ){
+                                    $pdf->Cell(180,5,  $pdf->drawTextBox($activities->activities->address, 180, 10,  'L', 'M', false),'',0);
+                                }
+                                // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
+                                $pdf->Ln(5);
+                                if( ($activities->activities->phone_number != NULL || $activities->activities->phone_number != "") && strlen($activities->activities->phone_number) >4){
+                                    $pdf->SetFont('Arial','B',10);
+                                    $pdf->Cell(70,5,'Phone Number: ','',0);
+                                    $pdf->Ln();
+                                    $pdf->SetFont('Arial','',10);
+                                    $pdf->Cell(180,5,  $pdf->drawTextBox($activities->activities->phone_number, 180, 10,  'L', 'M', false),'',0);
+                                    // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
+                                    $pdf->Ln(5);
+                                }
+
+                                // dd($activities->activities->destination_tips);
+                                foreach($activities->activities->destination_tips as $tips){
+                                    $pdf->SetFont('Arial','B',10);
+                                    $pdf->Cell(70,5,'[Tips] '.$tips->question,'',0);
+                                    $pdf->Ln();
+                                    $pdf->SetFont('Arial','',10);
+                                    $pdf->Cell(180,5,  $pdf->drawTextBox($tips->pivot->answer, 180, 10,  'L', 'M', false),'',0);
+                                    // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
+                                    $pdf->Ln(5);
+                                }
                                 
-                                $pdf->SetCellMargin(15);
-                                $pdf->SetFont('Arial','B',10);
-                                $pdf->Cell(70,5,'Check-in \ Check-out Date: ','',0);
-                                $pdf->Ln();
-                                $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, Carbon::parse($hotel->start_date)->format('d M y').' - '.Carbon::parse($hotel->end_date)->format('d F y'),'',0);
-                                $pdf->Ln(10);
-
-                                $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-
-                                $pdf->SetCellMargin(15);
-                                $pdf->SetFont('Arial','B',10);
-                                $pdf->Cell(120,5,'Location: ','',0);
-                                $pdf->Ln();
-                                $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
-                                $pdf->Ln(10);
-                                $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-
-                                $pdf->SetCellMargin(15);
-                                $pdf->SetFont('Arial','B',10);
-                                $pdf->Cell(120,5,'Accomodation Contact Number: ','',0);
-                                $pdf->Ln();
-                                $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
-                                $pdf->Ln(10);
-                                $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-                                
-                                $pdf->SetCellMargin(15);
-                                $pdf->SetFont('Arial','B',10);
-                                $pdf->Cell(120,5,'Booking Reference Number: ','',0);
-                                $pdf->Ln();
-                                $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, $data->transaction_number,'',0);
-                                $pdf->Ln(10);
-                                $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
-
                                 $this->bottom_left_x = $pdf->getX()+7.5;
                                 $this->bottom_left_y = $pdf->getY()+5;
                                 $this->bottom_right_x = 200;
                                 $this->bottom_right_y = $pdf->getY()+5;
 
                                 $this->set_border($pdf);
+
                                 $pdf->Ln(100);
                             // }
                         }
@@ -716,18 +711,13 @@ class TransactionController extends Controller
                         $pdf->Cell(180,5,'Activity Participant:','',0);
                         $pdf->SetFont('Arial','',10);
                         $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->SetTopMargin(0);
-                        $pdf->Cell(180,5,'Nama Participant','',0);
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0); 
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0); 
-                        $pdf->Ln();
-                        $pdf->Cell(10, 5, '','',0,'');
-                        $pdf->Cell(180,5,'Nama Participant','',0);
+                        // dd($tour->transactions->contact_list);
+                        foreach($tour->transactions->contact_list as $contact){
+                            $pdf->Cell(10, 5, '','',0,'');
+                            $pdf->SetTopMargin(0);
+                            $pdf->Cell(180,5,$contact->firstname.' '.$contact->lastname,'',0);
+                            $pdf->Ln();
+                        }
                         $pdf->Ln(5);
                         $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
                         // $this->new_page($pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
@@ -759,7 +749,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(5,7, $pdf->Circle_Activity($pdf->getX(), $pdf->getY()+3, 1, 1),'',0,'');
                                 $pdf->SetDrawColor(255,140,0);
                                 $pdf->SetFont('Arial','',11);
-                                $pdf->Cell(30,7, 'Stay the night at','',0,'C');
+                                $pdf->Cell(40,7, 'Stay the night at','',0,'C');
                                 $pdf->SetFont('Arial','B',11);
                                 $pdf->Cell(48,7,$hotel->hotel_name,'',0,'C');
                                 $pdf->Ln(10);
@@ -774,9 +764,8 @@ class TransactionController extends Controller
                                 $pdf->Cell(70,5,'Room Type: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(30,5, $hotel->number_of_rooms. ' room(s)','',0);
-                                $pdf->Cell(10,5, '|','',0, 'C');
-                                $pdf->Cell(120,5, $hotel->room_name,'',0);
+                                $pdf->Cell(30,5, $hotel->number_of_rooms. ' room(s)   |  ','',0);
+                                $pdf->Cell(1,5, $hotel->room_name,'',0);
                                 // $pdf->Cell(180,100,$pdf->writeHtml('<div>This is my disclaimer</div>.<br><div>'.$lorem.'</div>'),'',0);
                                 $pdf->Ln(10);
 
@@ -797,7 +786,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(120,5,'Location: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
+                                $pdf->Cell(120,5, $hotel->locations,'',0);
                                 $pdf->Ln(10);
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
 
@@ -806,7 +795,7 @@ class TransactionController extends Controller
                                 $pdf->Cell(120,5,'Accomodation Contact Number: ','',0);
                                 $pdf->Ln();
                                 $pdf->SetFont('Arial','',10);
-                                $pdf->Cell(120,5, 'Hotel Location','',0);
+                                $pdf->Cell(120,5, $hotel->hotel_contact_number,'',0);
                                 $pdf->Ln(10);
                                 $this->new_page($pdf, $pdf->getY(), $data->transaction_number, $data->paid_at,$data->customer);
                                 
