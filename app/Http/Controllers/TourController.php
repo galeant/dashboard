@@ -1065,7 +1065,6 @@ class TourController extends Controller
         return redirect()->back();
     }
     public function priceUpdate(Request $request){
-        
         if($request->price_usd == null  || $request->price_usd == 0){
             $request->price_usd = null;
         }else{

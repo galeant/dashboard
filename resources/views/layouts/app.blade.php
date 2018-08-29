@@ -187,17 +187,28 @@
 							</li>
 		                </ul>
 		            </li>
-
+					<li {{{ (Request::is('settlement*') ? 'class=active' : '') }}}>
+						<a  class="menu-toggle waves-effect waves-block toggled">
+							<i class="material-icons">account_balance</i>
+		                    <span>Partner Settlement</span>
+		                </a>
+						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('settlement/all') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/all') }}" class=" waves-effect waves-block">
+		                            <span>Settlement List</span>
+		                        </a>
+							</li>
+							<li {{{ (Request::is('settlement/generate') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/generate') }}" class=" waves-effect waves-block">
+		                            <span>Settlement Generate</span>
+		                        </a>
+		                    </li>
+		                </ul>
+		            </li>
 		            {{-- <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">money</i>
 		                    <span>Refunds</span>
-		                </a>
-		            </li>
-		            <li>
-		                <a href="{{ URL('/admin/members') }}">
-		                    <i class="material-icons">person</i>
-		                    <span>Partner Settlement</span>
 		                </a>
 		            </li>
 		            <li>
