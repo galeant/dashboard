@@ -111,6 +111,13 @@ class TourController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->company_id);
+        if(Tour::where('company_id', $request->company_id)->count() == 1){
+            if(Tour::where('company_id', $request->company_id)->where('status', [0, 1])->count() == 1){
+                $tour = Tour::where('company_id', $request->company_id)->first();
+                return redirect('product/tour-activity/'.$tour->id.'/edit')->with('error', 'This company has sample product, complete it!!');
+            }
+        }
         $messages = [
                 'company_id' => 'Company filed is required.',
                 'image_resize.required' => 'Cover Image is required.'

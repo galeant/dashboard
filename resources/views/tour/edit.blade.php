@@ -1390,10 +1390,12 @@
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
-                }else if($(this).val() > {{$data->max_person}}){
-                    $(this).closest("td#numberOfPerson").find("small").remove();
-                    $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
-                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else if("{{$data->max_person}}" != ""){
+                    if($(this).val() > "{{$data->max_person}}"){
+                        $(this).closest("td#numberOfPerson").find("small").remove();
+                        $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
+                        $(this).closest("tr#price_value").find("a#price_update").hide();
+                    }
                 // }else if($(this).val() <= Math.max.apply(Math,priceL)){
                 //     $(this).closest("td#numberOfPerson").find("small").remove();
                 //     $(this).closest("td#numberOfPerson").append("<small>Please insert higher number</small>");
@@ -1461,7 +1463,7 @@
                     }else{
                         me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
                     }
-                    var max_pep = {{$data->max_person}};
+                    var max_pep = "{{$data->max_person}}";
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{

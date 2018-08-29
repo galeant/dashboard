@@ -6,6 +6,7 @@ use App\Models\BookingTour;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
+use Helpers;
 
 class BookingTourController extends Controller
 {
@@ -33,7 +34,17 @@ class BookingTourController extends Controller
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
             })
-            ->rawColumns(['status', 'booking_number'])
+            ->addColumn('company_name', function(BookingTour $booking_tour){
+                return $booking_tour->tours->company->company_name;
+            })
+            ->editColumn('net_price', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->net_price);
+            })
+            ->editColumn('commission', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->commission);
+            })
+
+            ->rawColumns(['status', 'booking_number', 'company_name'])
             ->make(true);        
         }
         return view('bookings.tour.index');
@@ -68,6 +79,7 @@ class BookingTourController extends Controller
     public function show($id)
     {
         $data = BookingTour::where('booking_number', $id)->first();
+        // dd($data->transactions->customer);
         return view('bookings.tour.detail',[
             'data' => $data
         ]);
