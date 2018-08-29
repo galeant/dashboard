@@ -8054,3 +8054,58 @@ html.ie11 .bs-searchbox .form-control {
   /*top:5px;*/
   right: 30px;
 }
+div.btn-inv-right { 
+  float:right; 
+  margin-right: 20px;
+}
+.clearBoth { clear:both; }
+div.btn-inv-right a { 
+  text-decoration: underline;
+  color:#000;
+  font-weight: bold;
+}
+div.btn-inv-right a:hover { 
+  color:#747474;}
+.font-thin{
+  font-weight: 300;
+  color:#949494;
+}
+.font-fat{
+  font-weight: 700;
+  color:#949494;
+}
+.tr-dt-footer{
+  display: inline;
+  background-color: #ddd;
+}
+.tr-dt-footer h5{
+  float:left;
+}
+.tr-dt-footer span{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  float:right;
+}
+.tr-dt-footer p{
+  float:right;
+}
+.bread-cumb{
+  display: inline;
+}
+.bread-cumb h2{
+  float:left;
+}
+.bread-cumb div{
+  float:right;
+  margin-right: 15px;
+}
+.tr-st-hd{
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  width: 300px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.list-btn{
+  display: inline-table;
+}

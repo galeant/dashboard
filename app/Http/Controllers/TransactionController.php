@@ -42,33 +42,43 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-        //
-        $data = Transaction::whereIn('status_id',[2,3,4,5,6]);
-        if($request->ajax())
-        {
-            $transaction = Transaction::with(
-                'transaction_status')
-            ->whereNotNull('transaction_number')
-            ->orderBy('paid_at','DESC');
-            return Datatables::of($transaction)
-            ->addColumn('status',function(Transaction $transaction){
-                return '<span class="badge" style="background-color:'.$transaction->transaction_status->color.'">'.$transaction->transaction_status->name.'</span>';
-            })
-            ->addColumn('user',function(Transaction $transaction){
-                if(!empty($transaction->customer)){
-                    return $transaction->customer->firstname.' '.$transaction->customer->lastname;
-                }
-            })
-            ->editColumn('transaction_number', function(Transaction $transaction) {
-                    return '<a href="/transaction/'.$transaction->transaction_number.'" class="btn btn-primary">'.$transaction->transaction_number.'</a>';
-                })
-            ->editColumn('total_price', function(Transaction $transaction) {
-                    return number_format($transaction->total_price);
-                })
-            ->rawColumns(['status','user','total_price','transaction_number'])
-            ->make(true);        
+
+        $data = Transaction::list();
+        $sort = $request->input('sort','paid_at');
+        $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
+        if($request->input('start_date')){
+            $start = $request->input('start_date').' 00:00:01';
+            $end = $request->input('start_date').' 23:59:59';
+            if($request->input('end_date')){
+                $end = $request->input('end_date').' 23:59:59';
+            }
+            $data = $data->whereRaw(DB::raw("(a.paid_at >= '".$start."' && a.paid_at <= '".$end."')"));
         }
-        return view('transaction.index');
+
+        $request->request->add([
+                'sort_tr_number' => request()->fullUrlWithQuery(["sort"=>"transaction_number","order"=>$orderby]),
+                'sort_tr_date' => request()->fullUrlWithQuery(["sort"=>"paid_at","order"=>$orderby]),
+                'sort_ct_name' => request()->fullUrlWithQuery(["sort"=>"contact_name","order"=>$orderby]),
+                'sort_ct_email' => request()->fullUrlWithQuery(["sort"=>"contact_email","order"=>$orderby]),
+                'sort_total_discount' => request()->fullUrlWithQuery(["sort"=>"total_discount","order"=>$orderby]),
+                'sort_total_payment' => request()->fullUrlWithQuery(["sort"=>"total_paid","order"=>$orderby]),
+                'sort_created_at' => request()->fullUrlWithQuery(["sort"=>"created_at","order"=>$orderby])
+                ]);
+        if($sort != 'contact_name' && $sort != 'contact_email'){
+            $data = $data->orderBy($sort,$orderby);
+        }else{
+            if($sort == 'contact_name'){
+                $data->orderBy('b.firstname',$orderby);
+            }else{
+                $data->orderBy('b.email',$orderby);
+            }
+        }
+        if($request->input('q')){
+            $data->whereRaw(DB::raw("(a.transaction_number LIKE '%".$request->input('q')."%' OR a.paid_at LIKE '%".$request->input('q')."%' OR CONCAT(`b`.`firstname`,' ',`b`.`lastname`) LIKE '%".$request->input('q')."%') OR c.name LIKE '%".$request->input('q')."%' OR b.email LIKE '%".$request->input('q')."%'"));
+        }
+        $data = $data->paginate($request->input('per_page',10));
+        // dd($data);
+        return view('transaction.index',['data' => $data]);
 
     }
 
@@ -103,7 +113,7 @@ class TransactionController extends Controller
     {
         //
         $data = Transaction::where('transaction_number', $code)->first();
-        return view('transaction.detail',['data' => $data]);
+        return view('transaction.detail1',['data' => $data]);
     }
 
     /**
@@ -127,7 +137,6 @@ class TransactionController extends Controller
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
-        // dd();
         $listStat = array_pluck($data->transaction_log_status, 'transaction_status_id');
         if(!in_array($request->status, $listStat)){
             if($request->status == 2){
