@@ -19,24 +19,24 @@
         </div>
         <div class="body">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-6">Booking Number</div>
-                    <div class="col-md-6">: {{$data->booking_number}}</div>
+                <div class="col-md-6">
+                    <div class="col-md-4">Booking Number</div>
+                    <div class="col-md-8">: {{$data->booking_number}}</div>
                 </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="col-md-6">Booked By</div>
-                    <div class="col-md-6">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
+                <div class="col-md-6">
+                    <div class="col-md-4">Booked By</div>
+                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}} ({{$data->transactions->customer->email}})</div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-4">
-                    <div class="col-md-6">Transaction Date</div>
-                    <div class="col-md-6">: {{date('d-F-Y', strtotime($data->created_at))}}</div>
+                <div class="col-md-6">
+                    <div class="col-md-4">Transaction Date</div>
+                    <div class="col-md-8">: {{date('d-F-Y', strtotime($data->created_at))}}</div>
                 </div>
-                <div class="col-md-4 col-md-offset-2">
-                    <div class="col-md-6">Booking Status</div>
-                    <div class="col-md-6">: 
-                            <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
+                <div class="col-md-6">
+                    <div class="col-md-4">Booking Status</div>
+                    <div class="col-md-8">: 
+                        <span class="badge" style="background-color:{{$data->booking_status->color}}">{{$data->booking_status->name}}</span>    
                     </div>
                 </div>
             </div>
@@ -138,7 +138,14 @@
                     Full Name
                 </div>
                 <div class="col-md-6">
-                    : <span>{{$data->transactions->customer->salutation}}. {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</span>
+                    : 
+                    <span>{{$data->transactions->contact->salutation}}. {{$data->transactions->contact->firstname}} {{$data->transactions->contact->lastname}}
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->salutation}}. {{$data->customer->firstname}} {{$data->customer->lastname}}
+                    @else
+                        {{$data->contact->salutation}}. {{$data->contact->firstname}} {{$data->contact->lastname}}
+                    @endif
+                    </span>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px">
@@ -146,7 +153,14 @@
                     Phone Number
                 </div>
                 <div class="col-md-6">
-                        : <span>{{$data->transactions->customer->phone}}</span>
+                    : 
+                    <span>
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->phone}}
+                    @else
+                        {{$data->contact->phone}}
+                    @endif
+                    </span>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px; margin-bottom: 20px">
@@ -154,7 +168,14 @@
                     Email Address
                 </div>
                 <div class="col-md-6">
-                        : <span>{{$data->transactions->customer->email}}</span>
+                    : 
+                    <span>
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->email}}
+                    @else
+                        {{$data->contact->email}}
+                    @endif
+                    </span>
                 </div>
             </div>
         </div>

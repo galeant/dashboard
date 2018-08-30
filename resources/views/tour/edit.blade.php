@@ -307,7 +307,13 @@
                                                {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','min'=> 0,'max'=>30]) }}
                                             </div>
                                             <div class="col-md-6">
-                                            <p class="form-note">Your activity is available for booking until D-<b>0</b> from activity schedule.</p>
+                                            <p class="form-note">Your activity is available for booking until D-<b>
+                                            @if($data->max_booking_day != null)
+                                                {{$data->max_booking_day}}
+                                            @else
+                                                0
+                                            @endif
+                                            </b> from activity schedule.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1463,7 +1469,7 @@
                     }else{
                         me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
                     }
-                    var max_pep = "{{$data->max_person}}";
+                    var max_pep = {{$data->max_person}};
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{

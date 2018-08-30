@@ -200,9 +200,8 @@ class helpers{
 
 	public static function idr($number)
     {
-        return 'Rp. '.number_format($number, 2, ",", ".");
+        return 'Rp. '.number_format($number, 0, ",", ".");
 	}
-	
 
 	public static function breakdown_date($start,$end)
 		{

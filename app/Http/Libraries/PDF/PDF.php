@@ -207,7 +207,7 @@ class PDF extends Fpdf
 	    	$this->Code128($this->GetPageWidth()-60,55,$transactionNumber,50,15);
 	    }
 	    $this->SetFont('Arial','B',15);
-	    $this->Cell(50,10,'Booking Sumary');
+	    $this->Cell(50,10,'Booking Summary');
 	    $this->Ln();
 	    $header=['Item','Item Description','Qty','Unit Price(Rp)','Total Price(Rp)'];
 	    $this->SetFillColor(200,200,200);

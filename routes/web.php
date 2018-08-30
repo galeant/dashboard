@@ -112,7 +112,18 @@ Route::group(['middleware' => ['auth:web']], function () {
 		//planning
 		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
 	});
-
+	Route::group(['prefix' => 'settlement'],function(){
+		Route::get('/all', 'SettlementController@index');
+		Route::get('/detail/{id}', 'SettlementController@detail');
+		Route::get('/generate', 'SettlementController@generate');
+		Route::get('/procced', 'SettlementController@poccedList');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
+		Route::post('/filter', 'SettlementController@filter');
+		Route::post('/paid', 'SettlementController@paid');
+		Route::post('/update-notes', 'SettlementController@notes');
+		Route::post('/update-bank', 'SettlementController@bank');
+	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
@@ -126,7 +137,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
 	
-	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
+	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
+	
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 	// Route::get('/emailTest', function(){
