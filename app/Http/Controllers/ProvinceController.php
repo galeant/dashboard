@@ -78,7 +78,7 @@ class ProvinceController extends Controller
                 $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
                 $img = str_replace(' ', '+', $file);
                 $data_img = base64_decode($img);
-                $filename = md5($request->product_code).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
+                $filename = time().Helpers::encodeSpecialChar($data->name).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
                 $file = $destinationPath . $filename;
                 $success = file_put_contents($file, $data_img);
                 $bankPic = Helpers::saveImage($file,'province',true,[1,1]);
@@ -161,7 +161,7 @@ class ProvinceController extends Controller
                 $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
                 $img = str_replace(' ', '+', $file);
                 $data_img = base64_decode($img);
-                $filename = md5($request->product_code).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
+                $filename = time().Helpers::encodeSpecialChar($data->name).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
                 $file = $destinationPath . $filename;
                 $success = file_put_contents($file, $data_img);
                 $bankPic = Helpers::saveImage($file,'province',true,[1,1]);

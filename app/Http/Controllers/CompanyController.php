@@ -432,7 +432,7 @@ class CompanyController extends Controller
                     CompanyStatusLog::create(['company_id' => $id,'status' => $status,'note' => $note]);
 
                     if($status == 3 || $status == 4||  $status == 5){
-                       Mail::to($data->pic->email)->send(new StatusCompany($data));    
+                       // Mail::to($data->pic->email)->send(new StatusCompany($data));    
                         // SendEmail::dispatch($data)
                                 // ->delay(now()->addSeconds(15));     
                     }

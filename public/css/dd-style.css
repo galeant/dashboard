@@ -202,3 +202,8 @@ ul.p-info li {
 .tooltiptext{
     display: none;
 }
+.dd-till{
+    position: absolute;
+    top: 30px;
+    left: -4px;
+}

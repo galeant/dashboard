@@ -108,14 +108,30 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax');
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
-	});
 
+		//planning
+		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print');
+	});
+	Route::group(['prefix' => 'settlement'],function(){
+		Route::get('/all', 'SettlementController@index');
+		Route::get('/detail/{id}', 'SettlementController@detail');
+		Route::get('/generate', 'SettlementController@generate');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
+		Route::post('/filter', 'SettlementController@filter');
+		Route::post('/paid', 'SettlementController@paid');
+		Route::post('/update-notes', 'SettlementController@notes');
+		Route::post('/update-bank', 'SettlementController@bank');
+	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
+		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
+		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
+		Route::resource('rent-car', 'BookingRentCarController');
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');

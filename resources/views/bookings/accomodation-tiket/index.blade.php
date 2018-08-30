@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        All Bookings
+                        All Bookings Accomodation Tiket
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         {{-- <li >
@@ -32,10 +32,9 @@
                                 <tr>
                                     <th>Transaction ID</th>
                                     <th>Booking Number</th>
-                                    <th>Company</th>
-                                    <th>Tour Name</th>
-                                    <th>Product Code</th>
-                                    <th>Total Booking</th>
+                                    <th>Hotel Name</th>
+                                    <th>Room Name</th>
+                                    <th>Number of Room</th>
                                     <th>Total Price</th>
                                     <th>Total Commission</th>
                                     <th>Status</th>
@@ -64,16 +63,15 @@
             $('#data-tables').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/bookings/tour',
+                ajax: '/bookings/accomodation-tiket',
                 columns: [
                     {data: 'transaction_id'},
                     {data: 'booking_number'},
-                    {data: 'company_name'},
-                    {data: 'tour_name'},
-                    {data: 'product_code'},
-                    {data: 'number_of_person'},
-                    {data: 'net_price'},
-                    {data: 'commission'},
+                    {data: 'hotel_name'},
+                    {data: 'room_name'},
+                    {data: 'number_of_rooms'},
+                    {data: 'total_price'},
+                    {data: 'total_commission'},
                     {data: 'status'}
                 ]
             });

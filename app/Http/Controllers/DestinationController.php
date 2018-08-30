@@ -28,9 +28,10 @@ class DestinationController extends Controller
     {
         $destination_type = DestinationType::all();
         $province = Province::all();
+        
+        $data = Destination::with('provinces', 'cities','destination_types')->get();
         if($request->ajax())
         {
-            $data = Destination::with('provinces', 'cities','destination_types')->get();
             return Datatables::of($data)
                 // ->addColumn('status', function(Destination $data) {
                 //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
