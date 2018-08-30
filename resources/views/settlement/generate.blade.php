@@ -68,7 +68,100 @@
                     </div>
                 </div>
             </div>
+            @if($data != null)
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <a href="{{ url('settlement/procced') }}" class="btn bg-deep-orange waves-effect">Process</a>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table class="table table-modif table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                    <thead>
+                                        <tr>
+                                            <th>Booking Number</th>
+                                            <th>Product Type</th>
+                                            <th>Product Name</th>
+                                            <th>Qty</th>
+                                            <th>Unit Price</th>
+                                            <th>Total Paid</th>
+                                            <th>Total Commssion</th>
+                                            <th>Account Bank</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(count($data) > 0)
+                                            @foreach(array_collapse($data) as $set)
+                                            <tr>
+                                                <td>{{$set['booking_number']}}</td>
+                                                <td>
+                                                    @if(array_key_exists('hotel_name',$set))
+                                                        Hotel
+                                                    @elseif(array_key_exists('tour_name',$set))
+                                                        Tour
+                                                    @else
+                                                        Car Rental
+                                                    @endif
 
+                                                </td>
+                                                <td>
+                                                    @if(array_key_exists('hotel_name',$set))
+                                                        {{$set['hotel_name']}} - {{$set['room_name']}}
+                                                    @elseif(array_key_exists('tour_name',$set))
+                                                        {{$set['tour_name']}}
+                                                    @else
+                                                        {{$set['vehicle_name']}} - {{$set['vehicle_type']}} - {{$set['vehicle_brand']}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(array_key_exists('hotel_name',$set))
+                                                        {{$set['number_of_rooms']}}
+                                                    @elseif(array_key_exists('tour_name',$set))
+                                                        {{$set['number_of_person']}}
+                                                    @else
+                                                        {{$set['number_of_day']}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(array_key_exists('hotel_name',$set))
+                                                        {{Helpers::idr($set['price_per_night'])}}
+                                                    @elseif(array_key_exists('tour_name',$set))
+                                                        {{Helpers::idr($set['price_per_person'])}}
+                                                    @else
+                                                        {{Helpers::idr($set['price_per_day'])}}
+                                                    @endif
+                                                <td>
+                                                    @if(array_key_exists('total_price',$set) && array_key_exists('commission',$set))
+                                                        {{Helpers::idr($set['total_price'] - $set['commission'])}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(array_key_exists('commission',$set))
+                                                        {{Helpers::idr($set['commission'])}}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(array_key_exists('tours',$set))
+                                                        @if($set['tours']['company']['bank_account_number'] != null)
+                                                        <button type="button" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set['tours']['company']['bank_name']}} : {{$set['tours']['company']['bank_account_number']}}" data-original-title="{{$set['tours']['company']['bank_account_name']}}">
+                                                            {{$set['tours']['company']['bank_account_number']}}
+                                                        </button>
+                                                        @endif
+                                                    @endif 
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endif
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
 @stop
 @section('head-js')
 @parent
@@ -78,6 +171,7 @@
 <script src="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.js') }}"></script>
 <script>
     $(document).ready(function(){
+        $('[data-toggle="popover"]').popover();
         var dateFormat = 'DD-MM-YYYY';
         var options = {
             autoUpdateInput: false,

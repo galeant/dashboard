@@ -106,6 +106,7 @@
                                     @endif
                                     </tbody>
                                 </table>
+                                @if($data['complete'] != 1)
                                  <!-- Modal -->
                                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
                                     <div class="modal-dialog" role="document">
@@ -132,6 +133,7 @@
                                         </form>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </div>

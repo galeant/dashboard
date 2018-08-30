@@ -957,7 +957,7 @@ class TourController extends Controller
 
         // dd($request->all());
         $id = $request->id;
-        $schedule = Schedule::find($id);
+        dd($schedule = Schedule::where('id',$id)->with()->get());
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){
