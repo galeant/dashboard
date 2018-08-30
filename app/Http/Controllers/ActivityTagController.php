@@ -17,11 +17,12 @@ class ActivityTagController extends Controller
      */
     public function index(Request $request)
     {
+        // dd($model = ActivityTag::with('products')->get());
         //
         if($request->ajax())
         {
-            $model = ActivityTag::query();
-            return Datatables::eloquent($model)
+            $model = ActivityTag::with('products')->get();
+            return Datatables::of($model)
             ->addColumn('action', function(ActivityTag $data) {
                 return '<a href="/master/activity-tag/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
                         <i class="glyphicon glyphicon-edit"></i>
@@ -29,6 +30,9 @@ class ActivityTagController extends Controller
                     <a href="/master/activity-tag/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/activity-tag/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
+            })
+            ->addColumn('used', function(ActivityTag $data) {
+                return count($data->products);
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);        

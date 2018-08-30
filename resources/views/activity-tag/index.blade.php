@@ -32,6 +32,7 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Name</th>
+                                            <th>Used</th>
                                             <th>Description</th>
                                             <th>Created At</th>
                                             <th>Updated At</th>
@@ -66,6 +67,7 @@
 	        columns: [
 	            {data: 'id'},
 	            {data: 'name'},
+                {data: 'used'},
 	            {data: 'description'},
 	            {data: 'created_at'},
 	            {data: 'updated_at'},

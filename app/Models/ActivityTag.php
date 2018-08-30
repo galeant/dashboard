@@ -16,4 +16,5 @@ class ActivityTag extends Model
     {
         return $this->belongsToMany('App\Models\Tour', 'product_activities','activity_id', 'product_id');
     }
+    
 }
