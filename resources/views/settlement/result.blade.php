@@ -67,8 +67,8 @@
                                             <th>Product Name</th>
                                             <th>Qty</th>
                                             <th>Unit Price</th>
-                                            <th>Total Paid</th>
                                             <th>Total Commssion</th>
+                                            <th>Total Payment</th>
                                             <th>Account Bank</th>
                                         </tr>
                                     </thead>
@@ -81,8 +81,8 @@
                                             <td>{{$set->product_name}}</td>
                                             <td>{{$set->qty}}</td>
                                             <td>{{Helpers::idr($set->unit_price)}}</td>
-                                            <td>{{Helpers::idr($set->total_price - $set->commission)}}</td>
                                             <td>{{Helpers::idr($set->total_commission)}}</td>
+                                            <td>{{Helpers::idr($set->total_paid)}}</td>
                                             
                                             <td>
                                             @if($data->status != 1)

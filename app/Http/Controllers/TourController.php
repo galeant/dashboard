@@ -754,7 +754,7 @@ class TourController extends Controller
                 $event[$i]['end_date'] = $value->end_date;
                 $event[$i]['backgroundColor'] = '#e5730d';
                 $event[$i]['id'] = $value->id;
-                $event[$i]['booked'] = 0;
+                $event[$i]['booked'] = count($value->bookings);
                 $event[$i]['max_booking'] = $value->maximum_booking;
 
                 if($data->schedule_type == 1 || $data->schedule_type == 3){
@@ -924,7 +924,7 @@ class TourController extends Controller
                 $event['end_date'] = $request->end_date;
                 $event['backgroundColor'] = '#e5730d';
                 $event['id'] = $schedule->id;
-                $event['booked'] = 0;
+                $event['booked'] = count($schedule->bookings);
                 $event['max_booking'] = $request->maximum_booking;
                 if($type == 1 || $type == 3){
                 $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($request->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($request->end_date))."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($request->start_date))).' 23:59:59';
@@ -957,7 +957,8 @@ class TourController extends Controller
 
         // dd($request->all());
         $id = $request->id;
-        dd($schedule = Schedule::where('id',$id)->with()->get());
+        $schedule = Schedule::find($id);
+        // dd($schedule = Schedule::where('id',$id)->with('bookings')->get());
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){
@@ -973,6 +974,13 @@ class TourController extends Controller
             if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
                 $response = [
                     'message' => 'Can\'t change the schedule past the current date !',
+                    'data' => $schedule
+                ];
+                return response()->json($response,400);
+            }
+            if(count($schedule->bookings) != 0){
+                $response = [
+                    'message' => 'Schedule has booking !',
                     'data' => $schedule
                 ];
                 return response()->json($response,400);
@@ -1031,7 +1039,7 @@ class TourController extends Controller
         $event['end_date'] = $schedule->end_date;
         $event['backgroundColor'] = '#e5730d';
         $event['id'] = $schedule->id;
-        $event['booked'] = 0;
+        $event['booked'] = count($schedule->bookings);
         $event['max_booking'] = $schedule->maximum_booking;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($schedule->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($schedule->end_date))."<br>".'Max Booking Person: '.$schedule->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($schedule->start_date))).' 23:59:59';
