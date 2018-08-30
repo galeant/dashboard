@@ -110,7 +110,7 @@
                                         @endif
                                     </th>
                                     <th>Voucher</th>
-                                    <th>
+                                    {{-- <th>
                                         @if (Request::input('sort') == 'total_discount')
                                             <a href="{!! Request::input('sort_total_discount') !!}" >
                                                 Total Discount @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
@@ -120,7 +120,7 @@
                                                 Total Discount <i class="fa fa-fw fa-sort"></i>
                                             </a>
                                         @endif
-                                    </th>
+                                    </th> --}}
                                     <th>
                                         @if (Request::input('sort') == 'total_payment')
                                             <a href="{!! Request::input('sort_total_payment') !!}" >
@@ -157,13 +157,13 @@
                                     <td>{{$dt->email}}</td>
                                     <td>
                                         @if(!empty($dt->coupon_id))
-                                        <span class="bg-green">{{$data->coupon_code}}</span>
+                                        <span class="bg-green">{{$dt->coupon_code}}</span>
                                         @else
                                         <i class="material-icons font-16 bg-red">clear</i>
                                         @endif
                                     </td>
-                                    <td>{{number_format($dt->total_discount)}}</td>
-                                    <td>{{number_format($dt->total_paid)}}</td>
+                                    {{-- <td>{{number_format($dt->total_discount)}}</td> --}}
+                                    <td>{{Helpers::idr($dt->total_paid)}}</td>
                                     <td><span class="badge" style="background-color:{{$dt->status_color}}">{{$dt->status}}</span></td>
                                     <td>
                                         {{$dt->payment_method}}

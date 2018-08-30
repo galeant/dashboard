@@ -43,6 +43,11 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BookingActivity', 'transaction_id','id');
     }
+    
+    public function booking_rent_cars()
+    {
+        return $this->hasMany('App\Models\BookingRentCar', 'transaction_id','id');
+    }
     // TRAVELLER
     public function contact_list()
     {
@@ -57,5 +62,9 @@ class Transaction extends Model
     public function contact()
     {
         return $this->belongsTo('App\Models\Members','user_contact_id','id');
+    }
+    public function planning()
+    {
+        return $this->hasOne('App\Models\Planning','transaction_id','id');
     }
 }

@@ -20,9 +20,9 @@
     	<div class="col-md-12 m-t-20">
     		<div class="row">
                 <div class="col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2 list-btn">
-                    <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF">View Invoice</a></div>
+                    <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF" target="_blank" >View Invoice</a></div>
                     <div class="btn-inv-right"><a href="">Send Invoice to Email</a></div>
-                    <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/itinerary/PDF">View Receipt</a></div>
+                    <div class="btn-inv-right"><a href="/transaction/1/print/{{$data->planning->id}}/itinerary/PDF" target="_blank" >View Receipt</a></div>
                     <div class="btn-inv-right"><a href="">Send Receipt to Email</a></div>
                 </div>
             </div>
@@ -72,7 +72,13 @@
                             </div>
                             <div class="col-md-4">
                                 <h5 class="font-thin">Transaction Date</h5>
-                                <p>{{date('d M Y H:i:s',strtotime($data->paid_at))}}</p>
+                                <p>
+                                @if(count($data->paid_at))
+                                    {{date('d M Y H:i',strtotime($data->paid_at))}}
+                                @else
+                                    -
+                                @endif
+                                </p>
                             </div>
                             <div class="col-md-4">
                                 <h5 class="font-thin">Last Updated</h5>
@@ -141,42 +147,40 @@
                     <table class="table table-hover">
                         <tbody>
                             <tr>
-                                <th>Day</th>
                                 <th>Booking Number</th>
-                                <th>Tour Name</th>
                                 <th>Company</th>
-                                <th>Duration Schedule</th>
-                                <th>Numb. Of Person</th>
+                                <th>Product Name</th>
+                                <th>Schedule</th>
+                                <th>Number Of Person</th>
                                 <th>Price Per Person</th>
-                                <th>Total Discount</th>
-                                <th>Total Commission</th>
                                 <th>Total Price</th>
-                                <th>Net Price</th>
+                                <th>Booking Status</th>
                             </tr>
                             @foreach($data->booking_tours as $tour)
                                 <tr>
-                                    <td>{{$tour->day_at}}</td>
                                     <td><a href="{{url('/booking/tour/'.$tour->booking_number)}}"><span class="badge">{{$tour->booking_number}}</span></a></td>
-                                    <td>{{$tour->tour_name}}</td>
                                     <td><a href="/partner/{{$tour->tours->company->id}}/edit">{{$tour->tours->company->company_name}}</a></td>
+                                    <td>{{$tour->tour_name}}</td>
                                     <td>
-                                        {{date('d M Y',strtotime($tour->start_date))}} {{$tour->start_hours}} - {{date('d M Y',strtotime($tour->end_date))}} {{$tour->end_hours}}
+                                        @if($tour->start_date == $tour->end_date)
+											@if($tour->end_hours == "23:59:00")
+												{{date('d M Y', strtotime($tour->start_date))}}
+											@else
+												{{date('d M Y', strtotime($tour->start_date))}}, {{date('h:i', strtotime($tour->start_hours))}} - {{date('h:i', strtotime($tour->end_hours))}}
+											@endif
+										@else
+										{{date('d M Y', strtotime($tour->start_date))}} - {{date('d M Y', strtotime($tour->end_date))}}
+										@endif
                                     </td>
                                     <td>{{$tour->number_of_person}} person(s)</td>
                                     <td>
-                                        {{number_format($tour->price_per_person)}}
+                                        {{Helpers::idr($tour->price_per_person)}}
                                     </td>
                                     <td>
-                                        {{number_format($tour->total_discount)}}
+                                        {{Helpers::idr($tour->total_price)}}
                                     </td>
                                     <td>
-                                        {{number_format($tour->commission)}}
-                                    </td>
-                                    <td>
-                                        {{number_format($tour->total_price)}}
-                                    </td>
-                                    <td>
-                                        {{number_format($tour->net_price)}}
+                                        <span class="badge" style="background-color:{{$tour->booking_status->color}}">{{$tour->booking_status->name}}</span>
                                     </td>
                                 </tr>
                             @endforeach
@@ -269,12 +273,14 @@
                                 <th>Booking Number</th>
                                 <th>Booking From</th>
                                 <th>Hotel Name</th>
+                                <th>Room Name</th>
                                 <th>Start Date</th>
                                 <th>End Date</th>
-                                <th>Room Name</th>
+                                <th>Number of Room</th>
+                                <th>Number of Night</th>
                                 <th>Price/Night</th>
-                                <th>Discount</th>
                                 <th>Total Price</th>
+                                <th>Booking Status</th>
                             </tr>
                             @foreach($data->booking_hotels as $hotel)
                                 <tr>
@@ -291,17 +297,25 @@
                                         {{$hotel->hotel_name}}
                                     </td>
                                     <td>
-                                        {{$hotel->start_date}} {{$hotel->check_in}}
-                                    </td>
-                                    <td>
-                                        {{$hotel->end_date}} {{$hotel->check_out}}
-                                    </td>
-                                    <td>
                                         {{$hotel->number_of_rooms}}x {{$hotel->room_name}} ({{$hotel->adult+$hotel->child}})
                                     </td>
-                                    <td>{{number_format($hotel->price_per_night)}}</td>
-                                    <td>{{number_format($hotel->total_discount)}}</td>
-                                    <td>{{number_format($hotel->total_price)}}</td>
+                                    <td>
+                                        {{date('d M Y', strtotime($hotel->start_date))}}, {{date('h:i', strtotime($hotel->check_in))}}
+                                    </td>
+                                    <td>
+                                        {{date('d M Y', strtotime($hotel->end_date))}}, {{date('h:i', strtotime($hotel->check_out))}}
+                                    </td>
+                                    <td>
+                                        {{$hotel->number_of_rooms}}
+                                    </td>
+                                    <td>
+                                        {{$hotel->night}}
+                                    </td>
+                                    <td>{{Helpers::idr($hotel->price_per_night)}}</td>
+                                    <td>{{Helpers::idr($hotel->total_price)}}</td>
+                                    <td>
+                                        <span class="badge" style="background-color:{{$hotel->booking_status->color}}">{{$hotel->booking_status->name}}</span>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -310,6 +324,49 @@
             </div>
             @endif
             
+            @if(count($data->booking_rent_car) > 0)
+            <div class="card">
+                <div class="body">
+                    <h4>
+                        Booking Rent Cars
+                    </h4>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Booking Number</th>
+                                <th>Company</th>
+                                <th>Vehicle Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Number of Day</th>
+                                <th>Price per Day</th>
+                                <th>Total Price</th>
+                                <th>Booking Status</th>
+                            </tr>
+                            @foreach($data->booking_rent_car as $rent_car)
+                                <tr>
+                                    <td>{{$rent_car->booking_number}}</td>
+                                    <td>{{$rent_car->agency_name}}</td>
+                                    <td>{{$rent_car->vehicle_name}}</td>
+                                    <td>{{date('d M Y', strtotime($rent_car->start_date))}}</td>
+                                    <td>{{date('d M Y', strtotime($rent_car->end_date))}}</td>
+                                    <td>{{$rent_car->number_of_day}} day(s)</td>
+                                    <td>
+                                        {{Helpers::idr($rent_car->price_per_day)}}
+                                    </td>
+                                    <td>
+                                        {{Helpers::idr($rent_car->total_price)}}
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 </div>

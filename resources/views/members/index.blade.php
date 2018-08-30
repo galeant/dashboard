@@ -2,9 +2,9 @@
 @section('head-css')
 @parent
     <!-- JQuery DataTable Css -->
-    <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
+    {{-- <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet"> --}}
     <style>
-    .waves-effect{
+    .waves-effect-button{
         margin-top:20px;
     }
     #data-tables_filter{
@@ -47,7 +47,7 @@
                                         <input type="text" class="form-control" name="keyword" @if($request != null) @if($request['keyword'] != null) value="{{$request['keyword']}}" @endif @endif/>
                                     </div>
                                     <div class="col-md-3">
-                                        <button type="submit" class="btn bg-green waves-effect">
+                                        <button type="submit" class="btn bg-green waves-effect-button">
                                             <i class="material-icons">search</i>
                                         </button>
                                     </div>
@@ -116,7 +116,7 @@
     <script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
-    <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    {{-- <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> --> --}}
     <script type="text/javascript">
     
         $(document).ready(function() {

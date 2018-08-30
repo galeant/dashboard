@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class BookingTour extends Model
 {
     protected $table = 'booking_tours';
+
+    public function booking_status()
+	{
+	    return $this->hasOne('App\Models\TransactionStatus','id','status');
+    }
     
     public function transactions()
     {

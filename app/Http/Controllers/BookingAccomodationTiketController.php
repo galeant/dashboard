@@ -24,7 +24,7 @@ class BookingAccomodationTiketController extends Controller
             return Datatables::of($booking_hotel)
             ->addColumn('status',function(BookingHotel $booking_hotel){
                 if(!empty($booking_hotel->transactions)){
-                    return '<span class="badge" style="background-color:'.$booking_hotel->transactions->transaction_status->color.'">'.$booking_hotel->transactions->transaction_status->name.'</span>';
+                    return '<span class="badge" style="background-color:'.$booking_hotel->booking_status->color.'">'.$booking_hotel->booking_status->name.'</span>';
                 } 
             })
             ->addColumn('booking_number', function(BookingHotel $booking_hotel){

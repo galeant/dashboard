@@ -33,10 +33,10 @@
                     <div class="col-md-4">Transaction Date</div>
                     <div class="col-md-8">: {{date('d-F-Y', strtotime($data->created_at))}}</div>
                 </div>
-                <div class="col-md-5 col-md-offset-1">
+                <div class="col-md-6">
                     <div class="col-md-4">Booking Status</div>
                     <div class="col-md-8">: 
-                        <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
+                        <span class="badge" style="background-color:{{$data->booking_status->color}}">{{$data->booking_status->name}}</span>    
                     </div>
                 </div>
             </div>
@@ -145,7 +145,14 @@
                     Full Name
                 </div>
                 <div class="col-md-6">
-                    : <span>{{$data->transactions->customer->salutation}}. {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</span>
+                    : 
+                    <span>{{$data->transactions->contact->salutation}}. {{$data->transactions->contact->firstname}} {{$data->transactions->contact->lastname}}
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->salutation}}. {{$data->customer->firstname}} {{$data->customer->lastname}}
+                    @else
+                        {{$data->contact->salutation}}. {{$data->contact->firstname}} {{$data->contact->lastname}}
+                    @endif
+                    </span>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px">
@@ -153,7 +160,14 @@
                     Phone Number
                 </div>
                 <div class="col-md-6">
-                        : <span>{{$data->transactions->customer->phone}}</span>
+                    : 
+                    <span>
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->phone}}
+                    @else
+                        {{$data->contact->phone}}
+                    @endif
+                    </span>
                 </div>
             </div>
             <div class="row" style="margin-top: 20px; margin-bottom: 20px">
@@ -161,7 +175,14 @@
                     Email Address
                 </div>
                 <div class="col-md-6">
-                        : <span>{{$data->transactions->customer->email}}</span>
+                    : 
+                    <span>
+                    @if($data->user_contact_id == 0)
+                        {{$data->customer->email}}
+                    @else
+                        {{$data->contact->email}}
+                    @endif
+                    </span>
                 </div>
             </div>
         </div>

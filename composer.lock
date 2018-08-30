@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.67.1",
+            "version": "3.67.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "a77e6796841056f46543393f5cd06aa9fa4cc40a"
+                "reference": "b4f47ccd5715fe100111f26713c3500ff56e3dcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/a77e6796841056f46543393f5cd06aa9fa4cc40a",
-                "reference": "a77e6796841056f46543393f5cd06aa9fa4cc40a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b4f47ccd5715fe100111f26713c3500ff56e3dcc",
+                "reference": "b4f47ccd5715fe100111f26713c3500ff56e3dcc",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-08-28T19:38:00+00:00"
+            "time": "2018-08-29T20:04:59+00:00"
         },
         {
             "name": "barryvdh/laravel-dompdf",

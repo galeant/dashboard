@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 
 		//planning
-		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print');
+		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
 	});
 	Route::group(['prefix' => 'settlement'],function(){
 		Route::get('/all', 'SettlementController@index');
@@ -137,7 +137,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
 	
-	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
+	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
+	
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 	// Route::get('/emailTest', function(){
