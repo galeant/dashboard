@@ -50,4 +50,8 @@ class Transaction extends Model
     {
         return $this->belongsTo('App\Models\Members','user_contact_id','id');
     }
+    public function planning()
+    {
+        return $this->hasOne('App\Models\Planning','transaction_id','id');
+    }
 }

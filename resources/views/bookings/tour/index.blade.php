@@ -30,11 +30,11 @@
                         <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                             <thead>
                                 <tr>
-                                    <th>Transaction ID</th>
+                                    {{-- <th>Transaction ID</th> --}}
                                     <th>Booking Number</th>
                                     <th>Company</th>
                                     <th>Tour Name</th>
-                                    <th>Product Code</th>
+                                    {{-- <th>Product Code</th> --}}
                                     <th>Total Booking</th>
                                     <th>Total Price</th>
                                     <th>Total Commission</th>
@@ -66,11 +66,11 @@
                 serverSide: true,
                 ajax: '/bookings/tour',
                 columns: [
-                    {data: 'transaction_id'},
+                    // {data: 'transaction_id'},
                     {data: 'booking_number'},
                     {data: 'company_name'},
                     {data: 'tour_name'},
-                    {data: 'product_code'},
+                    // {data: 'product_code'},
                     {data: 'number_of_person'},
                     {data: 'net_price'},
                     {data: 'commission'},

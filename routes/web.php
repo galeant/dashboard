@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 
 		//planning
-		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print');
+		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
 	});
 
 	Route::resource('members', 'MembersController');

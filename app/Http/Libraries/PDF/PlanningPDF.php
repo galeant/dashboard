@@ -199,8 +199,9 @@ protected $issetcolor;
 	    }
         // ...
     }
-	function Header($transactionNumber='',$date='',$customer = null)
+	function Header($data = null)
 	{
+		
 		// dd($customer);
 		// $this->Write(5,'A set: "'.''.'"');
 	    // Logo
@@ -214,23 +215,27 @@ protected $issetcolor;
         // $this->SetDrawColor(0,0,0);		
 		$this->Ln(5);
 	    // $this->Image("http://ironman.test/images/logo.png",10,16.5,25,0,'','http://ironman.test');
-	    $this->Image("https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.jpg",10,16.5,25,0,'','https://www.pigijo.id');
+	    $this->Image("https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.jpg",10,16.5,25,0,'','https://www.pigijo.com');
 	    // Arial bold 15
 	    $this->SetFont('Arial','B',15);
 	    // Move to the right
 	    $this->SetXY($this->GetPageWidth()-70, 25);
 	    // Title
-	    $this->Cell(60,10,'Planning',0,0,'R',false);
+	    $this->Cell(60,10,'TRIP ITINERARY',0,0,'R',false);
 
 		$this->SetXY($this->GetPageWidth()-70,45);
 	    // Line break
 	    $this->SetFont('Arial','',12);
 	    $this->Ln(5);
 	    $this->SetXY($this->GetPageWidth()-70, 35);
-		$this->Cell(60,5,'nama trip',0,0,'R');
+	    if($data != null){
+		$this->Cell(60,5,$data->name,0,0,'R');
+		}
 	    $this->Ln(5);
+	    if($data != null){
 	    $this->SetXY($this->GetPageWidth()-70, 40);
-	    $this->Cell(60,5,'tanggal trip',0,0,'R');
+	    $this->Cell(60,5,date('d M Y',strtotime($data->start_date)).' - '.date('d M Y',strtotime($data->end_date)),0,0,'R');
+		}
 		$this->Ln(7);
 
 	}

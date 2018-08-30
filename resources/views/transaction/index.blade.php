@@ -28,7 +28,7 @@
                                     <th>Transaction ID</th>
                                     <th>Transaction Number</th>
                                     <th>User</th>
-                                    <th>Total Discount</th>
+                                    {{-- <th>Total Discount</th> --}}
                                     <th>Total Price</th>
                                     <th>Total Paid</th>
                                     <th>Status</th>
@@ -64,7 +64,7 @@
                     {data: 'id'},
                     {data: 'transaction_number'},
                     {data: 'user'},
-                    {data: 'total_discount'},
+                    // {data: 'total_discount'},
                     {data: 'total_price'},
                     {data: 'total_price'},
                     {data: 'status'},
