@@ -13,9 +13,6 @@
      <!-- Light Gallery Plugin Css -->
     <link href="{{asset('plugins/light-gallery/css/lightgallery.css')}}" rel="stylesheet">
     <style>
-        .row{
-            margin:0px;
-        }
         .input-group input[type="text"], .input-group .form-control {
             border: solid #555 1px;
             padding-left: 15px;
@@ -25,6 +22,9 @@
         }
         .kv-file-upload,.kv-file-remove{
             display:none;
+        }
+        #step-p-1 .activity-details{
+            padding:5px;
         }
     </style>
 @stop
@@ -475,9 +475,6 @@
                     <h2>Edit Tour Activity</h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
-                            <button type="button" class="btn bg-teal btn-block waves-effect m-r-20" data-toggle="modal" data-target="#largeModal">Schedule</button>
-                        </li>
-                        <li>
                             <a href="{{ url('/product/tour-activity/'.$data->id.'/edit') }}" class="btn bg-deep-orange btn-waves">Edit Product</a>
                         </li>
                     </ul>
@@ -607,21 +604,21 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h4 class="dd-title m-t-20">
-                                                Activity Duration
+                                                Activity Schedule and Duration
                                             </h4>
                                             <h5>How long is the duration of your tour/activity ?</h5>
                                             <div class="col-md-3">
                                                 <input name="schedule_type" type="radio" id="1d" class="radio-col-deep-orange schedule-type" value="1" sel="1" required @if($data->schedule_type == 1) checked @elseif($data->schedule_type == 0) 
                                                 checked
-                                                @endif/>
+                                                @endif @if($data->schedule_type != 0) disabled @endif/>
                                                 <label for="1d">Multiple days</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif/>
+                                                <input name="schedule_type" type="radio" id="2d" class="radio-col-deep-orange schedule-type" value="2" sel="2" @if($data->schedule_type == 2) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                                 <label for="2d">A couple of hours</label>
                                             </div>
                                             <div class="col-md-3">
-                                                <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif/>
+                                                <input name="schedule_type" type="radio" id="3d" class="radio-col-deep-orange schedule-type" value="3" sel="3" @if($data->schedule_type == 3) checked @endif @if($data->schedule_type != 0) disabled @endif/>
                                                 <label for="3d">One day full</label>
                                             </div>
                                         </div>
@@ -629,13 +626,13 @@
 
                                     <div class="row clearfix">
                                         <div class="col-md-12">
-                                            <h5>This is related with your itinerary.</h5>
                                             <div class="col-md-2 scheduleDays">
                                                 <div class="form-group">
                                                     <h5>Day?* :</h5>
-                                                    <select class="form-control" id="day" name="day"  required>
+                                                    <select class="form-control" id="day" name="day"  required @if($data->schedule_type != 0) disabled @endif>
                                                         @for($i=2;$i<=24;$i++)
-                                                        <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option>
+                                                        <option values="{{$i}}" @if($data->schedule_interval == $i) selected @endif>{{$i}}</option>
+                                                        <!-- <option values="{{$i}}" @if(old('day') == $i) selected @elseif(count($data->itineraries) == $i) selected @endif>{{$i}}</option> -->
                                                         @endfor
                                                     </select>
                                                 </div>
@@ -646,7 +643,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Hours?* :</label>
-                                                            <select class="form-control" id="hours" name="hours" required>
+                                                            <select class="form-control" id="hours" name="hours" required @if($data->schedule_type != 0) disabled @endif>
                                                                 @for($i=1;$i<12;$i++)
                                                                 <option values="{{$i}}" @if(old('hours') ==$i)selected @elseif($data->schedule_type == 2 &&
                                                                 (int)substr($data->schedule_interval,0,2) == $i) selected @endif>{{$i}}</option>
@@ -658,7 +655,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Minutes?* :</label>
-                                                            <select class="form-control" id="minutes" name="minutes" required>
+                                                            <select class="form-control" id="minutes" name="minutes" required @if($data->schedule_type != 0) disabled @endif>
                                                                 <option values="0" @if(old('minutes') ==0)selected @elseif($data->schedule_type == 2 &&
                                                                 (int)substr($data->schedule_interval,3) == 0) selected @endif>0</option>
                                                                 <option values="30" @if(old('minutes') ==30)selected @elseif($data->schedule_type == 2 &&
@@ -667,6 +664,30 @@
                                                         </div>
                                                     </div>
 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-12 schedule-activity" style="display: none">
+                                            <h5>How would you like to set your activity schedule ?</h5>
+                                            <div class="col-md-4">
+                                                <input name="always_available_for_sale" type="radio" id="free_sale_1" class="radio-col-deep-orange" value="1" sel="1" @if($data->always_available_for_sale == 1) checked @endif/>
+                                                <label for="free_sale_1">Always available for booking</label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <input name="always_available_for_sale" type="radio" id="free_sale_0" class="radio-col-deep-orange" value="0" sel="0" @if($data->always_available_for_sale == 0) checked @endif/>
+                                                <label for="free_sale_0">Only available on specific dates</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','min'=> 0,'max'=>30]) }}
+                                                </div>
+                                                <div class="col-md-6">
+                                                <p class="form-note">Your activity is available for booking until D-@if($data->max_booking_day != 0 )<b>{{$data->max_booking_day}}</b>@else <b>0</b>@endif from activity schedule.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -886,7 +907,6 @@
                                                     <th id="numberOfPerson">Number Of Person</th>
                                                     <th id="price_idr">Price IDR</th>
                                                     <th id="price_usd">Price USD</th>
-                                                    <th id="action">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1252,7 +1272,7 @@
     <script>
         $(document).ready(function () {
         // DISABLE ALL INPUT, SELECT, TEXTAREA
-            $("input[type='text'],input[type='email'],input[type='radio'],input[type='url']").attr("disabled","disabled");
+            $("input[type='number'],input[type='text'],input[type='email'],input[type='radio'],input[type='url']").attr("disabled","disabled");
             $("select").attr("disabled","disabled");
             $("textarea").attr("disabled","disabled");
             $("button#change").closest(".caption").hide();
@@ -2029,7 +2049,7 @@
             $("#change-status").show();
             $("#submit").show();
             $("input").removeAttr("disabled");
-            $("input[name='email']").attr("readonly",'readonly');
+            // $("input[name='email']").attr("readonly",'readonly');
             $("select").removeAttr("disabled");
             $("textarea").removeAttr("disabled");
             $("button#change").closest(".caption").show();

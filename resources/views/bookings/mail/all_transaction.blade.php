@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>A Responsive Email Template</title>
+<title>Reciept Booking Number</title>
 <!--
 
     An email present from your friends at Litmus (@litmusapp)
@@ -91,7 +91,7 @@
         /* ALLOWS FOR FLUID TABLES */
         .wrapper {
           width: 100% !important;
-        	max-width: 100% !important;
+            max-width: 100% !important;
         }
 
         /* ADJUSTS LAYOUT OF LOGO IMAGE */
@@ -184,7 +184,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 15px 0;" class="logo">
                         <a href="#" target="_blank">
-                            <img alt="Logo" src="{{asset('images/logo.png')}}" width="100" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
+                            <img alt="Logo" src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.png" width="75" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
                         </a>
                         <hr class="width-80-mobile" />
                     </td>
@@ -211,7 +211,7 @@
                         <!-- HERO IMAGE -->
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                             <tr>
-                              	
+                                
                             </tr>
                             <tr>
                                 <td>
@@ -261,7 +261,7 @@
                                         <tr>
                                             <hr class="" style="margin-top: 40px;"/>
                                             <td align="left" class="mobile-hide">
-                                                <img src="./assets/maskot.png" alt="" width="125" height="125">
+                                                <!-- <img src="/assets/maskot.png" alt="" width="125" height="125"> -->
                                             </td>
                                             <td align="justify" style="padding-left: 20px;" class="padding">
                                                 <!-- <img src="./assets/logo.png" alt=""> -->
@@ -294,17 +294,17 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 500px;" class="responsive-table mobile-hide">
                 <tr>
                     <td align="left" style="padding-left: 20px;">
-                        <img src="{{asset('images/logo-white.png')}}" alt="logo white">
+                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo.svg" width="75" alt="logo white">
                     </td>
                     <td align="right" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; padding-right: 10px;">
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{asset('images/facebook.png')}}" alt="fb-button"></a> 
+                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/facebook.png" alt="fb-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{asset('images/twitter.png')}}" alt="twitter-button"></a> 
+                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/twitter.png" alt="twitter-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="{{asset('images/instagram.png')}}" alt="instagram-button"></a> 
+                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/instagram.png" alt="instagram-button"></a> 
                         </button>
                     </td>  
                 </tr>
@@ -313,13 +313,13 @@
                 <tr>
                     <td cellpadding:"30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="{{asset('images/facebook.png')}}" alt="fb-button"></a> 
+                            <a href="https://www.facebook.com/PIGIJOID/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/facebook.png" alt="fb-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="{{asset('images/twitter.png')}}" alt="twitter-button"></a> 
+                            <a href="https://twitter.com/PigijoTweet" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/twitter.png" alt="twitter-button"></a> 
                         </button>
                         <button class="btn-socmed bg-transparent">
-                            <a href="https://www.instagram.com/pigijoo/    " target="_blank"><img src="{{asset('images/instagram.png')}}" alt="instagram-button"></a> 
+                            <a href="https://www.instagram.com/pigijoo/" target="_blank"><img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/instagram.png" alt="instagram-button"></a> 
                         </button>
                     </td> 
                 </tr>
@@ -327,7 +327,7 @@
             <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="" style="max-width: 500px;" class="responsive-table tab-none">
                 <tr>
                     <td align="center" style="">
-                        <img src="{{asset('images/logo-white.png')}}" alt="logo white">
+                        <img src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo.svg" alt="logo white" width="75">
                     </td>
                 </tr>
             </table>

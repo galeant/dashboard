@@ -15,5 +15,9 @@ class Members extends Model {
      * @var stringA
      */
     protected $table = 'users';
-    protected $fillable = ['salutation','firstname','lastname','username','email','phone','status'];
+    protected $fillable = ['gender','firstname','lastname','username','email','phone','status'];
+
+    public function transactions(){
+        return $this->hasMany('App\Models\Transaction', 'user_id','id');
+    }
 }

@@ -15,7 +15,7 @@ class Province extends Model {
      * @var stringA
      */
     protected $table = 'provinces';
-    protected $fillable = ['country_id','name'];
+    protected $fillable = ['country_id','name','cover_path','cover_filename'];
 
     public function country()
     {

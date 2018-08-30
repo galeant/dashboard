@@ -199,3 +199,11 @@ ul.p-info li {
     width: 100%;
     margin-bottom: 10px;
 }
+.tooltiptext{
+    display: none;
+}
+.dd-till{
+    position: absolute;
+    top: 30px;
+    left: -4px;
+}

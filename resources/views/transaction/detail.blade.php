@@ -12,10 +12,14 @@
     </h2>
     <div class="row clearfix">
     	<div class="col-md-12 m-t-20">
-    		<button type="button" class="btn btn-info waves-effect pull-left">
+    		<a target="_blank" href="/transaction/{{$data->transaction_number}}/print/PDF" class="btn btn-info waves-effect pull-left">
                 <i class="material-icons">local_printshop</i>
                 <span>Invoice</span>
-            </button>
+			</a>
+			<a target="_blank" href="/transaction/{{$data->transaction_number}}/print/itinerary/PDF" class="btn btn-info waves-effect m-l-20">
+                <i class="material-icons">local_printshop</i>
+                <span>Itinerary</span>
+            </a>
     	</div>
     	<div class="col-md-12 m-t-20">
     		<div class="card">
@@ -34,6 +38,7 @@
                                 </tbody>
                             </table>
                     	</div>
+						@if($data->status_id != 6)
                     	<div class="col-md-6">
                     		{{ Form::model($data, ['route' => ['transaction.update', $data->id], 'method'=>'PUT','class'=>'m-t-20']) }}
                     			<div class="input-group">
@@ -46,6 +51,7 @@
                                 </div>
                     		</form>
                     	</div>
+						@endif
                     </div>
                 </div>
             </div>

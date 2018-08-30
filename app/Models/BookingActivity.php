@@ -15,7 +15,7 @@ class BookingActivity extends Model
     
     public function activities()
     {
-        return $this->belongsTo('App\Models\Destination', 'activity_id','id');
+        return $this->belongsTo('App\Models\Destination', 'destination_id','id');
     }
     
     public function schedule()

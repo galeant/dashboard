@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +20,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 
 	Route::resource('partner', 'CompanyController');
+	
+	Route::resource('partner-product-type', 'CompanyProductTypeController');
+	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete');
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');
@@ -106,18 +108,50 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax');
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
-	});
 
+		//planning
+		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print');
+	});
+	Route::group(['prefix' => 'settlement'],function(){
+		Route::get('/all', 'SettlementController@index');
+		Route::get('/detail/{id}', 'SettlementController@detail');
+		Route::get('/generate', 'SettlementController@generate');
+		Route::post('/procced', 'SettlementController@poccedList');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
+		Route::post('/filter', 'SettlementController@filter');
+		Route::post('/paid', 'SettlementController@paid');
+		Route::post('/update-notes', 'SettlementController@notes');
+		Route::post('/update-bank', 'SettlementController@bank');
+	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
+		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
+		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
+		Route::resource('rent-car', 'BookingRentCarController');
 	});
 	Route::resource('transaction', 'TransactionController');
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
+	
+	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
+	// Route::get('/emailTest', function(){
+	// 	$details['email'] = 'ilham.rach.f@gmail.com';
+	// 	dispatch(new App\Jobs\SendEmailTest($details));
+	// 	dd('done');
+	// });
 });
+// FOR EMAIL TESTING
+// Route::get('/mailable', function () {
+//     $company = App\Models\Company::where('id',9)->with(['suppliers' => function($query){
+// 		$query->orderBy('created_at','asc')->first();
+// 	}])->first();
 
-
+//     return new App\Mail\StatusCompany($company);
+// });
+Route::get('lolo','SettlementController@tes');

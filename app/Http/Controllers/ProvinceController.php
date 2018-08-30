@@ -7,6 +7,7 @@ use App\Models\Province;
 use Datatables;
 use Validator;
 use DB;
+use Helpers;
 class ProvinceController extends Controller
 {
     /**
@@ -68,6 +69,26 @@ class ProvinceController extends Controller
         try{
             $data = new Province();
             $data->country_id = $request->input('country_id');
+            if(!empty($request->input('image_resize'))){
+                $destinationPath = public_path('img/temp/');
+                if( ! \File::isDirectory($destinationPath) ) 
+                {
+                    File::makeDirectory($destinationPath, 0777, true , true);
+                }
+                $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+                $img = str_replace(' ', '+', $file);
+                $data_img = base64_decode($img);
+                $filename = time().Helpers::encodeSpecialChar($data->name).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
+                $file = $destinationPath . $filename;
+                $success = file_put_contents($file, $data_img);
+                $bankPic = Helpers::saveImage($file,'province',true,[1,1]);
+                if($bankPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $data->cover_image = $bankPic['path'];
+                $data->cover_filename = $bankPic['filename'];
+            }
             $data->name = $request->input('name');
             if($data->save()){
                 DB::commit();
@@ -117,6 +138,7 @@ class ProvinceController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // Validation //
         $validation = Validator::make($request->all(), [
             'country_id' => 'required',
@@ -127,9 +149,29 @@ class ProvinceController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
+        $data = Province::find($id);
         DB::beginTransaction();
         try{
-            $data = Province::find($id);
+            if(!empty($request->input('image_resize'))){
+                $destinationPath = public_path('img/temp/');
+                if( ! \File::isDirectory($destinationPath) ) 
+                {
+                    File::makeDirectory($destinationPath, 0777, true , true);
+                }
+                $file = str_replace('data:image/jpeg;base64,', '', $request->image_resize);
+                $img = str_replace(' ', '+', $file);
+                $data_img = base64_decode($img);
+                $filename = time().Helpers::encodeSpecialChar($data->name).".".(!empty($request->file('cover_img'))? $request->cover_img->getClientOriginalExtension() : 'jpg');
+                $file = $destinationPath . $filename;
+                $success = file_put_contents($file, $data_img);
+                $bankPic = Helpers::saveImage($file,'province',true,[1,1]);
+                if($bankPic instanceof  MessageBag){
+                    return redirect()->back()->withInput()
+                ->with('errors', $validation->errors() );
+                }
+                $data->cover_image = $bankPic['path'];
+                $data->cover_filename = $bankPic['filename'];
+            }
             $data->country_id = $request->input('country_id');
             $data->name = $request->input('name');
             if($data->save()){

@@ -51,8 +51,8 @@ class TourController extends Controller
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
         $data = new Tour;
         $data = $data->orderBy($sort,$orderby);
-        if($request->input('status',2) != 99){
-            $data = $data->where('status',$request->input('status',2));
+        if(!empty($request->input('status')) && $request->input('status') != 99){
+            $data = $data->where('status',$request->input('status'));
         }
         if(!empty($request->input('product_type'))){
             $data = $data->where('product_type',$request->input('product_type'));
@@ -81,7 +81,6 @@ class TourController extends Controller
                 'sort_code' => request()->fullUrlWithQuery(["sort"=>"product_code","order"=>$orderby]),
                 'sort_product_name' => request()->fullUrlWithQuery(["sort"=>"product_name","order"=>$orderby])
                 ]);
-        // dd($request->all());
         $data = $data->paginate(10);
         return view('tour.view',['data' => $data]);
     }
@@ -112,6 +111,13 @@ class TourController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->company_id);
+        if(Tour::where('company_id', $request->company_id)->count() == 1){
+            if(Tour::where('company_id', $request->company_id)->where('status', [0, 1])->count() == 1){
+                $tour = Tour::where('company_id', $request->company_id)->first();
+                return redirect('product/tour-activity/'.$tour->id.'/edit')->with('error', 'This company has sample product, complete it!!');
+            }
+        }
         $messages = [
                 'company_id' => 'Company filed is required.',
                 'image_resize.required' => 'Cover Image is required.'
@@ -186,76 +192,9 @@ class TourController extends Controller
      */
     public function show($id)
     {
-        $product = Tour::with(
-			'prices',
-            'image_destination',
-            'image_activity',
-            'image_accommodation',
-            'image_other',
-            'videos',
-            'itineraries',
-            'schedules',
-			'destinations',
-			'destinations.province',
-			'destinations.city',
-			'destinations.dest',
-            'activities',
-            'includes',
-            'excludes'
-			)
-			->where('id',$id)
-            ->first();
-        $company = Company::all();
-        $province = Province::all();
-        $activities = ActivityTag::all();
-		$city = City::all();
-		$destination = ProductDestination::all();
-		// DAY
-		$startDate = strtotime($product->schedules[0]->start_date);
-		$endDate = strtotime($product->schedules[0]->end_date);
-		// HOUR
-		$startTime = strtotime($product->schedules[0]->start_hours);
-        $endTime = strtotime($product->schedules[0]->end_hours);
-        // PRICE TYPE
-        if(count($product->prices) != 0){
-            // PRICE KURS
-            if($product->prices[0]->price_usd == null){
-                $price_kurs = 'one';
-            }else{
-                $price_kurs = 'both';
-            }
-            $price_type = 'based';
-        }else{
-            $price_type = 'fix';
-            if($product->price_usd == null){
-                $price_kurs = 'one';
-            }else{
-                $price_kurs = 'both';
-            }
-        }
-		$day = round(($endDate - $startDate)/(60 * 60 * 24))+1;
-		$hours = floor(($endTime - $startTime)/(60 * 60));
-		$minutes = (($endTime - $startTime)/60)%60;
-		$pushToBlade = [
-			'product'=>$product,
-			'product2'=>  new ProductDestination,
-			'provinces'=> $province,
-			'cities'=>$city,
-			'cities2'=> new City,
-			'destinations'=>$destination,
-			'destination2' => new Destination,
-			'day' => $day,
-			'hours' => $hours,
-            'minutes' => $minutes,
-            'companies'=>$company,
-            'activities'=>$activities,
-            'price_kurs' => $price_kurs,
-            'price_type' => $price_type
-        ];
-
-        // dd($pushToBlade);
-        
-        return view('tour.test',$pushToBlade);
+        $data = Tour::find($id);
+        $provinces = Province::select('id','name')->get();
+        return view('tour.detail',['data' => $data,'provinces' => $provinces]);
     }
 
     /**
@@ -815,7 +754,7 @@ class TourController extends Controller
                 $event[$i]['end_date'] = $value->end_date;
                 $event[$i]['backgroundColor'] = '#e5730d';
                 $event[$i]['id'] = $value->id;
-                $event[$i]['booked'] = 0;
+                $event[$i]['booked'] = count($value->bookings);
                 $event[$i]['max_booking'] = $value->maximum_booking;
 
                 if($data->schedule_type == 1 || $data->schedule_type == 3){
@@ -900,7 +839,7 @@ class TourController extends Controller
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
         $product = Tour::find($id);
-        if($type == 1){
+        if($type == 1 || $type == 3){
             $validation = Validator::make($request->all(), [
                 'start_date' => 'date_format:Y-m-d',
                 'end_date' => 'date_format:Y-m-d',
@@ -952,20 +891,6 @@ class TourController extends Controller
             $request['end_date'] = date("Y-m-d",strtotime($end)); 
             $request['start_hours'] = $request->start_hours;
             $request['end_hours'] = $request->end_hours;
-        }else{
-            $validation = Validator::make($request->all(), [
-                'start_date' => 'date_format:Y-m-d',
-                'maximum_booking' => 'required',
-            ]);
-            if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
-                $response = [
-                    'error' => 'Can\'t change the schedule past the current date !'
-                ];
-                return response()->json($response,400);
-            }
-            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
-            $request['start_hours'] = '00:00';
-            $request['end_hours'] = '23:59';
         }
         if( $validation->fails() ){
             if($request->ajax())
@@ -999,7 +924,7 @@ class TourController extends Controller
                 $event['end_date'] = $request->end_date;
                 $event['backgroundColor'] = '#e5730d';
                 $event['id'] = $schedule->id;
-                $event['booked'] = 0;
+                $event['booked'] = count($schedule->bookings);
                 $event['max_booking'] = $request->maximum_booking;
                 if($type == 1 || $type == 3){
                 $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($request->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($request->end_date))."<br>".'Max Booking Person: '.$request->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($request->start_date))).' 23:59:59';
@@ -1033,6 +958,7 @@ class TourController extends Controller
         // dd($request->all());
         $id = $request->id;
         $schedule = Schedule::find($id);
+        // dd($schedule = Schedule::where('id',$id)->with('bookings')->get());
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){
@@ -1052,7 +978,14 @@ class TourController extends Controller
                 ];
                 return response()->json($response,400);
             }
-            $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval.' days', strtotime($request->input('start_date'))));
+            if(count($schedule->bookings) != 0){
+                $response = [
+                    'message' => 'Schedule has booking !',
+                    'data' => $schedule
+                ];
+                return response()->json($response,400);
+            }
+            $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval   .' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
             $check = Schedule::where('product_id',$product->id)->whereRaw(DB::raw("(`schedules`.`start_date` >'".$start."')"))->whereRaw(DB::raw("(`schedules`.`end_date` < '".$end."')"))->where('id','!=',$id)->first();
             if($check){
@@ -1106,7 +1039,7 @@ class TourController extends Controller
         $event['end_date'] = $schedule->end_date;
         $event['backgroundColor'] = '#e5730d';
         $event['id'] = $schedule->id;
-        $event['booked'] = 0;
+        $event['booked'] = count($schedule->bookings);
         $event['max_booking'] = $schedule->maximum_booking;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             $event['description'] = 'Start Date : '.date('d-m-Y',strtotime($schedule->start_date))."<br>".'End Date : '.date('d-m-Y',strtotime($schedule->end_date))."<br>".'Max Booking Person: '.$schedule->maximum_booking.'<br>'.'Maximum Booking : '.date('d-m-Y', strtotime('-'.$product->max_booking_day.' day', strtotime($schedule->start_date))).' 23:59:59';
@@ -1126,8 +1059,7 @@ class TourController extends Controller
         return redirect()->back();
     }
     public function priceUpdate(Request $request){
-        
-        if($request->price_usd == null  || $request->price_usd == ''){
+        if($request->price_usd == null  || $request->price_usd == 0){
             $request->price_usd = null;
         }else{
             $request->price_usd = str_replace(".", "", $request->price_usd);    

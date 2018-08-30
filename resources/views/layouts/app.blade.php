@@ -25,7 +25,7 @@
 
 	<link href="{{ asset('plugins/select2/select2.min.css') }}" rel="stylesheet" />
     <!-- Custom Css -->
-    <link href="{{asset('css/style.css?v=1.3')}}" rel="stylesheet">
+    <link href="{{asset('css/style.css?v=3')}}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{asset('css/themes/all-themes.css')}}" rel="stylesheet" />
@@ -83,7 +83,7 @@
 		                    <span>Overview</span>
 		                </a>
 		            </li>
-		            <li>
+		            <li {{{ (Request::is('members*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/members') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Members</span>
@@ -98,6 +98,11 @@
 		                    <li {{{ (Request::is('partner') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('partner') }}" class=" waves-effect waves-block">
 		                            <span>Partner List</span>
+		                        </a>
+							</li>
+							<li {{{ (Request::is('partner-product-type') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('partner-product-type') }}" class=" waves-effect waves-block">
+		                            <span>Partner Type List</span>
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
@@ -118,10 +123,9 @@
  -->
 		                </ul>
 		            </li>
-
 		            <li {{{ (Request::is('product*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
-		                    <i class="material-icons">people</i>
+		                    <i class="material-icons">camera_enhance</i>
 		                    <span>Products</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
@@ -144,6 +148,11 @@
 		                    <span>Transaction & Bookings</span>
 		                </a>
 						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('transaction*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
+		                            <span>Transaction</span>
+		                        </a>
+		                    </li>
 							<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 								<a  class="menu-toggle waves-effect waves-block toggled">
 									<span>Bookings</span>
@@ -159,42 +168,47 @@
 											</span> --}}
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/uhotel*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/uhotel') }}" class=" waves-effect waves-block">
+									<li {{{ (Request::is('bookings/accomodation-uhotel*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/accomodation-uhotel') }}" class=" waves-effect waves-block">
 											<span>Accomodation uHotel</span>
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
+									<li {{{ (Request::is('bookings/accomodation-tiket*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/accomodation-tiket') }}" class=" waves-effect waves-block">
 											<span>Accomodation Tiket</span>
 										</a>
 									</li>
-									<li {{{ (Request::is('bookings/tiket*') ? 'class=active' : '') }}}>
-										<a href="{{ URL('/bookings/tiket') }}" class=" waves-effect waves-block">
-											<span>Car Rental</span>
+									<li {{{ (Request::is('bookings/rent-car*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/rent-car') }}" class=" waves-effect waves-block">
+											<span>Rent Car</span>
 										</a>
 									</li>
 								</ul>
 							</li>
-		                    <li {{{ (Request::is('transactions*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
-		                            <span>Transaction</span>
-		                        </a>
-		                    </li>
-
 		                </ul>
 		            </li>
-
+					<li {{{ (Request::is('settlement*') ? 'class=active' : '') }}}>
+						<a  class="menu-toggle waves-effect waves-block toggled">
+							<i class="material-icons">account_balance</i>
+		                    <span>Partner Settlement</span>
+		                </a>
+						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('settlement/all') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/all') }}" class=" waves-effect waves-block">
+		                            <span>Settlement List</span>
+		                        </a>
+							</li>
+							<li {{{ (Request::is('settlement/generate') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('settlement/generate') }}" class=" waves-effect waves-block">
+		                            <span>Settlement Generate</span>
+		                        </a>
+		                    </li>
+		                </ul>
+		            </li>
 		            {{-- <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">money</i>
 		                    <span>Refunds</span>
-		                </a>
-		            </li>
-		            <li>
-		                <a href="{{ URL('/admin/members') }}">
-		                    <i class="material-icons">person</i>
-		                    <span>Partner Settlement</span>
 		                </a>
 		            </li>
 		            <li>
@@ -233,7 +247,7 @@
 		                            <span>Language</span>
 		                        </a>
 		                    </li>
-							<li {{{ (Request::is('coupon') ? 'class=active' : '') }}}>
+							<li {{{ (Request::is('coupon*') ? 'class=active' : '') }}}>
 								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
 										<span>Coupon</span>
 								</a>

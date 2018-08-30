@@ -8,87 +8,87 @@
     <link href="{{ asset('plugins/telformat/css/intlTelInput.css') }}" rel="stylesheet" />
 @stop
 @section('main-content')
-    <div class="container-fluid">
-        <div class="row clearfix">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="header">
-                        <h2>All Place / Destination</h2>
+    <div class="block-header">
+        <h2>
+            Destinations
+            <small>Master Data / Destinations</small>
+        </h2>
+    </div>
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>All Place / Destination</h2>
+                </div>
+                <div class="body" style="padding-left:20px">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label for="destination_type_id">Destination Type *</label>
+                            <select class="form-control" name="destination_type_id" id="destination_type_id">
+                                <option value="">-Select Type-</option>
+                                @foreach($destination_type as $dt)
+                                <option value="{{$dt->id}}">{{$dt->name_EN}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="destination_type_id">Province *</label>
+                            <select class="form-control" name="province_id" id="province_id">
+                                <option value="">-Select Province-</option>
+                                @foreach($province as $p)
+                                <option value="{{$p->id}}" data="{{$p->id}}">{{$p->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="destination_type_id">City *</label>
+                            <select name="city_id" id="city_id"  class="form-control" required>
+                                <option value="">--Select City--</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{{ URL('/master/destination/create') }}">
+                                <button type="button" class="btn btn-primary waves-effect">
+                                    <i class="material-icons">extension</i>
+                                    <span>Add New Destination</span>
+                                </button>
+                            </a>
+                        </div>
                     </div>
-                    <div class="body" style="padding-left:20px">
-                        <div class="row">
-                            <div class="col-md-3">Destination Type *</div>
-                            <div class="col-md-3">Province *</div>
-                            <div class="col-md-6">City *</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <select class="form-control" name="destination_type_id" id="destination_type_id">
-                                    <option value="">-Select Type-</option>
-                                    @foreach($destination_type as $dt)
-                                    <option value="{{$dt->id}}">{{$dt->name_EN}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-control" name="province_id" id="province_id">
-                                    <option value="">-Select Province-</option>
-                                    @foreach($province as $p)
-                                    <option value="{{$p->name}}" data="{{$p->id}}">{{$p->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select name="city_id" id="city_id"  class="form-control" required>
-                                    <option value="">--Select City--</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <a href="{{ URL('/master/destination/create') }}">
-                                    <button type="button" class="btn btn-primary waves-effect">
-                                        <i class="material-icons">extension</i>
-                                        <span>Add New Destination</span>
-                                    </button>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                Search a place*
-                            </div>
-                            <div class="col-md-9">
-                                <input type="text" name="keyword" id="keyword" class="form-control">
-                            </div>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <label for="">Search a place*</label>
+                            <input type="text" name="keyword" id="keyword" class="form-control">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid">
-        <div class="card">
-            <div class="header">
-                <h2>All Place / Destination</h2>
-            </div>
-            <div class="body table-responsive">
-                <table class="table table-bordered table-striped table-hover dataTable table-modif" id="data-tables">
-                    <thead>
-                        <tr>
-                            <th>Destination Type</th>
-                            <th>Destination Name</th>
-                            <th>Province</th>
-                            <th>City</th>
-                            <th>Last Updated</th>
-                            <th>Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead> 
-                </tbody>
-                </table>
-                
-            </div>
-        </div>  
-    </div>
+</div>
+<div class="container-fluid">
+    <div class="card">
+        <div class="header">
+            <h2>All Place / Destination</h2>
+        </div>
+        <div class="body table-responsive">
+            <table class="table table-bordered table-striped table-hover dataTable table-modif" id="data-tables">
+                <thead>
+                    <tr>
+                        <th>Destination Type</th>
+                        <th>Destination Name</th>
+                        <th>Province</th>
+                        <th>City</th>
+                        <th>Last Updated</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead> 
+            </tbody>
+            </table>
+            
+        </div>
+    </div>  
 @endsection
 
 @section('head-js')
@@ -103,9 +103,7 @@
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
-    <script src="{{ asset('js/admin.js') }}"></script>
-    <script src="{{ asset('js/pages/tables/jquery-datatable.js') }}"></script>
-    <script src="{{ asset('js/demo.js') }}"></script>
+
     <script>
         $(document).ready(function(){
             $(document).ready(function(){ 
@@ -158,7 +156,7 @@
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },
-                        { data: 'updated_at', name: 'updated' },
+                        { data: 'updated_at', name: 'updated_at' },
                         { 
                             data: null, 
                             name: 'status',
@@ -200,7 +198,7 @@
                         { data: 'destination_name' },
                         { data: 'provinces.name', name: 'province' },
                         { data: 'cities.name', name: 'city' },
-                        { data: 'updated_at', name: 'updated' },
+                        { data: 'updated_at', name: 'updated_at' },
                         { 
                             data: null, 
                             name: 'status',
@@ -226,14 +224,15 @@
                 $("select[name='city_id']").empty();
                 $.ajax({
                     method: "GET",
-                    url: "{{ url('/master/findCity') }}"+"/"+idProvince
+                    url: "{{ url('/json/city') }}",
+                    data: { 
+                        province_id : idProvince,
+                    },
                 }).done(function(response) {
                     $("select[name='city_id']").append("<option value=''>-Select City-</option>");
-                    console.log(response)
-                    $.each(response, function (index, value) {
-                        console.log(value.name)
+                    $.each(response.data, function (index, value) {
                         $("select[name='city_id']").append(
-                            "<option value='"+value.name+"'>"+value.name+"</option>"
+                            "<option value='"+value.id+"'>"+value.name+"</option>"
                         );
                     });
                     var table = $('.dataTable').DataTable({
@@ -252,11 +251,11 @@
                             type: 'GET'
                         },
                         columns: [
-                            { data: 'destination_types.name' },
+                            { data: 'destination_types.name_EN' },
                             { data: 'destination_name' },
                             { data: 'provinces.name', name: 'province' },
                             { data: 'cities.name', name: 'city' },
-                            { data: 'updated_at', name: 'updated' },
+                            { data: 'updated_at', name: 'updated_at' },
                             { 
                                 data: null, 
                                 name: 'status',

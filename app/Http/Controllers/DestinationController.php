@@ -28,9 +28,10 @@ class DestinationController extends Controller
     {
         $destination_type = DestinationType::all();
         $province = Province::all();
+        
+        $data = Destination::with('provinces', 'cities','destination_types')->get();
         if($request->ajax())
         {
-            $data = Destination::with('provinces', 'cities','destination_types')->get();
             return Datatables::of($data)
                 // ->addColumn('status', function(Destination $data) {
                 //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
@@ -111,7 +112,7 @@ class DestinationController extends Controller
         $destination->fill($data)->save();
         
         if($request->has('destination_activities')){
-            $test = $destination->destination_activities()->sync($request->destination_activities);
+            $destination->destination_activities()->sync($request->destination_activities);
         }
         // dd($test);
         if($request->has('destination_tips')){
@@ -120,14 +121,6 @@ class DestinationController extends Controller
                $dataSync[$dt["question_id"]] = ['answer' => $dt['answer']];
             }
             $destination->destination_tips()->sync($dataSync, false);
-        }
-        if($request->has('destination_activities')){
-            foreach($data['destination_activities'] as $da){
-                // dd($dpt);
-                $a = new DestinationActivity;
-                $da['destination_id'] = $destination->id;
-                $a->fill($da)->save();
-            }
         }
         if($request->hasFile('destination_photo')){
             foreach($data['destination_photo'] as $ddp){

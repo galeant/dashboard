@@ -304,10 +304,16 @@
                                         <h5>Maximum Booking Date / How many days prior the schedule at maximum customer can book your activity?</h5>
                                         <div class="row">
                                             <div class="col-md-2">
-                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','max'=>30]) }}
+                                               {{ Form::number('max_booking_day', null, ['class' => 'form-control','id'=>'max_booking_day','required'=>'required','min'=> 0,'max'=>30]) }}
                                             </div>
                                             <div class="col-md-6">
-                                            <p class="form-note">YourActivity is available booking until D-0 from activity Schedule</p>
+                                            <p class="form-note">Your activity is available for booking until D-<b>
+                                            @if($data->max_booking_day != null)
+                                                {{$data->max_booking_day}}
+                                            @else
+                                                0
+                                            @endif
+                                            </b> from activity schedule.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -1280,7 +1286,8 @@
                   }
                 }).done(function(response) {
                     $('#'+id+'-destination option').remove();
-                    $.each(response, function (index, value) {
+                    $('#'+id+'-destination').append('<option value=""></option>');
+                    $.each(response, function (index, value) {  
                         $('#'+id+'-destination').append(
                             "<option value="+value.id+">"+value.destination_name+"</option>"
                         );
@@ -1330,7 +1337,10 @@
                 }else{
                     @if(count($data->prices) > 0)
                         $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}").attr("max","{{$data->max_person}}").val("{{$data->prices[(count($data->prices)-1)]->number_of_person+1}}");
+                    @else
+                        $("div#price_row").find("#number_person").show().find("#price_list_field1").attr("min","{{$data->min_person}}").attr("max","{{$data->max_person}}");
                     @endif
+                    
                     $("div#price_list").show();
                     $("tr#price_value").each(function(){
                         $(this).show();
@@ -1386,10 +1396,12 @@
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
-                }else if($(this).val() > {{$data->max_person}}){
-                    $(this).closest("td#numberOfPerson").find("small").remove();
-                    $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
-                    $(this).closest("tr#price_value").find("a#price_update").hide();
+                }else if("{{$data->max_person}}" != ""){
+                    if($(this).val() > "{{$data->max_person}}"){
+                        $(this).closest("td#numberOfPerson").find("small").remove();
+                        $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
+                        $(this).closest("tr#price_value").find("a#price_update").hide();
+                    }
                 // }else if($(this).val() <= Math.max.apply(Math,priceL)){
                 //     $(this).closest("td#numberOfPerson").find("small").remove();
                 //     $(this).closest("td#numberOfPerson").append("<small>Please insert higher number</small>");
@@ -1461,7 +1473,9 @@
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{
-                        $("#price_list").show();
+                        if($("#priceType").val() != 1){
+                            $("#price_list").show();
+                        }
                     }
                     priceL =[];
                     me.find("a#price_edit").show();
@@ -1669,6 +1683,9 @@
                 $(this).closest("div").find("a").attr("data-original-title","Open Group");
                 $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
             }
+        });
+        $("input[name='max_booking_day']").change(function(){
+            $("p.form-note").find("b").text($(this).val());
         });
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
