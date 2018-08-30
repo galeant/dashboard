@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use Helpers;
+use Carbon\Carbon;
 
 class BookingTourController extends Controller
 {
@@ -35,17 +36,34 @@ class BookingTourController extends Controller
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
             })
+            ->addColumn('transaction_number', function(BookingTour $booking_tour){
+                return '<a href="'.url('transaction/'.$booking_tour->transactions->transaction_number).'" class="btn btn-primary">'.$booking_tour->transactions->transaction_number.'</a>';
+            })
+            ->addColumn('schedule',function(BookingTour $data){
+                if($data->start_date == $data->end_date){
+                    if($data->end_hours == "23:59:00"){
+                        return Carbon::parse($data->start_date)->format('d M Y');
+                    }
+                    else{
+                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('h:i').' - '.Carbon::parse($data->start_hours)->format('h:i');
+                    }
+                }
+                else{
+                    return Carbon::parse($data->start_date)->format('d M Y').' - '.Carbon::parse($data->end_date)->format('d M Y');
+                }
+                
+            })
             ->addColumn('company_name', function(BookingTour $booking_tour){
                 return $booking_tour->tours->company->company_name;
             })
-            ->editColumn('net_price', function(BookingTour $booking_tour){
-                return Helpers::idr($booking_tour->net_price);
+            ->editColumn('price_per_person', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->price_per_person);
             })
-            ->editColumn('commission', function(BookingTour $booking_tour){
-                return Helpers::idr($booking_tour->commission);
+            ->editColumn('total_price', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->total_price);
             })
 
-            ->rawColumns(['status', 'booking_number', 'company_name'])
+            ->rawColumns(['status', 'booking_number', 'company_name', 'transaction_number'])
             ->make(true);        
         }
         return view('bookings.tour.index');

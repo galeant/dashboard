@@ -30,15 +30,16 @@
                         <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                             <thead>
                                 <tr>
-                                    <th>Transaction ID</th>
                                     <th>Booking Number</th>
-                                    <th>Company Name</th>
+                                    <th>Transaction Number</th>
+                                    <th>Company</th>
                                     <th>Vehicle Name</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
+                                    <th>Number of Day</th>
+                                    <th>Price per Day</th>
                                     <th>Total Price</th>
-                                    <th>Total Commission</th>
-                                    <th>Status</th>
+                                    <th>Booking Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -66,14 +67,15 @@
                 serverSide: true,
                 ajax: '/bookings/rent-car',
                 columns: [
-                    {data: 'transaction_id'},
                     {data: 'booking_number'},
-                    {data: 'vehicle_company_name'},
+                    {data: 'transaction_number'},
+                    {data: 'agency_name'},
                     {data: 'vehicle_name'},
                     {data: 'start_date'},
                     {data: 'end_date'},
+                    {data: 'number_of_day'},
+                    {data: 'price_per_day'},
                     {data: 'total_price'},
-                    {data: 'total_commission'},
                     {data: 'status'}
                 ]
             });
