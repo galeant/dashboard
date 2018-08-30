@@ -832,7 +832,7 @@ class TourController extends Controller
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
         $product = Tour::find($id);
-        if($type == 1){
+        if($type == 1 || $type == 3){
             $validation = Validator::make($request->all(), [
                 'start_date' => 'date_format:Y-m-d',
                 'end_date' => 'date_format:Y-m-d',
@@ -884,20 +884,6 @@ class TourController extends Controller
             $request['end_date'] = date("Y-m-d",strtotime($end)); 
             $request['start_hours'] = $request->start_hours;
             $request['end_hours'] = $request->end_hours;
-        }else{
-            $validation = Validator::make($request->all(), [
-                'start_date' => 'date_format:Y-m-d',
-                'maximum_booking' => 'required',
-            ]);
-            if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
-                $response = [
-                    'error' => 'Can\'t change the schedule past the current date !'
-                ];
-                return response()->json($response,400);
-            }
-            $request['end_date'] = date("Y-m-d",strtotime($request->start_date)); 
-            $request['start_hours'] = '00:00';
-            $request['end_hours'] = '23:59';
         }
         if( $validation->fails() ){
             if($request->ajax())
@@ -984,7 +970,7 @@ class TourController extends Controller
                 ];
                 return response()->json($response,400);
             }
-            $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval.' days', strtotime($request->input('start_date'))));
+            $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval   .' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
             $check = Schedule::where('product_id',$product->id)->whereRaw(DB::raw("(`schedules`.`start_date` >'".$start."')"))->whereRaw(DB::raw("(`schedules`.`end_date` < '".$end."')"))->where('id','!=',$id)->first();
             if($check){
