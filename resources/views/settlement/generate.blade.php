@@ -31,30 +31,31 @@
                         <div class="body settlement">
                             @include('errors.error_notification')
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label>Start Date</label>
-                                    <input type="text" class="form-control" id="start"/>
-                                </div>
-                                <div class="col-md-12">
-                                    <label>End Date</label>
-                                    <input type="text" class="form-control" id="end"/>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn bg-green waves-effect" data-toggle="modal" data-target="#myModal" id="opener">
-                                        <i class="material-icons">search</i>
-                                        <span>Cari</span>
-                                    </button>
-                                </div>
+                                <form method="POST" action="{{url('settlement/filter')}}" id="search">
+                                    @csrf
+                                    <div class="col-md-12">
+                                        <label>Start Date</label>
+                                        <input type="text" class="form-control" id="start" name="start" value="{{date('d-m-Y')}}" required/>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>End Date</label>
+                                        <input type="text" class="form-control" id="end" name="end" value="{{date('d-m-Y')}}"/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn bg-green waves-effect">
+                                            <i class="material-icons">search</i>
+                                            <span>Cari</span>
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
                             <div class="modal-dialog" role="document">
-                                <form method="POST" action="{{url('settlement/filter')}}" id="filter">
+                                <form method="POST" action="{{url('settlement/procced')}}" id="proced">
                                 @csrf
                                     <div class="modal-content">
                                         <div class="modal-body">
-                                            <input type="hidden" name="start" value=""/>
-                                            <input type="hidden" name="end" value=""/>
                                             Notes : <textarea rows="5" class="form-control no-resize" name="notes"></textarea>
                                         </div>
                                         <div class="modal-footer">
@@ -73,7 +74,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <a href="{{ url('settlement/procced') }}" class="btn bg-deep-orange waves-effect">Process</a>
+                            <a class="btn bg-deep-orange waves-effect" data-toggle="modal" data-target="#myModal" id="opener">Process</a>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -85,8 +86,8 @@
                                             <th>Product Name</th>
                                             <th>Qty</th>
                                             <th>Unit Price</th>
-                                            <th>Total Paid</th>
                                             <th>Total Commssion</th>
+                                            <th>Total Payment</th>
                                             <th>Account Bank</th>
                                         </tr>
                                     </thead>
@@ -132,13 +133,13 @@
                                                         {{Helpers::idr($set['price_per_day'])}}
                                                     @endif
                                                 <td>
-                                                    @if(array_key_exists('total_price',$set) && array_key_exists('commission',$set))
-                                                        {{Helpers::idr($set['total_price'] - $set['commission'])}}
+                                                    @if(array_key_exists('commission',$set))
+                                                        {{Helpers::idr($set['commission'])}}
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if(array_key_exists('commission',$set))
-                                                        {{Helpers::idr($set['commission'])}}
+                                                    @if(array_key_exists('net_price',$set))
+                                                        {{Helpers::idr($set['net_price'])}}
                                                     @endif
                                                 </td>
                                                 <td>
@@ -185,6 +186,7 @@
         };
         $('input#start').daterangepicker(options).on('apply.daterangepicker', function(ev, picker) {
             $(this).val(picker.startDate.format('DD-MM-YYYY')); 
+            $(this).closest("form").find('input#end').val(null); 
             $("#opener").attr('start',picker.startDate.format('DD-MM-YYYY'));
             $('input#end').daterangepicker({
             autoUpdateInput: false,
