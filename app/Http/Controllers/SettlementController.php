@@ -93,39 +93,51 @@ class SettlementController extends Controller
         //
     }
     public function generate(){
-        return view('settlement.generate',['data'=> null]);
+        // dd(session()->get('request'));
+        $data = null;
+        if(session()->get('request') != null){
+            $data = [
+                'hotel' => session()->get('request')['data']['hotel']->toArray(),
+                'tour' => session()->get('request')['data']['tour']->toArray(),
+                'car' => session()->get('request')['data']['car']->toArray()
+            ];
+            $sellement = session()->pull('request');
+            session()->put('settlement',$sellement);
+        }
+        // dd($data);
+        return view('settlement.generate',['data' => $data])    ;
     }
     public function filter(Request $request){
         // dd($request->all());
         
         $start = date("Y-m-d", strtotime($request->start));
-        $end = date("Y-m-d", strtotime($request->end));
+        if($request->end != null){
+            $end = date("Y-m-d", strtotime($request->end));
+        }else{
+            $end = date("Y-m-d", strtotime($request->start.'+1 day'));
+        }
         $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->get();
         $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->get();
         $dataCar = BookingCarRental::whereBetween('start_date', [$start, $end])->where('status',2)->get();
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
-            $data = [
-                'hotel' =>$dataHotel->toArray(),
-                'tour' =>$dataTour->toArray(),
-                'car' =>$dataCar->toArray(),
-            ];
             session()->put('request',[
                 'start' => $start,
                 'end' => $start,
-                'note' => $request->notes,
                 'data' => [
                     'hotel' => $dataHotel,
                     'tour' =>$dataTour,
                     'car' =>$dataCar
                 ]
             ]);
-            return view('settlement.generate',['data'=> $data]);
+            return redirect('settlement/generate');
         }else{
-            return redirect()->back()->with('message', 'Nothing generate for '.date("d M Y", strtotime($request->start)).' - '.date("d M Y", strtotime($request->end)));
+            session()->forget('request')['data'];
+            return redirect()->back()->with('message', 'Nothing generate for '.date("d M Y", strtotime($start)).' - '.date("d M Y", strtotime($end)));
         }
     }
-    public function poccedList(){
-        $store = session()->pull('request');
+    public function poccedList(Request $request){
+        // dd($request->all());
+        $store = session()->pull('settlement');
         $dataHotel = $store['data']['hotel'];
         $dataTour = $store['data']['tour'];
         $dataCar = $store['data']['car'];
@@ -151,7 +163,7 @@ class SettlementController extends Controller
                 'total_price' => $totalPrice,
                 'total_commission' => $totalCommission,
                 'total_paid' => $totalPrice - $totalCommission,
-                'note' => $store['note'],
+                'note' => $request->notes,
                 'status' => 1,
                 'period_start' => $store['start'],
                 'period_end' => $store['end']
@@ -184,7 +196,6 @@ class SettlementController extends Controller
         return view('settlement.result',['data'=>$data]);
     }
     public function paid(Request $request){
-        // dd($request->all());
         if(SettlementGroup::find($request->id) != null){
             DB::beginTransaction();
             try{
@@ -269,6 +280,7 @@ class SettlementController extends Controller
     }
     // 
     public function bookingListInsert($data,$group_id,$type){
+        // dd($data);
         foreach($data as $d){
             if($type == 'hotel'){
                 $product_name = $d->hotel_name.'-'.$d->room_name;
@@ -309,7 +321,7 @@ class SettlementController extends Controller
                 'bank_name' => $bank_name,
                 'bank_account_name' => $bank_account_name,
                 'bank_account_number' => $bank_account_number,
-                'total_paid' => $d->total_price - $d->commission
+                'total_paid' => $d->net_price
             ]);
             $book->update([
                 'status' => 4

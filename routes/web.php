@@ -116,7 +116,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('/all', 'SettlementController@index');
 		Route::get('/detail/{id}', 'SettlementController@detail');
 		Route::get('/generate', 'SettlementController@generate');
-		Route::get('/procced', 'SettlementController@poccedList');
+		Route::post('/procced', 'SettlementController@poccedList');
 		Route::get('/excel/{id}', 'SettlementController@exportExcel');
 		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
 		Route::post('/filter', 'SettlementController@filter');
@@ -155,3 +155,4 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 //     return new App\Mail\StatusCompany($company);
 // });
+Route::get('lolo','SettlementController@tes');

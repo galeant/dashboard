@@ -24,6 +24,6 @@ class Schedule extends Model
     }
     public function bookings()
     {
-        return $this->hasMany('App\Models\BookingTours','id','schedule_id');
+        return $this->hasMany('App\Models\BookingTour','schedule_id','id');
     }
 }
