@@ -22,7 +22,7 @@
                 <div class="col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2 list-btn">
                     <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF" target="_blank" >View Invoice</a></div>
                     <div class="btn-inv-right"><a href="">Send Invoice to Email</a></div>
-                    <div class="btn-inv-right"><a href="/transaction/1/print/{{$data->planning->id}}/itinerary/PDF" target="_blank" >View Receipt</a></div>
+                    <div class="btn-inv-right"><a href="@if(count($data->planning) > 0)/transaction/1/print/{{$data->planning->id}}/itinerary/PDF@else # @endif" target="_blank" >View Receipt</a></div>
                     <div class="btn-inv-right"><a href="">Send Receipt to Email</a></div>
                 </div>
             </div>
@@ -180,7 +180,13 @@
                                         {{Helpers::idr($tour->total_price)}}
                                     </td>
                                     <td>
+                                        @if(count($tour->booking_status) > 0)
                                         <span class="badge" style="background-color:{{$tour->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">
+                                                Awaiting Payment
+                                        </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -314,7 +320,12 @@
                                     <td>{{Helpers::idr($hotel->price_per_night)}}</td>
                                     <td>{{Helpers::idr($hotel->total_price)}}</td>
                                     <td>
+                                        @if(count($hotel->booking_status))
                                         <span class="badge" style="background-color:{{$hotel->booking_status->color}}">{{$hotel->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
+                                        @endif
+                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -358,7 +369,11 @@
                                         {{Helpers::idr($rent_car->total_price)}}
                                     </td>
                                     <td>
+                                        @if(count($rent_car->booking_status))
                                         <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

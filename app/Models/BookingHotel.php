@@ -12,9 +12,12 @@ class BookingHotel extends Model
 	{
 	    return $this->hasOne('App\Models\TransactionStatus','id','status');
     }
-    
     public function transactions()
     {
         return $this->belongsTo('App\Models\Transaction', 'transaction_id','id');
     }
+    public function available_rooms(){
+    	return $this->hasMany('App\Models\RoomAvailable','room_id','room_id');
+    }
+
 }

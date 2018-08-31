@@ -219,7 +219,7 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script> 
     <!-- Mask js -->
     <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
-    <script src="http://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
 
     <!-- Moment Plugin Js -->
     <script src="{{ asset('plugins/momentjs/moment.js') }}"></script>

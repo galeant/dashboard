@@ -21,6 +21,10 @@ use App\Http\Libraries\PDF\TripItinerary;
 use Carbon\Carbon;
 use App\Models\Itinerary;
 use App\Models\Company;
+use App\Models\ReservationHotel;
+use App\Models\ReservationRoom;
+use App\Models\ReservationRentCar;
+use App\Models\RoomAvailable;
 
 class TransactionController extends Controller
 {
@@ -138,6 +142,37 @@ class TransactionController extends Controller
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
+
+    public function cancelledAction($transactionNumber = '',$data = null)
+    {
+        // $data = $data;
+        if(empty($data)){
+            $data = Transaction::where('transaction_number',$transactionNumber)->first();
+        }
+        DB::beginTransaction();
+        try{
+            if(count($data->booking_tours)){
+            }
+            if(count($data->booking_hotels)){
+                foreach($data->booking_hotels as $hotel){
+                    // dd($hotel);
+                    dd($hotel->available_rooms);
+                }
+            }
+            if(count($data->booking_activities)){
+               dd("erea");
+            }
+            if(count($data->booking_rent_cars)){
+                dd("ered");
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+        }
+
+    }
+
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
@@ -147,6 +182,9 @@ class TransactionController extends Controller
                 if(in_array(1, $listStat)){
                     DB::beginTransaction();
                     try{
+                        if(empty($data->planning)){
+                            return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
+                        }
                         Transaction::where('id',$id)->update([
                             'status_id' => $request->status,
                             'paid_at' => date('Y-m-d H:i:s'),
@@ -173,8 +211,9 @@ class TransactionController extends Controller
                 }else{
                     return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                 }
-            }else if($request->status == 5){
-                if(in_array(2, $listStat)){
+            }else if($request->status == 5){ //cancelled
+                if(in_array(2, $listStat) || in_array(1, $listStat)){
+                    // $this->cancelledAction($data->transaction_number,$data);
                     DB::beginTransaction();
                     try{
                         Transaction::where('id',$id)->update([
@@ -194,7 +233,7 @@ class TransactionController extends Controller
                 }else{
                     return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                 }
-            }else if($request->status == 6){
+            }else if($request->status == 6){ //refunded
                 if(in_array(5, $listStat)){
                     DB::beginTransaction();
                     try{
