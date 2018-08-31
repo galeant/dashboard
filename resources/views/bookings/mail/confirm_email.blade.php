@@ -174,7 +174,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 15px 0;" class="logo">
                         <a href="#" target="_blank">
-                            <img alt="Logo" src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.png" width="75" height="100" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
+                            <img alt="Logo" src="https://s3.ap-southeast-1.amazonaws.com/pigijo/assets/logo-black.png" width="75" style="display: block; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-size: 16px; padding-bottom: 20px;" border="0">
                         </a>
                         <hr class="width-80-mobile" />
                     </td>
@@ -208,18 +208,18 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Your Booking Reciept</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Your Booking Receipt</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Dear, {{$data->customer->salutation}}. {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}. <span>your booking with Booking Number {{$data->transaction_number}} has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
+                                                <p>Dear, {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}, <span>your booking with Booking Number {{$data->transaction_number}} has been successfully confirmed. Please find your booking receipt attached below.</span></p>
                                             </td>
                                         </tr>
                                     </table>
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>You may get asked to show your booking receipt upon arrival at the location. Please keep your booking receipt handy</p>
+                                            <td align="justify" style="padding: 0 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
+                                                <p>You may get asked to show your booking receipt upon arrival at the location. Please keep your booking receipt handy.</p>
                                             </td>
                                         </tr>
                                     </table>

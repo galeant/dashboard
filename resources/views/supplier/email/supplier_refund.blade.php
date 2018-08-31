@@ -215,11 +215,11 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Complete Your Payment</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Refund Notice</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi {{$supplier['fullname']}}, <span>we have receipt your booking order. Please complete your payment within the given time limit. Your order will be proceed only after you have completed your payment</span></p>
+                                                <p>Hi {{$supplier['fullname']}}, <span>we have received a refund request for the following booking. Please complete your payment within the given time limit. Your order will be proceed only after you have completed your payment</span></p>
                                             </td>
                                         </tr>
                                     </table>
@@ -230,29 +230,108 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <table style="background-color: lightgray; width:100%;">
+                                    <table style="background-color: whitesmoke; width:100%; border-radius: 5px;">
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Booking number</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Booking Number</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
                                                 <p>: 101101010010100</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Complete payment before</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Booked Activity</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
-                                                <p>: <b>Today, 22:00</b></p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Paket Jalan Jalan (10102)</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Total pay amount</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Activity Category</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
-                                                <p>: <b>IDR 1,950,000</b></p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Open Group</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Schedule</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 24 Agustus 2018 - 26 Agustus 2018</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Total Person</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 2 person(s)</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                Total Sales
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Rp 2,000,000</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <!-- COPY -->
+                                    
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <p><b><u>Refund Detail</u></b></p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="background-color: whitesmoke; width:100%; border-radius: 5px;">
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Request Date</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 12 July 2018</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Cancel</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Rp 200,000</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Refund Amount</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Rp 1,800,000</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Refund Status</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Successful</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Refund Date</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 15 July 2018</p>
                                             </td>
                                         </tr>
                                     </table>
@@ -260,8 +339,15 @@
                                         <tr>
                                             <td align="justify" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
                                                 <p>
-                                                    Your booking order detail can be found on this email attachment. Your receipt and e-tickets will be sent to you shortly after you have completed your payment.
+                                                    You need not to worry for the refund process as we already taken care of it and everything is under control. We are sending you this notice only for your information.
                                                 </p>
+                                                <p>
+                                                    We hope you find this information useful
+                                                </p>
+                                                <p>
+                                                    Thank you
+                                                </p><br>
+
                                             </td>
                                         </tr>
                                     </table>
@@ -322,7 +408,7 @@
                     </td>  
                 </tr>
             </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
+            <!-- <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
                 <tr>
                     <td cellpadding:"30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
                         <button class="btn-socmed bg-transparent">
@@ -343,7 +429,7 @@
                         <img src="{{asset('images/logo-white.png')}}" alt="logo white">
                     </td>
                 </tr>
-            </table>
+            </table> -->
             <!--[if (gte mso 9)|(IE)]>
             </td>
             </tr>
