@@ -212,7 +212,7 @@
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Dear, {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}. <span>your booking with Booking Number {{$data->transaction_number}} has been succesfully confirmed. Please find your booking receipt attachment below.</span></p>
+                                                <p>Dear, {{ucfirst($data->customer->firstname)}} {{$data->customer->lastname}}, <span>your booking with Booking Number {{$data->transaction_number}} has been successfully confirmed. Please find your booking receipt attached below.</span></p>
                                             </td>
                                         </tr>
                                     </table>
