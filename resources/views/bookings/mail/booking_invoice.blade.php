@@ -260,7 +260,7 @@
                                         <tr>
                                             <td align="justify" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
                                                 <p>
-                                                    Your booking order detail can be found on this email attachment. Your receipt and e-tickets will be sent to you shortly after you have completed your payment
+                                                    Your booking order detail can be found on this email attachment. Your receipt and e-tickets will be sent to you shortly after you have completed your payment.
                                                 </p>
                                             </td>
                                         </tr>
