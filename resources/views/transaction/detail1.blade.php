@@ -23,7 +23,7 @@
                     <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF" target="_blank" >View Invoice</a></div>
                     <div class="btn-inv-right"><a href="">Send Invoice to Email</a></div>
                     <div class="btn-inv-right"><a href="/transaction/1/print/{{$data->planning->id}}/itinerary/PDF" target="_blank" >View Receipt</a></div>
-                    <div class="btn-inv-right"><a href="">Send Receipt to Email</a></div>
+                    <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/send_receipt">Send Receipt to Email</a></div>
                 </div>
             </div>
     	</div>

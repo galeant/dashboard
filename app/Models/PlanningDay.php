@@ -9,7 +9,7 @@ class PlanningDay extends Model
     //
     protected $table = 'planning_days';
 
-    public function planning_days(){
+    public function planning_destinations(){
         return $this->hasMany('App\Models\PlanningDestination', 'planning_day_id','id');
     }
 }

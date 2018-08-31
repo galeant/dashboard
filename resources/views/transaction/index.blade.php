@@ -152,7 +152,7 @@
                                 @foreach($data as $dt)
                                 <tr>
                                     <td><a href="/transaction/{{$dt->transaction_number}}" class="btn btn-primary">{{$dt->transaction_number}}</a></td>
-                                    <td>{{date('d M Y H:i:s',strtotime($dt->paid_at))}}</td>
+                                    <td>{{date('d M Y H:i:s',strtotime($dt->created_at))}}</td>
                                     <td>{{$dt->fullname}}</td>
                                     <td>{{$dt->email}}</td>
                                     <td>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Models\TemporaryTransaction;
 use App\Models\Planning;
+use App\Models\PlanningDay;
 use App\Models\User;
 use App\Models\TransactionLogStatus;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ use App\Http\Libraries\PDF\TripItinerary;
 use Carbon\Carbon;
 use App\Models\Itinerary;
 use App\Models\Company;
+use App\Models\Province;
+use App\Models\City;
 
 class TransactionController extends Controller
 {
@@ -138,6 +141,16 @@ class TransactionController extends Controller
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
+
+    public function send_receipt($id){
+        $data = Transaction::where('transaction_number', $id)->first();
+        $request = new Request();
+        $request->request->add(['status', $data->transaction_status]);
+        $pdf = $this->print($request,$data->transaction_number,'PDF',1);
+        $pdf2 = $this->print_itinerary($request,1, $data->planning->id,'PDF',1);
+        Mail::to($data->customer->email)->send(new TransactionMail($data));
+        return redirect('transaction/'.$data->transaction_number)->with('message','Send Receipt Email Successfull');
+    }
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
@@ -926,10 +939,10 @@ class TransactionController extends Controller
     public function print_itinerary(Request $request,$transaction_id, $planning_id,$type = 'PDF',$download = 0)
     {
         $planning = Planning::where('id',$planning_id)->first();
-        if($transaction_id!=0){
+        if($transaction_id==1){
             $data = Transaction::where('id',$planning->transaction_id)->first();
         }
-        else{
+        else if($transaction_id==0){
             $data = TemporaryTransaction::where('id',$planning->temporary_transaction_id)->first();
         }
         // dd($data);
@@ -968,7 +981,17 @@ class TransactionController extends Controller
             $pdf->SetLineWidth(0.1);
             $pdf->SetDrawColor(200,200,200);
             $pdf->SetFont('Arial','B',15);
-            $pdf->Cell(30,7,'Day '.$day_at.' - '.$data->planning->name,'',0,'');
+            $destination = PlanningDay::where('id',$data->planning->id)->where('number_of_day', $day_at)->select('location_id', 'location_type')->first();
+            $name_destination = "---";
+            if(!empty($destination)){
+                if($destination->location_type==1){
+                    $name_destination = Province::where('id',$destination->location_id)->value('name');
+                }
+                else if($destination->location_type==2){
+                    $name_destination = City::where('id',$destination->location_id)->value('name');
+                }
+            }
+            $pdf->Cell(120,7,'Day '.$day_at.' - '.$name_destination,'',0,'');
             $pdf->Ln();
             $pdf->SetFont('Arial','',12);
             $pdf->Cell(5,7, '', 0, '');
@@ -1039,18 +1062,20 @@ class TransactionController extends Controller
                         $pdf->SetFont('Arial','',10);
                         $pdf->Ln();
                         // dd($tour->transactions->contact_list);
-                        foreach($data->contact_list as $contact){
-                            $pdf->Cell(10, 5, '','',0,'');
-                            $pdf->SetTopMargin(0);
-                            $pdf->Cell(180,5,$contact->firstname.' '.$contact->lastname,'',0);
-                            $pdf->Ln();
+                        if($transaction_id==1){
+                            foreach($data->contact_list as $contact){
+                                $pdf->Cell(10, 5, '','',0,'');
+                                $pdf->SetTopMargin(0);
+                                $pdf->Cell(180,5,$contact->firstname.' '.$contact->lastname,'',0);
+                                $pdf->Ln();
+                            }
                         }
                         $pdf->Ln(5);
                         $this->new_page($pdf, $pdf->getY(), $data->planning);
                         // $this->new_page($pdf->getY(), $data->planning);
                         $pdf->Cell(15, 5, '','',0,'');
                         $pdf->SetFont('Arial','B',10);
-                        $pdf->Cell(180,5,'Booking Refernece Number:','',0);
+                        $pdf->Cell(180,5,'Booking Reference Number:','',0);
                         $pdf->SetFont('Arial','',10);
                         $pdf->Ln();
                         $pdf->Cell(15, 5, '','',0,'');
@@ -1064,7 +1089,7 @@ class TransactionController extends Controller
                         //parameter left  border
                         $this->set_border($pdf);
                         $this->new_page($pdf, $pdf->getY(), $data->planning);                        
-                        $pdf->Ln(15);
+                        $pdf->Ln(50);
                     }
                 }
             }
@@ -1140,7 +1165,7 @@ class TransactionController extends Controller
                         $this->bottom_right_y = $pdf->getY()+5;
 
                         $this->set_border($pdf);
-                        $pdf->Ln(15);
+                        $pdf->Ln(50);
                     }
                 }
                 // }
@@ -1223,7 +1248,7 @@ class TransactionController extends Controller
 
                             $this->set_border($pdf);
 
-                            $pdf->Ln(100);
+                            $pdf->Ln(50);
                         }
                     }
                 // }
@@ -1286,5 +1311,37 @@ class TransactionController extends Controller
         $pdf->Line($top_right_x, $top_right_y, $bottom_right_x,$bottom_right_y);
         //parameter bottom  border
         $pdf->Line($bottom_left_x, $bottom_left_y, $bottom_right_x,$bottom_right_y);
+    }
+    public function set_border_top($pdf){
+        $top_left_x = $this->top_left_x;
+        $top_left_y = $this->top_left_y;
+        $top_right_x = $this->top_right_x;
+        $top_right_y = $this->top_right_y;
+        //parameter top  border
+        $pdf->Line($top_left_x, $top_left_y, $top_right_x,$top_right_y);
+    }
+    public function set_border_right($pdf){
+        $top_right_x = $this->top_right_x;
+        $top_right_y = $this->top_right_y;
+        $bottom_right_x = $this->bottom_right_x;
+        $bottom_right_y = $this->bottom_right_y;
+        //parameter right  border
+        $pdf->Line($top_right_x, $top_right_y, $bottom_right_x,$bottom_right_y);
+    }
+    public function set_border_bottom($pdf){
+        $bottom_left_x = $this->bottom_left_x;
+        $bottom_left_y = $this->bottom_left_y;
+        $bottom_right_x = $this->bottom_right_x;
+        $bottom_right_y = $this->bottom_right_y;
+        //parameter bottom  border
+        $pdf->Line($bottom_left_x, $bottom_left_y, $bottom_right_x,$bottom_right_y);
+    }
+    public function set_border_left($pdf){
+        $top_left_x = $this->top_left_x;
+        $top_left_y = $this->top_left_y;
+        $bottom_left_x = $this->bottom_left_x;
+        $bottom_left_y = $this->bottom_left_y;
+        //parameter left  border
+        $pdf->Line($top_left_x, $top_left_y, $bottom_left_x,$bottom_left_y);
     }
 }
