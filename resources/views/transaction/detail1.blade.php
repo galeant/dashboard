@@ -128,7 +128,7 @@
                                 <h5 class="font-thin">
                                     Total Payment
                                 </h5>
-                                <p>Rp. {{number_format($data->total_paid)}}</p>
+                                <p>Rp. {{number_format($data->total_price-$data->total_discount)}}</p>
                             </div>
                         </div>
                     </div>
