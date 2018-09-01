@@ -169,7 +169,7 @@
                                         @endif
                                     </td>
                                     {{-- <td>{{number_format($dt->total_discount)}}</td> --}}
-                                    <td>{{Helpers::idr($dt->total_paid)}}</td>
+                                    <td>{{Helpers::idr($dt->total_price-$dt->total_discount)}}</td>
                                     <td><span class="badge" style="background-color:{{$dt->status_color}}">{{$dt->status}}</span></td>
                                     <td>
                                         {{$dt->payment_method}}
