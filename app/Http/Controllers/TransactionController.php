@@ -204,7 +204,6 @@ class TransactionController extends Controller
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
-                        dd($exception);
                         DB::rollBack();
                         \Log::info($exception->getMessage());
                         return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());

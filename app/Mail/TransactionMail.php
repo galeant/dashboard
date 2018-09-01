@@ -34,7 +34,7 @@ class TransactionMail extends Mailable
                 'as' => $this->transaction->transaction_number.'.pdf',
                 'mime' => 'application/pdf',
             ])
-            ->attach(url('pdf/itinerary-'.$this->transaction->transaction_number.'.pdf'), [
+            ->attach(base_path('public/pdf/itinerary-'.$this->transaction->transaction_number.'.pdf'), [
                 'as' => 'itinerary-'.$this->transaction->transaction_number.'.pdf',
                 'mime' => 'application/pdf',
             ]);
