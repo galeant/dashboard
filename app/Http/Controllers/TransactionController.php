@@ -182,9 +182,9 @@ class TransactionController extends Controller
                 if(in_array(1, $listStat)){
                     DB::beginTransaction();
                     try{
-                        if(empty($data->planning)){
-                            return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
-                        }
+                        // if(empty($data->planning)){
+                        //     return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
+                        // }
                         Transaction::where('id',$id)->update([
                             'status_id' => $request->status,
                             'paid_at' => date('Y-m-d H:i:s'),
@@ -204,6 +204,7 @@ class TransactionController extends Controller
                         DB::commit();
                         return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
                     }catch (\Exception $exception){
+                        dd($exception);
                         DB::rollBack();
                         \Log::info($exception->getMessage());
                         return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());

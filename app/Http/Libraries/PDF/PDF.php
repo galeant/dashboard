@@ -180,7 +180,7 @@ class PDF extends Fpdf
 	    // Move to the right
 	    $this->SetXY($this->GetPageWidth()-70, 25);
 	    // Title
-	    $this->Cell(60,10,'INVOICE',0,0,'R',false);
+	    $this->Cell(60,10,'Booking Receipt',0,0,'R',false);
 
 		$this->SetXY($this->GetPageWidth()-70,45);
 	    $this->SetRightMargin(30);
