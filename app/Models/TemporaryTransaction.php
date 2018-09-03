@@ -12,12 +12,10 @@ class TemporaryTransaction extends Model
 	{
 	    return $this->hasOne('App\Models\TransactionStatus','id','status_id');
     }
-
     public function customer()
     {
         return $this->hasOne('App\Models\Members','id','user_id');
     }
-    
     public function planning()
     {
         return $this->hasOne('App\Models\Planning','temporary_transaction_id','id');
@@ -33,5 +31,9 @@ class TemporaryTransaction extends Model
     public function booking_activities()
     {
         return $this->hasMany('App\Models\BookingActivity', 'temp_transaction_id','id');
+    }
+    public function booking_rent_cars()
+    {
+        return $this->hasMany('App\Models\BookingRentCar', 'temp_transaction_id','id');
     }
 }

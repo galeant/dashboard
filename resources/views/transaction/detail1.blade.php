@@ -86,7 +86,9 @@
                             </div>
                             <div class="col-md-12">
                                 <h5 class="font-thin">Booked By</h5>
+                                @if($data->customer)
                                 <p>{{$data->customer->firstname.' '.$data->customer->lastname}} ({{$data->customer->email}})</p>
+                                @endif
                             </div>
                             <div class="col-md-12">
                                 <h4 class="font-fat m-t-20 m-b-15">Contact Person</h4>
