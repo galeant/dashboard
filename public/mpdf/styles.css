@@ -1,0 +1,179 @@
+@font-face {
+  font-family: MyriadPro;
+  src: url(../fonts/MyriadPro-Regular.otf);
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: transparent !important;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: MyriadPro, sans-serif;
+  font-size: 12px;
+  line-height: 1.8em;
+  color: #333333;
+}
+
+/* Ini tar take out */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.header {
+  border-top: 10px solid #e17306;
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 0;
+  box-sizing: border-box;
+  align-items: flex-start;
+  /* Ini tar take out */
+  flex: initial;
+}
+.header .logo {
+  flex: initial;
+}
+.header .logo img {
+  min-width: 100px;
+  height: auto;
+}
+.header .title {
+  flex: initial;
+  text-align: right;
+}
+.header .title h1 {
+  font-size: 3em;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  margin: 0;
+  margin-bottom: 8px;
+  line-height: 1em;
+}
+.header .title span {
+  display: block;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 10px solid #37383a;
+  padding: 32px 0;
+  align-items: center;
+  /* Ini tar take out */
+  flex: initial;
+}
+.footer .contact {
+  flex: initial;
+  padding-left: 16px;
+  border-left: 1px solid #e17306;
+}
+.footer .contact span {
+  display: block;
+}
+.footer .logo {
+  flex: initial;
+}
+.footer .logo img {
+  min-width: 100px;
+  height: auto;
+}
+
+/* Content Start */
+.content {
+  flex: auto;
+}
+.content .info {
+  padding: 24px 0;
+}
+.content .info .title,
+.content .table .title {
+  font-size: 1.4em;
+  font-weight: bold;
+  padding: 8px 0;
+}
+.content .info .info-row {
+  padding: 4px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.content .info .info-row > span {
+  flex: 0 0 80%;
+}
+.content .info .info-row > span:first-child {
+  width: 200px;
+  flex: 0 0 20%;
+}
+.content .table .table-header {
+  padding: 8px 4px;
+  background-color: #d8d8d8;
+  display: flex;
+  font-weight: bold;
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+}
+.content .table .table-row {
+  padding: 8px 0;
+  display: flex;
+  border-bottom: 1px solid #d8d8d8;
+}
+.content .table .table-header > span,
+.content .table .table-row > span {
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+.content .table .table-header .item,
+.content .table .table-row .item {
+  flex: 0 0 10%;
+}
+.content .table .table-header .item-description,
+.content .table .table-row .item-description {
+  flex: 0 0 35%;
+}
+.content .table .table-header .qty,
+.content .table .table-row .qty {
+  flex: 0 0 15%;
+}
+.content .table .table-header .unit-price,
+.content .table .table-row .unit-price,
+.content .table .total-row .label {
+  flex: 0 0 20%;
+}
+.content .table .table-header .total,
+.content .table .table-row .total,
+.content .table .total-row .amount {
+  flex: 0 0 20%;
+  text-align: right;
+}
+.content .table .table-row .item-description > span {
+  display: block;
+}
+.content .table .table-row .item-description .date {
+  color: #9b9b9b;
+  font-size: 0.9em;
+}
+.content .table .total-row {
+  display: flex;
+}
+.content .table .total-row .spacer {
+  flex: 0 0 60%;
+  padding: 8px 4px;
+  box-sizing: border-box;
+}
+.content .table .total-row .label,
+.content .table .total-row .amount {
+  padding: 8px 4px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.content .table .grand-total {
+  font-weight: bold;
+  color: #e17306;
+}
+/* Content End */

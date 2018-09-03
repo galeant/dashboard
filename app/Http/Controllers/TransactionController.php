@@ -24,6 +24,8 @@ use App\Models\Itinerary;
 use App\Models\Company;
 use App\Models\Province;
 use App\Models\City;
+use Illuminate\Support\Facades\App;
+use App\Http\Libraries\PDF\PDFM;
 
 class TransactionController extends Controller
 {
@@ -938,6 +940,25 @@ class TransactionController extends Controller
 
     public function print_itinerary(Request $request,$transaction_id, $planning_id,$type = 'PDF',$download = 0)
     {
+        // return view('bookings.tour.html2');
+        // $pdf = App::make('dompdf.wrapper');
+        // $pdf->loadHTML(view('bookings.tour.html'));
+        // return $pdf->stream();
+        // return view('bookings.tour.html');
+        // $html = view('bookings.tour.html');
+        // $array_css[0] = url('css/bootstrap.min.css');
+        // $array_css[1] = url('planning/main.css');
+        // $array_css[2] = url('planning/style.css');
+        // // $array_css[3] = url('planning/responsive.css');
+        // // dd($array_css);
+        // // $tophr = '<hr style="border:none;height:50px;width: 200%; color:rgb(255,140,0);">';
+        // // $bottomhr = '<hr style="border:none;border-top: 1px solid rgb(255,140,0);height:20px;width: 100%; color:rgb(255,140,0);">';
+        // $mpdf = new PDFM;
+        // $mpdf->pdf($html, $array_css);
+        // // $mpdf->AddPage();
+        // // $mpdf->SetHTMLHeader($tophr);
+        // // // $mpdf->writeHTML($css, 1);
+        // return $mpdf;
         $planning = Planning::where('id',$planning_id)->first();
         if($transaction_id==1){
             $data = Transaction::where('id',$planning->transaction_id)->first();
