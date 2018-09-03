@@ -249,7 +249,7 @@
                             @else
                             <div class="col-md-8" id="value" cat="bank">
                                 <div class="thumbnail">
-                                    <img src="http://placehold.it/500x300" class="img-responsive">
+                                    <img src="https://placehold.it/500x300" class="img-responsive">
                                     <div class="caption">
                                         <button type="button" class="btn bg-red waves-effect" id="change">
                                             <i class="material-icons">replay</i>
@@ -302,7 +302,7 @@
                                 @else
                                 <div class="col-md-6" id="value" cat="akta">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <img src="https://placehold.it/500x300" class="img-responsive">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -338,7 +338,7 @@
                                 @else
                                 <div class="col-md-6" id="value" cat="siup">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <img src="https://placehold.it/500x300" class="img-responsive">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -374,7 +374,7 @@
                                 @else
                                 <div class="col-md-6" id="value" cat="npwp">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <img src="https://placehold.it/500x300" class="img-responsive">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -410,7 +410,7 @@
                                 @else
                                 <div class="col-md-6" id="value" cat="ktp">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <img src="https://placehold.it/500x300" class="img-responsive">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -446,7 +446,7 @@
                                 @else
                                 <div class="col-md-6" id="value" cat="evi">
                                     <div class="thumbnail">
-                                        <img src="http://placehold.it/500x300" class="img-responsive">
+                                        <img src="https://placehold.it/500x300" class="img-responsive">
                                         <div class="caption">
                                             <button type="button" class="btn bg-red waves-effect" id="change">
                                                 <i class="material-icons">replay</i>
@@ -1262,7 +1262,7 @@
     <script src="{{ asset('plugins/telformat/js/intlTelInput.js') }}"></script>
     <!-- Mask js -->
 	<script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyAWlnymqJ5QiPRrM_NIvEMg9eQLuPzS4rE&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWlnymqJ5QiPRrM_NIvEMg9eQLuPzS4rE&libraries=places"></script>
     <!-- Light Gallery Plugin Js -->
     <script src="{{asset('plugins/light-gallery/js/lightgallery-all.js')}}"></script>
     <!-- Jquery Validation Plugin Css -->

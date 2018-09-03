@@ -45,7 +45,7 @@ class BookingTourController extends Controller
                         return Carbon::parse($data->start_date)->format('d M Y');
                     }
                     else{
-                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('h:i').' - '.Carbon::parse($data->start_hours)->format('h:i');
+                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('H:i').' - '.Carbon::parse($data->end_hours)->format('H:i');
                     }
                 }
                 else{

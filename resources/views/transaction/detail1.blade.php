@@ -22,8 +22,8 @@
                 <div class="col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2 list-btn">
                     <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF" target="_blank" >View Invoice</a></div>
                     <div class="btn-inv-right"><a href="">Send Invoice to Email</a></div>
-                    <div class="btn-inv-right"><a href="/transaction/1/print/{{$data->planning->id}}/itinerary/PDF" target="_blank" >View Receipt</a></div>
-                    <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/send_receipt">Send Receipt to Email</a></div>
+                    <div class="btn-inv-right"><a href="@if(!empty($data->planning) > 0)/transaction/1/print/{{$data->planning->id}}/itinerary/PDF@else # @endif" target="_blank" >View Receipt</a></div>
+                    <div class="btn-inv-right"><a href="">Send Receipt to Email</a></div>
                 </div>
             </div>
     	</div>
@@ -86,7 +86,9 @@
                             </div>
                             <div class="col-md-12">
                                 <h5 class="font-thin">Booked By</h5>
+                                @if($data->customer)
                                 <p>{{$data->customer->firstname.' '.$data->customer->lastname}} ({{$data->customer->email}})</p>
+                                @endif
                             </div>
                             <div class="col-md-12">
                                 <h4 class="font-fat m-t-20 m-b-15">Contact Person</h4>
@@ -128,7 +130,7 @@
                                 <h5 class="font-thin">
                                     Total Payment
                                 </h5>
-                                <p>Rp. {{number_format($data->total_paid)}}</p>
+                                <p>Rp. {{number_format($data->total_price-$data->total_discount)}}</p>
                             </div>
                         </div>
                     </div>
@@ -180,7 +182,13 @@
                                         {{Helpers::idr($tour->total_price)}}
                                     </td>
                                     <td>
+                                        @if(!empty($tour->booking_status))
                                         <span class="badge" style="background-color:{{$tour->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">
+                                                Awaiting Payment
+                                        </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -314,7 +322,12 @@
                                     <td>{{Helpers::idr($hotel->price_per_night)}}</td>
                                     <td>{{Helpers::idr($hotel->total_price)}}</td>
                                     <td>
+                                        @if(count($hotel->booking_status))
                                         <span class="badge" style="background-color:{{$hotel->booking_status->color}}">{{$hotel->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
+                                        @endif
+                                        
                                     </td>
                                 </tr>
                             @endforeach
@@ -358,7 +371,11 @@
                                         {{Helpers::idr($rent_car->total_price)}}
                                     </td>
                                     <td>
+                                        @if(count($rent_car->booking_status))
                                         <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                        @else
+                                        <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

@@ -9,10 +9,9 @@ class BookingTour extends Model
     protected $table = 'booking_tours';
 
     public function booking_status()
-	{
-	    return $this->hasOne('App\Models\TransactionStatus','id','status');
+    {
+        return $this->hasOne('App\Models\BookingStatus','id','status');
     }
-    
     public function transactions()
     {
         return $this->belongsTo('App\Models\Transaction', 'transaction_id','id');

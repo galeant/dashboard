@@ -119,7 +119,7 @@
                                             <div class="col-md-6 cover-image">
                                                 <h5>Cover Product Image*</h5>
                                                 <div class="dd-main-image">
-                                                    <img style="width: 100%" src="http://via.placeholder.com/400x300" id="cover-img">
+                                                    <img style="width: 100%" src="https://via.placeholder.com/400x300" id="cover-img">
                                                 </div>
                                                 <input name="image_resize" type="text" value="" hidden>
                                                 <a href="#" id="c_p_picture" class="btn bg-teal btn-block btn-xs waves-effect">Upload Cover Image</a>

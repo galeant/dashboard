@@ -954,11 +954,9 @@ class TourController extends Controller
         }else{
             $request->end_date = date("Y-m-d",strtotime($request->end_date));
         }
-
-        // dd($request->all());
+        
         $id = $request->id;
         $schedule = Schedule::find($id);
-        // dd($schedule = Schedule::where('id',$id)->with('bookings')->get());
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){
@@ -970,7 +968,6 @@ class TourController extends Controller
         }
         
         if($product->schedule_type == 1 || $product->schedule_type == 3){
-            
             if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
                 $response = [
                     'message' => 'Can\'t change the schedule past the current date !',

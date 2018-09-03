@@ -158,7 +158,6 @@
                                 </thead>
                                 <tbody>
                                    @foreach($data as $dt)
-
                                    <tr>
                                        <td>{{$dt->product_code}}</td>
                                        <td><img src="{{cdn($dt->cover_path.'/xsmall/'.$dt->cover_filename)}}" width="50" height="50"></td>

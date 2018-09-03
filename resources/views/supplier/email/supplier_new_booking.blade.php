@@ -215,11 +215,11 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>Complete Your Payment</b></td>
+                                            <td align="left" style="font-size: 25px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"><b>New booking confirmed!</b></td>
                                         </tr>
                                         <tr>
                                             <td align="justify" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding">
-                                                <p>Hi {{$supplier['fullname']}}, <span>we have receipt your booking order. Please complete your payment within the given time limit. Your order will be proceed only after you have completed your payment</span></p>
+                                                <p>Hi {{$supplier['fullname']}}, <span>you have received a new booking for the following booking. Please complete your payment within the given time limit. Your order will be proceed only after you have completed your payment</span></p>
                                             </td>
                                         </tr>
                                     </table>
@@ -230,29 +230,119 @@
                                             </td>
                                         </tr>
                                     </table>
-                                    <table style="background-color: lightgray; width:100%;">
+                                    <table style="background-color: whitesmoke; width:100%; border-radius: 5px;">
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Booking number</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Booking Number</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
                                                 <p>: 101101010010100</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Complete payment before</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Booked Activity</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
-                                                <p>: <b>Today, 22:00</b></p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Paket Jalan Jalan (10102)</p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px;">
-                                                <p>Total pay amount</p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Activity Category</p>
                                             </td>
-                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
-                                                <p>: <b>IDR 1,950,000</b></p>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Open Group</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Schedule</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 24 Agustus 2018 - 26 Agustus 2018</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Total Person</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 2 person(s)</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                Total Sales
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Rp 2,000,000</p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <!-- COPY -->
+                                    
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <p><b><u>Your Product's booking summary</u></b></p>
+                                                <p>
+                                                    Here is the summary of your product related to this booking
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table style="background-color: whitesmoke; width:100%; border-radius: 5px;">
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Product</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: Paket Jalan Jalan (10102)</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Schedule</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 24 Agustus 2018 - 26 Agustus 2018</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Maximum Booking</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 10 person</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Total Booking</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 2 booking(s), 5 person(s), total</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Availability</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: <b>5 of 10 left</b></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #666666; padding-left: 10px; width: 40%;">
+                                                <p>Settlement Due Date</p>
+                                            </td>
+                                            <td style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; width: 60%;">
+                                                <p>: 23 Agustus 2018</p>
                                             </td>
                                         </tr>
                                     </table>
@@ -260,7 +350,7 @@
                                         <tr>
                                             <td align="justify" style="font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;">
                                                 <p>
-                                                    Your booking order detail can be found on this email attachment. Your receipt and e-tickets will be sent to you shortly after you have completed your payment.
+                                                   For more detailed information regarding your product, please go to Pigijo Partner Dashboard.
                                                 </p>
                                             </td>
                                         </tr>
@@ -270,6 +360,17 @@
                             <tr>
                                 <td align="center">
                                     <!-- BULLETPROOF BUTTON -->
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td align="center" style="padding-top: 25px;" class="padding">
+                                                <table border="0" cellspacing="0" cellpadding="0" class="mobile-button-container">
+                                                    <tr>
+                                                    	<td class="td-button bg-orange" align="center" style="border-radius: 5px; outline:none;" ><a href="{{ env('APP_URL_SUPPLIER').('/password/reset/'. $supplier['token']) }}" target="_blank" style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; border-radius: 3px; padding: 15px 25px; display: inline-block;" class="mobile-button">Go To Dashboard</a></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <hr class="" style="margin-top: 40px;"/>
@@ -322,7 +423,7 @@
                     </td>  
                 </tr>
             </table>
-            <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
+            <!-- <table width="100%" border="0" cellspacing="0" cellpadding ="0" align="center" style="max-width: 500px; margin: auto;" class="responsive-table tab-none">
                 <tr>
                     <td cellpadding:"30" align="center" style="font-size: 12px; line-height: 18px; font-family: Helvetica, Arial, sans-serif; color:#666666; margin-left: 30px;">
                         <button class="btn-socmed bg-transparent">
@@ -343,7 +444,7 @@
                         <img src="{{asset('images/logo-white.png')}}" alt="logo white">
                     </td>
                 </tr>
-            </table>
+            </table> -->
             <!--[if (gte mso 9)|(IE)]>
             </td>
             </tr>

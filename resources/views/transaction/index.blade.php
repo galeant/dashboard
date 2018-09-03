@@ -152,7 +152,13 @@
                                 @foreach($data as $dt)
                                 <tr>
                                     <td><a href="/transaction/{{$dt->transaction_number}}" class="btn btn-primary">{{$dt->transaction_number}}</a></td>
-                                    <td>{{date('d M Y H:i:s',strtotime($dt->created_at))}}</td>
+                                    <td>
+                                    @if(!empty($dt->paid_at))
+                                        {{date('d M Y H:i:s',strtotime($dt->paid_at))}}
+                                    @else
+                                        -
+                                    @endif
+                                    </td>
                                     <td>{{$dt->fullname}}</td>
                                     <td>{{$dt->email}}</td>
                                     <td>
@@ -163,7 +169,7 @@
                                         @endif
                                     </td>
                                     {{-- <td>{{number_format($dt->total_discount)}}</td> --}}
-                                    <td>{{Helpers::idr($dt->total_paid)}}</td>
+                                    <td>{{Helpers::idr($dt->total_price-$dt->total_discount)}}</td>
                                     <td><span class="badge" style="background-color:{{$dt->status_color}}">{{$dt->status}}</span></td>
                                     <td>
                                         {{$dt->payment_method}}

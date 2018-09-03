@@ -26,6 +26,10 @@ use App\Models\Province;
 use App\Models\City;
 use Illuminate\Support\Facades\App;
 use App\Http\Libraries\PDF\PDFM;
+use App\Models\ReservationHotel;
+use App\Models\ReservationRoom;
+use App\Models\ReservationRentCar;
+use App\Models\RoomAvailable;
 
 class TransactionController extends Controller
 {
@@ -153,6 +157,84 @@ class TransactionController extends Controller
         Mail::to($data->customer->email)->send(new TransactionMail($data));
         return redirect('transaction/'.$data->transaction_number)->with('message','Send Receipt Email Successfull');
     }
+    
+    public function cancelledAction($transactionNumber = '',$data = null)
+    {
+        // dd($data);
+        if(empty($data)){
+            $data = Transaction::where('transaction_number',$transactionNumber)->first();
+        }
+        if(empty($data)){
+            $data = TemporaryTransaction::where('id',$transactionNumber)->first();
+        }
+        DB::beginTransaction();
+        try{
+            if(count($data->booking_activities)){
+                foreach ($data->booking_activities as $act) {
+                    $act->status = 3;
+                    $act->save();
+                }
+            }
+            if(count($data->booking_tours)){
+
+                $tours_cart_id = [];
+                foreach ($data->booking_tours as $tour) {
+                    $tours_cart_id[] = $tour->id;
+                    $tour->status = 3;
+                    $tour->save();
+                }
+                // ============ delete availablity log start =================
+                $availablity_log = DB::table('availlability_log');
+                $availablity_log->whereIn('cart_id',$tours_cart_id)->delete();
+            }
+            if(count($data->booking_hotels)){
+                // dd('here');
+                foreach($data->booking_hotels as $hotel){
+                    $date = Helpers::breakdown_date($hotel->start_date,$hotel->end_date);
+                    foreach($date as $dt){
+                        $m = (int)date('m',strtotime($dt['date']));
+                        $d = (int)date('d',strtotime($dt['date']));
+                        $y = date('Y',strtotime($dt['date']));
+                        $y = ($y == 2018 ? 0 : 1);
+                        $reservation = $hotel->reservation()->first();
+                        if($reservation){
+                            $reservation->status = 6; // status cancelled in UHotel
+                            $reservation->status_changed = date('Y-m-d H:i:s');
+                            $reservation->save();
+                        }   
+                        $avaibility = $hotel->available_rooms()->where('m',$m)->where('y',$y)->first();
+                        $avaibility['a'.$d] = $avaibility['a'.$d] - 1;
+                        if($avaibility['a'.$d] >= 0){
+                            $avaibility->save();
+                        }
+                    }
+                    $hotel->status = 3;
+                    $hotel->save();
+                }
+            }
+            if(count($data->booking_rent_cars)){
+                foreach($data->booking_rent_cars as $car){
+                    $car->status = 3;
+                    $reservationCar = $car->reservation;
+                    if($reservationCar){
+                        $reservationCar->status = 6;
+                        $reservationCar->status_changed = date('Y-m-d H:i:s');
+                        $reservationCar->save();
+                        if($reservationCar){
+                            $car->save();
+                        }
+                    }
+                }
+            }
+            DB::commit();
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return false;
+        }
+
+    }
+
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
@@ -162,6 +244,9 @@ class TransactionController extends Controller
                 if(in_array(1, $listStat)){
                     DB::beginTransaction();
                     try{
+                        if(empty($data->planning)){
+                            return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
+                        }
                         Transaction::where('id',$id)->update([
                             'status_id' => $request->status,
                             'paid_at' => date('Y-m-d H:i:s'),
@@ -188,10 +273,12 @@ class TransactionController extends Controller
                 }else{
                     return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                 }
-            }else if($request->status == 5){
-                if(in_array(2, $listStat)){
+            }else if($request->status == 5){ //cancelled
+                if(in_array(2, $listStat) || in_array(1, $listStat)){
+                    
                     DB::beginTransaction();
                     try{
+                        $this->cancelledAction($data->transaction_number,$data);
                         Transaction::where('id',$id)->update([
                             'status_id' => $request->status
                         ]);
@@ -209,7 +296,7 @@ class TransactionController extends Controller
                 }else{
                     return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                 }
-            }else if($request->status == 6){
+            }else if($request->status == 6){ //refunded
                 if(in_array(5, $listStat)){
                     DB::beginTransaction();
                     try{
