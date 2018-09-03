@@ -3,6 +3,7 @@
 @parent
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
 @stop
 @section('main-content')
 <div class="card">
@@ -16,6 +17,13 @@
     <div class="card">
         <div class="header">
             <h4>Booking Detail</h4>
+            <ul class="header-dropdown m-r--5">
+                <li>
+                    @if($data->status == 3)
+                    <a location="{{ url('bookings/rent-car/'.$data->booking_number.'/refund')}}" class="btn btn-waves bg-red" id="refund" >Refund</a>
+                    @endif
+                </li>
+            </ul>
         </div>
         <div class="body">
             <div class="row">
@@ -25,7 +33,7 @@
                 </div>
                 <div class="col-md-5 col-md-offset-1">
                     <div class="col-md-4">Booked By</div>
-                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
+                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}} ({{$data->transactions->customer->email}})</div>
                 </div>
             </div>
             <div class="row">
@@ -36,7 +44,19 @@
                 <div class="col-md-5 col-md-offset-1">
                     <div class="col-md-4">Booking Status</div>
                     <div class="col-md-8">: 
-                        <span class="badge" style="background-color:{{$data->transactions->transaction_status->color}}">{{$data->transactions->transaction_status->name}}</span>    
+                        @if($data->status == 1)
+                        <span class="badge" style="background-color:#666699">Awaiting Payment</span>    
+                        @elseif($data->status == 2)
+                        <span class="badge" style="background-color:#006600">Payment Accepted</span>    
+                        @elseif($data->status == 3)
+                        <span class="badge" style="background-color:#cc0000">Cancelled</span>    
+                        @elseif($data->status == 4)
+                        <span class="badge" style="background-color:#3399ff">On Prosses Settlement,</span>    
+                        @elseif($data->status == 5)
+                        <span class="badge" style="background-color:#3333ff">Settled</span>    
+                        @else
+                        <span class="badge" style="background-color:#b30086">Refund</span>    
+                        @endif
                     </div>
                 </div>
             </div>
@@ -170,5 +190,24 @@
 @stop
 @section('head-js')
 @parent
+<script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        $("#refund").click(function(){
+            var href = $(this).attr('location');
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to change this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                closeOnConfirm: false
+            }, function(isConfirm){
+                window.location = href;
+            });
+        });
+    });
+</script>
 @stop
     

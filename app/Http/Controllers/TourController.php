@@ -739,6 +739,8 @@ class TourController extends Controller
                     $query->whereRaw(DB::raw("(`schedules`.`end_date` <= '".date('Y-m-d',strtotime($request->input('end')))."')"));
                 }
             }
+        }])->with(['schedules.bookings' => function($query){
+            $query->whereNotIn('status',[3,6]);
         }])->find($id);
         $event = [];
         $view = $request->input('view','calendar');
@@ -958,7 +960,6 @@ class TourController extends Controller
         // dd($request->all());
         $id = $request->id;
         $schedule = Schedule::find($id);
-        // dd($schedule = Schedule::where('id',$id)->with('bookings')->get());
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){

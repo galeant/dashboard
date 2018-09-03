@@ -12,4 +12,7 @@ class BookingRentCar extends Model
     {
         return $this->belongsTo('App\Models\Transaction', 'transaction_id','id');
     }
+    // public function car_rental(){
+    //     return $this->belongsTo('App\Models\Transaction', 'transaction_id','id');
+    // }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingHotel;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
@@ -23,9 +24,19 @@ class BookingAccomodationUHotelController extends Controller
                 ->get();
             return Datatables::of($booking_hotel)
             ->addColumn('status',function(BookingHotel $booking_hotel){
-                if(!empty($booking_hotel->transactions)){
-                    return '<span class="badge" style="background-color:'.$booking_hotel->transactions->transaction_status->color.'">'.$booking_hotel->transactions->transaction_status->name.'</span>';
-                } 
+                if($booking_hotel->status == 1){
+                    return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
+                }elseif($booking_hotel->status == 2){
+                    return '<span  class="badge" style="background-color:#006600">Payment Accepted</span>';    
+                }elseif($booking_hotel->status == 3){
+                    return '<span  class="badge" style="background-color:#cc0000">Cancelled</span>';    
+                }elseif($booking_hotel->status == 4){
+                    return '<span  class="badge" style="background-color:#3399ff">On Prosses Settlement</span>';
+                }elseif($booking_hotel->status == 5){
+                    return '<span  class="badge" style="background-color:#3333ff">Settled</span>';
+                }else{
+                    return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
+                }
             })
             ->addColumn('booking_number', function(BookingHotel $booking_hotel){
                 return '<a href="'.url('bookings/accomodation-uhotel/'.$booking_hotel->booking_number).'" class="btn btn-primary">'.$booking_hotel->booking_number.'</a>';
@@ -114,5 +125,26 @@ class BookingAccomodationUHotelController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function refund($kode){
+        $data = BookingHotel::where('booking_number', $kode)->firstOrFail();
+        DB::beginTransaction();
+        try{
+            Refund::create([
+                'transaction_id' => $data->transaction_id,
+                'booking_number'=> $data->booking_number,
+                'product_type'=> 'hotels',
+                'total_payment'=> 0
+            ]);
+            BookingHotel::where('booking_number',$kode)->update([
+                'status' => 6
+            ]);
+            DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 }

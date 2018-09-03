@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingRentCar;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
@@ -23,9 +24,19 @@ class BookingRentCarController extends Controller
                 ->get();
             return Datatables::of($booking_rent_car)
             ->addColumn('status',function(BookingRentCar $booking_rent_car){
-                if(!empty($booking_rent_car->transactions)){
-                    return '<span class="badge" style="background-color:'.$booking_rent_car->transactions->transaction_status->color.'">'.$booking_rent_car->transactions->transaction_status->name.'</span>';
-                } 
+                if($booking_rent_car->status == 1){
+                    return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
+                }elseif($booking_rent_car->status == 2){
+                    return '<span  class="badge" style="background-color:#006600">Payment Accepted</span>';    
+                }elseif($booking_rent_car->status == 3){
+                    return '<span  class="badge" style="background-color:#cc0000">Cancelled</span>';    
+                }elseif($booking_rent_car->status == 4){
+                    return '<span  class="badge" style="background-color:#3399ff">On Prosses Settlement</span>';
+                }elseif($booking_rent_car->status == 5){
+                    return '<span  class="badge" style="background-color:#3333ff">Settled</span>';
+                }else{
+                    return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
+                }
             })
             ->addColumn('booking_number', function(BookingRentCar $booking_rent_car){
                 return '<a href="'.url('bookings/rent-car/'.$booking_rent_car->booking_number).'" class="btn btn-primary">'.$booking_rent_car->booking_number.'</a>';
@@ -120,5 +131,26 @@ class BookingRentCarController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function refund($kode){
+        $data = BookingRentCar::where('booking_number', $kode)->firstOrFail();
+        DB::beginTransaction();
+        try{
+            Refund::create([
+                'transaction_id' => $data->transaction_id,
+                'booking_number'=> $data->booking_number,
+                'product_type'=> 'hotels',
+                'total_payment'=> 0
+            ]);
+            BookingRentCar::where('booking_number',$kode)->update([
+                'status' => 6
+            ]);
+            DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 }

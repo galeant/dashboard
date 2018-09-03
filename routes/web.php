@@ -130,9 +130,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
+		Route::get('tour/{kode}/refund','BookingTourController@refund');
 		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
+		Route::get('accomodation-uhotel/{kode}/refund','BookingAccomodationUHotelController@refund');
 		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
+		Route::get('accomodation-tiket/{kode}/refund','BookingAccomodationTiketController@refund');
 		Route::resource('rent-car', 'BookingRentCarController');
+		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund');
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');

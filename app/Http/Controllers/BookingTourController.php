@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingTour;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use Helpers;
+use Carbon\Carbon;
 
 class BookingTourController extends Controller
 {
@@ -27,9 +29,19 @@ class BookingTourController extends Controller
             ->get();
             return Datatables::of($booking_tour)
             ->addColumn('status',function(BookingTour $booking_tour){
-                if(!empty($booking_tour->transactions)){
-                    return '<span class="badge" style="background-color:'.$booking_tour->transactions->transaction_status->color.'">'.$booking_tour->transactions->transaction_status->name.'</span>';
-                } 
+                if($booking_tour->status == 1){
+                    return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
+                }elseif($booking_tour->status == 2){
+                    return '<span  class="badge" style="background-color:#006600">Payment Accepted</span>';    
+                }elseif($booking_tour->status == 3){
+                    return '<span  class="badge" style="background-color:#cc0000">Cancelled</span>';    
+                }elseif($booking_tour->status == 4){
+                    return '<span  class="badge" style="background-color:#3399ff">On Prosses Settlement</span>';
+                }elseif($booking_tour->status == 5){
+                    return '<span  class="badge" style="background-color:#3333ff">Settled</span>';
+                }else{
+                    return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
+                }
             })
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
@@ -117,5 +129,39 @@ class BookingTourController extends Controller
     public function destroy(BookingTour $bookingTour)
     {
         //
+    }
+    public function refund($kode){
+        // dd($request->all());
+        $data = BookingTour::where('booking_number', $kode)->with('tours')->firstOrFail();
+        $total_payment = $data->total_price;
+        if($data->tours->cancellation_type != 1){
+            if($data->tours->cancellation_type == 0){
+                $total_payment = 0;
+            }else{
+                if(Carbon::now()->format('Y-m-d') >= Carbon::parse($data->start_date)->addDays(-$data->tours->max_cancellation_day)->format('Y-m-d')){
+                    $total_payment = $data->total_price - ($data->total_price*($data->tours->cancellation_fee/100));
+                }else{
+                    $total_payment = $total_payment;
+                }
+            }
+        }
+        DB::beginTransaction();
+        try{
+            Refund::create([
+                'transaction_id' => $data->transaction_id,
+                'booking_number'=> $data->booking_number,
+                'product_type'=> 'tour',
+                'total_payment'=> $total_payment
+            ]);
+            BookingTour::where('booking_number',$kode)->update([
+                'status' => 6
+            ]);
+            DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 }
