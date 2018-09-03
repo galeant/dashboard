@@ -30,6 +30,12 @@ class BookingRentCarController extends Controller
             ->addColumn('booking_number', function(BookingRentCar $booking_rent_car){
                 return '<a href="'.url('bookings/rent-car/'.$booking_rent_car->booking_number).'" class="btn btn-primary">'.$booking_rent_car->booking_number.'</a>';
             })
+            ->addColumn('transaction_number', function(BookingRentCar $booking_rent_car){
+                return '<a href="'.url('transaction/'.$booking_rent_car->transactions->transaction_number).'" class="btn btn-primary">'.$booking_rent_car->transactions->transaction_number.'</a>';
+            })
+            ->editColumn('agency_name', function(BookingRentCar $booking_rent_car){
+                return $booking_rent_car->agency_name;
+            })
             ->editColumn('vehicle_name', function(BookingRentCar $booking_rent_car){
                 return $booking_rent_car->vehicle_brand.' - '. $booking_rent_car->vehicle_name;
             })
@@ -45,7 +51,7 @@ class BookingRentCarController extends Controller
             ->addColumn('total_commission', function(BookingRentCar $booking_rent_car){
                 return Helpers::idr($booking_rent_car->commission);
             })
-            ->rawColumns(['status', 'booking_number'])
+            ->rawColumns(['status', 'booking_number', 'transaction_number'])
             ->make(true);        
         }
         return view('bookings.rent-car.index');

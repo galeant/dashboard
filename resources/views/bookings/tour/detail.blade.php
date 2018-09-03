@@ -139,11 +139,11 @@
                 </div>
                 <div class="col-md-6">
                     : 
-                    <span>{{$data->transactions->contact->salutation}}. {{$data->transactions->contact->firstname}} {{$data->transactions->contact->lastname}}
+                    {{-- <span>{{$data->transactions->contact->salutation}}. {{$data->transactions->contact->firstname}} {{$data->transactions->contact->lastname}} --}}
                     @if($data->user_contact_id == 0)
-                        {{$data->customer->salutation}}. {{$data->customer->firstname}} {{$data->customer->lastname}}
+                        {{$data->transactions->customer->salutation}}. {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}
                     @else
-                        {{$data->contact->salutation}}. {{$data->contact->firstname}} {{$data->contact->lastname}}
+                        {{$data->transactions->contact->salutation}}. {{$data->transactions->contact->firstname}} {{$data->transactions->contact->lastname}}
                     @endif
                     </span>
                 </div>
@@ -156,9 +156,9 @@
                     : 
                     <span>
                     @if($data->user_contact_id == 0)
-                        {{$data->customer->phone}}
+                        {{$data->transactions->customer->phone}}
                     @else
-                        {{$data->contact->phone}}
+                        {{$data->transactions->contact->phone}}
                     @endif
                     </span>
                 </div>
@@ -171,9 +171,9 @@
                     : 
                     <span>
                     @if($data->user_contact_id == 0)
-                        {{$data->customer->email}}
+                        {{$data->transactions->customer->email}}
                     @else
-                        {{$data->contact->email}}
+                        {{$data->transactions->contact->email}}
                     @endif
                     </span>
                 </div>
