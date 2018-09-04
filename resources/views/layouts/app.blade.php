@@ -329,6 +329,30 @@
 		                    <span>Supplier</span>
 		                </a>
 		            </li>
+					<li {{{ (Request::is('autorization*') ? 'class=active' : '') }}}>
+		                <a  class="menu-toggle waves-effect waves-block toggled">
+		                    <i class="material-icons">camera_enhance</i>
+		                    <span>Autorization</span>
+		                </a>
+		                <ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('autorization/employee*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/employee') }}" class=" waves-effect waves-block">
+		                            <span>Employee</span>
+		                        </a>
+		                    </li>
+		                    <li {{{ (Request::is('autorization/roles*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/roles') }}" class=" waves-effect waves-block">
+		                            <span>Roles</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('autorization/permission*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/permission') }}" class=" waves-effect waves-block">
+		                            <span>Permission</span>
+		                        </a>
+		                    </li>
+
+		                </ul>
+		            </li>
 		            <li>
 		                <a href="{{ URL('/logout') }}">
 		                    <i class="material-icons">exit_to_app</i>

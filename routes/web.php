@@ -127,7 +127,12 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
-
+	// 
+	Route::group(['prefix' => 'autorization'],function(){
+		Route::resource('/employee', 'EmployeeController');	
+		Route::resource('/roles', 'RolesController');	
+		Route::resource('/permission', 'PermissionController');	
+	});
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
 		Route::get('tour/{kode}/refund','BookingTourController@refund');
