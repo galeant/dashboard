@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Auth;
 use App\Models\Employee;
 use App\Models\Roles;
@@ -32,6 +33,16 @@ class EmployeeController extends Controller
             ],
             $remember
         )){
+            $permission = [];
+            // dd(Auth::user()->Roles[0]->rolePermission);
+            foreach(Auth::user()->Roles as $ro){
+                foreach($ro->rolePermission as $per){
+                    if(!in_array($per->id,$permission)){
+                        $permission[] = $per->id;
+                    }
+                }
+            }
+            Cache::forever('permission', $permission);
             return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );
@@ -39,6 +50,7 @@ class EmployeeController extends Controller
 
     public function logout(Request $request)
     {
+        Cache::forget('permission');
         Auth::logout();
         return redirect('/login');
     }

@@ -401,6 +401,7 @@
 
 <!-- Demo Js -->
 <script src="{{asset('js/demo.js')}}"></script>
+
 @show
 <!-- End Js -->
 </body>

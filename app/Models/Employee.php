@@ -64,7 +64,26 @@ class Employee extends Model implements AuthenticatableContract, CanResetPasswor
     
     public function HasPermission($permission) {
     	return in_array($permission, $this->Acl());
-    }
+	}
+	
+	public function hasAnyRole($roles){
+		if(is_array($roles)){
+			foreach($roles as $role){
+				if($this->hasRole($role)){
+					return true;
+				}
+			}
+		}else{
+			if($this->hasRole($roles)){
+				return true;
+			}
+		}
+	}
 
+	public function hasRole($role){
+		if($this->role()->where('name',$role)->first()){
+			return true;
+		}
+	}
 }
 

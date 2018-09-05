@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('registration/activity', 'CompanyController@registrationList');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus');
 	});
-	Route::group(['prefix' => 'master'],function(){
+	Route::group(['prefix' => 'master', 'middleware' => 'permission'],function(){
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');
