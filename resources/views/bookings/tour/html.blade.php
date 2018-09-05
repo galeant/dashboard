@@ -1,894 +1,255 @@
+<body>
+    {{-- <!--mpdf --}}
+    <htmlpageheader name="myheader">
+    <hr class="hr-header">
+    <div style="height:10px;">
 
- <style>
-    @page {
-        header: html_myHeader;
-    }
-
-    .header {
-        position: absolute;
-        top: 50mm;
-        left: 5mm;
-        width: 20%;
-    }
-</style>
-
-<htmlpageheader name="myHeader">
-    <div class="header">
-        This is a fixed position element that should show on every page
     </div>
-</htmlpageheader>
-
-P1
-
-<pagebreak />
-
-P2
-
-<pagebreak />
-
-P3
-<div id="main">
-    <section class="content-wrap" style="z-index:-11111; position:relative">
-        <div class="col-lg-8 col-md-8 col-sm-8">
-            <div>
-                <span>Trip Itinerary</span>
-                <h3>Bandung → Bali</h3>
-                <span>17 April 2018 - 21 April 2018</span>
-            </div>
-            <br>
-            <div>
-                <img src="{{url('img/circle-start.png')}}"
-                    style="height:20px; width:20px;
-                    margin-top: -10px;
-                    margin-left: -10px;">
-                <div style="border-left:1px solid #e17306; padding-top:10px;">
-                    <div class="act-explore" style="margin-left:20px">
-                        <ul class="list-unstyled list-activities">
-                            {{-- <li class="list-activities-before"></li> --}}
-                            <span class="list-activities-li"></span>
-                            <li class="">
-                                <span class="review-explore-before list-activities-li-before"></span>
-                                <div class="row no-gutter">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper mb2">
-                                            <div class="act-time">Day 1 - Bandung</div>
-                                            <div class="text-sm">Wed, 18 April 2018</div>
-                                        </div>
-                                    </div>
-                                </div><!-- row -->
-                            </li>
-                            <span class="list-activities-li"></span>
-                            <li>
-                                <img src="{{url('img/circle-activity.png')}}"
-                                style="height:16px; width:16px;
-                                margin-bottom: -16px;
-                                z-index: 1;
-                                margin-left: -28px;">
-                                <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-lg-2 col-md-2 col-sm-2"><div class="act-time">12:30</div></div>
-                                    <div class="col-lg-10 col-md-10 col-sm-10">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c1" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/tp01.png&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/tp01.png" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="text-label text-primary">Arrived In Bandung</div>
-                                                            <h4 class="text-title">Binus - Dipatiukur</h4>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Departure</div>
-                                                                    <div class="text-dark">07:30</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Arrival</div>
-                                                                    <div class="text-dark">12:30</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>							
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c1">
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-4 col-md-4 col-sm-6">
-                                                            <div class="text-label">Departure</div>
-                                                            <div class="text-dark">07:30<br>Jl. Binus No. 8</div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-4 col-sm-6">
-                                                            <div class="text-label">Arrival</div>
-                                                            <div class="text-dark">12:30<br>Jl. Dipatiukur No. 11</div>
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-4 col-sm-6">
-                                                            <div class="text-label">Total Spending</div>
-                                                            <div class="text-dark">2 persons x Rp 170,000<br><b class="text-primary">Rp 340,000</b></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- panel-body -->
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                <img src="{{url('img/circle-activity.png')}}"
-                                style="height:16px; width:16px;
-                                display: inline-block;
-                                margin-bottom: -16px;
-                                z-index: 2;
-                                margin-left: -28px;">
-                                <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-lg-2 col-md-2 col-sm-2">
-                                        <div class="act-time">16:00</div>
-                                        <div class="text-sm">2hr</div>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-10">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c2" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/img12.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/img12.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="text-label text-primary">Activity</div>
-                                                            <h4 class="text-title">Wild Horse Back Riding</h4>
-                                                            <div class="text-label">Outdoor/Sport, Wildlife</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Location</div>
-                                                                    <div class="text-dark">Lembang, Bandung</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Person</div>
-                                                                    <div class="text-dark">2 persons</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>								
-                                            </div><!-- trip-destination -->
-                                            {{-- <div class="collapse collapse-wrapper" id="c2">
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Meeting Point</div>
-                                                            <div class="text-dark">Borobudur Hotel - Jl. Borobudur No. 27 Lembangm Bandung</div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Total Spending</div>
-                                                            <div class="text-dark">2 persons x Rp 170,000<br><b class="text-primary">Rp 340,000</b></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- panel-body -->
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse --> --}}
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                <img src="{{url('img/circle-activity.png')}}"
-                                    style="height:16px; width:16px;
-                                    display: inline-block;
-                                    margin-bottom: -16px;
-                                    z-index: 3;
-                                    margin-left: -28px;">
-                                    <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-lg-2 col-md-2 col-sm-2">
-                                        <div class="act-time">18:30</div>
-                                        <div class="text-sm">2hr</div>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-10">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c3" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/img13.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/img13.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="text-label text-primary">Place</div>
-                                                            <h4 class="text-title">Amazing Art World</h4>
-                                                            <div class="text-label">Museums/Historical Site</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Location</div>
-                                                                    <div class="text-dark">Sukasari, Bandung</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                                                    <div class="text-label">Open Hour</div>
-                                                                    <div class="text-dark">9:00 - 21:00</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>							
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c3">
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Address</div>
-                                                            <div class="text-dark">Jl. Setiabudi No. 293, Isola - Sukasari, Bandung 40154</div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Ticket Price</div>
-                                                            <div class="text-dark"><b class="text-primary">Rp 340,000</b> for adult<br>
-                                                            <b class="text-primary">Rp 15,000</b> for children</div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- panel-body -->
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                    <img src="{{url('img/circle-activity.png')}}"
-                                    style="height:16px; width:16px;float: left;
-                                    display: inline-block;
-                                    margin-bottom: -16px;
-                                    z-index: 5;
-                                    margin-left: -28px;">
-                                    <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper">
-                                            <div class="act-time">Stay the night at</div>
-                                        </div>
-                                    </div><!-- col -->
-                                    <div class="col-xs-12">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c4" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/img14.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/img14.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="rating">
-                                                                <span class="rated"></span>
-                                                                <span class="rated"></span>
-                                                                <span class="rated"></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>
-                                                            <h4 class="text-title">Rumah Tawa Hotel</h4>
-                                                            <div class="text-sm">Superior Room (Include. Breakfast + Free wifi)</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Check In</div>
-                                                                    <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Check Out</div>
-                                                                    <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Person</div>
-                                                                    <div class="text-dark">2 person(s)</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Room</div>
-                                                                    <div class="text-dark">1 room(s)</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>								
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c4">
-                                                <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Address</div>
-                                                            <div class="text-dark">Taman Cibunut Selatan No. 6 - Sumur Bandung, Bandung 40266</div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Total Spending</div>
-                                                            <div class="text-dark">1 room x Rp 1,070,000 (2 nights)<br><b class="text-primary">Rp 1,070,000</b></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- panel-body -->
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                <img src="{{url('img/circle-activity.png')}}"
-                                    style="height:16px; width:16px;
-                                    display: inline-block;
-                                    margin-bottom: -16px;
-                                    z-index: 6;
-                                    display: inline-block;
-                                    margin-left: -28px;">
-                                    <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper mb1">
-                                            <div class="act-time">Getting arround with</div>
-                                        </div>
-                                    </div><!-- col -->
-                                    <div class="col-xs-12">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c5" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/avanza.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/avanza.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="text-label">Mini MPV</div>
-                                                            <h4 class="text-title">Toyota All New Avanza</h4>
-                                                            <div class="text-sm">With Driver</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Rental Start</div>
-                                                                    <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Rental Start</div>
-                                                                    <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Duration</div>
-                                                                    <div class="text-dark">3 day(s)</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>								
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c5">
-                                                <div class="panel-body">
-                                                    <div class="row text-wrapper">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3">
-                                                            <h5>Service Detail</h5>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-9">
-                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas feugiat sem purus. Quisque mattis sollicitudin mauris, vel eleifend nisi imperdiet ut. Ut tortor enim, pretium ut suscipit sit amet, interdum at magna. Cras vulputate ut mi hendrerit commodo. Pellentesque vel quam 
-                                                        </div>
-                                                    </div><!-- row -->
-                                                    <div class="space-1"></div>
-                                                    <div class="row text-wrapper">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3">
-                                                            <h5>Vehicle Detail</h5>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-9">
-                                                            <div class="facility-icon list">
-                                                                <span><img src="images/ic_user_24.png">Seat capacity up to 5 persons (including driver)</span>
-                                                                <span><img src="images/ic_briefcase_24.png">Fits up to baggage</span>
-                                                                <span><img src="images/ic_car.png">Toyota All New Avanza - year 2014</span>
-                                                            </div>	
-                                                        </div>
-                                                    </div><!-- row -->
-                                                </div>
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                        </ul>
-                    </div><!-- act-explore -->
+    <table width="100%" class="header">
+        <tr >
+            <td width="50%" style="color:#E17306; ">
+                <div>
+                    <img class="logo" src="{{url('img/logo.png')}}">
                 </div>
-                <img src="{{url('img/circle-start.png')}}"
-                    style="height:20px; width:20px;
-                    margin-top: -10px;
-                    margin-left: -10px;">
-                <div style="border-left:1px solid #e17306; padding-top:10px;">
-                    <div class="act-explore" style="margin-left:20px">
-                        <ul class="list-unstyled list-activities">
-                            <li class="review-explore">
-                                <div class="row no-gutter" style="margin-top:-15px">
+                Trip on a whim.<br/>
+            </td>
+            <td width="50%" style="text-align: right;color:#E17306;">Your Travel Plan Name.<br/>
+                <span style="font-weight: bold; font-size: 12pt;">Bersenang-Senang</span>
+            </td>
+        </tr>
+    </table>
+    </htmlpageheader>
+    <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
+    
+    <htmlpagefooter name="myfooter">
+    <hr class="hr-footer">
+    </htmlpagefooter>
+    <sethtmlpagefooter name="myfooter" value="on" />
+    {{-- mpdf--> --}}
+    <div class="booked-detail" style="margin:5mm">
+        <h3 class=".b-d-header">Itinerary Information</h3>
+        <table width="100%">
+            <tr >
+                <td width="15%">
+                    <span class="b-d-detail-header">Booked Number</span>
+                </td>
+                <td width="35%">
+                    <span class="b-d-detail-content">: {{$data->transaction_number}}</span>
+                </td>
+                <td width="15%">
+                    <span class="b-d-detail-header">Email Address</span>
+                </td>
+                <td width="35%">
+                    <span class="b-d-detail-content">: {{$data->customer->email}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="15%">
+                    <span class="b-d-detail-header">Contact Person</span>
+                </td>
+                <td width="35%">
+                    <span class="b-d-detail-content">: {{$data->customer->firstname.' '.$data->customer->lastname}}</span>
+                </td>
+                <td width="15%">
+                    <span class="b-d-detail-header">Phone Number</span>
+                </td>
+                <td width="35%">
+                    <span class="b-d-detail-content">: {{$data->customer->phone}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="main" style="margin-left:5mm">
+        <section>
+            <div class="col-lg-8 col-md-8 col-sm-8">
+                <div>
+                @for($day_at=1; $day_at<= count(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)); $day_at++)
+                    <img class="circle-start" src="{{url('img/circle-start.png')}}">
+                    <div class="act-explore">
+                        <ul class="list-unstyled list-activities" >
+                            <li class="day-line-sidebar">
+                                <div class="m-l-10 m-mt-10">
                                     <div class="col-xs-12">
-                                        <div class="text-wrapper mb2">
-                                            <div class="act-time">Day 2 - Bandung</div>
-                                            <div class="text-sm">Thu, 19 April 2018</div>
-                                        </div>
-                                    </div>
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                <img src="{{url('img/circle-activity.png')}}"
-                                    style="height:16px; width:16px;
-                                    display: inline-block;
-                                    margin-bottom: -16px;
-                                    z-index: 7;
-                                    display: inline-block;
-                                    margin-left: -28px;">
-                                <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper mb2">
-                                            <div class="act-time">No activities added</div>
-                                        </div>
+                                        <h4>Day {{$day_at}} - Bandung</h4>
+                                        <h5>{{date('D, d F Y',strtotime(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date']))}}</h5>
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper mb1">
-                                            <div class="act-time">Stay the night at</div>
+                            @if(count($data->booking_tours))
+                                @foreach($data->booking_tours as $tour)
+                                    @if(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date'] == date('Y-m-d',strtotime($tour->start_date)))
+                                    <li class="day-image-sidebar">
+                                        <img class="circle-activity" src="{{url('img/circle-activity.png')}}">
+                                    </li>
+                                    <li class="day-line-sidebar">
+                                        <div class="col-lg-2 col-md-2 col-sm-2">
+                                            <span class="activity-start-hour">{{date('H:i', strtotime($tour->start_time))}}</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-duration">{{Helpers::diff_in_hours($tour->start_hours, $tour->end_hours)}} hour(s)</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-name">{{$tour->tour_name}}</span>
                                         </div>
-                                    </div><!-- col -->
-                                    <div class="col-xs-12">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c6" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/img14.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/img14.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="rating">
-                                                                <span class="rated"></span>
-                                                                <span class="rated"></span>
-                                                                <span class="rated"></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>
-                                                            <h4 class="text-title">Rumah Tawa Hotel</h4>
-                                                            <div class="text-sm">Superior Room (Include. Breakfast + Free wifi)</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Check In</div>
-                                                                    <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Check Out</div>
-                                                                    <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Person</div>
-                                                                    <div class="text-dark">2 person(s)</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                    <div class="text-label">Room</div>
-                                                                    <div class="text-dark">1 room(s)</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>								
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c6">
+                                        <div class="col-lg-10 col-md-10 col-sm-10">
+                                            <div class="panel">
                                                 <div class="panel-body">
-                                                    <div class="row">
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Address</div>
-                                                            <div class="text-dark">Taman Cibunut Selatan No. 6 - Sumur Bandung, Bandung 40266</div>
-                                                        </div>
-                                                        <div class="col-lg-6 col-md-6 col-sm-6">
-                                                            <div class="text-label">Total Spending</div>
-                                                            <div class="text-dark">1 room x Rp 1,070,000 (2 nights)<br><b class="text-primary">Rp 1,070,000</b></div>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- panel-body -->
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
-                            <li>
-                                <div class="row no-gutter" style="margin-top:-15px">
-                                    <div class="col-xs-12">
-                                        <div class="text-wrapper mb1">
-                                            <div class="act-time">Getting arround with</div>
-                                        </div>
-                                    </div><!-- col -->
-                                    <div class="col-xs-12">
-                                        <div class="panel-trip panel">
-                                            <div class="trip-destination">
-                                                <a class="flex-row flex-center" href="#c7" data-toggle="collapse">
-                                                    <div class="box-img">
-                                                        <div class="thumb" style="background-image: url(&quot;images/avanza.jpg&quot;); background-size: cover; background-position: center center;">
-                                                            <img src="images/avanza.jpg" style="display: none;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="panel-body">
-                                                        <div class="info">
-                                                            <div class="text-label">Mini MPV</div>
-                                                            <h4 class="text-title">Toyota All New Avanza</h4>
-                                                            <div class="text-sm">With Driver</div>
-                                                        </div><!-- info -->
-                                                        <div class="footer">
-                                                            <div class="row">
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Rental Start</div>
-                                                                    <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Rental Start</div>
-                                                                    <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                                </div><!-- col -->
-                                                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                    <div class="text-label">Duration</div>
-                                                                    <div class="text-dark">3 day(s)</div>
-                                                                </div><!-- col -->
-                                                            </div><!-- row -->
-                                                        </div><!-- footer -->
-                                                    </div><!-- panel-body -->
-                                                </a>								
-                                            </div><!-- trip-destination -->
-                                            <div class="collapse collapse-wrapper" id="c7">
-                                                <div class="panel-body">
-                                                    <div class="row text-wrapper">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3">
-                                                            <h5>Service Detail</h5>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-9">
-                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas feugiat sem purus. Quisque mattis sollicitudin mauris, vel eleifend nisi imperdiet ut. Ut tortor enim, pretium ut suscipit sit amet, interdum at magna. Cras vulputate ut mi hendrerit commodo. Pellentesque vel quam 
-                                                        </div>
-                                                    </div><!-- row -->
-                                                    <div class="space-1"></div>
-                                                    <div class="row text-wrapper">
-                                                        <div class="col-lg-3 col-md-3 col-sm-3">
-                                                            <h5>Vehicle Detail</h5>
-                                                        </div>
-                                                        <div class="col-lg-9 col-md-9 col-sm-9">
-                                                            <div class="facility-icon list">
-                                                                <span><img src="images/ic_user_24.png">Seat capacity up to 5 persons (including driver)</span>
-                                                                <span><img src="images/ic_briefcase_24.png">Fits up to baggage</span>
-                                                                <span><img src="images/ic_car.png">Toyota All New Avanza - year 2014</span>
-                                                            </div>	
-                                                        </div>
-                                                    </div><!-- row -->
+                                                    <span class="a-d-title">Get in touch with:</span>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td width="40%">
+                                                                <span>{{$tour->tours->pic_name.' ('.$tour->tours->pic_phone.') '}}</span>
+                                                            </td>
+                                                            <td width="60%">
+                                                                <p class="a-d-get-detail"><i>this is the person in charge who will be meeting you at the location and reach you within 24 hours prior the schedule.</i></p>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <br>
+                                                    <span class="a-d-title">Assemble at:</span>
+                                                    <p>{{$tour->tours->meeting_point_address ."\n".$tour->tours->meeting_point_note}}</p>
+                                                    <br>
+                                                    <span class="a-d-title">Activity participant:</span>
+                                                    @if($tour->transaction_id!=1)
+                                                        <ol class="a-d-participant">
+                                                        @foreach($data->contact_list as $contact)
+                                                        <li>{{$contact->firstname.' '.$contact->lastname}}</li>
+                                                        @endforeach
+                                                        </ol>
+                                                    @endif
+                                                    <br>
+                                                    <span class="a-d-title">Booking reference number:</span>
+                                                    <p>{{$tour->booking_number}}</p>
                                                 </div>
-                                                <div class="panel-footer">
-                                                    <ul class="footer-nav">
-                                                        <li><a href="#!">See Nearby Places</a></li>
-                                                        <li><a href="#!">Activity Deals</a></li>
-                                                        <li><a href="#!">View on Map</a></li>
-                                                        <li><a href="#!">Remove</a></li>
-                                                    </ul>
-                                                </div><!-- panel-footer -->
-                                            </div><!-- collapse -->
-                                        </div><!-- panel-trip panel -->
-                                    </div><!-- col -->
-                                </div><!-- row -->
-                            </li>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @endif
+                                @endforeach
+                            @endif
+                            @if(count($data->booking_hotels))
+                                @foreach($data->booking_hotels as $hotel)
+                                    @if(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date'] == date('Y-m-d',strtotime($hotel->start_date)))
+
+                                    <li class="day-image-sidebar">
+                                        <img class="circle-activity" src="{{url('img/circle-activity.png')}}">
+                                    </li>
+                                    <li class="day-line-sidebar">
+                                        <div class="col-lg-2 col-md-2 col-sm-2">
+                                            <span>Stay the night at </span>
+                                            <span class="trip-name">{{$hotel->hotel_name}}</span>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-10">
+                                            <div class="panel">
+                                                <div class="panel-body">
+                                                    <span class="a-d-title">Room Type:</span>
+                                                    <span class="activity-start-hour">{{$hotel->number_of_rooms}} room(s)</span>
+                                                    <span class="activity-space">|</span>
+                                                    <span class="activity-duration">{{$hotel->room_name}}</span>
+                                                    <br>
+                                                    <span class="a-d-title">Check In \ Check Out Date:</span>
+                                                    <p>{{date('d M Y', strtotime($hotel->start_date))}} \ {{date('d M Y', strtotime($hotel->end_date))}}</p>
+                                                    <br>
+                                                    <span class="a-d-title">Location:</span>
+                                                    <p>{{$hotel->locations}}</p>
+                                                    <br>
+                                                    <span class="a-d-title">Accomodation Contact Number::</span>
+                                                    <p>{{$hotel->hotel_contact_number}}</p>
+                                                    <br>
+                                                    <span class="a-d-title">Booking reference number:</span>
+                                                    <p>{{$hotel->booking_number}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @endif
+                                @endforeach
+                            @endif
+                            @if(count($data->booking_activities))
+                                @foreach($data->booking_activities as $activities)
+                                    @if(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date'] == date('Y-m-d',strtotime($activities->start_date)))
+
+                                    <li class="day-image-sidebar">
+                                        <img class="circle-activity" src="{{url('img/circle-activity.png')}}">
+                                    </li>
+                                    <li class="day-line-sidebar">
+                                        <div class="col-lg-2 col-md-2 col-sm-2">
+                                            <span class="activity-start-hour">{{date('H:i', strtotime($tour->start_time))}}</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-duration">{{Helpers::diff_in_hours($tour->start_hours, $tour->end_hours)}} hour(s)</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-name">{{$tour->tour_name}}</span>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-10">
+                                            <div class="panel">
+                                                <div class="panel-body">
+                                                    <span class="a-d-title">About This Place:</span>
+                                                    <p>{{$activities->activities->description}}</p>
+                                                    <br>
+                                                    <span class="a-d-title">Location:</span>
+                                                    <p>{{$activities->activities->cities->name .','.$activities->activities->provinces->name}}</p>
+                                                    <p>{{$activities->activities->address}}</p>
+                                                    <br>
+                                                    @if( ($activities->activities->phone_number != NULL || $activities->activities->phone_number != "") && strlen($activities->activities->phone_number) >4)
+                                                    <span class="a-d-title">Phone Number:</span>
+                                                    <p>{{$activities->activities->phone_number}}</p>
+                                                    @endif
+                                                    @foreach($activities->activities->destination_tips as $tips)
+                                                        <span class="a-d-title">[Tips] {{$tips->question}}:</span>
+                                                        <p>[Tips] {{$tips->pivot->answer}}</p>
+                                                        <br>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @endif
+                                @endforeach
+                            @endif
+                            @if(count($data->booking_rent_cars))
+                                @foreach($data->booking_rent_cars as $rent_car)
+                                    @if(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date'] == date('Y-m-d',strtotime($rent_car->start_date)))
+
+                                    <li class="day-image-sidebar">
+                                        <img class="circle-activity" src="{{url('img/circle-activity.png')}}">
+                                    </li>
+                                    <li class="day-line-sidebar">
+                                        <div class="col-lg-2 col-md-2 col-sm-2">
+                                            <span class="activity-start-hour">{{date('H:i', strtotime($rent_car->time_from))}}</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-duration">{{Helpers::diff_in_hours($rent_car->time_from, $rent_car->time_to)}} hour(s)</span>
+                                            <span class="activity-space">|</span>
+                                            <span class="activity-name">{{$rent_car->vehicle_brand}} {{$rent_car->vehicle_name}}</span>
+                                            <span>({{$rent_car->agency_name}})</span>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-10">
+                                            <div class="panel">
+                                                <div class="panel-body">
+                                                    <span class="a-d-title">Reservation Description:</span>
+                                                    @php
+                                                        $desc = $rent_car->reservation_description;
+                                                        $array = explode(",", $desc);
+                                                        $contact_number = current($array);
+                                                        $location = str_replace($contact_number.",","",$desc);
+                                                    @endphp
+                                                    <p>{{$contact_number}}</p>
+                                                    <div>{{$location}}</div>
+                                                    <br>
+                                                    <span class="a-d-title">Booking reference number:</span>
+                                                    <p>{{$rent_car->booking_number}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    @endif
+                                @endforeach
+                            @endif
                         </ul>
                     </div>
-                </div><!-- act-explore -->
-            </div>
-            
-            <img src="{{url('img/circle-start.png')}}"
-                style="height:20px; width:20px;
-                margin-top: -10px;
-                margin-left: -10px;">
-            <div style="border-left:1px solid #e17306; padding-top:10px;">
-                <div class="act-explore" style="margin-left:20px">
-                    <ul class="list-unstyled list-activities">
-                        <li class="review-explore">
-                            <img src="{{url('img/circle-activity.png')}}"
-                                style="height:16px; width:16px;
-                                display: inline-block;
-                                margin-bottom: -16px;
-                                z-index: 8;
-                                display: inline-block;
-                                margin-left: -28px;">
-                            <div class="row no-gutter" style="margin-top:-15px">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb2">
-                                        <div class="text-label text-primary"></div>
-                                        <div class="act-time">Day 3 - Bandung/Bali</div>
-                                        <div class="text-sm">Fri, 20 April 2018</div>
-                                    </div>
-                                </div>
-                            </div><!-- row -->
-                        </li>
-                        <li>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb2">
-                                        <div class="act-time">No activities added</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="row no-gutter" style="margin-top:-15px">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb1">
-                                        <div class="act-time">Stay the night at</div>
-                                    </div>
-                                </div><!-- col -->
-                                <div class="col-xs-12">
-                                    <div class="panel-trip panel">
-                                        <div class="trip-destination">
-                                            <a class="flex-row flex-center" href="#c8" data-toggle="collapse">
-                                                <div class="box-img">
-                                                    <div class="thumb" style="background-image: url(&quot;images/img14.jpg&quot;); background-size: cover; background-position: center center;">
-                                                        <img src="images/img14.jpg" style="display: none;">
-                                                    </div>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div class="info">
-                                                        <div class="rating">
-                                                            <span class="rated"></span>
-                                                            <span class="rated"></span>
-                                                            <span class="rated"></span>
-                                                            <span></span>
-                                                            <span></span>
-                                                        </div>
-                                                        <h4 class="text-title">Rumah Tawa Hotel</h4>
-                                                        <div class="text-sm">Superior Room (Include. Breakfast + Free wifi)</div>
-                                                    </div><!-- info -->
-                                                    <div class="footer">
-                                                        <div class="row">
-                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                <div class="text-label">Check In</div>
-                                                                <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                            </div><!-- col -->
-                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                <div class="text-label">Check Out</div>
-                                                                <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                            </div><!-- col -->
-                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                <div class="text-label">Person</div>
-                                                                <div class="text-dark">2 person(s)</div>
-                                                            </div><!-- col -->
-                                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-6">
-                                                                <div class="text-label">Room</div>
-                                                                <div class="text-dark">1 room(s)</div>
-                                                            </div><!-- col -->
-                                                        </div><!-- row -->
-                                                    </div><!-- footer -->
-                                                </div><!-- panel-body -->
-                                            </a>								
-                                        </div><!-- trip-destination -->
-                                        <div class="collapse collapse-wrapper" id="c8">
-                                            <div class="panel-body">
-                                                <div class="row">
-                                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                                        <div class="text-label">Address</div>
-                                                        <div class="text-dark">Taman Cibunut Selatan No. 6 - Sumur Bandung, Bandung 40266</div>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                                        <div class="text-label">Total Spending</div>
-                                                        <div class="text-dark">1 room x Rp 1,070,000 (2 nights)<br><b class="text-primary">Rp 1,070,000</b></div>
-                                                    </div>
-                                                </div>
-                                            </div><!-- panel-body -->
-                                            <div class="panel-footer">
-                                                <ul class="footer-nav">
-                                                    <li><a href="#!">See Nearby Places</a></li>
-                                                    <li><a href="#!">Activity Deals</a></li>
-                                                    <li><a href="#!">View on Map</a></li>
-                                                    <li><a href="#!">Remove</a></li>
-                                                </ul>
-                                            </div><!-- panel-footer -->
-                                        </div><!-- collapse -->
-                                    </div><!-- panel-trip panel -->
-                                </div><!-- col -->
-                            </div><!-- row -->
-                        </li>
-                        <li>
-                            <div class="row no-gutter">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb1">
-                                        <div class="act-time">Getting arround with</div>
-                                    </div>
-                                </div><!-- col -->
-                                <div class="col-xs-12">
-                                    <div class="panel-trip panel">
-                                        <div class="trip-destination">
-                                            <a class="flex-row flex-center" href="#c9" data-toggle="collapse">
-                                                <div class="box-img">
-                                                    <div class="thumb" style="background-image: url(&quot;images/avanza.jpg&quot;); background-size: cover; background-position: center center;">
-                                                        <img src="images/avanza.jpg" style="display: none;">
-                                                    </div>
-                                                </div>
-                                                <div class="panel-body">
-                                                    <div class="info">
-                                                        <div class="text-label">Mini MPV</div>
-                                                        <h4 class="text-title">Toyota All New Avanza</h4>
-                                                        <div class="text-sm">With Driver</div>
-                                                    </div><!-- info -->
-                                                    <div class="footer">
-                                                        <div class="row">
-                                                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                <div class="text-label">Rental Start</div>
-                                                                <div class="text-dark">Tue, 17 Apr 2018</div>
-                                                            </div><!-- col -->
-                                                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                <div class="text-label">Rental Start</div>
-                                                                <div class="text-dark">Tue, 19 Apr 2018</div>
-                                                            </div><!-- col -->
-                                                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                                                <div class="text-label">Duration</div>
-                                                                <div class="text-dark">3 day(s)</div>
-                                                            </div><!-- col -->
-                                                        </div><!-- row -->
-                                                    </div><!-- footer -->
-                                                </div><!-- panel-body -->
-                                            </a>								
-                                        </div><!-- trip-destination -->
-                                        <div class="collapse collapse-wrapper" id="c9">
-                                            <div class="panel-body">
-                                                <div class="row text-wrapper">
-                                                    <div class="col-lg-3 col-md-3 col-sm-3">
-                                                        <h5>Service Detail</h5>
-                                                    </div>
-                                                    <div class="col-lg-9 col-md-9 col-sm-9">
-                                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas feugiat sem purus. Quisque mattis sollicitudin mauris, vel eleifend nisi imperdiet ut. Ut tortor enim, pretium ut suscipit sit amet, interdum at magna. Cras vulputate ut mi hendrerit commodo. Pellentesque vel quam 
-                                                    </div>
-                                                </div><!-- row -->
-                                                <div class="space-1"></div>
-                                                <div class="row text-wrapper">
-                                                    <div class="col-lg-3 col-md-3 col-sm-3">
-                                                        <h5>Vehicle Detail</h5>
-                                                    </div>
-                                                    <div class="col-lg-9 col-md-9 col-sm-9">
-                                                        <div class="facility-icon list">
-                                                            <span><img src="images/ic_user_24.png">Seat capacity up to 5 persons (including driver)</span>
-                                                            <span><img src="images/ic_briefcase_24.png">Fits up to baggage</span>
-                                                            <span><img src="images/ic_car.png">Toyota All New Avanza - year 2014</span>
-                                                        </div>	
-                                                    </div>
-                                                </div><!-- row -->
-                                            </div>
-                                            <div class="panel-footer">
-                                                <ul class="footer-nav">
-                                                    <li><a href="#!">See Nearby Places</a></li>
-                                                    <li><a href="#!">Activity Deals</a></li>
-                                                    <li><a href="#!">View on Map</a></li>
-                                                    <li><a href="#!">Remove</a></li>
-                                                </ul>
-                                            </div><!-- panel-footer -->
-                                        </div><!-- collapse -->
-                                    </div><!-- panel-trip panel -->
-                                </div><!-- col -->
-                            </div><!-- row -->
-                        </li>
-                    </ul>
+                @endfor
                 </div>
-            </div><!-- act-explore -->
-            <img src="{{url('img/circle-start.png')}}"
-                style="height:20px; width:20px;
-                margin-top: -10px;
-                margin-left: -10px;">
-            <div style="border-left:1px solid #e17306; padding-top:10px;">
-                <div class="act-explore" style="margin-left:20px">
-                    <ul class="list-unstyled list-activities">
-                        <li class="review-explore">
-                            <img src="{{url('img/circle-activity.png')}}"
-                                style="height:16px; width:16px;
-                                display: inline-block;
-                                margin-bottom: -16px;
-                                z-index: 9;
-                                margin-left: -28px;">
-                            <div class="row no-gutter" style="margin-top:-15px">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb2">
-                                        <div class="act-time">Day 4 - Bali</div>
-                                        <div class="text-sm">Sat, 21 April 2018</div>
-                                    </div>
-                                </div>
-                            </div><!-- row -->
-                        </li>
-                        <li>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper">
-                                        <div class="act-time">No activities added</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- act-explore -->
-            <img src="{{url('img/circle-start.png')}}"
-                style="height:20px; width:20px;
-                margin-top: -10px;
-                margin-left: -10px;">
-            <div style="border-left:1px solid #e17306; padding-top:10px;">
-                <div class="act-explore" style="margin-left:20px">
-                    <ul class="list-unstyled list-activities">
-                        <li class="review-explore">
-                            <img src="{{url('img/circle-activity.png')}}"
-                                style="height:16px; width:16px;
-                                display: inline-block;
-                                margin-bottom: -16px;
-                                z-index: 10;
-                                display: inline-block;
-                                margin-left: -28px;">
-                            <div class="row no-gutter" style="margin-top:-15px">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper mb2">
-                                        <div class="act-time">Day 5 - Bali</div>
-                                        <div class="text-sm">Sun, 22 April 2018</div>
-                                    </div>
-                                </div>
-                            </div><!-- row -->
-                        </li>
-                        <li>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="text-wrapper">
-                                        <div class="act-time">No activities added</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div><!-- act-explore -->
-        </div><!-- col -->
-    </section>
-</div>
+            </div><!-- col -->
+        </section>
+    </div>
+</body>

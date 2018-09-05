@@ -1,0 +1,29 @@
+@font-face {
+  font-family: "eina";
+  font-style: normal;
+  font-weight: 700;
+  src: url("eina-semibold.eot") format("embedded-opentype"),
+	   url("eina-semibold.html") format("woff2"),
+	   url("eina-semibold.ttf") format("truetype"),
+	   url("eina-semibold.svg") format("svg")
+}
+
+@font-face {
+  font-family: "eina";
+  font-style: normal;
+  font-weight: 400;
+  src: url("eina-regular.eot") format("embedded-opentype"),
+	   url("eina-regular.html") format("woff2"),
+	   url("eina-regular.ttf") format("truetype"),
+	   url("eina-regular.svg") format("svg")
+}
+
+@font-face {
+  font-family: "eina";
+  font-style: normal;
+  font-weight: 200;
+  src: url("eina-light.eot") format("embedded-opentype"),
+	   url("eina-light.html") format("woff2"),
+	   url("eina-light.ttf") format("truetype"),
+	   url("eina-light.svg") format("svg")
+}

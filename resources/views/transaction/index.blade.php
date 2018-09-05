@@ -136,13 +136,13 @@
                                     <th>Payment Method
                                     </th>
                                     <th>
-                                        @if (Request::input('sort') == 'created_at')
-                                            <a href="{!! Request::input('sort_created_at') !!}" >
-                                                Created At @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
+                                        @if (Request::input('sort') == 'updated_at')
+                                            <a href="{!! Request::input('sort_updated_at') !!}" >
+                                                Updated At @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
                                             </a>
                                         @else
-                                            <a href="{!! Request::input('sort_created_at') !!}">
-                                                Created At <i class="fa fa-fw fa-sort"></i>
+                                            <a href="{!! Request::input('sort_updated_at') !!}">
+                                                Updated At <i class="fa fa-fw fa-sort"></i>
                                             </a>
                                         @endif
                                     </th>
@@ -175,7 +175,7 @@
                                         {{$dt->payment_method}}
                                     </td>
                                     <td>
-                                        {{$dt->created_at}}
+                                        {{$dt->updated_at}}
                                     </td>
                                 </tr>
                                 @endforeach
