@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\BookingTour;
 use App\Models\BookingHotel;
 use App\Models\BookingActivity;
-use App\Models\BookingCarRental;
+use App\Models\BookingRentCar;
 use App\Models\Settlement;
 use App\Models\SettlementGroup;
 use App\Models\CompanyLevelCommission;
@@ -118,7 +118,7 @@ class SettlementController extends Controller
         }
         $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->get();
         $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->get();
-        $dataCar = BookingCarRental::whereBetween('start_date', [$start, $end])->where('status',2)->get();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->get();
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
             session()->put('request',[
                 'start' => $start,
@@ -203,7 +203,7 @@ class SettlementController extends Controller
                 $listBook = array_pluck($listBook,'booking_number');
                 $bookHotel = BookingHotel::whereIn('booking_number',$listBook)->update(['status' => 5]);
                 $bookingTour = BookingTour::whereIn('booking_number',$listBook)->update(['status' => 5]);
-                $bookingCar = BookingCarRental::whereIn('booking_number',$listBook)->update(['status' => 5]);
+                $bookingCar = BookingRentCar::whereIn('booking_number',$listBook)->update(['status' => 5]);
                 SettlementGroup::where('id',$request->id)->update([
                     'status' => 2
                 ]);
@@ -306,7 +306,7 @@ class SettlementController extends Controller
                 $bank_name = null;
                 $bank_account_name = null;
                 $bank_account_number = null;
-                $book = BookingCarRental::where('booking_number',$d->booking_number);
+                $book = BookingRentCar::where('booking_number',$d->booking_number);
             }
             $settlement = Settlement::firstOrCreate(
                 ['booking_number' => $d->booking_number],
