@@ -1090,6 +1090,7 @@ class TransactionController extends Controller
         $html = view('transaction.receipt', [
             'data' => $data
         ]);
+        // return $html;
         $mpdf = new PDFM;
         $array_css[0] = url('css/bootstrap.min.css');
         $array_css[1] = url('planning/main.css');
