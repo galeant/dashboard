@@ -338,6 +338,18 @@ class TransactionController extends Controller
     public function print(Request $request, $tr_number,$type = 'PDF',$download = 0)
     {
         $data = Transaction::where('transaction_number',$tr_number)->first();
+        $html = view('transaction.invoice', [
+            'data' => $data
+        ]);
+        // dd($data->booking_tours[0]->tours);
+        // return $html;
+        $mpdf = new PDFM;
+        $array_css[0] = url('css/bootstrap.min.css');
+        $array_css[1] = url('planning/invoice.css');
+        $mpdf->pdf($html, $array_css);
+        return $mpdf;
+        
+        $data = Transaction::where('transaction_number',$tr_number)->first();
         $pdf = new PDF;
         $pdf->AddPage();
         $pdf->Code128($pdf->GetPageWidth()-60,55,$data->transaction_number,50,15);
@@ -1075,7 +1087,7 @@ class TransactionController extends Controller
         else if($transaction_id==0){
             $data = TemporaryTransaction::where('id',$planning->temporary_transaction_id)->first();
         }
-        $html = view('bookings.tour.html', [
+        $html = view('transaction.receipt', [
             'data' => $data
         ]);
         $mpdf = new PDFM;

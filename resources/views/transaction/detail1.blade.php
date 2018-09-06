@@ -248,7 +248,7 @@
                                         {{date('Y-m-d',strtotime($tour->end_date))}} {{$tour->end_hours}}
                                     </td>
                                     <td>
-                                        {{$tour->schedule->destination_schedule_day}}
+                                        {{date('l, d M Y',strtotime($tour->start_date))}}
                                     </td>
                                     <td>
                                         {{number_format($tour->price_per_person)}}
