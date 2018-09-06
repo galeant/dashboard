@@ -1087,7 +1087,7 @@ class TransactionController extends Controller
         else if($transaction_id==0){
             $data = TemporaryTransaction::where('id',$planning->temporary_transaction_id)->first();
         }
-        $html = view('transaction.receipt', [
+        $html = view('transaction.receipt1', [
             'data' => $data
         ]);
         // return $html;

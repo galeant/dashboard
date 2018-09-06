@@ -75,7 +75,7 @@
                         </div>
                     </div>
                 </li>
-                <table width="100%">
+                <table width="100%" style="border-left:2px solid #e17306;">
                 @if(count($data->booking_tours))
                     @foreach($data->booking_tours as $tour)
                         @if(Helpers::breakdown_date2($data->planning->start_date,$data->planning->end_date)[$day_at-1]['date'] == date('Y-m-d',strtotime($tour->start_date)))
