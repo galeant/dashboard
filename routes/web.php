@@ -14,18 +14,18 @@ Route::get('login', function () {
 	return view('login');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web','permission']], function () {
+Route::group(['middleware' => ['auth:web'/*,'permission'*/]], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
-	});
+	})->name('overview');
 
 	Route::resource('partner', 'CompanyController');
 	
 	Route::resource('partner-product-type', 'CompanyProductTypeController');
-	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete');
+	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete')->name('company.product_type');
 	Route::group(['prefix' => 'partner'], function(){
-		Route::get('registration/activity', 'CompanyController@registrationList');
-		Route::post('{id}/change/status', 'CompanyController@changeStatus');
+		Route::get('registration/activity', 'CompanyController@registrationList')->name('partner.activity');
+		Route::post('{id}/change/status', 'CompanyController@changeStatus')->name('partner.change_status');
 	});
 	Route::group(['prefix' => 'master', 'middleware' => 'permission'],function(){
 		Route::resource('language', 'LanguageController');
@@ -37,13 +37,13 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::resource('tour-guide', 'TourGuideServiceController');
 
 		//Delete Photo
-		Route::post('destination_photo/destroy','DestinationPhotoController@destroy');
-		Route::post('destination_tips/destroy','DestinationController@delTips');
+		Route::post('destination_photo/destroy','DestinationPhotoController@destroy')->name('destination.delete_photo');
+		Route::post('destination_tips/destroy','DestinationController@delTips')->name('destination.delete_tips');
 
 		Route::group(['prefix' => 'destination'],function($id){
-			Route::get('find', 'DestinationController@find');
-			Route::get('status/active/{id}', 'DestinationController@active');
-			Route::get('status/disabled/{id}', 'DestinationController@disabled');
+			Route::get('find', 'DestinationController@find')->name('destination.find');
+			Route::get('status/active/{id}', 'DestinationController@active')->name('destination.status');
+			Route::get('status/disabled/{id}', 'DestinationController@disabled')->name('destination.disabled');
 		});
 		//Destination
 		Route::resource('destination', 'DestinationController');
@@ -88,21 +88,21 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
 	Route::group(['prefix' => 'product'],function(){
-		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
-		Route::get('tour-activity/{id}/off-day', 'TourController@offDay');
-		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck');
-		Route::post('tour-activity/{id}/off-day/save', 'TourController@offDayUpdate');
-		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
+		Route::get('tour-activity/{id}/schedule', 'TourController@schedule')->name('product.schedule');
+		Route::get('tour-activity/{id}/off-day', 'TourController@offDay')->name('product.schedule_off_day');
+		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck')->name('product.schedule_off_day_check');
+		Route::post('tour-activity/{id}/off-day/save', 'TourController@offDayUpdate')->name('product.schedule_off_day_update');
+		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave')->name('product.schedule_update');
 		// change status
-		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus');
+		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus')->name('product.change_status');
 		// UPDATE SHCHEDULE
-		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
+		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate')->name('product.schedule_update');
 		// DELETE SHCHEDULE
-		Route::post('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
+		Route::post('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete')->name('product.schedule_delete');
 		// UPDATE PRICE
-		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
+		Route::post('tour-activity/price/update', 'TourController@priceUpdate')->name('product.price_update');
 		// DELETE PRICE
-		Route::get('tour-activity/{product_id}/price/{id}/delete', 'TourController@priceDelete');
+		Route::get('tour-activity/{product_id}/price/{id}/delete', 'TourController@priceDelete')->name('product.price_delete');
 
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
@@ -110,19 +110,19 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 
 		//planning
-		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print');
+		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print')->name('planning.print');
 	});
 	Route::group(['prefix' => 'settlement'],function(){
-		Route::get('/all', 'SettlementController@index');
-		Route::get('/detail/{id}', 'SettlementController@detail');
-		Route::get('/generate', 'SettlementController@generate');
-		Route::post('/procced', 'SettlementController@poccedList');
-		Route::get('/excel/{id}', 'SettlementController@exportExcel');
-		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
-		Route::post('/filter', 'SettlementController@filter');
-		Route::post('/paid', 'SettlementController@paid');
-		Route::post('/update-notes', 'SettlementController@notes');
-		Route::post('/update-bank', 'SettlementController@bank');
+		Route::get('/all', 'SettlementController@index')->name('settlement.view');
+		Route::get('/detail/{id}', 'SettlementController@detail')->name('settlement.find');
+		Route::get('/generate', 'SettlementController@generate')->name('settlement.generate');
+		Route::post('/procced', 'SettlementController@poccedList')->name('settlement.process_list');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel')->name('settlement.export_excel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf')->name('settlement.export_pdf');
+		Route::post('/filter', 'SettlementController@filter')->name('settlement.filter');
+		Route::post('/paid', 'SettlementController@paid')->name('settlement.paid');
+		Route::post('/update-notes', 'SettlementController@notes')->name('settlement.update_notes');
+		Route::post('/update-bank', 'SettlementController@bank')->name('settlement.update_bank');
 	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
@@ -135,32 +135,18 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	});
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
-		Route::get('tour/{kode}/refund','BookingTourController@refund');
+		Route::get('tour/{kode}/refund','BookingTourController@refund')->name('booking_tour.refund');
 		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
-		Route::get('accomodation-uhotel/{kode}/refund','BookingAccomodationUHotelController@refund');
+		Route::get('accomodation-uhotel/{kode}/refund','BookingAccomodationUHotelController@refund')->name('booking_uhotel.refund');
 		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
-		Route::get('accomodation-tiket/{kode}/refund','BookingAccomodationTiketController@refund');
+		Route::get('accomodation-tiket/{kode}/refund','BookingAccomodationTiketController@refund')->name('booking_tiket.refund');
 		Route::resource('rent-car', 'BookingRentCarController');
-		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund');
+		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund')->name('booking_rent_car.refund');
 	});
 	Route::resource('transaction', 'TransactionController');
-	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print')->name('transaction.print');
 	
-	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary');
+	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.print_itinerary');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
-	// Route::get('/emailTest', function(){
-	// 	$details['email'] = 'ilham.rach.f@gmail.com';
-	// 	dispatch(new App\Jobs\SendEmailTest($details));
-	// 	dd('done');
-	// });
 });
-// FOR EMAIL TESTING
-// Route::get('/mailable', function () {
-//     $company = App\Models\Company::where('id',9)->with(['suppliers' => function($query){
-// 		$query->orderBy('created_at','asc')->first();
-// 	}])->first();
-
-//     return new App\Mail\StatusCompany($company);
-// });
-Route::get('lolo','SettlementController@tes');

@@ -43,10 +43,12 @@
                                 </div>
                                 <div class="row" id="list_role">
                                     @foreach($permission as $index=>$per)
-                                        <div class="col-md-3">
+                                        @if($per->name != null || $per->name != '')
+                                        <div class="col-md-6">
                                             <input type="checkbox" id="{{$per->id}}" class="filled-in chk-col-deep-orange" name="permission_id[{{$per->id}}]" >
-                                            <label for="{{$per->id}}">{{$per->description}}</label>
+                                            <label for="{{$per->id}}">{{$per->name}}</label>
                                         </div>
+                                        @endif
                                     @endforeach
                                 </div>
                                 </div>

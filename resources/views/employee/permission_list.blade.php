@@ -33,7 +33,8 @@
                                         <tr>
                                             <th>ID</th>
                                             <th>Code</th>
-                                            <th>Description</th>
+                                            <th>Path</th>
+                                            <th>Name</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -66,7 +67,8 @@
 	        columns: [
 	            {data: 'id'},
                 {data: 'code'},
-                {data: 'description'},
+                {data: 'uri'},
+                {data: 'name'},
 	            {data: 'created_at'},
 	            {data: 'action'}
 	        ]

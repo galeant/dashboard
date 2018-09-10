@@ -7,6 +7,8 @@ use App\Models\Permission;
 use Datatables;
 use DB;
 use Validator;
+// use Route;
+use Illuminate\Support\Facades\Route;
 
 class PermissionController extends Controller
 {
@@ -17,6 +19,24 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
+        // $ar = [];
+        // $routeCollection = Route::getRoutes()->get();
+        // // dd($routeCollection[185]->action['as']);
+        // foreach ($routeCollection as $i=>$value) {
+        //     $ar[$i]['uri'] = $value->uri;
+        //     // dd($value);
+        //     if(!array_key_exists("as",$value->action)){
+        //         $ar[$i]['name'] = null;
+        //     }else{
+        //         $ar[$i]['name'] = $value->action['as'];
+        //     }
+            
+        //     // dd($value->action['as']);
+        // }
+        // DB::table('permissions')->insert(
+        //     $ar
+        // );
+        // dd($ar);
         if($request->ajax())
         {
             $model = Permission::query();
