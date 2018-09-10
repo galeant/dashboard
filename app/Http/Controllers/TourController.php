@@ -1088,4 +1088,24 @@ class TourController extends Controller
         } 
         return redirect("/product/tour-activity/".$product_id.'/edit#step-h-3');
     }
+    public function json(Request $request)
+    {
+        $data   = new Tour;
+        $name   = ($request->input('name') ? $request->input('name') : '');
+        $id     = ($request->input('id') ? $request->input('id') : '');
+        if(!empty($request->input('company_id'))){
+            $country_id = $request->input('company_id');
+            $data = $data->where('company_id',$country_id);
+        }
+        if($name)
+        {
+            $data = $data->whereRaw('(product_name LIKE "%'.$name.'%" )')->where('status',2);
+        }
+        if($id)
+        {
+            $data = $data->where(['id' => $id,'status' => 5])->orWhere('status',6);
+        }
+        $data = $data->select('id','product_name as name')->get()->toArray();
+        return $this->sendResponse($data, "Tour retrieved successfully", 200);
+    }
 }

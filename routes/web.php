@@ -85,6 +85,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('findDestination','DestinationController@findDestination');
 		Route::get('destination','DestinationController@json');
 
+		Route::get('tour','TourController@json');
+
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
 	Route::group(['prefix' => 'product'],function(){
@@ -128,6 +130,11 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
 
+	Route::group(['prefix' => 'campaign'],function(){
+		Route::resource('campaign-list', 'CampaignController');
+		Route::resource('campaign-product', 'CampaignProductController');
+	});
+	
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
 		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
