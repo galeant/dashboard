@@ -60,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>Password</h5>
-                                        <input type="password" class="form-control" name="password"  value="{{$employee->email}}"  required/>
+                                        <input type="password" class="form-control" name="password"  value="{{$employee->password}}"  required/>
                                     </div>
                                 </div>
                                 

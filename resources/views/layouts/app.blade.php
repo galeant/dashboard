@@ -331,7 +331,7 @@
 		            </li>
 					<li {{{ (Request::is('autorization*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
-		                    <i class="material-icons">camera_enhance</i>
+		                    <i class="material-icons">developer_mode</i>
 		                    <span>Autorization</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">

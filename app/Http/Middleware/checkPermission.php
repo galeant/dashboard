@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 use Illuminate\Support\Facades\Cache;
 use Closure;
+use Auth;
+use Route;
 
 class checkPermission
 {
@@ -15,7 +17,15 @@ class checkPermission
      */
     public function handle($request, Closure $next)
     {
-        dd($value = Cache::get('permission'));
+        if($request->path() != '/'){
+            if($request->path() != 'logout'){
+                $permission = Cache::get(Auth::user()->remember_token);
+                if(!array_search(Route::currentRouteName(),$permission)){
+                    abort(404);
+                }
+            }   
+            return $next($request);
+        }
         return $next($request);
     }
 }

@@ -71,6 +71,15 @@ class RolesController extends Controller
                 $permission_id[] = $i;
             }
         }
+        // $list_permission = Permission::all();
+        // foreach($list_permission as $k=>$lp){
+        //     $permission_id[$lp->id] = $lp->description;
+        // }
+        // if($request->permission_id != null){
+        //     foreach($request->permission_id as $i=>$a){
+        //         unset($permission_id[$i]);
+        //     }
+        // }
         DB::beginTransaction();
         try{
             $role = Roles::create([
@@ -78,6 +87,7 @@ class RolesController extends Controller
                 'description' => $request->name,
             ]);
             $role->rolePermission()->sync($permission_id);
+            // $role->rolePermission()->sync(array_keys($permission_id));
             DB::commit();
             return redirect("autorization/roles")->with('message', 'Successfully saved Roles');
         }catch (\Exception $exception){
@@ -137,6 +147,15 @@ class RolesController extends Controller
                 $permission_id[] = $i;
             }
         }
+        // $list_permission = Permission::all();
+        // foreach($list_permission as $k=>$lp){
+        //     $permission_id[$lp->id] = $lp->description;
+        // }
+        // if($request->permission_id != null){
+        //     foreach($request->permission_id as $i=>$a){
+        //         unset($permission_id[$i]);
+        //     }
+        // }
         DB::beginTransaction();
         try{
             $role = Roles::where('id',$id)->update([
@@ -145,6 +164,7 @@ class RolesController extends Controller
             ]);
             $role = Roles::where('id',$id)->first();
             $role->rolePermission()->sync($permission_id);
+            // $role->rolePermission()->sync(array_keys($permission_id));
             DB::commit();
             return redirect()->back()->with('message', 'Permission change success');
         }catch (\Exception $exception){

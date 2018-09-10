@@ -56,6 +56,7 @@ class PermissionController extends Controller
         // dd($request->all());
         $validation = Validator::make($request->all(), [
             'name' => 'required',
+            'path' => 'required',
             'code' => 'required'
         ]);
         // Check if it fails //
@@ -67,7 +68,8 @@ class PermissionController extends Controller
         try{
             $permission = Permission::create([
                 'code' => $request->code,
-                'description' => $request->name,
+                'path' => $request->path,
+                'description' => $request->name
             ]);
             DB::commit();
             return redirect("autorization/permission")->with('message', 'Successfully saved Roles');
@@ -113,6 +115,7 @@ class PermissionController extends Controller
          // dd($request->all());
          $validation = Validator::make($request->all(), [
             'name' => 'required',
+            'path' => 'required',
             'code' => 'required'
         ]);
         // Check if it fails //
@@ -124,7 +127,8 @@ class PermissionController extends Controller
         try{
             $permission = Permission::where('id',$id)->update([
                 'code' => $request->code,
-                'description' => $request->name,
+                'path' => $request->path,
+                'description' => $request->name
             ]);
             DB::commit();
             return redirect()->back()->with('message', 'Permission change success');

@@ -33,16 +33,17 @@ class EmployeeController extends Controller
             ],
             $remember
         )){
+            $token = Auth::user()->remember_token;
             $permission = [];
-            // dd(Auth::user()->Roles[0]->rolePermission);
             foreach(Auth::user()->Roles as $ro){
-                foreach($ro->rolePermission as $per){
-                    if(!in_array($per->id,$permission)){
-                        $permission[] = $per->id;
+                foreach($ro->rolePermission as $index=>$per){
+                    if(!in_array($per->path,$permission)){
+                        $permission[] = $per->path;
                     }
                 }
             }
-            Cache::forever('permission', $permission);
+            // dd($permission);
+            Cache::put($token,$permission,60);
             return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );
@@ -50,7 +51,7 @@ class EmployeeController extends Controller
 
     public function logout(Request $request)
     {
-        Cache::forget('permission');
+        Cache::forget(Auth::user()->remember_token);
         Auth::logout();
         return redirect('/login');
     }
@@ -113,6 +114,15 @@ class EmployeeController extends Controller
                 $role_id[] = $i;
             }
         }
+        // $list_role = Roles::all();
+        // foreach($list_role as $k=>$lr){
+        //     $role_id[$lr->id] = $lr->description;
+        // }
+        // if($request->role_id != null){
+        //     foreach($request->role_id as $i=>$a){
+        //         unset($role_id[$i]);
+        //     }
+        // }
         DB::beginTransaction();
         try{
             $employee = Employee::create([
@@ -123,6 +133,7 @@ class EmployeeController extends Controller
                 'password' => bcrypt($request->password)
             ]);
             $employee->Roles()->sync($role_id);
+            // $employee->Roles()->sync(array_keys($role_id));
             DB::commit();
             return redirect("autorization/employee")->with('message', 'Successfully saved Roles');
         }catch (\Exception $exception){
@@ -185,18 +196,31 @@ class EmployeeController extends Controller
                 $role_id[] = $i;
             }
         }
-        // dd($role_id);
+        // $list_role = Roles::all();
+        // foreach($list_role as $k=>$lr){
+        //     $role_id[$lr->id] = $lr->description;
+        // }
+        // if($request->role_id != null){
+        //     foreach($request->role_id as $i=>$a){
+        //         unset($role_id[$i]);
+        //     }
+        // }
         DB::beginTransaction();
         try{
             $employee = Employee::where('id',$id)->update([
                 'fullname' => $request->fullname,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'username' => $request->username,
-                'password' => bcrypt($request->password)
+                'username' => $request->username
             ]);
             $employee = Employee::where('id',$id)->first();
             $employee->Roles()->sync($role_id);
+            // $employee->Roles()->sync(array_keys($role_id));
+            if($employee->password != $request->password){
+                $employee = Employee::where('id',$id)->update([
+                    'password' => bcrypt($request->password)
+                ]);
+            }
             DB::commit();
             return redirect()->back()->with('message', 'Role change success');
         }catch (\Exception $exception){

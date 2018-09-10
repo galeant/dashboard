@@ -37,6 +37,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
+                                        <h5>Path permission name</h5>
+                                        <input type="text" class="form-control" name="path" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
                                         <h5>Name permission</h5>
                                         <input type="text" class="form-control" name="name" required/>
                                     </div>
