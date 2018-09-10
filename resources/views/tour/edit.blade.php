@@ -345,7 +345,7 @@
                                             <select  class="form-control city-sel" name="place[0][city]" id="0-city" style="width: 100%" data-id="0" required>
                                                 @if(count($data->destinations) !=0)
                                                 @foreach(Helpers::cities($data->destinations[0]->province_id) as $key => $city)
-                                                    <option value="{{$key}}" selected="">{{$city}}</option>
+                                                    <option value="{{$key}}" @if($key == $data->destinations[0]->city_id) selected @endif>{{$city}}</option>
                                                 @endforeach
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
