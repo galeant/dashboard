@@ -839,11 +839,20 @@ class TourController extends Controller
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
         $product = Tour::find($id);
+        $max_book = Validator::make($request->all(), [
+            'maximum_booking' => 'required',
+        ]);
+        if($product->product_type == 'open'){
+            if($request->maximum_booking > $product->max_person){
+                return response()->json(['error' => 'Max booking cant more than max people'],400);
+            }else if($request->maximum_booking < $request->booked){
+                return response()->json(['error' => 'Max booking cant less than number of bookings'],400);
+            }
+        }
         if($type == 1 || $type == 3){
             $validation = Validator::make($request->all(), [
                 'start_date' => 'date_format:Y-m-d',
                 'end_date' => 'date_format:Y-m-d',
-                'maximum_booking' => 'required',
             ]);
             $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval.' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
@@ -871,7 +880,6 @@ class TourController extends Controller
                 'start_date' => 'date_format:Y-m-d',
                 'start_hours' => 'date_format:H:i',
                 'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
-                'maximum_booking' => 'required',
             ]);
             $start = date("Y-m-d ".$request->start_hours,strtotime($request->start_date));
             $interval = explode(':',$product->schedule_interval);
@@ -966,7 +974,29 @@ class TourController extends Controller
                 $request->end_hours = '23:59';
             }
         }
-        
+        // if(count($schedule->bookings) != 0){
+            if($schedule->tour->product_type == 'open'){
+                if($request->max_booking > $schedule->tour->max_person){
+                    $response = [
+                        'message' => 'Max booking cant more than max people',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }else if($request->max_booking < count($schedule->bookings)){
+                    $response = [
+                        'message' => 'Max booking cant less than sum of bookings',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }else if($request->max_booking < $schedule->tour->min_person){
+                    $response = [
+                        'message' => 'Max booking cant less than min people',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }
+            }
+        // }
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
                 $response = [
@@ -975,13 +1005,7 @@ class TourController extends Controller
                 ];
                 return response()->json($response,400);
             }
-            if(count($schedule->bookings) != 0){
-                $response = [
-                    'message' => 'Schedule has booking !',
-                    'data' => $schedule
-                ];
-                return response()->json($response,400);
-            }
+            
             $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval   .' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
             $check = Schedule::where('product_id',$product->id)->whereRaw(DB::raw("(`schedules`.`start_date` >'".$start."')"))->whereRaw(DB::raw("(`schedules`.`end_date` < '".$end."')"))->where('id','!=',$id)->first();
