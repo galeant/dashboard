@@ -16,13 +16,29 @@ class helpers{
 	public static function provinces(){
 		$data = DB::table('provinces')->pluck('name','id');
 		$temp[0]= '-Please Select-';
-		foreach($data as $dt){
-			array_push($temp,$dt);
+		foreach($data as $key => $dt){
+			$temp[$key] = $dt;
 		}
 		return $temp;
 	}
-	public static function cities(){
-		$data = DB::table('cities')->pluck('name','id');
+	public static function cities($province_id = null){
+		$data = DB::table('cities');
+		if(!empty($province_id)){
+			$data = $data->where('province_id',$province_id);
+		}
+		$data = $data->pluck('name','id');
+		$temp[0]= '-Please Select-';
+		foreach($data as $key => $dt){
+			$temp[$key] = $dt;
+		}
+		return $temp;
+	}
+	public static function destinations($city_id = null){
+		$data = DB::table('destinations');
+		if(!empty($province_id)){
+			$data = $data->where('city_id',$province_id);
+		}
+		$data = $data->pluck('destination_','id');
 		$temp[0]= '-Please Select-';
 		foreach($data as $dt){
 			array_push($temp,$dt);
