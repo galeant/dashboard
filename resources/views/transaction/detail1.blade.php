@@ -22,7 +22,10 @@
                 <div class="col-md-8 col-md-offset-4 col-sm-10 col-sm-offset-2 list-btn">
                     <div class="btn-inv-right"><a href="/transaction/{{$data->transaction_number}}/print/PDF" target="_blank" >View Invoice</a></div>
                     <div class="btn-inv-right"><a href="">Send Invoice to Email</a></div>
-                    <div class="btn-inv-right"><a href="@if(count($data->planning) > 0)/transaction/1/print/{{$data->planning->id}}/itinerary/PDF@else # @endif" target="_blank" >View Receipt</a></div>
+                    <div class="btn-inv-right"><a href="
+                        @if(!empty($data->planning) > 0)
+                            /transaction/1/print/{{$data->planning->id}}/itinerary/PDF"
+                        @else "#" @endif target="_blank" >View Receipt</a></div>
                     <div class="btn-inv-right"><a href="">Send Receipt to Email</a></div>
                 </div>
             </div>
@@ -182,7 +185,7 @@
                                         {{Helpers::idr($tour->total_price)}}
                                     </td>
                                     <td>
-                                        @if(count($tour->booking_status) > 0)
+                                        @if(!empty($tour->booking_status))
                                         <span class="badge" style="background-color:{{$tour->booking_status->color}}">{{$tour->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">
@@ -245,7 +248,7 @@
                                         {{date('Y-m-d',strtotime($tour->end_date))}} {{$tour->end_hours}}
                                     </td>
                                     <td>
-                                        {{$tour->schedule->destination_schedule_day}}
+                                        {{date('l, d M Y',strtotime($tour->start_date))}}
                                     </td>
                                     <td>
                                         {{number_format($tour->price_per_person)}}
@@ -337,7 +340,7 @@
             </div>
             @endif
             
-            @if(count($data->booking_rent_car) > 0)
+            @if(count($data->booking_rent_cars) > 0)
             <div class="card">
                 <div class="body">
                     <h4>
@@ -356,7 +359,7 @@
                                 <th>Total Price</th>
                                 <th>Booking Status</th>
                             </tr>
-                            @foreach($data->booking_rent_car as $rent_car)
+                            @foreach($data->booking_rent_cars as $rent_car)
                                 <tr>
                                     <td>{{$rent_car->booking_number}}</td>
                                     <td>{{$rent_car->agency_name}}</td>
@@ -384,6 +387,39 @@
                 </div>
             </div>
             @endif
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h6>Total Transaction</h6>
+                </div>
+                <div class="panel-body">
+                    <div class="row form-group m-t-10">
+                        <div class="col-sm-6">
+                            <span>Total Price :</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{Helpers::idr($data->total_price)}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group m-t-10">
+                        <div class="col-sm-6">
+                            <span>Discount ({{$data->coupon_code}})</span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span>{{Helpers::idr($data->total_discount)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span>Total Amount to Pay :</span>
+                        </div>
+                        <div class="col-sm-6" style="margin-left:-1%;">
+                            <span>{{Helpers::idr(($data->total_price-$data->total_discount))}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

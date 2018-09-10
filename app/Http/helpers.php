@@ -8,6 +8,7 @@ use Config;
 use DB;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Support\Facades\Input;
+use Carbon\Carbon;
 // use
 class helpers{
 	public static function salutation(){
@@ -310,6 +311,12 @@ class helpers{
 				}
 
 				return $data;
+		}
+	
+		public static function diff_in_hours($start_time, $end_time){
+			$start_time = Carbon::parse($start_time);
+			$end_time = Carbon::parse($end_time);
+			return $end_time->diffInHours($start_time);
 		}
 
 }

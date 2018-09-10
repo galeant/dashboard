@@ -41,11 +41,11 @@ class BookingTourController extends Controller
             })
             ->addColumn('schedule',function(BookingTour $data){
                 if($data->start_date == $data->end_date){
-                    if($data->end_hours == "23:59:00"){
+                    if($data->tours->schedule_type == 3){
                         return Carbon::parse($data->start_date)->format('d M Y');
                     }
                     else{
-                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('h:i').' - '.Carbon::parse($data->start_hours)->format('h:i');
+                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('H:i').' - '.Carbon::parse($data->end_hours)->format('H:i');
                     }
                 }
                 else{

@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="col-md-4">Booked By</div>
-                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}}</div>
+                    <div class="col-md-8">: {{$data->transactions->customer->firstname}} {{$data->transactions->customer->lastname}} ({{$data->transactions->customer->email}})</div>
                 </div>
             </div>
             <div class="row">

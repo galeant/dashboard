@@ -136,7 +136,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
-	
+	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt');
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
 	
 	
