@@ -26,7 +26,7 @@ class helpers{
 		if(!empty($province_id)){
 			$data = $data->where('province_id',$province_id);
 		}
-		$data = $data->pluck('name','id');
+		$data = $data->pluck(DB::raw("CONCAT(`name`,' (',`type`,')') as name"),'id');
 		$temp[0]= '-Please Select-';
 		foreach($data as $key => $dt){
 			$temp[$key] = $dt;
