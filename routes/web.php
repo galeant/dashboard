@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('destination','DestinationController@json');
 
 		Route::get('tour','TourController@json');
+		Route::get('campaign','CampaignController@json');
 
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
