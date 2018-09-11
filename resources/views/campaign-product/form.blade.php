@@ -156,7 +156,7 @@
 				}
 			}
 		});
-		$("#product_id").select2();
+		// $("#product_id").select2();
 
 		
     });
