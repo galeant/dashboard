@@ -37,14 +37,20 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h5>Path permission name</h5>
-                                        <input type="text" class="form-control" name="path" value="{{$permission->path}}" required/>
+                                        <h5>URI</h5>
+                                        <input type="text" class="form-control" name="uri" value="{{$permission->uri}}" required/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h5>Name role</h5>
-                                        <input type="text" class="form-control" name="name" value="{{$permission->description}}" required/>
+                                        <h5>Path permission name</h5>
+                                        <input type="text" class="form-control" name="name" value="{{$permission->name}}" required/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Description</h5>
+                                        <input type="text" class="form-control" name="description" value="{{$permission->description}}" required/>
                                     </div>
                                 </div>
 					            <div class="form-group m-b-20">

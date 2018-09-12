@@ -182,6 +182,7 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
+
         // dd($id);
         DB::beginTransaction();
         try{

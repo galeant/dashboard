@@ -49,7 +49,7 @@ class Employee extends Model implements AuthenticatableContract, CanResetPasswor
 
     public function Roles()
     {
-        return $this->belongsToMany('App\Models\Roles', 'admin_role', 'admin_id', 'role_id');
+        return $this->belongsToMany('App\Models\Roles', 'employee_roles', 'employee_id', 'role_id');
     }
 
     public function Acl() {

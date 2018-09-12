@@ -33,6 +33,7 @@ class EmployeeController extends Controller
             ],
             $remember
         )){
+            // dd(Auth::user()->Roles);
             $token = Auth::user()->remember_token;
             $permission = [];
             foreach(Auth::user()->Roles as $ro){

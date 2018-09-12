@@ -46,7 +46,8 @@
                                         $role_permission = array_pluck($role->rolePermission, 'id');
                                     @endphp
                                     @foreach($permission as $index=>$per)
-                                        <div class="col-md-3">
+                                        @if($per->name != null || $per->name != '')
+                                        <div class="col-md-6">
                                             <input type="checkbox" id="{{$per->id}}" class="filled-in chk-col-deep-orange" name="permission_id[{{$per->id}}]" 
                                                 @if(in_array($per->id,$role_permission))
                                                     checked
@@ -54,6 +55,7 @@
                                             >
                                             <label for="{{$per->id}}">{{$per->description}}</label>
                                         </div>
+                                        @endif
                                     @endforeach
                                 </div>
                                 </div>
