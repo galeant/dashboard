@@ -15,7 +15,14 @@
   {{ Session::get('error') }}
   </div>
 @endif
-
+@if( Session::has('error_add_campaign') )
+  <div class="alert alert-danger" role="alert" align="center">
+  @php
+    $data = Session::get('error_add_campaign');
+  @endphp
+  Product <b>{{$data[0]}}</b> has registered with <b>{{$data[1]}}</b> campaign
+  </div>
+@endif
 @if(Session::has('problems'))
 <?php $problems =  Session::get('problems'); ?>
     @if(!empty($problems['errors']))
