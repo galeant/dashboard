@@ -37,13 +37,12 @@ class EmployeeController extends Controller
             $permission = [];
             foreach(Auth::user()->Roles as $ro){
                 foreach($ro->rolePermission as $index=>$per){
-                    if(!in_array($per->path,$permission)){
-                        $permission[] = $per->path;
+                    if(!in_array($per->name,$permission)){
+                        $permission[] = $per->name;
                     }
                 }
             }
-            // dd($permission);
-            Cache::put($token,$permission,60);
+            Cache::put('permission_'.$token,$permission,60);
             return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );
