@@ -27,15 +27,16 @@ class checkPermission
                         abort(404);
                     }
                 }else{
+                    $token = Auth::user()->remember_token;
                     $permission = [];
                     foreach(Auth::user()->Roles as $ro){
                         foreach($ro->rolePermission as $index=>$per){
-                            if(!in_array($per->path,$permission)){
-                                $permission[] = $per->path;
+                            if(!in_array($per->name,$permission)){
+                                $permission[] = $per->name;
                             }
                         }
                     }
-                    dd($permission);
+                    // dd($permission);
                     Cache::put('permission_'.$token,$permission,60);
                 }
             }   

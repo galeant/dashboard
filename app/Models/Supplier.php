@@ -39,7 +39,7 @@ class Supplier extends Model implements AuthenticatableContract, CanResetPasswor
 
     // public function Roles()
     // {
-    //     return $this->belongsToMany('App\Role', 'admin_roles', 'admin_id', 'role_id');
+    //     return $this->belongsToMany('App\Role', 'employee_roles', 'employee_id', 'role_id');
     // }
 
     // public function Acl() {

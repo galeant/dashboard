@@ -43,8 +43,31 @@ class RolesController extends Controller
      */
     public function create()
     {   
+        $index = Permission::where('code','like','1%')->get();
+        $detail = Permission::where('code','like','4%')->get();
+        $add = Permission::where('code','like','3%')->get();
+        $delete = Permission::where('code','like','7%')->get();
+        $update = Permission::where('code','like','6%')->get();
+        $other = Permission::where('code','like','99%')->get();
+        // dd($aa = Permission::where('code','not like','1%')
+        //                 ->where('code','not like','4%')
+        //                 ->where('code','not like','3%')
+        //                 ->where('code','not like','7%')
+        //                 ->where('code','not like','6%')
+        //                 ->where('code','not like','99%')
+        //                 ->where('code','not like','0%')
+        //                 ->where('code','not like','2%')
+        //                 ->where('code','not like','5%')
+        //                 ->get());
         $permission = Permission::all();
-        return view('employee.role_add',['permission'=>$permission]);
+        return view('employee.role_add',[
+            'index'=>$index,
+            'detail'=>$detail,
+            'add'=>$add,
+            'delete'=>$delete,
+            'update'=>$update,
+            'other'=>$other
+        ]);
     }
 
     /**
@@ -116,10 +139,24 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        $roles = Roles::where('id',$id)->first();
+        // $roles = Roles::where('id',$id)->first();
         $role  = Roles::where('id',$id)->with('rolePermission')->first();
-        $permission = Permission::all();
-        return view('employee.role_edit',['role' => $role, 'permission' => $permission]);
+
+        $index = Permission::where('code','like','1%')->get();
+        $detail = Permission::where('code','like','4%')->get();
+        $add = Permission::where('code','like','3%')->get();
+        $delete = Permission::where('code','like','7%')->get();
+        $update = Permission::where('code','like','6%')->get();
+        $other = Permission::where('code','like','99%')->get();
+        return view('employee.role_edit',[
+            'role' => $role,
+            'index'=>$index,
+            'detail'=>$detail,
+            'add'=>$add,
+            'delete'=>$delete,
+            'update'=>$update,
+            'other'=>$other
+        ]);
     }
 
     /**
@@ -182,6 +219,7 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
+
         // dd($id);
         DB::beginTransaction();
         try{

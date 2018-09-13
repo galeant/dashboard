@@ -13,6 +13,6 @@ class Roles extends Model
         return $this->belongsToMany('App\Models\Permission', 'role_permissions', 'role_id', 'permission_id');
     }
     public function adminRoles(){
-        return $this->belongsToMany('App\Models\Employee', 'admin_role', 'role_id', 'admin_id');
+        return $this->belongsToMany('App\Models\Employee', 'emplosyee_roles', 'role_id', 'employee_id');
     }
 }   
