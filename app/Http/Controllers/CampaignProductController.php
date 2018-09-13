@@ -179,12 +179,12 @@ class CampaignProductController extends Controller
         try{
             $validate = CampaignProduct::where('id',$id)->first();
             // if($validate->campaign_id != $request->campaign_id){
-                if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
-                    $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
-                    $data[0] = $product->tours->product_name;
-                    $data[1] = $product->campaigns->name;
-                    return redirect()->back()->with('error_add_campaign', $data);
-                }
+                // if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
+                //     $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
+                //     $data[0] = $product->tours->product_name;
+                //     $data[1] = $product->campaigns->name;
+                //     return redirect()->back()->with('error_add_campaign', $data);
+                // }
             // }
             $campaign = Campaign::find($request->campaign_id);
             if($request->input('supplier_discount') < $campaign->supplier_discount){

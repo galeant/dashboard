@@ -31,6 +31,9 @@ use App\Models\ReservationRoom;
 use App\Models\ReservationRentCar;
 use App\Models\RoomAvailable;
 use PDF as TCPDF;
+use App\Models\BookingHotel;
+use App\Models\BookingTour;
+use App\Models\BookingRentCar;
 
 class TransactionController extends Controller
 {
@@ -346,7 +349,7 @@ class TransactionController extends Controller
         $mpdf = new PDFM;
         $array_css[0] = url('css/bootstrap.min.css');
         $array_css[1] = url('planning/invoice.css');
-        $mpdf->pdf($html, $array_css);
+        $mpdf->pdf($html, $array_css, $tr_number, 0);
         return $mpdf;
         
         $data = Transaction::where('transaction_number',$tr_number)->first();
@@ -1094,9 +1097,55 @@ class TransactionController extends Controller
         $mpdf = new PDFM;
         $array_css[0] = url('css/bootstrap.min.css');
         $array_css[1] = url('planning/main.css');
-        $mpdf->pdf($html, $array_css);
+        $mpdf->pdf($html, $array_css, $data->transaction_number, 0);
         return $mpdf;
     }
+
+    public function e_tiket_hotel($booking_number)
+    {
+        $hotel = BookingHotel::where('booking_number',$booking_number)->first();
+        // dd($hotel);
+        $html = view('e-tiket.hotel', [
+            'data' => $hotel
+        ]);
+        // return $html;
+        $mpdf = new PDFM;
+        $array_css[0] = url('e-tiket/bootstrap.min.css');
+        $array_css[0] = url('e-tiket/hotel.css');
+        $mpdf->pdf($html, $array_css, $booking_number, 0);
+        return $mpdf;
+    }
+
+
+    public function e_tiket_activity($booking_number)
+    {
+        $tour = BookingTour::where('booking_number',$booking_number)->first();
+        // dd($hotel);
+        $html = view('e-tiket.activity', [
+            'data' => $tour
+        ]);
+        // return $html;
+        $mpdf = new PDFM;
+        $array_css[0] = url('e-tiket/bootstrap.min.css');
+        $array_css[0] = url('e-tiket/activity.css');
+        $mpdf->pdf($html, $array_css, $booking_number, 0);
+        return $mpdf;
+    }
+    public function e_tiket_rent_car($booking_number)
+    {
+        $rent_car = BookingRentCar::where('booking_number',$booking_number)->first();
+        // dd($rent_car);
+        $html = view('e-tiket.rent-car', [
+            'data' => $rent_car
+        ]);
+        // return $html;
+        $mpdf = new PDFM;
+        $array_css[0] = url('e-tiket/bootstrap.min.css');
+        $array_css[0] = url('e-tiket/rent-car.css');
+        $mpdf->pdf($html, $array_css, $booking_number, 0);
+        return $mpdf;
+    }
+
     public function set_border_top($pdf){
         $top_left_x = $this->top_left_x;
         $top_left_y = $this->top_left_y;

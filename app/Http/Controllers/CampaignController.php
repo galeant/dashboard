@@ -229,7 +229,21 @@ class CampaignController extends Controller
         ];
         return response()->json($response,200);
     }
-    public function save(Request $request){
-        dd($request->all());
+    public function json(Request $request)
+    {
+        $data   = new Campaign;
+        $name   = ($request->input('name') ? $request->input('name') : '');
+        $id     = ($request->input('id') ? $request->input('id') : '');
+        if($name)
+        {
+            $data = $data->whereRaw('(name LIKE "%'.$name.'%" )');
+        }
+        if($id)
+        {
+            $data = $data->where('id', $id);
+        }
+        $data = $data->select('id','name')->get()->toArray();
+        return $this->sendResponse($data, "Campaign retrieved successfully", 200);
+
     }
 }

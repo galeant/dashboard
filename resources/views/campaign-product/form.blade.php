@@ -51,11 +51,13 @@
 								</div>
 								<div class="form-group m-b-20">
 									<label>Campaign Name</label>
-									@if(isset($data))
-									{{ Form::select('campaign_id', $campaign, $data->campaign_id,['class' => 'form-control','id'=>'campaign_id','required'=>'required']) }}
-									@else
-									{{ Form::select('campaign_id', $campaign, null,['class' => 'form-control','id'=>'campaign_id','required'=>'required']) }}
-									@endif
+									<select name="campaign_id" class="form-control" id="campaign_id" required>
+										@if(isset($data))
+										<option value="{{$data->campaign_id}}">{{$data->campaigns->name}}</option>
+										@else
+										<option value="">--Select Campaign--</option>
+										@endif
+									</select>
 								</div>
 								<div class="form-group m-b-20">
 									<label>Quantity</label>
@@ -170,16 +172,54 @@
 				$("#suplier_discount").attr("min",disc);
 			});
 		@endif
-		$("#campaign_id").change(function(){
-			$.ajax({
-				method: "GET",
-				url: "{{ url('campaign/findCampaign') }}",
-				data: { campaign_id: $(this).val()}
-			}).done(function(response) {
-				var disc = Math.round(response.data.supplier_discount);
-				$("#suplier_discount").attr("min",disc);
-			});
+		// $("#product_id").select2();
+
+		$("#campaign_id").select2({
+			ajax: {
+				url: "/json/campaign",
+				dataType: 'json',
+				delay: 250,
+				data: function (params) {
+				return {
+					name: params.term, // search term
+					page: params.page,
+				};
+				},
+				processResults: function (data, params) {
+				// parse the results into the format expected by Select2
+				// since we are using custom formatting functions we do not need to
+				// alter the remote JSON data, except to indicate that infinite
+				// scrolling can be used
+				params.page = params.page || 1;
+				return {
+					results: data.data,
+					pagination: {
+					more: (params.page * 30) < data.total_count
+					}
+				};
+				},
+				cache: true
+			},
+			escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+			minimumInputLength: 1,
+			templateResult: formatRepo, // omitted for brevity, see the source of this page
+			templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
 		});
+		function formatRepo (repo) {
+			if (repo.loading) return repo.text;
+
+			var markup = "<div class='select2-result-repository clearfix'>" +
+
+				"<div class='select2-result-repository__meta'>" +
+				"<div class='select2-result-repository__title'>" + repo.name + "</div>";
+
+			"</div></div>";
+
+			return markup;
+			}
+		function formatRepoSelection (repo) {
+		return repo.name || repo.text;
+		}
     });
 </script>
 @stop

@@ -86,6 +86,7 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::get('destination','DestinationController@json');
 
 		Route::get('tour','TourController@json');
+		Route::get('campaign','CampaignController@json');
 
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
@@ -136,6 +137,9 @@ Route::group(['middleware' => ['auth:web']], function () {
 		// Route::post('product-save', 'CampaignController@save');
 		Route::get('findCampaign', 'CampaignController@findCampaign');
 	});
+	Route::get('e-tiket/hotel/{booking_number}', 'TransactionController@e_tiket_hotel');
+	Route::get('e-tiket/activity/{booking_number}', 'TransactionController@e_tiket_activity');
+	Route::get('e-tiket/rent-car/{booking_number}', 'TransactionController@e_tiket_rent_car');
 	
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
