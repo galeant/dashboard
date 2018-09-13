@@ -319,4 +319,10 @@ class helpers{
 			return $end_time->diffInHours($start_time);
 		}
 
+		public static function diff_in_days($start_date, $end_date){
+			$start_date = Carbon::parse($start_date);
+			$end_date = Carbon::parse($end_date);
+			return $end_date->diffInDays($start_date)+1;
+		}
+
 }

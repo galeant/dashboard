@@ -23,9 +23,12 @@ class BookingRentCarController extends Controller
                 ->get();
             return Datatables::of($booking_rent_car)
             ->addColumn('status',function(BookingRentCar $booking_rent_car){
-                if(!empty($booking_rent_car->transactions)){
+                if($booking_rent_car->status == 0){
+                    return "status = 0";
+                }
+                else{
                     return '<span class="badge" style="background-color:'.$booking_rent_car->booking_status->color.'">'.$booking_rent_car->booking_status->name.'</span>';
-                } 
+                }
             })
             ->addColumn('booking_number', function(BookingRentCar $booking_rent_car){
                 return '<a href="'.url('bookings/rent-car/'.$booking_rent_car->booking_number).'" class="btn btn-primary">'.$booking_rent_car->booking_number.'</a>';
