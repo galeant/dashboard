@@ -83,6 +83,7 @@ class CampaignProductController extends Controller
         $validation = Validator::make($request->all(), [
             'product_type' => 'required',
             'product_id' => 'required',
+            'quantity' => 'required',
             'campaign_id' => 'required',
             'supplier_discount' => 'required|numeric|between:0,99.99',
         ]);
@@ -101,6 +102,7 @@ class CampaignProductController extends Controller
             $data->product_type = $request->input('product_type');
             $data->product_id = $request->input('product_id');
             $data->campaign_id = $request->input('campaign_id');
+            $data->quantity = $request->input('quantity');
             $data->supplier_discount = $request->input('supplier_discount');
             if($data->save()){
                 DB::commit();
@@ -157,6 +159,7 @@ class CampaignProductController extends Controller
         $validation = Validator::make($request->all(), [
             'product_type' => 'required',
             'product_id' => 'required',
+            'quantity' => 'required',
             'campaign_id' => 'required',
             'supplier_discount' => 'required|numeric|between:0,99.99',
         ]);
@@ -175,6 +178,7 @@ class CampaignProductController extends Controller
             $data->product_type = $request->input('product_type');
             $data->product_id = $request->input('product_id');
             $data->campaign_id = $request->input('campaign_id');
+            $data->quantity = $request->input('quantity');
             $data->supplier_discount = $request->input('supplier_discount');
             if($data->save()){
                 DB::commit();
