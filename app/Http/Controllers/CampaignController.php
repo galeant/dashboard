@@ -68,7 +68,7 @@ class CampaignController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required',
             'internal_discount' => 'required|numeric|between:0,99.99',
-            'supplier_discount' => 'required_with:internal_discount|numeric|between:0,99.99|min:'.($internal_discount),
+            'supplier_discount' => 'required_with:internal_discount|numeric|between:0,99.9',
             'booking_date' => 'required',
             'schedule_date' => 'required'
         ]);
@@ -146,7 +146,7 @@ class CampaignController extends Controller
         $validation = Validator::make($request->all(), [
             'name' => 'required',
             'internal_discount' => 'required|numeric|between:0,99.99',
-            'supplier_discount' => 'required_with:internal_discount|numeric|between:0,99.99|min:'.($internal_discount),
+            'supplier_discount' => 'required_with:internal_discount|numeric|between:0,99.99',
             'booking_date' => 'required',
             'schedule_date' => 'required'
         ]);
