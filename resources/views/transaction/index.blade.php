@@ -110,7 +110,7 @@
                                         @endif
                                     </th>
                                     <th>Voucher</th>
-                                    <th>
+                                    {{-- <th>
                                         @if (Request::input('sort') == 'total_discount')
                                             <a href="{!! Request::input('sort_total_discount') !!}" >
                                                 Total Discount @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
@@ -120,7 +120,7 @@
                                                 Total Discount <i class="fa fa-fw fa-sort"></i>
                                             </a>
                                         @endif
-                                    </th>
+                                    </th> --}}
                                     <th>
                                         @if (Request::input('sort') == 'total_payment')
                                             <a href="{!! Request::input('sort_total_payment') !!}" >
@@ -136,13 +136,13 @@
                                     <th>Payment Method
                                     </th>
                                     <th>
-                                        @if (Request::input('sort') == 'created_at')
-                                            <a href="{!! Request::input('sort_created_at') !!}" >
-                                                Created At @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
+                                        @if (Request::input('sort') == 'updated_at')
+                                            <a href="{!! Request::input('sort_updated_at') !!}" >
+                                                Updated At @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
                                             </a>
                                         @else
-                                            <a href="{!! Request::input('sort_created_at') !!}">
-                                                Created At <i class="fa fa-fw fa-sort"></i>
+                                            <a href="{!! Request::input('sort_updated_at') !!}">
+                                                Updated At <i class="fa fa-fw fa-sort"></i>
                                             </a>
                                         @endif
                                     </th>
@@ -152,24 +152,30 @@
                                 @foreach($data as $dt)
                                 <tr>
                                     <td><a href="/transaction/{{$dt->transaction_number}}" class="btn btn-primary">{{$dt->transaction_number}}</a></td>
-                                    <td>{{date('d M Y H:i:s',strtotime($dt->paid_at))}}</td>
+                                    <td>
+                                    @if(!empty($dt->paid_at))
+                                        {{date('d M Y H:i:s',strtotime($dt->paid_at))}}
+                                    @else
+                                        -
+                                    @endif
+                                    </td>
                                     <td>{{$dt->fullname}}</td>
                                     <td>{{$dt->email}}</td>
                                     <td>
                                         @if(!empty($dt->coupon_id))
-                                        <span class="bg-green">{{$data->coupon_code}}</span>
+                                        <span class="bg-green">{{$dt->coupon_code}}</span>
                                         @else
                                         <i class="material-icons font-16 bg-red">clear</i>
                                         @endif
                                     </td>
-                                    <td>{{number_format($dt->total_discount)}}</td>
-                                    <td>{{number_format($dt->total_paid)}}</td>
+                                    {{-- <td>{{number_format($dt->total_discount)}}</td> --}}
+                                    <td>{{Helpers::idr($dt->total_price-$dt->total_discount)}}</td>
                                     <td><span class="badge" style="background-color:{{$dt->status_color}}">{{$dt->status}}</span></td>
                                     <td>
                                         {{$dt->payment_method}}
                                     </td>
                                     <td>
-                                        {{$dt->created_at}}
+                                        {{$dt->updated_at}}
                                     </td>
                                 </tr>
                                 @endforeach

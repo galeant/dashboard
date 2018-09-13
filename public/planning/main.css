@@ -1,0 +1,142 @@
+
+span{
+	font-size: 12px;
+}
+.hr-header { 
+	color: #e17306;
+    display: block;
+    margin-top: 0;
+	margin-bottom: 0;
+	height: 30px;
+}
+.hr-footer { 
+	color: #333;
+    display: block;
+    margin-top: 0;
+	margin-bottom: 0;
+	height: 15px;
+}
+.header{
+	margin-top: 10px;
+}
+.booked-detail{
+	margin-top: 10px;
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 20px;
+	background-color: #BBBBBB;
+}
+.b-d-header{
+	font-weight: bold; 
+	padding-bottom: 10px;
+}
+.b-d-detail{
+	font-size: 12px; ;
+}
+.b-d-detail-header{
+	font-size: 12px; ;
+}
+.b-d-detail-content{
+	font-size: 12px; ;
+}
+.header{
+	margin: 20px;
+	padding: 20px;
+}
+
+.circle-start{
+	height:20px; width:20px;
+	margin-top: -8px;
+	margin-left: -8px;
+}
+.circle-activity{
+	height:12px; width:12px;
+	margin-left: -5px;
+	position:relative;
+	overflow: hidden;
+	float: left;
+}
+.day-line-sidebar{
+	border-left:2px solid #e17306; 
+	border-bottom:0; 
+	border-top:0; 
+	border-right: 0;
+	margin-left: 0px;
+	padding-top:-14px; 
+	padding-bottom: 20px;
+}
+.activity-start-hour{
+	width:30px;
+	font-weight: bold;
+	text-align: center;
+}
+.activity-duration{
+	width:20px;
+	text-align: center;
+}
+.activity-space{
+	margin-left: 20px;
+	margin-right: 20px;
+}
+.activity-name{
+	font-weight: bold;
+	width:100%;
+}
+.a-d-title{
+	font-weight: bold;
+}
+.a-d-get-detail{
+	font-size: 10px;
+	color: #e17306;
+}
+.a-d-participant{
+	margin-left: -10px;
+}
+.m-l-10{
+	margin-left:10px;
+}
+.m-t-10{
+	margin-top:10px;
+}
+.m-mt-10{
+	margin-top:-10px;
+}
+.div-detail-activity{
+	margin-left:10px; 
+	margin-top:2px
+}
+.panel{
+	border: 1;
+	border-color:#e17306;
+}
+.trip-name{
+	font-weight: bold;
+}
+.td-desc{
+	border-bottom:1; 
+	border-top:1; 
+	border-right: 1;
+	border-top: 1px solid #e17306; 
+	border-left: 1px solid #e17306; 
+	border-right: 1px solid #e17306; 
+	border-bottom: 1px solid #e17306;
+	padding-top: 20px;
+	padding-left: 20px; 
+	padding-bottom: 50px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+.tr-p-10{
+	padding-top: 10px;
+	margin-top: 10px;
+}
+.tr-pb-30{
+	padding-bottom: 30px;
+	margin-bottom: 30px;
+}
+.table-sideline{
+	border-left: 100px solid #e17306;
+}

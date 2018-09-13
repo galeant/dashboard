@@ -24,6 +24,7 @@ class BookingRentCarController extends Controller
                 ->get();
             return Datatables::of($booking_rent_car)
             ->addColumn('status',function(BookingRentCar $booking_rent_car){
+<<<<<<< HEAD
                 if($booking_rent_car->status == 1){
                     return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
                 }elseif($booking_rent_car->status == 2){
@@ -37,9 +38,20 @@ class BookingRentCarController extends Controller
                 }else{
                     return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
                 }
+=======
+                if(!empty($booking_rent_car->transactions)){
+                    return '<span class="badge" style="background-color:'.$booking_rent_car->booking_status->color.'">'.$booking_rent_car->booking_status->name.'</span>';
+                } 
+>>>>>>> dev
             })
             ->addColumn('booking_number', function(BookingRentCar $booking_rent_car){
                 return '<a href="'.url('bookings/rent-car/'.$booking_rent_car->booking_number).'" class="btn btn-primary">'.$booking_rent_car->booking_number.'</a>';
+            })
+            ->addColumn('transaction_number', function(BookingRentCar $booking_rent_car){
+                return '<a href="'.url('transaction/'.$booking_rent_car->transactions->transaction_number).'" class="btn btn-primary">'.$booking_rent_car->transactions->transaction_number.'</a>';
+            })
+            ->editColumn('agency_name', function(BookingRentCar $booking_rent_car){
+                return $booking_rent_car->agency_name;
             })
             ->editColumn('vehicle_name', function(BookingRentCar $booking_rent_car){
                 return $booking_rent_car->vehicle_brand.' - '. $booking_rent_car->vehicle_name;
@@ -56,7 +68,7 @@ class BookingRentCarController extends Controller
             ->addColumn('total_commission', function(BookingRentCar $booking_rent_car){
                 return Helpers::idr($booking_rent_car->commission);
             })
-            ->rawColumns(['status', 'booking_number'])
+            ->rawColumns(['status', 'booking_number', 'transaction_number'])
             ->make(true);        
         }
         return view('bookings.rent-car.index');

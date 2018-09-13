@@ -29,6 +29,7 @@ class BookingTourController extends Controller
             ->get();
             return Datatables::of($booking_tour)
             ->addColumn('status',function(BookingTour $booking_tour){
+<<<<<<< HEAD
                 if($booking_tour->status == 1){
                     return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
                 }elseif($booking_tour->status == 2){
@@ -42,21 +43,44 @@ class BookingTourController extends Controller
                 }else{
                     return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
                 }
+=======
+                if(!empty($booking_tour->transactions)){
+                    // return "ddd";
+                    return '<span class="badge" style="background-color:'.$booking_tour->booking_status->color.'">'.$booking_tour->booking_status->name.'</span>';
+                } 
+>>>>>>> dev
             })
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
             })
+            ->addColumn('transaction_number', function(BookingTour $booking_tour){
+                return '<a href="'.url('transaction/'.$booking_tour->transactions->transaction_number).'" class="btn btn-primary">'.$booking_tour->transactions->transaction_number.'</a>';
+            })
+            ->addColumn('schedule',function(BookingTour $data){
+                if($data->start_date == $data->end_date){
+                    if($data->tours->schedule_type == 3){
+                        return Carbon::parse($data->start_date)->format('d M Y');
+                    }
+                    else{
+                        return Carbon::parse($data->start_date)->format('d M Y').', '.Carbon::parse($data->start_hours)->format('H:i').' - '.Carbon::parse($data->end_hours)->format('H:i');
+                    }
+                }
+                else{
+                    return Carbon::parse($data->start_date)->format('d M Y').' - '.Carbon::parse($data->end_date)->format('d M Y');
+                }
+                
+            })
             ->addColumn('company_name', function(BookingTour $booking_tour){
                 return $booking_tour->tours->company->company_name;
             })
-            ->editColumn('net_price', function(BookingTour $booking_tour){
-                return Helpers::idr($booking_tour->net_price);
+            ->editColumn('price_per_person', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->price_per_person);
             })
-            ->editColumn('commission', function(BookingTour $booking_tour){
-                return Helpers::idr($booking_tour->commission);
+            ->editColumn('total_price', function(BookingTour $booking_tour){
+                return Helpers::idr($booking_tour->total_price);
             })
 
-            ->rawColumns(['status', 'booking_number', 'company_name'])
+            ->rawColumns(['status', 'booking_number', 'company_name', 'transaction_number'])
             ->make(true);        
         }
         return view('bookings.tour.index');

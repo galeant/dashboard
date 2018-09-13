@@ -85,6 +85,8 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('findDestination','DestinationController@findDestination');
 		Route::get('destination','DestinationController@json');
 
+		Route::get('tour','TourController@json');
+
 		Route::post('changeStatus/{status}','TourController@changeStatus');
 	});
 	Route::group(['prefix' => 'product'],function(){
@@ -110,7 +112,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::post('/delete/image', 'TourController@deleteImageAjax');
 
 		//planning
-		Route::get('planning/{transaction_number}/print/{type}', 'PlanningController@print')->name('planning.print');
+		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
 	});
 	Route::group(['prefix' => 'settlement'],function(){
 		Route::get('/all', 'SettlementController@index')->name('settlement.view');
@@ -127,12 +129,20 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
-	// 
+
 	Route::group(['prefix' => 'autorization'],function(){
 		Route::resource('/employee', 'EmployeeController');	
 		Route::resource('/roles', 'RolesController');	
 		Route::resource('/permission', 'PermissionController');	
 	});
+
+	Route::group(['prefix' => 'campaign'],function(){
+		Route::resource('campaign-list', 'CampaignController');
+		Route::resource('campaign-product', 'CampaignProductController');
+		// Route::post('product-save', 'CampaignController@save');
+		Route::get('findCampaign', 'CampaignController@findCampaign');
+	});
+	
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
 		Route::get('tour/{kode}/refund','BookingTourController@refund')->name('booking_tour.refund');
@@ -144,9 +154,11 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund')->name('booking_rent_car.refund');
 	});
 	Route::resource('transaction', 'TransactionController');
-	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print')->name('transaction.print');
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
+	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt');
+	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
 	
-	Route::get('transaction/{transaction_number}/print/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.print_itinerary');
 	
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
+	
 });

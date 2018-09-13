@@ -340,13 +340,13 @@
                                                 @endif
                                             </select>
                                         </div>
-
                                         <div class="col-md-3 col-city">
                                             <h5>City*</h5>
                                             <select  class="form-control city-sel" name="place[0][city]" id="0-city" style="width: 100%" data-id="0" required>
                                                 @if(count($data->destinations) !=0)
-
-                                                <option value="{{$data->destinations[0]->city_id}}" selected="">{{$data->destinations[0]->city->name}}</option>
+                                                @foreach(Helpers::cities($data->destinations[0]->province_id) as $key => $city)
+                                                    <option value="{{$key}}" @if($key == $data->destinations[0]->city_id) selected @endif>{{$city}}</option>
+                                                @endforeach
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
                                                 @endif
@@ -355,11 +355,7 @@
                                         <div class="col-md-4 col-destination">
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
-                                                @if(count($data->destinations) !=0)
-                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
-                                                @else
-                                                <option value="" selected>-- Select City --</option>
-                                                @endif
+                                                <option value="" selected>-- Select Destination --</option>
                                             </select>
                                             <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                         </div>
@@ -389,7 +385,10 @@
                                             <h5>City*</h5>
                                             <select  class="form-control city-sel" name="place[{{$index}}][city]" id="{{$index}}-city" data-id="{{$index}}" style="width: 100%" required>
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->city_id}}" selected="">{{$destination->city->name}}</option>
+                                                @foreach(Helpers::cities($destination->province_id) as $key => $city)
+                                                    <option value="{{$key}}" @if($key == $destination->city_id) selected @endif>{{$city}}</option>
+                                                @endforeach
+                                                
                                                 @else
                                                 <option value="" selected>-- Select City --</option>
                                                 @endif
@@ -876,7 +875,7 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script> 
     <!-- Mask js -->
     <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
-    <script src="http://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
 
     <!-- Light Gallery Plugin Js -->
     <script src="{{asset('plugins/light-gallery/js/lightgallery-all.js')}}"></script>

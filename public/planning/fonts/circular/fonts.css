@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "circular";
+  font-style: normal;
+  font-weight: 900;
+  src: url("circular-black/circular-black.eot") format("embedded-opentype"),
+	   url("circular-black/circular-black.woff") format("woff"),
+	   url("circular-black/circular-black.otf") format("opentype"),
+	   url("circular-black/circular-black.svg") format("svg")
+}
+
+@font-face {
+  font-family: "circular";
+  font-style: normal;
+  font-weight: 700;
+  src: url("circular-bold/circular-bold.eot") format("embedded-opentype"),
+	   url("circular-bold/circular-bold.woff") format("woff"),
+	   url("circular-bold/circular-bold.otf") format("opentype"),
+	   url("circular-bold/circular-bold.svg") format("svg")
+}
+
+@font-face {
+  font-family: "circular";
+  font-style: normal;
+  font-weight: 600;
+  src: url("circular-medium/circular-medium.eot") format("embedded-opentype"),
+	   url("circular-medium/circular-medium.woff") format("woff"),
+	   url("circular-medium/circular-medium.otf") format("opentype"),
+	   url("circular-medium/circular-medium.svg") format("svg")
+}
+
+@font-face {
+  font-family: "circular";
+  font-style: normal;
+  font-weight: normal;
+  src: url("circular-book/circular-book.eot") format("embedded-opentype"),
+	   url("circular-book/circular-book.woff") format("woff"),
+	   url("circular-book/circular-book.otf") format("opentype"),
+	   url("circular-book/circular-book.svg") format("svg")
+}
+
+@font-face {
+  font-family: "circular";
+  font-style: normal;
+  font-weight: 300;
+  src: url("circular-light/circular-light.eot") format("embedded-opentype"),
+	   url("circular-light/circular-light.woff") format("woff"),
+	   url("circular-light/circular-light.otf") format("opentype"),
+	   url("circular-light/circular-light.svg") format("svg")
+}

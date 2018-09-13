@@ -1,0 +1,1027 @@
+/*==================== 1366px */
+@media screen and (max-width:1366px) {
+	.container-fluid {
+		padding: 0 3em
+	}
+	
+	.container {
+		width: 100%;
+		padding: 0 3em
+	}
+	
+	.banner-caption .text-title {
+		font-size: 2.75em;
+		padding-right: 2em
+	}
+	
+	.home-travel-diary + .list-article:after {
+		height: 64.5%
+	}
+
+}
+
+/*==================== 1280px */
+@media screen and (max-width:1280px) {
+	.main-dashboard .profile-content .container-fluid {
+		padding: 0 0 0 1em
+	}
+}
+
+/*==================== 1199px */
+@media screen and (max-width:1199px) {
+	.container,
+	.container-fluid {
+		padding: 0 2em
+	}
+	
+	.home-travel-diary + .list-article:after {
+		height: 61.8%
+	}
+}
+
+/*==================== 991px */
+@media screen and (max-width:991px) {
+	.container,
+	.container-fluid {
+		padding: 0 1.5em
+	}
+	
+	.panel-heading {
+		padding: 1.2em 1.5em 0
+	}
+	
+	.panel-body {
+		padding: 1.2em 1.5em
+	}
+	
+	.flex-row {
+		display: block
+	}
+	
+	.content-wrap {
+		transform: none;
+		padding: 3em 0
+	}
+	
+	.main-title {
+		margin-bottom: 1.75em;
+		font-size: 12px
+	}
+	
+	.button-wrapper {
+		margin-top: 2em
+	}
+	
+	.user-header .user-avatar .box-img {
+		min-width: 32px;
+		height: 32px
+	}
+	
+	.slide-modal {
+		display: block
+	}
+	
+	.slide-modal .panel-heading {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		padding: 1.5em 0
+	}
+	
+	.slide-modal .modal-dialog,
+	.slide-modal .modal-content,
+	.slide-modal .modal-panel {
+		height: 100%
+	}
+	
+	.slide-modal .scroll-content {
+		height: calc(100% - 60.75px) !important;
+		min-height: auto;
+		margin-top: 60.75px
+	}
+	
+	/*==========*/
+	.logo-header {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		margin: 0;
+		width: 60px;
+		height: 60px;
+		background-position: center
+	}
+	
+	.toggle-menu-wrapper {
+		margin-left: 0;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: center;
+		-webkit-justify-content: center;
+		height: 60px
+	}
+	
+	.toggle-menu-wrapper .label-menu {
+		display: none
+	}
+	
+	.lang-header {
+		display: none
+	}
+	
+	.user-header {
+		margin-left: auto
+	}
+	
+	.nav-header {
+		padding: 6.5em 0 3em;
+		text-align: center
+	}
+	
+	.menu-header {
+		margin-left: 0
+	}
+	
+	.menu-header .footer {
+		margin-top: 3em;
+		display: block
+	}
+	
+	.menu-header .footer .social-icon {
+		margin-top: 1em
+	}
+	
+	.banner-area, .banner-area .banner-image,
+	.banner-area .swiper-container {
+		height: 100vh;
+		min-height: auto
+	}
+	
+	.banner-caption .container {
+		margin-top: -3em
+	}
+	
+	.banner-caption .text-title {
+		padding: 0;
+		text-align: center;
+		font-size: 2.25em;
+		letter-spacing: .5px
+	}
+	
+	.banner-area .mouse {
+		display: none
+	}
+	
+	/*===========*/	
+	.close-planning,
+	.planning-toggle {
+		display: block
+	}
+	
+	.planning-area {
+		position: fixed;
+		display: none;
+		background-color: #fff;
+		z-index: 200
+	}
+	
+	.active-planning {
+		overflow: hidden !important
+	}
+	
+	.active-planning .banner-area {
+		z-index: 200
+	}
+	
+	.active-planning .planning-area {
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		-webkit-box-align: center
+	}
+	
+	.planning-area .container {
+		padding: 0;
+		height: 100%
+	}
+	
+	.planning-area .panel,
+	.planning-area .panel-body,
+	.planning-area .container > .row,
+	.planning-area .container > .row > [class^="col"] {
+		height: 100%
+	}
+	
+	.planning-area .panel {
+		position: static;
+		margin: 0;
+		background-color: #fff
+	}
+	
+	.planning-area .panel-body {
+		padding: 2em 1.5em;
+		position: static
+	}
+	
+	.planning-area .text-title {
+		margin-bottom: 1.75em
+	}
+	
+	.planning-area .row [class^="col-"] {
+		position: static
+	}
+	
+	.planning-area .btn-submit {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		border-radius: 0;
+		margin: 0;
+		transform: none;
+		font-size: .72em
+	}
+	
+	.daterangepicker.show-calendar .ranges {
+		display: none
+	}
+	
+	.daterangepicker:not(.single) {
+		margin: 0 !important;
+		top: 50% !important;
+		left: 50% !important;
+		transform: translate(-50%, -50%);
+		min-width: 320px
+	}
+	
+	.daterangepicker.single {
+		min-width: 320px
+	}
+	
+	.daterangepicker:before,
+	.daterangepicker:after {
+		display: none
+	}
+	
+	.daterangepicker .drp-calendar.left,
+	.daterangepicker .drp-calendar.right {
+		display: block;
+		width: 100%;
+		max-width: none;
+		float: none;
+		padding: 1em
+	}
+	
+	.daterangepicker .drp-calendar.right {
+		padding-top: 0
+	}
+	
+	.reservation-form .trip-date {
+		display: block
+	}
+	
+	.reservation-form .trip-date .form-control {
+		padding: 0 1.2em;
+		border-bottom: 1px solid #D8DDE6;
+		border-radius: 0 !important
+	}
+	
+	.reservation-form .trip-date select.form-control {
+		border-bottom: none;
+		min-width: auto;
+		width: 100%
+	}
+	
+	/*==========*/
+	.home-intro .intro-bg {
+		margin-bottom: 2em
+	}
+	
+	.home-intro .welcome-text {
+		margin-left: 2em
+	}
+	
+	/*==========*/
+	.home-plan .plan-list {
+		margin-top: 2em	
+	}
+	
+	.place-list {
+		margin-top: 2em
+	}
+	
+	/*==========*/
+	.home-travel-diary + .list-article:after {
+    	height: 56%
+	}
+	
+	.home-travel-diary .diary-desc {
+		padding-top: 200px;
+		padding-bottom: 3em
+	}
+	
+	.home-travel-diary .diary-desc .text-title {
+		font-size: 1.75em
+	}
+	
+	.home-travel-diary .diary-text {
+		margin-left: 2em
+	}
+	
+	.home-travel-diary .diary-text p {
+		margin: 0;
+		max-height: calc(1.6em * 3);
+		overflow: hidden
+	}
+	
+	/*==========*/
+	.filter-header {
+		display: none
+	}
+	
+	/*==========*/
+	.timeline-steps {
+		margin-top: calc(-4em - 5px)
+	}
+	
+	/*==========*/
+	.trip-destination {
+		max-height: none
+	}
+	
+	.trip-destination .box-img {
+		display: none
+	}
+	
+	.trip-destination .panel-body {
+		padding: 1.3em 1.5em .72em
+	}
+	
+	.trip-destination .text-title {
+		font-size: 1.25em;
+		margin: .25em 0;
+		font-weight: normal
+	}
+	
+	.list-trip .trip-footer .timeline {
+		left: .5em
+	}
+	
+	.list-trip .trip-footer .action-footer {
+		margin-left: 2.5em;
+		float: none !important
+	}
+	
+	.list-trip .action-footer span {
+		margin-right: 0;
+		display: block
+	}
+	
+	.list-trip .action-footer span + span {
+		margin-left: 0;
+		margin-top: 1em
+	}
+	
+	.list-trip .action-footer .btn {
+		display: block;
+		width: 100%;
+		margin-top: 2em
+	}
+	
+	.list-trip .trip-footer .panel-trip {
+		margin-left: 2em
+	}
+	
+	.trip-destination .footer [class^="col-"],
+	.list-airport [class^="col-"] {
+		margin-bottom: .72em
+	}
+	
+	.trip-destination .footer .text-right {
+		text-align: left !important
+	}
+	
+	.trip-destination .footer .more + .dropdown-menu {
+		right: auto !important;
+		left: 0 !important
+	}
+	
+	.list-transports .price,
+	.list-transport .price {
+		text-align: left !important;
+		margin-top: 1em
+	}
+	
+	#flight-transport img.icon,
+	#transport img.icon,
+	#accommodation img.icon,
+	#rent_transport img.icon {
+		display: none
+	}
+	
+	.planning-date,
+	.planning-guest {
+		font-size: .86em
+	}
+	
+	.list-airport .airport,
+	.list-airport .airport-info .schedule {
+		margin: 0
+	}
+	
+	.list-airport .airport-info {
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		-webkit-box-align: center
+	}
+	
+	.list-transport .btn {
+		width: 100%;
+		margin-top: 1em
+	}
+	
+	.list-transport .transport-schedule [class^="col-"] {
+		margin-bottom: .72em
+	}
+	
+	.btn-proceed {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+		border-radius: 0;
+		margin: 0 !important;
+		z-index: 20;
+		transition: transform .4s cubic-bezier(.4, 0, .2, 1)
+	}
+	
+	.btn-fix {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-radius: 0;
+		margin: 0 !important;
+		z-index: 20;
+		line-height: 50px;
+		font-size: .72em;
+		transition: transform .4s cubic-bezier(.4, 0, .2, 1),
+					background-color .4s cubic-bezier(.4, 0, .2, 1)
+	}
+
+	.btn-fix.visible,
+	.btn-fix-wrapper.visible {
+		transform: translateY(100%)
+	}
+	
+	.btn-fix-wrapper {
+		position: fixed;
+		margin: 0 !important;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 4;
+		transition: transform .4s cubic-bezier(.4, 0, .2, 1),
+					background-color .4s cubic-bezier(.4, 0, .2, 1)
+	}
+	
+	.btn-fix-wrapper .btn {
+		position: static;
+		border-radius: 0;
+		margin: 0 !important;
+		line-height: 50px;
+		font-size: .72em
+	}
+	
+	.btn-fix-wrapper .btn-o {
+		line-height: 48px
+	}
+	
+	.action-btn .btn-save {
+		background-color: #2B2826;
+		border-color: transparent;
+		flex-basis: 80px;
+		text-indent: -999px;
+		background-image: url(../images/ic_save_button_24.png);
+		background-position: center;
+		background-size: 1.5em auto;
+		background-repeat: no-repeat
+	}
+    
+    .action-btn .btn-save,
+    .action-btn .btn-save:focus,
+    .action-btn .btn-save:focus:active {
+        background-color: #2B2826;
+        border-color: transparent;
+        line-height: 48px
+    }
+	
+	.pagination-nav {
+		margin-bottom: 2em
+	}
+	
+	.accommodation-detail {
+		display: block;
+		padding: 0 1em !important;
+		margin-top: 2em
+	}
+	
+	.accommodation-detail .list-bordered li + li {
+		margin-top: 1em;
+		padding-top: 1em
+	}
+	
+	.accommodation-detail .price {
+		margin-bottom: 1em
+	}
+	
+	.accommodation-detail .price .amount {
+		font-size: 1.75em
+	}
+	
+	/*==========*/
+	.header-action {
+		padding: 1.75em 0
+	}
+	
+	.header-action .text-title {
+		float: left
+	}
+	
+	.plan-item .plan-footer {
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		-webkit-box-align: center
+	}
+	
+	.plan-item .plan-footer .amount {
+		font-size: 1.25em !important 
+	}
+	
+	.main-contact .row {
+		display: flex;
+		display: -webkit-flex;
+		align-items: center;
+		-webkit-box-align: center
+	}
+	
+	/*==========*/
+	.modal-plan-details .modal-panel {
+		border-radius: 0
+	}
+	
+	.modal-plan-details .panel-body {
+		padding: 1.3em 1.5em
+	}
+	
+	.modal-plan-details .container {
+		padding: 0
+	}
+	
+	.modal-plan-details .modal-dialog,
+	.modal-plan-details .modal-content,
+	.modal-plan-details .panel-body > .row {
+		display: block
+	}
+	
+	.modal-plan-details .modal-plan-img {
+		margin: 0 0 2em
+	}
+	
+	.modal-plan-details .tab-control {
+		margin: 0 0 2em
+	}
+	
+	.modal-plan-details .nav-tabs {
+		display: block;
+		white-space: nowrap;
+		width: 100%;
+		overflow: auto
+	}
+	
+	.modal-plan-details .nav-tabs li + li {
+		margin-left: 1.75em
+	}
+	
+	.modal-plan-details .scroll-content {
+		position: static
+	}
+	
+	/*==========*/
+	.profile-header {
+		padding: 0 2em 2em
+	}
+    
+    .profile-header .row {
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        -webkit-box-align: center
+    }
+	
+	.main-dashboard {
+		display: block
+	}
+	
+	.main-dashboard .sidebar {
+		padding: 0 2em;
+		margin: -3em -1em 0 -1em;
+		background-color: #e17306;
+		width: auto;
+		float: none
+	}
+	
+	.main-dashboard .sidebar-nav:after {
+		display: none
+	}
+	
+	.main-dashboard .sidebar-nav {
+		margin: 0 0 2em
+	}
+	
+	.sidebar-menu {
+		display: flex;
+		display: -webkit-flex;
+		white-space: nowrap;
+		justify-content: space-between;
+		overflow: auto
+	}
+	
+	.sidebar-menu li a {
+		line-height: inherit;
+		display: block;
+		text-align: center;
+		padding: 1.5em 0 1em;
+		color: #fff
+	}
+	
+	.sidebar-menu li + li {
+		margin-left: 2em
+	}
+	
+	.sidebar-menu li i {
+		display: block;
+		font-size: 1.75em;
+		margin: 0 0 .15em;
+		color: #9B5006
+	}
+	
+	.sidebar-menu li span {
+		font-size: .714em
+	}
+	
+	.sidebar-menu li a:hover,
+	.sidebar-menu li.active a,
+	.sidebar-menu li.active i{
+		color: #fff
+	}
+}
+
+/*==================== 768px */
+@media screen and (max-width:768px) {
+	html {
+		font-size: 13.5px
+	}
+	
+	hr {
+		margin: 1.25em 0
+	}
+	
+	.social-icon-lg a {
+		font-size: 1em
+	}
+	
+	.hide-xs {
+		display: none
+	}
+	
+	.btn {
+		font-size: .72em
+	}
+	
+	.btn-sm {
+		line-height: 30px;
+		padding: 0 1.5em;
+		font-size: .714em
+	}
+	
+	h1 {
+		font-size: 2.5em
+	}
+	
+	h2 {
+		font-size: 2.25em
+	}
+	
+	h3 {
+		font-size: 1.75em
+	}
+	
+	h4 {
+		font-size: 1.35em
+	}
+	
+	h5 {
+		font-size: 1.15em
+	}
+	
+	.alert {
+		padding: 1em 1.5em;
+		align-items: flex-start
+	}
+	
+	/*==========*/
+	.home-plan .plan-list,
+	.list-article .swiper-container {
+		margin-left: -2em;
+		margin-right: -2em
+	}
+	
+	.home-plan .plan-list .swiper-slide,
+	.list-article .swiper-slide {
+		width: 280px
+	}
+	
+	.home-plan [class^="col-"] > .text-title {
+		font-size: 1em;
+		font-family: inherit;
+		color: inherit;
+		line-height: inherit
+	}
+	
+	.place-list {
+		margin-top: 2em;
+		margin-left: -2em;
+		margin-right: -2em
+	}
+	
+	.place-list .swiper-slide {
+		width: 260px
+	}
+	
+	.place-list .swiper-button-prev,
+	.place-list .swiper-button-next {
+		display: none
+	}
+	
+	.home-travel-diary + .list-article:after {
+		height: 63%
+	}
+	
+	.modal .modal-content {
+		background-color: #F5F7FA
+	}
+	
+	.modal-panel.main-login .content-row {
+		display: block
+	}
+	
+	.modal-panel.main-login .login-bg {
+		display: none
+	}
+	
+	.modal-panel.main-login .login-form {
+		padding: 2em 
+	}
+	
+	#suprise .panel {
+		background-color: transparent;
+		margin: 0
+	}
+	
+	#suprise .panel-heading,
+	#suprise .panel-body {
+		padding: 2em 0 0
+	}
+	
+	#suprise .panel-body {
+		padding-bottom: 2em
+	}
+	
+	#suprise .btn {
+		margin-top: 2em
+	}
+	
+	/*=========*/
+	.page-header-content {
+		text-align: center;
+		padding: 0 0 4em
+	}
+	
+	.page-header .text-title {
+		font-size: 1.75em;
+		margin-bottom: 1em
+	}
+	
+	.timeline-steps .step {
+		width: 36px;
+		line-height: 36px
+	}
+	
+	.act-explore + .act-explore {
+		margin-top: 3em
+	}
+	
+	.act-explore .trip-destination {
+		margin-top: 1em
+	}
+	
+	.act-explore .panel-footer {
+		display: none
+	}
+	
+	.act-explore .panel-body {
+		padding: 1.3em 1.5em .72em
+	}
+	
+	.act-explore .collapse-wrapper .panel-body {
+		padding-bottom: .5em
+	}
+	
+	.act-explore .button-wrapper [class^="col-"] + [class^="col-"] .btn {
+		margin-top: .5em
+	}
+	
+	.act-explore .list-activities {
+		margin-bottom: 2em
+	}
+	
+	.panel-information .text-wrapper,
+	.panel-information .btn {
+		margin-bottom: 1em
+	}
+	
+	.alert {
+		margin: 1em 0 !important
+	}
+	
+	.accommodation-detail .accommodation-info {
+		margin: 2em 0
+	}
+	
+	.list-rooms .facility-icon {
+		margin: 1em 0 0
+	}
+	
+	.list-rooms .btn {
+		margin-bottom: 1em
+	}
+	
+	.price .amount.h5 {
+		font-size: 1em
+	}
+	
+	.form-wrapper + .form-wrapper {
+		margin-top: 1em;
+		padding-top: 2em
+	}
+	
+	.form-wrapper .panel-body {
+		padding: 1.3em 1.5em .72em
+	}
+	
+	.form-wrapper .panel-body .mb2 {
+		margin-bottom: 1em !important
+	}
+	
+	.form-wrapper .panel-body > .row [class^="col-"] {
+		margin-bottom: .72em
+	}
+	
+	.form-wrapper .panel-body .card {
+		margin: 0 0 1em
+	}
+	
+	.main-about .content-wrap {
+		padding: 4em 0
+	}
+	
+	.main-about .about-img {
+		display: none
+	}
+	
+	.main-about .main-title span {
+		font-size: 5.25em
+	}
+	
+	.main-contact .row {
+		display: block
+	}
+	
+	.main-contact .contact-form {
+		padding-right: 1em;
+		border: none;
+		margin-bottom: 4em
+	}
+	
+	#modal-proceed .modal-panel .panel-body, #choose-transport .modal-panel .panel-body {
+		padding: 1.3em 1.5em
+	}
+	
+	#choose-transport .modal-panel .row {
+		margin: 0 -.5em 2em
+	}
+	
+	#choose-transport .modal-panel .row > [class^="col-"] {
+		padding: 0 .5em
+	}
+	
+	.choose-transport .radio label {
+		padding: 1.5em 1.25em 1.25em
+	}
+	
+	.choose-transport .radio img {
+		width: 28px;
+		margin-bottom: .5em
+	}
+	
+	.list-airport .airport {
+		margin-bottom: 1em
+	}
+	
+	.list-airport .airport-info {
+		display: block
+	}
+	
+	.list-airport .price {
+		margin: 0
+	}
+	
+	.list-airport .price .amount.h5 {
+		font-size: 1.75em
+	}
+    
+    .profile-header {
+        padding: 0 0 2em
+    }
+    
+    .profile-header .row {
+        display: block
+    }
+	
+	.profile-header .user-avatar {
+		display: block;
+		text-align: center;
+		margin-bottom: 2em
+	}
+	
+	.profile-header .user-avatar .box-img {
+		width: 80px;
+		margin: 0 auto 1em
+	}
+	
+	.profile-header .user-avatar .user-name {
+		font-size: 1.25em;
+		font-weight: 600
+	}
+    
+    .main-dashboard .panel .text-wrapper {
+        margin-bottom: 1.5em
+    }
+    
+     .panel-profile .btn {
+        margin: .72em 0
+    }
+    
+    .profile-content .panel .row > [class^="col-"] + [class^="col-"] {
+        margin-top: 1em
+    }
+    
+    .list-booking .price {
+        float: none
+    }
+    
+    .list-booking .panel-footer {
+        text-align: center
+    }
+    
+    .list-booking .booking-nav {
+        margin-top: 1em
+    }
+    
+    .booking-detail .list-transport .box-img {
+        min-width: 50px
+    }
+	
+	/*==========*/
+	.main-footer {
+		text-align: center
+	}
+	
+	.main-footer .logo-footer {
+		width: 60px;
+		display: inline-block
+	}
+	
+	.main-footer .footer-wrap:last-child {
+		text-align: center
+	}
+	
+	.main-footer .back-to-top {
+		margin-top: 2em;
+		display: inline-block
+	}
+}

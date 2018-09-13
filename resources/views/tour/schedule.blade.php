@@ -80,6 +80,10 @@
                         <input type="text" class="form-control end-hours" name="end_hours" placeholder="HH:mm:ss" readonly/>
                     </div>
                     <div class="form-group form-float">
+                        <label>Number of Bookings</label>
+                        <input type="number" class="form-control booked" name="booked" readonly/>
+                    </div>
+                    <div class="form-group form-float">
                         <label class="form-label">Maximum booking / trip</label>
                         <input type="number" class="form-control maximum-booking" name="maximum_booking" min=1 required/>
                     </div>
@@ -181,8 +185,8 @@
         }
         
         if(proType != 'private'){
-            $(".maximum-booking").val(1);
-            $(".maximum-booking").parent().hide();
+            $(".maximum-booking").val({{$data->max_person}}).attr('min',{{$data->min_person}}).attr('max',{{$data->max_person}});
+            // $(".maximum-booking").parent().hide();
         }else{
             $(".maximum-booking").val(1);
         }
@@ -362,6 +366,7 @@
             $('#form-schedule .end-date').val(event.end_date);
             $('#form-schedule .start-hours').val(event.start_hours);
             $('#form-schedule .end-hours').val(event.end_hours);
+            $('#form-schedule .booked').val(event.booked);
             $('#form-schedule .maximum-booking').val(event.max_booking);
             $('#form-schedule input[name=id]').val(event.id);
             $('#form-schedule .start-hours').attr('start-date',event.start.format('YYYY-MM-DD'));

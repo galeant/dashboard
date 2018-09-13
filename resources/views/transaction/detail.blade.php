@@ -104,7 +104,12 @@
                         		</td>
                         	</tr>
                         	<tr>
-                        		<td>Total Discount</td>
+                        		<td>
+									Total Discount
+									@if(count($data->coupon_id) &&count($data->coupon_code))
+										({{$data->coupon_code}})
+									@endif
+								</td>
                         		<td>{{number_format($data->total_discount)}}</td>
                         	</tr>
                         	<tr>
@@ -131,56 +136,42 @@
                     <table class="table table-hover">
                         <tbody>
                         	<tr>
-                        		<th>Day</th>
-                        		<th>Booking Number</th>
-                        		<th>Tour Name</th>
-                        		<th>Cancellaction Type</th>
-                        		<th>Cancellation Fee</th>
-                        		<th>Start Date</th>
-                        		<th>End Date</th>
+								<th>Booking Number</th>
+								<th>Company</th>
+								<th>Tour Name</th>
+								<th>Schedule</th>
+                        		<th>Number of Person</th>
                         		<th>Price Per Person</th>
-                        		<th>Total Discount</th>
-                        		<th>Total Commission</th>
                         		<th>Total Price</th>
-                        		<th>Net Price</th>
+                        		<th>Booking Status</th>
                         	</tr>
                             @foreach($data->booking_tours as $tour)
                             	<tr>
-                            		<td>{{$tour->day_at}}</td>
                             		<td><span class="badge">{{$tour->booking_number}}</span></td>
-                            		<td>{{$tour->tour_name}}</td>
+									<td>{{$tour->tours->company->company_name}}</td>
+									<td>{{$tour->tour_name}}</td>
                             		<td>
-                            			@if($tour->cancellaction_type == 0)
-                            				No cancellation
-                            			@elseif($tour->cancellaction_type == 1)
-                            				Free Cancellation
-                            			@elseif($tour->cancellaction_type == 2)
-                            				Cancellation policy applies
-                            			@endif
+										@if($tour->start_date == $tour->end_date)
+											@if($tour->end_hours == "23:59:00")
+												{{date('d M Y', strtotime($tour->start_date))}}
+											@else
+												{{date('d M Y', strtotime($tour->start_date))}}, {{date('h:i', strtotime($tour->start_hours))}} - {{date('h:i', strtotime($tour->end_hours))}}
+											@endif
+										@else
+										{{date('d M Y', strtotime($tour->start_date))}} - {{date('d M Y', strtotime($tour->end_date))}}
+										@endif
+									</td>
+									<td>
+										{{$tour->number_of_person}} person(s)
+									</td>
+                            		<td>
+                            			{{Helpers::idr($tour->price_per_person)}}
                             		</td>
                             		<td>
-                            			{{$tour->cancellation_fee}}
+                            			{{Helpers::idr($tour->total_price)}}
                             		</td>
                             		<td>
-                            			{{date('Y-m-d',strtotime($tour->start_date))}} {{$tour->start_hours}}
-                            		</td>
-                            		<td>
-                            			{{date('Y-m-d',strtotime($tour->end_date))}} {{$tour->end_hours}}
-                            		</td>
-                            		<td>
-                            			{{number_format($tour->price_per_person)}}
-                            		</td>
-                            		<td>
-                            			{{number_format($tour->total_discount)}}
-                            		</td>
-                            		<td>
-                            			{{number_format($tour->commission)}}
-                            		</td>
-                            		<td>
-                            			{{number_format($tour->total_price)}}
-                            		</td>
-                            		<td>
-                            			{{number_format($tour->net_price)}}
+										<span class="badge" style="background-color:{{$tour->booking_status->color}}">{{$tour->booking_status->name}}</span>
                             		</td>
                             	</tr>
                             @endforeach
@@ -312,7 +303,8 @@
                     </table>
                 </div>
             </div>
-            @endif
+			@endif
+			
         </div>
     </div>
 </div>

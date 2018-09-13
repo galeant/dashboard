@@ -51,7 +51,7 @@ class TourController extends Controller
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
         $data = new Tour;
         $data = $data->orderBy($sort,$orderby);
-        if(!empty($request->input('status')) && $request->input('status') != 99){
+        if($request->input('status') !=null && $request->input('status') != 99){
             $data = $data->where('status',$request->input('status'));
         }
         if(!empty($request->input('product_type'))){
@@ -841,11 +841,20 @@ class TourController extends Controller
     public function scheduleSave(Request $request, $id, $type){
         // dd($request->all());
         $product = Tour::find($id);
+        $max_book = Validator::make($request->all(), [
+            'maximum_booking' => 'required',
+        ]);
+        if($product->product_type == 'open'){
+            if($request->maximum_booking > $product->max_person){
+                return response()->json(['error' => 'Max booking cant more than max people'],400);
+            }else if($request->maximum_booking < $request->booked){
+                return response()->json(['error' => 'Max booking cant less than number of bookings'],400);
+            }
+        }
         if($type == 1 || $type == 3){
             $validation = Validator::make($request->all(), [
                 'start_date' => 'date_format:Y-m-d',
                 'end_date' => 'date_format:Y-m-d',
-                'maximum_booking' => 'required',
             ]);
             $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval.' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
@@ -873,7 +882,6 @@ class TourController extends Controller
                 'start_date' => 'date_format:Y-m-d',
                 'start_hours' => 'date_format:H:i',
                 'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
-                'maximum_booking' => 'required',
             ]);
             $start = date("Y-m-d ".$request->start_hours,strtotime($request->start_date));
             $interval = explode(':',$product->schedule_interval);
@@ -959,8 +967,7 @@ class TourController extends Controller
         }else{
             $request->end_date = date("Y-m-d",strtotime($request->end_date));
         }
-
-        // dd($request->all());
+        
         $id = $request->id;
         // $schedule = Schedule::find($id);
         $schedule = Schedule::where('id',$id)->with(['bookings' => function($query){
@@ -975,9 +982,30 @@ class TourController extends Controller
                 $request->end_hours = '23:59';
             }
         }
-        
+        // if(count($schedule->bookings) != 0){
+            if($schedule->tour->product_type == 'open'){
+                if($request->max_booking > $schedule->tour->max_person){
+                    $response = [
+                        'message' => 'Max booking cant more than max people',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }else if($request->max_booking < count($schedule->bookings)){
+                    $response = [
+                        'message' => 'Max booking cant less than sum of bookings',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }else if($request->max_booking < $schedule->tour->min_person){
+                    $response = [
+                        'message' => 'Max booking cant less than min people',
+                        'data' => $schedule
+                    ];
+                    return response()->json($response,400);
+                }
+            }
+        // }
         if($product->schedule_type == 1 || $product->schedule_type == 3){
-            
             if(strtotime($request->start_date) < strtotime(date('Y-m-d'))){
                 $response = [
                     'message' => 'Can\'t change the schedule past the current date !',
@@ -985,13 +1013,7 @@ class TourController extends Controller
                 ];
                 return response()->json($response,400);
             }
-            if(count($schedule->bookings) != 0){
-                $response = [
-                    'message' => 'Schedule has booking !',
-                    'data' => $schedule
-                ];
-                return response()->json($response,400);
-            }
+            
             $start = date('Y-m-d', strtotime('-'.(int)$product->schedule_interval   .' days', strtotime($request->input('start_date'))));
             $end = date('Y-m-d', strtotime('+'.(int)$product->schedule_interval.' days', strtotime($request->input('end_date'))));
             $check = Schedule::where('product_id',$product->id)->whereRaw(DB::raw("(`schedules`.`start_date` >'".$start."')"))->whereRaw(DB::raw("(`schedules`.`end_date` < '".$end."')"))->where('id','!=',$id)->first();
@@ -1097,5 +1119,25 @@ class TourController extends Controller
             Price::where('product_id',$product_id)->update(['number_of_person' =>1]);
         } 
         return redirect("/product/tour-activity/".$product_id.'/edit#step-h-3');
+    }
+    public function json(Request $request)
+    {
+        $data   = new Tour;
+        $name   = ($request->input('name') ? $request->input('name') : '');
+        $id     = ($request->input('id') ? $request->input('id') : '');
+        if(!empty($request->input('company_id'))){
+            $country_id = $request->input('company_id');
+            $data = $data->where('company_id',$country_id);
+        }
+        if($name)
+        {
+            $data = $data->whereRaw('(product_name LIKE "%'.$name.'%" )')->where('status',2);
+        }
+        if($id)
+        {
+            $data = $data->where(['id' => $id,'status' => 5])->orWhere('status',6);
+        }
+        $data = $data->select('id','product_name as name')->get()->toArray();
+        return $this->sendResponse($data, "Tour retrieved successfully", 200);
     }
 }

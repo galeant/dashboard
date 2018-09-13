@@ -187,7 +187,7 @@ class CityController extends Controller
         {
             $data = $data->whereRaw('(name LIKE "%'.$name.'%" )');
         }
-        $data = $data->select('id',DB::raw("CONCAT(`type`,' ',`name`) as name"))->get()->toArray();
+        $data = $data->select('id',DB::raw("CONCAT(`name`,' (',`type`,')') as name"))->get()->toArray();
         return $this->sendResponse($data, "City retrieved successfully", 200);
     }
     public function findCity(Request $req){

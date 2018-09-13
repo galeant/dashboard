@@ -30,14 +30,17 @@
                         <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables">
                             <thead>
                                 <tr>
-                                    <th>Transaction ID</th>
                                     <th>Booking Number</th>
+                                    <th>Transaction Number</th>
                                     <th>Hotel Name</th>
                                     <th>Room Name</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
                                     <th>Number of Room</th>
+                                    <th>Number of Night</th>
+                                    <th>Price per Night</th>
                                     <th>Total Price</th>
-                                    <th>Total Commission</th>
-                                    <th>Status</th>
+                                    <th>Booking Status</th>
                                 </tr>
                             </thead>
                         </table>
@@ -65,13 +68,16 @@
                 serverSide: true,
                 ajax: '/bookings/accomodation-uhotel',
                 columns: [
-                    {data: 'transaction_id'},
                     {data: 'booking_number'},
+                    {data: 'transaction_number'},
                     {data: 'hotel_name'},
                     {data: 'room_name'},
+                    {data: 'start_date'},
+                    {data: 'end_date'},
                     {data: 'number_of_rooms'},
+                    {data: 'night'},
+                    {data: 'price_per_night'},
                     {data: 'total_price'},
-                    {data: 'total_commission'},
                     {data: 'status'}
                 ]
             });

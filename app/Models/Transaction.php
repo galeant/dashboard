@@ -11,7 +11,7 @@ class Transaction extends Model
     public static function list()
     {
         return DB::table('transactions as a')
-                ->select('a.id','a.user_id','b.email',DB::raw("CONCAT(`b`.`firstname`,' ',`b`.`lastname`) as fullname"),'a.coupon_id','a.coupon_code','a.transaction_number','a.total_discount','a.total_price','a.total_paid','a.payment_method','a.paid_at','c.name as status','c.color as status_color','a.created_at')
+                ->select('a.id','a.user_id','b.email',DB::raw("CONCAT(`b`.`firstname`,' ',`b`.`lastname`) as fullname"),'a.coupon_id','a.coupon_code','a.transaction_number','a.total_discount','a.total_price','a.total_paid','a.payment_method','a.paid_at','c.name as status','c.color as status_color','a.created_at','a.updated_at')
                 ->leftJoin('users as b','b.id','=','a.user_id')
                 ->join('transaction_status as c','a.status_id','=','c.id');
     }
@@ -43,9 +43,10 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BookingActivity', 'transaction_id','id');
     }
-    public function booking_car_rent()
+    
+    public function booking_rent_cars()
     {
-        return $this->hasMany('App\Models\BookingCarRental', 'transaction_id','id');
+        return $this->hasMany('App\Models\BookingRentCar', 'transaction_id','id');
     }
     // TRAVELLER
     public function contact_list()
@@ -61,5 +62,9 @@ class Transaction extends Model
     public function contact()
     {
         return $this->belongsTo('App\Models\Members','user_contact_id','id');
+    }
+    public function planning()
+    {
+        return $this->hasOne('App\Models\Planning','transaction_id','id');
     }
 }

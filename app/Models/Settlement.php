@@ -38,7 +38,7 @@ class Settlement extends Model
     }
     public function bookingCarRental()
     {
-        return $this->belongsTo('App\Models\BookingCarRental','booking_number','booking_number');
+        return $this->belongsTo('App\Models\BookingRentCar','booking_number','booking_number');
     }
     public function settlementGroup()
     {

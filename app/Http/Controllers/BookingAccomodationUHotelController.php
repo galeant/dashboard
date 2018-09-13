@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use DB;
 use Datatables;
 use Helpers;
+use Carbon\Carbon;
 
 class BookingAccomodationUHotelController extends Controller
 {
@@ -24,33 +25,32 @@ class BookingAccomodationUHotelController extends Controller
                 ->get();
             return Datatables::of($booking_hotel)
             ->addColumn('status',function(BookingHotel $booking_hotel){
-                if($booking_hotel->status == 1){
-                    return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
-                }elseif($booking_hotel->status == 2){
-                    return '<span  class="badge" style="background-color:#006600">Payment Accepted</span>';    
-                }elseif($booking_hotel->status == 3){
-                    return '<span  class="badge" style="background-color:#cc0000">Cancelled</span>';    
-                }elseif($booking_hotel->status == 4){
-                    return '<span  class="badge" style="background-color:#3399ff">On Prosses Settlement</span>';
-                }elseif($booking_hotel->status == 5){
-                    return '<span  class="badge" style="background-color:#3333ff">Settled</span>';
-                }else{
-                    return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
-                }
+                if(!empty($booking_hotel->transactions)){
+                    return '<span class="badge" style="background-color:'.$booking_hotel->booking_status->color.'">'.$booking_hotel->booking_status->name.'</span>';
+                } 
             })
             ->addColumn('booking_number', function(BookingHotel $booking_hotel){
                 return '<a href="'.url('bookings/accomodation-uhotel/'.$booking_hotel->booking_number).'" class="btn btn-primary">'.$booking_hotel->booking_number.'</a>';
             })
+            ->addColumn('transaction_number', function(BookingHotel $booking_hotel){
+                return '<a href="'.url('transaction/'.$booking_hotel->transactions->transaction_number).'" class="btn btn-primary">'.$booking_hotel->transactions->transaction_number.'</a>';
+            })
             ->editColumn('room_name', function(BookingHotel $booking_hotel){
                 return $booking_hotel->room_name;
+            })
+            ->editColumn('start_date', function(BookingHotel $booking_hotel){
+                return Carbon::parse($booking_hotel->start_date)->format('d M Y');
+            })
+            ->editColumn('end_date', function(BookingHotel $booking_hotel){
+                return Carbon::parse($booking_hotel->end_date)->format('d M Y');
+            })
+            ->editColumn('price_per_night', function(BookingHotel $booking_hotel){
+                return Helpers::idr($booking_hotel->price_per_night);
             })
             ->editColumn('total_price', function(BookingHotel $booking_hotel){
                 return Helpers::idr($booking_hotel->total_price);
             })
-            ->addColumn('total_commission', function(BookingHotel $booking_hotel){
-                return Helpers::idr($booking_hotel->total_price*7/100);
-            })
-            ->rawColumns(['status', 'booking_number'])
+            ->rawColumns(['status', 'booking_number','transaction_number'])
             ->make(true);        
         }
         return view('bookings.accomodation-uhotel.index');

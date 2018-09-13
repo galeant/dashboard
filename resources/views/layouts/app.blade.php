@@ -141,6 +141,24 @@
 		                    </li>
 
 		                </ul>
+					</li>
+					<li {{{ (Request::is('campaign*') ? 'class=active' : '') }}}>
+						<a  class="menu-toggle waves-effect waves-block toggled">
+							<i class="material-icons">account_balance</i>
+		                    <span>Campaign</span>
+		                </a>
+						<ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('campaign/campaign-list*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('campaign/campaign-list') }}" class=" waves-effect waves-block">
+		                            <span>List</span>
+		                        </a>
+							</li>
+							<li {{{ (Request::is('campaign/campaign-product*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('campaign/campaign-product') }}" class=" waves-effect waves-block">
+		                            <span>Product</span>
+		                        </a>
+		                    </li>
+		                </ul>
 		            </li>
 					<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">

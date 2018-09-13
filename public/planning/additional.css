@@ -1,0 +1,276 @@
+.Select-control{
+    padding: 0 1.2em;
+    height: 42px;
+    border: 1px solid #D8DDE6;
+    border-radius: 2px;
+    box-shadow: none !important;
+    font-size: 1em;
+    font-weight: normal;
+    color: #2B2826;
+  
+  }
+  
+  /*====================*/
+  
+  .modal-activity .modal-panel {
+    max-width: 960px;
+    max-height: 550px
+  }
+  
+  .modal-proceed .modal-panel {
+    max-width: 600px !important;
+    text-align: center
+  }
+  
+  .modal-proceed .modal-panel .panel-body {
+    padding: 2.25em 3em
+  }
+  .modal-message .modal-panel{
+    max-width: 350px;
+    max-height: 380px;
+  }
+  .btn-cus{
+    max-width: 40%; 
+    text-align: center;
+    margin-left:50px;
+  }
+  li.swiper-slide .react-tabs__tab--selected {
+      color: #e17306 !important
+  }
+  
+  .tab-slide-control .react-tabs__tab--selected:after {
+      transform: scaleX(1);
+      transform-origin: left
+  }
+  .tab-slide-control .swiper-slide{
+    list-style: none;
+  }
+  .react-tabs__tab--selected {
+      background: none;
+      border-color: none;
+      color: black;
+      border-radius: 0;
+  }
+  
+  .react-tabs__tab {
+      border: none;
+      border-bottom: none;
+      bottom: 0;
+      list-style: none;
+      padding: 0;
+      cursor: pointer;
+  }
+  
+  
+  .timeline-days {
+      margin-bottom: 2em
+  }
+  
+  .timeline-days .nav-tabs {
+      position: relative;
+      transform: translateZ(0);
+      display: flex;
+      justify-content: space-between
+  }
+  
+  .timeline-days .nav-tabs:before {
+      content: "";
+      position: absolute;
+      display: block;
+      top: 50%;
+      left: 1em;
+      right: 1em;
+      height: 1px;
+      background-color: #D8DDE6;
+      z-index: -1
+  }
+  
+  .timeline-days .nav-tabs li {
+      float: none;
+      display: inline-block
+  }
+  
+  .timeline-days .nav-tabs li a {
+      font-size: .714em;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: .06em;
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      -webkit-box-align: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      line-height: 1.2em;
+      height: 42px;
+      text-align: center;
+      padding: 0 2em;
+      background-color: #E8EBF0;
+      color: inherit;
+      border-radius: 2px;
+      transition: background-color .4s cubic-bezier(.4, 0, .2, 1),
+                  color .4s cubic-bezier(.4, 0, .2, 1)
+  }
+  
+  .timeline-days .nav-tabs li a:hover {
+      color: #2B2826
+  }
+  
+  .timeline-days .nav-tabs li.active a {
+      background-color: #2B2826;
+      color: #fff
+  }
+  
+  .timeline-days .nav-tabs li {
+      font-size: .714em;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: .06em;
+      display: -ms-flexbox;
+      display: flex;
+      display: -webkit-flex;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-align: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-justify-content: center;
+      line-height: 1.2em;
+      height: 42px;
+      text-align: center;
+      padding: 0 2em;
+      background-color: #E8EBF0;
+      color: inherit;
+      border-radius: 2px;
+      -webkit-transition: background-color .4s cubic-bezier(.4, 0, .2, 1),
+   color .4s cubic-bezier(.4, 0, .2, 1);
+      -o-transition: background-color .4s cubic-bezier(.4, 0, .2, 1),
+   color .4s cubic-bezier(.4, 0, .2, 1);
+      transition: background-color .4s cubic-bezier(.4, 0, .2, 1),
+   color .4s cubic-bezier(.4, 0, .2, 1);
+  }
+  .timeline-days .nav-tabs .react-tabs__tab--selected {
+      background-color: #e17306 !important;
+      color: white !important;
+  }
+  .timeline-days .nav-tabs.react-tabs__tab--selected:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 103, 0, .35);
+      opacity: 0;
+      z-index: -1;
+  }
+  .modal-plan-img .react-tabs__tab--selected {
+      color: grey !important;
+  }
+  
+  #preloader-lay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      background: linear-gradient(rgba(255,255,255,0.6), rgba(0,0,0,0.6));;
+      filter:blur(2px)
+  }
+  #preloader-s {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2000
+  }
+  
+  #preloader-s:before,
+  #preloader-s:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      transform-origin: top;
+      transition: transform .8s cubic-bezier(.4, 0, .2, 1)
+  }
+  
+  #preloader-s:before {
+      background-color: #e17306
+  }
+  
+  #preloader-s:after {
+      background-color: #FFFFFF
+  }
+  
+  .page-load #preloader-s:after {
+      transform-origin: bottom;
+      z-index: 2;
+      animation: pageLoad .8s .4s cubic-bezier(.4, 0, .2, 1) forwards
+  }
+  
+  .page-load #preloader-s:before {
+      transform-origin: bottom;
+      animation: pageLoad .8s cubic-bezier(.4, 0, .2, 1) forwards
+  }
+  
+  @keyframes pageLoad {
+      0%{transform: scaleY(0)}
+      100%{transform: scaleY(1)}
+  }
+  
+  .load #preloader-s:before,
+  .load #preloader-s:after {
+      transform: scaleY(0)
+  }
+  
+  .load #preloader-s:before {
+      transition-delay: .4s
+  }
+  
+  #preloader-s #status-s {
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.075);
+      z-index: 2;
+      animation: head .8s cubic-bezier(.4, 0, .2, 1) forwards
+  }
+  
+  
+  .succes-msg-container{
+    margin-top:30px;
+    text-align: center;
+  }
+  .succes-msg-container img{
+    width:100px;
+  }
+  .rc-time-picker-panel-input-wrap{
+      width:100%;
+  }
+  .rc-time-picker-input, .rc-time-picker-panel-input{
+      padding: 0 1.2em;
+      height: 42px;
+      border: 1px solid #D8DDE6;
+      border-radius: 2px;
+      -webkit-box-shadow: none !important;
+      box-shadow: none !important;
+      font-size: 1em;
+      font-weight: normal;
+      color: #2B2826;
+  }
+  
+  @media screen and (max-width:991px) {
+          /*==========*/
+      .filter-header {
+          display: block
+      }
+      .filter-header .form-group{
+          margin-top: 10px; 
+      }
+  }
