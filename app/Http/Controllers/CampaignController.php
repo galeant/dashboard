@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Campaign;
 // use App\Models\ProductType;
+use App\Models\CampaignProduct;
 
 use Datatables;
 use Validator;
@@ -207,6 +208,7 @@ class CampaignController extends Controller
         DB::beginTransaction();
         try{
             $data = Campaign::find($id);
+            CampaignProduct::where('campaign_id',$id)->delete();
             if($data->delete()){
                 DB::commit();
                 return $this->sendResponse($data, "Delete Campaign ".$data->name." successfully", 200);

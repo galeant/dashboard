@@ -79,7 +79,6 @@ class CampaignProductController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $validation = Validator::make($request->all(), [
             'product_type' => 'required',
             'product_id' => 'required',
@@ -101,7 +100,7 @@ class CampaignProductController extends Controller
                 $data[1] = $product->campaigns->name;
                 return redirect()->back()->with('error_add_campaign', $data);
             }
-            $campaign = Campaign::find($campaign_id);
+            $campaign = Campaign::find($request->campaign_id);
             if($request->input('supplier_discount') < $campaign->supplier_discount){
                 return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
             }
@@ -178,13 +177,16 @@ class CampaignProductController extends Controller
         }
         DB::beginTransaction();
         try{
-            if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
-                $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
-                $data[0] = $product->tours->product_name;
-                $data[1] = $product->campaigns->name;
-                return redirect()->back()->with('error_add_campaign', $data);
-            }
-            $campaign = Campaign::find($campaign_id);
+            $validate = CampaignProduct::where('id',$id)->first();
+            // if($validate->campaign_id != $request->campaign_id){
+                if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
+                    $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
+                    $data[0] = $product->tours->product_name;
+                    $data[1] = $product->campaigns->name;
+                    return redirect()->back()->with('error_add_campaign', $data);
+                }
+            // }
+            $campaign = Campaign::find($request->campaign_id);
             if($request->input('supplier_discount') < $campaign->supplier_discount){
                 return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
             }
@@ -217,7 +219,7 @@ class CampaignProductController extends Controller
     {
         DB::beginTransaction();
         try{
-            $data = Campaign::find($id);
+            $data = CampaignProduct::find($id);
             if($data->delete()){
                 DB::commit();
                 return $this->sendResponse($data, "Delete Campaign Product ".$data->tours->product_name." successfully", 200);
