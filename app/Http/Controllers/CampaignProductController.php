@@ -92,12 +92,20 @@ class CampaignProductController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
+        
         DB::beginTransaction();
         try{
-            $campaign = Campaign::find($request->input('campaign_id'));
+            if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
+                $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
+                $data[0] = $product->tours->product_name;
+                $data[1] = $product->campaigns->name;
+                return redirect()->back()->with('error_add_campaign', $data);
+            }
+            $campaign = Campaign::find($campaign_id);
             if($request->input('supplier_discount') < $campaign->supplier_discount){
                 return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
             }
+            
             $data = new CampaignProduct();
             $data->product_type = $request->input('product_type');
             $data->product_id = $request->input('product_id');
@@ -170,7 +178,13 @@ class CampaignProductController extends Controller
         }
         DB::beginTransaction();
         try{
-            $campaign = Campaign::find($request->input('campaign_id'));
+            if(CampaignProduct::where('product_id', $request->input('product_id'))->exists()){
+                $product = CampaignProduct::where('product_id', $request->input('product_id'))->first();
+                $data[0] = $product->tours->product_name;
+                $data[1] = $product->campaigns->name;
+                return redirect()->back()->with('error_add_campaign', $data);
+            }
+            $campaign = Campaign::find($campaign_id);
             if($request->input('supplier_discount') < $campaign->supplier_discount){
                 return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
             }
