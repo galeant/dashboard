@@ -5,7 +5,7 @@ use \Mpdf\Mpdf;
 class PDFM extends Mpdf
 {
     public $mpdf;
-    public function pdf($html, $array_css = null){
+    public function pdf($html, $array_css = null, $booking_number, $download=0){
         $mpdf = new \Mpdf\Mpdf([
             'margin_left' => 0,
             'margin_right' => 0,
@@ -14,7 +14,7 @@ class PDFM extends Mpdf
             'margin_header' => 0,
             'margin_footer' => 0
         ]);
-        $mpdf->SetProtection(array('print'));
+        // $mpdf->SetProtection(array('print'));
         // $mpdf->SetTitle("Acme Trading Co. - Invoice");
         // $mpdf->SetAuthor("Acme Trading Co.");
         // $mpdf->SetWatermarkText("Paid");
@@ -34,6 +34,12 @@ class PDFM extends Mpdf
             }
         }
         $mpdf->WriteHTML($html, 2);
-        $mpdf->Output();
+        // $mpdf->Output();
+        if($download==0){
+            $mpdf->Output();
+        }
+        else{
+            $mpdf->Output($booking_number.'.pdf', 'D');
+        }
     }
 }

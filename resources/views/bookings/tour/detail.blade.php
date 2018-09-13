@@ -69,7 +69,7 @@
                         <div class="col-md-6">
                             :
                             @if($data->start_date == $data->end_date)
-                                @if($data->end_hours == "23:59:00")
+                                @if($data->tours->schedule_type == 3)
                                     {{date('d M Y', strtotime($data->start_date))}}
                                 @else
                                     {{date('d M Y', strtotime($data->start_date))}}, {{date('h:i', strtotime($data->start_hours))}} - {{date('h:i', strtotime($data->end_hours))}}
