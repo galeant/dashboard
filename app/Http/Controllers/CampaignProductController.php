@@ -79,6 +79,7 @@ class CampaignProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validation = Validator::make($request->all(), [
             'product_type' => 'required',
             'product_id' => 'required',

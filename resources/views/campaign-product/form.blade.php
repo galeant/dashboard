@@ -20,7 +20,7 @@
         <div class="col-md-12">
 		    <div class="card">
 		        <div class="header">
-		            <h2>Create Campaign</h2>
+		            <h2>Create Product Campaign</h2>
 		        </div>
 		        <div class="body">
 		        	@include('errors.error_notification')
@@ -50,14 +50,17 @@
 									</select>
 								</div>
 								<div class="form-group m-b-20">
-									<label>Product Name</label>
+									<label>Campaign Name</label>
 									@if(isset($data))
 									{{ Form::select('campaign_id', $campaign, $data->campaign_id,['class' => 'form-control','id'=>'campaign_id','required'=>'required']) }}
 									@else
 									{{ Form::select('campaign_id', $campaign, null,['class' => 'form-control','id'=>'campaign_id','required'=>'required']) }}
 									@endif
 								</div>
-								
+								<div class="form-group m-b-20">
+									<label>Quantity</label>
+									{{ Form::number('quantity', null, ['class' => 'form-control','placeholder'=>'Please Enter quantity','id'=>'quantity', 'min' => '0','required'=>'required']) }}
+								</div>
 					            <div class="form-group m-b-20">
 					                <label>Supplier Discount</label>
 									{{ Form::number('supplier_discount', null, ['class' => 'form-control','placeholder'=>'Please Enter Supplier Discount','id'=>'suplier_discount', 'step' => '.01', 'min' => '0', 'max' => '100','required'=>'required']) }}
@@ -157,8 +160,26 @@
 			}
 		});
 		$("#product_id").select2();
-
-		
+		@if(isset($data))
+			$.ajax({
+				method: "GET",
+				url: "{{ url('campaign/findCampaign') }}",
+				data: { campaign_id: $("#campaign_id").val()}
+			}).done(function(response) {
+				var disc = Math.round(response.data.supplier_discount);
+				$("#suplier_discount").attr("min",disc);
+			});
+		@endif
+		$("#campaign_id").change(function(){
+			$.ajax({
+				method: "GET",
+				url: "{{ url('campaign/findCampaign') }}",
+				data: { campaign_id: $(this).val()}
+			}).done(function(response) {
+				var disc = Math.round(response.data.supplier_discount);
+				$("#suplier_discount").attr("min",disc);
+			});
+		});
     });
 </script>
 @stop

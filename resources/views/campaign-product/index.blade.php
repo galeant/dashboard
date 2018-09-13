@@ -21,7 +21,7 @@
                             </h2>
                             <ul class="header-dropdown m-r--5">
                                 <li >
-                                    <a href="/campaign/campaign-product/create" class="btn bg-teal btn-block waves-effect">Add Campaign</a>
+                                    <a href="/campaign/campaign-product/create" class="btn bg-teal btn-block waves-effect">Add Product Campaign</a>
                                 </li>
                             </ul>
                         </div>

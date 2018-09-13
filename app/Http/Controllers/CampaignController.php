@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Campaign;
+// use App\Models\ProductType;
+
 use Datatables;
 use Validator;
 use DB;
@@ -50,8 +52,15 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        //
         return view('campaign.form');
+        //
+        // dd($product_type = ProductType::all());
+        // // $product_type = ProductType::pluck('name', 'id');
+        // // $campaign = Campaign::pluck('name', 'id');
+        // return view('campaign.form', [
+        //     // 'campaign' => $campaign,
+        //     'product_type' => $product_type
+        // ]);
     }
 
     /**
@@ -128,8 +137,10 @@ class CampaignController extends Controller
     {
         //
         $data = Campaign::find($id);
+        // $product_type = ProductType::all();
         return view('campaign.form')->with([
             'data'=> $data
+            // 'product_type' => $product_type
         ]);
     }
 
@@ -207,5 +218,16 @@ class CampaignController extends Controller
             \Log::info($exception->getMessage());
             return $this->sendResponse($data, $exception->getMessage() , 200);
         }
+    }
+    public function findCampaign(Request $request){
+        $data = Campaign::find($request->campaign_id);
+        $response = [
+            'status' => 'ok',
+            'data' => $data
+        ];
+        return response()->json($response,200);
+    }
+    public function save(Request $request){
+        dd($request->all());
     }
 }

@@ -133,6 +133,8 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::group(['prefix' => 'campaign'],function(){
 		Route::resource('campaign-list', 'CampaignController');
 		Route::resource('campaign-product', 'CampaignProductController');
+		// Route::post('product-save', 'CampaignController@save');
+		// Route::get('findCampaign', 'CampaignController@findCampaign');
 	});
 	
 	Route::group(['prefix' => 'bookings'],function(){
