@@ -53,7 +53,7 @@ class helpers{
 		return ['private'=>'Private Group','open'=> 'Open Group'];
 	}
 	public static function bankName(){
-		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB'];
+		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB','BPD DIY' => 'BPD DIY','BPD BALI' => 'BPD BALI'];
 	}
 	public static function typeCity(){
 		return ['Kota'=> 'Kota','Kabupaten'=>'Kabupaten'];

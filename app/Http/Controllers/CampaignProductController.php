@@ -164,10 +164,10 @@ class CampaignProductController extends Controller
     public function update(Request $request, $id)
     {
         $validation = Validator::make($request->all(), [
-            'product_type' => 'required',
-            'product_id' => 'required',
+            // 'product_type' => 'required',
+            // 'product_id' => 'required',
             'quantity' => 'required',
-            'campaign_id' => 'required',
+            // 'campaign_id' => 'required',
             'supplier_discount' => 'required|numeric|between:0,99.99',
         ]);
         // Check if it fails //

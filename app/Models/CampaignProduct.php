@@ -10,7 +10,7 @@ class CampaignProduct extends Model
 
     public function product_types()
     {
-        return $this->hasOne('App\Models\ProductType','product_type','id');
+        return $this->belongsTo('App\Models\ProductType','product_type','id');
     }
     public function campaigns()
     {
