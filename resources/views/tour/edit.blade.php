@@ -172,8 +172,13 @@
                                         {{ Form::hidden('meeting_point_latitude', null, ['placeholder'=>'Latitude','id'=>'lat']) }}
                                         {{ Form::hidden('meeting_point_longitude', null, ['placeholder'=>'Longitude','id'=>'lng']) }}
                                         <div class="form-group m-b-20">
-                                        <label>Starting Point/Gathering Point(where should your costumer meet you)?*</label> 
-                                        {{ Form::text('meeting_point_address', null, ['class' => 'form-control','id'=>'meeting_point_address','required'=>'required']) }}
+                                            <label>Starting Point/Gathering Point(where should your costumer meet you)?*</label> 
+                                            {{ Form::text('meeting_point_address', null, ['class' => 'form-control','id'=>'meeting_point_address','required'=>'required']) }}
+                                            <div id="infowindow-content">
+                                              <img src="" width="16" height="16" id="place-icon">
+                                              <span id="place-name"  class="title"></span><br>
+                                              <span id="place-address"></span>
+                                            </div>
                                         </div>
                                         <div class="form-group m-b-20">
                                             <label>Meeting Point Notes</label>
@@ -190,7 +195,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="map_canvas"></div>
+                                        <div class="map_canvas" id="map"></div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group m-b-20">
@@ -875,7 +880,6 @@
     <script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script> 
     <!-- Mask js -->
     <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
-    <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places"></script>
 
     <!-- Light Gallery Plugin Js -->
     <script src="{{asset('plugins/light-gallery/js/lightgallery-all.js')}}"></script>
@@ -890,6 +894,61 @@
     <script src="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript">
+        function initMap()
+        {
+            var myLatlng = new google.maps.LatLng({{isset($data->meeting_point_latitude) ? $data->meeting_point_latitude : 0}},{{isset($data->meeting_point_longitude) ? $data->meeting_point_longitude : 0}});
+            var map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat:{{isset($data->meeting_point_latitude) ? $data->meeting_point_latitude : 0}} , lng:{{isset($data->meeting_point_longitude) ? $data->meeting_point_longitude : 0}} },
+              zoom: 13
+            });
+            var input = document.getElementById('meeting_point_address');
+            var autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+            autocomplete.setFields(['address_components', 'geometry', 'icon', 'name']);
+            var infowindow = new google.maps.InfoWindow();
+            var infowindowContent = document.getElementById('infowindow-content');
+            infowindow.setContent(infowindowContent);
+            var marker = new google.maps.Marker({
+              map: map,
+              position: myLatlng
+            });
+            autocomplete.addListener('place_changed', function(e) {
+              infowindow.close();
+              marker.setVisible(false);
+              var place = autocomplete.getPlace();
+              if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+              }
+
+              // If the place has a geometry, then present it on a map.
+              if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+              } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);  // Why 17? Because it looks good.
+              }
+              marker.setPosition(place.geometry.location);
+              marker.setVisible(true);
+              
+              $('#lat').val(place.geometry.location.lat());
+              $('#lng').val(place.geometry.location.lng());
+              var address = '';
+              if (place.address_components) {
+                address = [
+                  (place.address_components[0] && place.address_components[0].short_name || ''),
+                  (place.address_components[1] && place.address_components[1].short_name || ''),
+                  (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+              }
+              infowindowContent.children['place-icon'].src = place.icon;
+              infowindowContent.children['place-name'].textContent = place.name;
+              infowindowContent.children['place-address'].textContent = address;
+              infowindow.open(map, marker);
+            });
+        }
         $( window ).on( "load", function() {
             if($('#3d').prop('checked')){
                 $(".scheduleDays, .scheduleHours").removeAttr("required").hide();
@@ -982,7 +1041,6 @@
 
         });
         $(document).ready(function () {
-            
             $( "#product_form" ).validate({
               rules: {
                 min_person: {
@@ -1038,34 +1096,8 @@
         $(".country").click(function(){
             $(this).closest(".valid-info").find("#PICFormat").val("+"+$(this).attr( "data-dial-code" ));
         });
+
         $(function(){
-            lat = $('#lng').val();
-            lng = $('#lat').val();
-            $("#meeting_point_address").geocomplete({
-                map: ".map_canvas",
-                details: ".place",
-                @if(!empty($data->meeting_point_latitude) && !empty($data->meeting_point_longitude))
-                location:[{{$data->meeting_point_latitude}},{{$data->meeting_point_longitude}}],
-                @elseif(!empty(old('meeting_point_latitude')) && !empty(old('meeting_point_longitude')))
-                location:[lat,lng],
-                @endif
-                mapOptions: {
-                  zoom: 8,
-                  scrollwheel: true,
-                  mapTypeId: "roadmap"
-                },
-
-                blur: false,
-                geocodeAfterResult: false,
-                restoreValueAfterBlur: false
-            });
-            $("#meeting_point_address")
-              .geocomplete()
-              .bind("geocode:result", function(event, result){
-                $("input#lat").val(result.geometry.location.lat());
-                $("input#lng").val(result.geometry.location.lng());
-              });
-
             var activityTag = [];
             $.ajax({
                 method: "GET",
@@ -1083,37 +1115,7 @@
                     data: activityTag,
                 });
             });
-            // $("#activity_tag").select2({
-            //     ajax: {
-            //         url: "/json/activity",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //           return {
-            //             name: params.term, // search term
-            //             page: params.page,
-            //           };
-            //         },
-            //         processResults: function (data, params) {
-            //           // parse the results into the format expected by Select2
-            //           // since we are using custom formatting functions we do not need to
-            //           // alter the remote JSON data, except to indicate that infinite
-            //           // scrolling can be used
-            //           params.page = params.page || 1;
-            //           return {
-            //             results: data,
-            //             pagination: {
-            //               more: (params.page * 30) < data.total_count
-            //             }
-            //           };
-            //         },
-            //         cache: true
-            //       },
-            //       escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-            //       minimumInputLength: 1,
-            //       templateResult: formatRepo, // omitted for brevity, see the source of this page
-            //       templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-            // });
+            
             $("#company_id").select2({
                 ajax: {
                     url: "/json/company",
@@ -1260,19 +1262,6 @@
                         );
                     });
                 });
-                // $.ajax({
-                //   method: "GET",
-                //   url: "{{ url('json/destination') }}",
-                //   data: {
-                //     province_id: $(this).val()
-                //   }
-                // }).done(function(response) {
-                //     $.each(response.data, function (index, value) {
-                //         $('#'+id+'-destination').append(
-                //             "<option value="+value.id+">"+value.name+"</option>"
-                //         );
-                //     });
-                // });
              });
             //  CITY AJAX
             $('.dd-cli').delegate('.city-sel','change',function(e){
@@ -1687,5 +1676,7 @@
             $("p.form-note").find("b").text($(this).val());
         });
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places&callback=initMap"
+        async defer></script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop
