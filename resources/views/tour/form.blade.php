@@ -497,9 +497,54 @@
                     $(this).closest("div").find("a").attr("data-content","Within a single commencing schedule, customers will be grouped into one group");
                 }
             });
+            $("#company_id").select2({
+                ajax: {
+                    url: "/json/company",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                      return {
+                        name: params.term, // search term
+                        page: params.page,
+                      };
+                    },
+                    processResults: function (data, params) {
+                      // parse the results into the format expected by Select2
+                      // since we are using custom formatting functions we do not need to
+                      // alter the remote JSON data, except to indicate that infinite
+                      // scrolling can be used
+                      params.page = params.page || 1;
+                      return {
+                        results: data.data,
+                        pagination: {
+                          more: (params.page * 30) < data.total_count
+                        }
+                      };
+                    },
+                    cache: true
+                  },
+                  escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                  minimumInputLength: 1,
+                  templateResult: formatRepo, // omitted for brevity, see the source of this page
+                  templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+            });
+            function formatRepo (repo) {
+                  if (repo.loading) return repo.text;
+
+                  var markup = "<div class='select2-result-repository clearfix'>" +
+
+                    "<div class='select2-result-repository__meta'>" +
+                      "<div class='select2-result-repository__title'>" + repo.name + "</div>";
+
+                  "</div></div>";
+
+                  return markup;
+                }
+            function formatRepoSelection (repo) {
+              return repo.name || repo.text;
+            }
 
         });
-
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places&callback=initMap"
         async defer></script>
