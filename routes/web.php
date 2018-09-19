@@ -54,10 +54,10 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		//DestinationTipsQuestion
 		Route::resource('tips-question', 'DestinationTipsQuestionController');
 
-		//API
-		Route::get('/findCity/{id}','CityController@findCity');
-		Route::get('/findDistrict/{id}','DistrictController@findDistrict');
-		Route::get('/findVillage/{id}','VillageController@findVillage');
+		// //API
+		// Route::get('/findCity/{id}','CityController@findCity')->name('json.city');
+		// Route::get('/findDistrict/{id}','DistrictController@findDistrict')->name('json.district');
+		// Route::get('/findVillage/{id}','VillageController@findVillage')->name('json.village');
 
 		//Activity Tag
 		Route::resource('activity-tag', 'ActivityTagController');
@@ -70,24 +70,24 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	});
 	// 
 	Route::group(['prefix' => 'json'], function(){
-		Route::get('country','CountryController@json');
-		Route::get('language','LanguageController@json');
-		Route::get('province','ProvinceController@json');
+		Route::get('country','CountryController@json')->name('json.country');
+		Route::get('language','LanguageController@json')->name('json.language');
+		Route::get('province','ProvinceController@json')->name('json.province');
 		// 
-		Route::get('city','CityController@json');
-		Route::get('findCity','CityController@findCity');
+		Route::get('city','CityController@json')->name('json.city');
+		Route::get('findCity','CityController@findCity')->name('json.city');
 		// 
-		Route::get('district','DistrictController@json');
-		Route::get('village','VillageController@json');
-		Route::get('company','CompanyController@json');
-		Route::get('activity','ActivityTagController@activityList');
+		Route::get('district','DistrictController@json')->name('json.district');
+		Route::get('village','VillageController@json')->name('json.village');
+		Route::get('company','CompanyController@json')->name('json.company');
+		Route::get('activity','ActivityTagController@activityList')->name('json.activity');
 
-		Route::get('findDestination','DestinationController@findDestination');
-		Route::get('destination','DestinationController@json');
+		Route::get('findDestination','DestinationController@findDestination')->name('json.destination');
+		Route::get('destination','DestinationController@json')->name('json.destination');;
 
-		Route::get('tour','TourController@json');
+		Route::get('tour','TourController@json')->name('json.tour');;
 
-		Route::post('changeStatus/{status}','TourController@changeStatus');
+		Route::post('changeStatus/{status}','TourController@changeStatus')->name('json.changeStatus');;
 	});
 	Route::group(['prefix' => 'product'],function(){
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule')->name('product.schedule');
@@ -108,11 +108,11 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
-		Route::post('/upload/image', 'TourController@uploadImageAjax');
-		Route::post('/delete/image', 'TourController@deleteImageAjax');
+		Route::post('/upload/image', 'TourController@uploadImageAjax')->name('product.uploadImage');;
+		Route::post('/delete/image', 'TourController@deleteImageAjax')->name('product.deletImage');
 
 		//planning
-		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
+		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print')->name('product.planning');
 	});
 	Route::group(['prefix' => 'settlement'],function(){
 		Route::get('/all', 'SettlementController@index')->name('settlement.view');
@@ -154,11 +154,8 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund')->name('booking_rent_car.refund');
 	});
 	Route::resource('transaction', 'TransactionController');
-	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
-	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt');
-	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
-	
-	
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print')->name('transaction.print');
+	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt')->name('transaction.sendReceipt');
+	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
-	
 });

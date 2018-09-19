@@ -8,6 +8,8 @@ use App\Models\Roles;
 use Datatables;
 use DB;
 use Validator;
+use Illuminate\Support\Facades\Cache;
+use Auth;
 
 class RolesController extends Controller
 {
@@ -18,6 +20,7 @@ class RolesController extends Controller
      */
     public function index(Request $request)
     {
+        // dd(Cache::get('permission_'.Auth::user()->remember_token));
         if($request->ajax())
         {
             $model = Roles::query();
@@ -43,7 +46,7 @@ class RolesController extends Controller
      */
     public function create()
     {   
-        $index = Permission::where('code','like','1%')->get();
+        dd($index = Permission::where('code','like','1%')->get());
         $detail = Permission::where('code','like','4%')->get();
         $add = Permission::where('code','like','3%')->get();
         $delete = Permission::where('code','like','7%')->get();
@@ -141,21 +144,24 @@ class RolesController extends Controller
     {
         // $roles = Roles::where('id',$id)->first();
         $role  = Roles::where('id',$id)->with('rolePermission')->first();
-
-        $index = Permission::where('code','like','1%')->get();
-        $detail = Permission::where('code','like','4%')->get();
-        $add = Permission::where('code','like','3%')->get();
-        $delete = Permission::where('code','like','7%')->get();
-        $update = Permission::where('code','like','6%')->get();
-        $other = Permission::where('code','like','99%')->get();
+        $permission = Permission::all()->groupBy('grouping')->toArray();
+        $contain_permission = [];
+        // dd($role->rolePermission->toArray());
+        foreach($role->rolePermission->toArray() as $index=>$per){
+            // if(!in_array($per['grouping'],$contain_permission)){
+            //     $contain_permission[] = $per['grouping'];
+            // }
+            if(!in_array($per['id'],$contain_permission)){
+                $contain_permission[] = $per['id'];
+            }
+        }
+        
+        // dd($contain_permission);
+        // dd($permission['App']);
         return view('employee.role_edit',[
             'role' => $role,
-            'index'=>$index,
-            'detail'=>$detail,
-            'add'=>$add,
-            'delete'=>$delete,
-            'update'=>$update,
-            'other'=>$other
+            'permission'=>$permission,
+            'contain_permission' =>$contain_permission
         ]);
     }
 
@@ -184,6 +190,7 @@ class RolesController extends Controller
                 $permission_id[] = $i;
             }
         }
+        // dd($permission_id);
         // $list_permission = Permission::all();
         // foreach($list_permission as $k=>$lp){
         //     $permission_id[$lp->id] = $lp->description;
@@ -203,6 +210,7 @@ class RolesController extends Controller
             $role->rolePermission()->sync($permission_id);
             // $role->rolePermission()->sync(array_keys($permission_id));
             DB::commit();
+            Cache::forget('permission_'.Auth::user()->remember_token);
             return redirect()->back()->with('message', 'Permission change success');
         }catch (\Exception $exception){
             DB::rollBack();

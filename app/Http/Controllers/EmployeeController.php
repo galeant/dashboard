@@ -35,14 +35,14 @@ class EmployeeController extends Controller
         )){
             // dd(Auth::user()->Roles);
             $token = Auth::user()->remember_token;
+            // dd(Auth::user()->Roles[0]->rolePermission);
             $permission = [];
             foreach(Auth::user()->Roles as $ro){
                 foreach($ro->rolePermission as $index=>$per){
-                    if(!in_array($per->name,$permission)){
-                        $permission[] = $per->name;
-                    }
+                    $permission[$per->grouping][] = $per->method;
                 }
             }
+            // dd($permission);
             Cache::put('permission_'.$token,$permission,60);
             return redirect()->intended('/');
         }
@@ -51,7 +51,7 @@ class EmployeeController extends Controller
 
     public function logout(Request $request)
     {
-        Cache::forget(Auth::user()->remember_token);
+        Cache::forget('permission_'.Auth::user()->remember_token);
         Auth::logout();
         return redirect('/login');
     }
