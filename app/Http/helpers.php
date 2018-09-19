@@ -16,7 +16,7 @@ class helpers{
 	}
 	public static function provinces(){
 		$data = DB::table('provinces')->pluck('name','id');
-		$temp[0]= '-Please Select-';
+		$temp[0]= '-- Province City --';
 		foreach($data as $key => $dt){
 			$temp[$key] = $dt;
 		}
@@ -28,7 +28,7 @@ class helpers{
 			$data = $data->where('province_id',$province_id);
 		}
 		$data = $data->pluck(DB::raw("CONCAT(`name`,' (',`type`,')') as name"),'id');
-		$temp[0]= '-Please Select-';
+		$temp[0]= '-- Select City --';
 		foreach($data as $key => $dt){
 			$temp[$key] = $dt;
 		}
@@ -40,7 +40,7 @@ class helpers{
 			$data = $data->where('city_id',$province_id);
 		}
 		$data = $data->pluck('destination_','id');
-		$temp[0]= '-Please Select-';
+		$temp[0]= '-- Select Destination --';
 		foreach($data as $dt){
 			array_push($temp,$dt);
 		}

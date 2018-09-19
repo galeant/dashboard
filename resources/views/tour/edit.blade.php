@@ -357,10 +357,15 @@
                                                 @endif
                                             </select>
                                         </div>
+                                        
                                         <div class="col-md-4 col-destination">
                                             <h5>Destination</h5>
                                             <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
+                                                @if(count($data->destinations) !=0)
+                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
+                                                @else
                                                 <option value="" selected>-- Select Destination --</option>
+                                                @endif
                                             </select>
                                             <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                         </div>
@@ -1239,6 +1244,8 @@
                 $('.child-'+destLength+' .col-city select').attr('name','place['+destLength+'][city]').attr('id',destLength+'-city').attr('data-id',destLength);
                 $('.child-'+destLength+' .col-city select').val('');
                 $('.child-'+destLength+' .col-destination select').attr('name','place['+destLength+'][destination]').attr('id',destLength+'-destination').attr('data-id',destLength);
+                $('#'+destLength+'-city').val(0);
+                $('#'+destLength+'-destination').empty().append('<option value="" selected>-- Select Destination --</option>');
                 $('.child-'+destLength).append('<button type="button" class="btn btn-xs btn-danger waves-effect btn-delete-des"><i class="material-icons">clear</i></button>').attr('data-id',destLength);
             });
             $('.dynamic-destinations').delegate('.btn-delete-des','click', function(e){
@@ -1254,8 +1261,10 @@
                     province_id: $(this).val()
                   }
                 }).done(function(response) {
-                    $('#'+id+'-destination option').remove();
-                    $('#'+id+'-city option').remove();
+                    $('#'+id+'-destination option').remove().empty();
+                    $('#'+id+'-destination').append('<option value="" selected="">-- Select Destination --</option>');
+                    $('#'+id+'-city option').remove().empty();
+                    $('#'+id+'-city').append('<option value="" selected="">-- Select City --</option>');
                     $.each(response, function (index, value) {
                         $('#'+id+'-city').append(
                             "<option value="+value.id+">"+value.name+"</option>"
@@ -1274,7 +1283,8 @@
                   }
                 }).done(function(response) {
                     $('#'+id+'-destination option').remove();
-                    $('#'+id+'-destination').append('<option value=""></option>');
+                    $('#'+id+'-destination option').empty();
+                    $('#'+id+'-destination').append('<option value="" selected="">-- Select Destination --</option>');
                     $.each(response, function (index, value) {  
                         $('#'+id+'-destination').append(
                             "<option value="+value.id+">"+value.destination_name+"</option>"
