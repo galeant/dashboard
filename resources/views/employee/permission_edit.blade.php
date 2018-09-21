@@ -38,19 +38,30 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>URI</h5>
-                                        <input type="text" class="form-control" name="uri" value="{{$permission->uri}}" required/>
+                                        <textarea rows="5" class="form-control" name="uri" required >{{$permission->uri}}</textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h5>Path permission name</h5>
-                                        <input type="text" class="form-control" name="name" value="{{$permission->name}}" required/>
+                                        <h5>Method</h5>
+                                        <select class="form-control" name='method' required>
+                                            <option value="GET" @if($permission->grouping == 'GET') selected @endif>GET</option>
+                                            <option value="POST" @if($permission->grouping == 'POST') selected @endif>POST</option>
+                                            <option value="PUT" @if($permission->grouping == 'PUT') selected @endif>PUT</option>
+                                            <option value="DELETE" @if($permission->grouping == 'DELETE') selected @endif>DELETE</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Grouping</h5>
+                                        <input type="text" class="form-control" name="grouping" value="{{$permission->grouping}}" required/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>Description</h5>
-                                        <input type="text" class="form-control" name="description" value="{{$permission->description}}" required/>
+                                        <textarea rows="5" class="form-control" name="description" required >{{$permission->description}}</textarea>
                                     </div>
                                 </div>
 					            <div class="form-group m-b-20">

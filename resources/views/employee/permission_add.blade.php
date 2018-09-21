@@ -38,19 +38,30 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>URI</h5>
-                                        <input type="text" class="form-control" name="uri" required/>
+                                        <textarea rows="5" class="form-control" name="uri" required ></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <h5>Path permission name</h5>
-                                        <input type="text" class="form-control" name="name" required/>
+                                        <h5>Method</h5>
+                                        <select class="form-control" name='method' required>
+                                            <option value="GET">GET</option>
+                                            <option value="POST">POST</option>
+                                            <option value="PUT">PUT</option>
+                                            <option value="DELETE">DELETE</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <h5>Grouping</h5>
+                                        <input type="text" class="form-control" name="grouping" required/>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h5>Description</h5>
-                                        <input type="text" class="form-control" name="description" required/>
+                                        <textarea rows="5" class="form-control" name="description" required ></textarea>
                                     </div>
                                 </div>
 					            <div class="form-group m-b-20">

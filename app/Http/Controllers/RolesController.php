@@ -46,31 +46,10 @@ class RolesController extends Controller
      */
     public function create()
     {   
-        dd($index = Permission::where('code','like','1%')->get());
-        $detail = Permission::where('code','like','4%')->get();
-        $add = Permission::where('code','like','3%')->get();
-        $delete = Permission::where('code','like','7%')->get();
-        $update = Permission::where('code','like','6%')->get();
-        $other = Permission::where('code','like','99%')->get();
-        // dd($aa = Permission::where('code','not like','1%')
-        //                 ->where('code','not like','4%')
-        //                 ->where('code','not like','3%')
-        //                 ->where('code','not like','7%')
-        //                 ->where('code','not like','6%')
-        //                 ->where('code','not like','99%')
-        //                 ->where('code','not like','0%')
-        //                 ->where('code','not like','2%')
-        //                 ->where('code','not like','5%')
-        //                 ->get());
-        $permission = Permission::all();
-        return view('employee.role_add',[
-            'index'=>$index,
-            'detail'=>$detail,
-            'add'=>$add,
-            'delete'=>$delete,
-            'update'=>$update,
-            'other'=>$other
-        ]);
+       $permission = Permission::all()->groupBy('grouping')->toArray();
+       return view('employee.role_add',[
+           'permission'=>$permission
+       ]);
     }
 
     /**
@@ -211,6 +190,16 @@ class RolesController extends Controller
             // $role->rolePermission()->sync(array_keys($permission_id));
             DB::commit();
             Cache::forget('permission_'.Auth::user()->remember_token);
+            $token = Auth::user()->remember_token;
+            // dd(Auth::user()->Roles[0]->rolePermission);
+            $permission = [];
+            foreach(Auth::user()->Roles as $ro){
+                foreach($ro->rolePermission as $index=>$per){
+                    $permission[$per->grouping][] = $per->method;
+                }
+            }
+            // dd($permission);
+            Cache::put('permission_'.$token,$permission,60);
             return redirect()->back()->with('message', 'Permission change success');
         }catch (\Exception $exception){
             DB::rollBack();

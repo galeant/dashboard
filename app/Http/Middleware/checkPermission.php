@@ -18,15 +18,18 @@ class checkPermission
      */
     public function handle($request, Closure $next)
     {
+        
         // Cache::forget('permission_'.Auth::user()->remember_token);
         // dd(Auth::user());
+        $permission = Cache::get('permission_'.Auth::user()->remember_token);
         if($request->path() != '/'){
             if($request->path() != 'logout'){
+                // dd(Cache::get('permission_'.Auth::user()->remember_token));
                 $current_method = Route::current()->methods();
                 $ex = explode('\\',Route::current()->action['controller']);
                 $ex1 = explode('@',$ex[3]);
                 $grouping = str_replace('Controller','',$ex1[0]);
-                $permission = Cache::get('permission_'.Auth::user()->remember_token);
+                // $permission = Cache::get('permission_'.Auth::user()->remember_token);
                 if($permission != null){
                     if(!array_key_exists($grouping, $permission)){
                         abort(404);
@@ -48,11 +51,28 @@ class checkPermission
                         }
                     }
                     Cache::put('permission_'.$token,$permission,60);
-                    $this->handle($request,$next);
+                    if(!array_key_exists($grouping, $permission)){
+                        abort(404);
+                    }else{
+                        if(!in_array($current_method[0],$permission[$grouping])){
+                            abort(404);
+                        }
+                    }
                 }
             }   
             return $next($request);
-        }
+        }else{
+            if($permission == null){
+                $token = Auth::user()->remember_token;
+                $permission = [];
+                foreach(Auth::user()->Roles as $ro){
+                    foreach($ro->rolePermission as $index=>$per){
+                        $permission[$per->grouping][] = $per->method;
+                    }
+                }
+                Cache::put('permission_'.$token,$permission,60);
+            }
+        }   
         return $next($request);
     }
 }

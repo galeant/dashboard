@@ -11,7 +11,7 @@
 */
 
 Route::get('login', function () {
-	return view('login');
+	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
 Route::group(['middleware' => ['auth:web','permission']], function () {
@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('registration/activity', 'CompanyController@registrationList')->name('partner.activity');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus')->name('partner.change_status');
 	});
-	Route::group(['prefix' => 'master', 'middleware' => 'permission'],function(){
+	Route::group(['prefix' => 'master'],function(){
 		Route::resource('language', 'LanguageController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');

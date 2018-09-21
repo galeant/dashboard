@@ -32,9 +32,8 @@
                                 <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Code</th>
-                                            <th>Path</th>
-                                            <th>Name</th>
+                                            <th>Grouping</th>
+                                            <th>Method</th>
                                             <th>Created At</th>
                                             <th>Action</th>
                                         </tr>
@@ -66,9 +65,8 @@
 	        ajax: "{{ url('autorization/permission') }}",
 	        columns: [
 	            {data: 'id'},
-                {data: 'code'},
-                {data: 'uri'},
-                {data: 'description'},
+                {data: 'grouping'},
+                {data: 'method'},
 	            {data: 'created_at'},
 	            {data: 'action'}
 	        ]

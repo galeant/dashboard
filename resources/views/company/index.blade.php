@@ -19,11 +19,18 @@
                             <h2>
                                 All Partners
                             </h2>   
-                            <ul class="header-dropdown m-r--5">
-                                <li >
-                                    <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">New Registration</a>
-                                </li>
-                            </ul>
+                            @php
+                                $permission = Cache::get('permission_'.Auth::user()->remember_token);
+                            @endphp
+                            @if(array_key_exists("Company",$permission))
+                                @if(in_array('POST', $permission['Company']))
+                                <ul class="header-dropdown m-r--5">
+                                    <li >
+                                        <a href="{{ url('partner/create') }}" class="btn bg-teal btn-block waves-effect">New Registration</a>
+                                    </li>
+                                </ul>
+                                @endif
+                            @endif
                         </div>
                         <div class="body">
                             <div class="table-responsive">

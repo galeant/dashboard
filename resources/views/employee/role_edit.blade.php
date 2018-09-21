@@ -43,11 +43,7 @@
                                 </div>
                                 <div class="row" id="all-permission">
                                     <div class="col-md-12">
-                                        <input type="checkbox" id="all" class="filled-in chk-col-deep-orange" name="permission"
-                                        @if(count($contain_permission) == 151)
-                                            checked
-                                        @endif
-                                        > 
+                                        <input type="checkbox" id="all" class="filled-in chk-col-deep-orange" name="permission"> 
                                         <label for="all">All</label>
                                     </div>
                                     @foreach($permission as $index=>$value)
@@ -78,7 +74,7 @@
                                                                     VIEW
                                                                 @elseif($a['method'] == 'POST')
                                                                     SAVE
-                                                                @elseif($a['method'] == 'PUT ')
+                                                                @elseif($a['method'] == 'PUT')
                                                                     UPDATE
                                                                 @else
                                                                     DELETE
