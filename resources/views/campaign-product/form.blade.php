@@ -31,6 +31,12 @@
 						    @else
 						        {{ Form::open(['route'=>'campaign-product.store', 'method'=>'POST', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
 						    @endif
+								@if(isset($data))
+								<div class="form-group m-b-20">
+									<label>Product Type</label>
+									<input type="text" class="form-control" id="product_type" value="{{$data->product_types->name}}" readonly />
+								</div>
+								@else
 						    	<div class="form-group m-b-20">
 									<label>Product Type</label>
 									@if(isset($data))
@@ -39,6 +45,14 @@
 									{{ Form::select('product_type', $product_type, null,['class' => 'form-control','id'=>'product_type','required'=>'required']) }}
 									@endif
 								</div>
+								@endif
+
+								@if(isset($data))
+								<div class="form-group m-b-20">
+									<label>Product Name</label>
+									<input type="text" class="form-control" id="product_name" value="{{$data->tours->product_name}}"  readonly />
+								</div>
+								@else
 								<div class="form-group m-b-20">
 									<label>Product Name</label>
 									<select name="product_id" class="form-control" id="product_id" required>
@@ -49,6 +63,14 @@
 										@endif
 									</select>
 								</div>
+								@endif
+
+								@if(isset($data))
+								<div class="form-group m-b-20">
+									<label>Campaign Name</label>
+									<input type="text" class="form-control" id="product_name" value="{{$data->campaigns->name}}"  readonly />
+								</div>
+								@else
 								<div class="form-group m-b-20">
 									<label>Campaign Name</label>
 									<select name="campaign_id" class="form-control" id="campaign_id" required>
@@ -59,6 +81,8 @@
 										@endif
 									</select>
 								</div>
+								@endif
+
 								<div class="form-group m-b-20">
 									<label>Quantity</label>
 									{{ Form::number('quantity', null, ['class' => 'form-control','placeholder'=>'Please Enter quantity','id'=>'quantity', 'min' => '0','required'=>'required']) }}

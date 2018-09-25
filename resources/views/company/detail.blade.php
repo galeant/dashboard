@@ -198,13 +198,8 @@
                         <div class="col-md-3">
                             <div class="valid-info">
                                 <h5>Bank Name*:</h5>
-                                <select class="form-control" name="bank_name" value="{{$company->bank_name}}">
-                                    <option>BRI</option>
-                                    <option>BCA</option>
-                                    <option>BNI</option>
-                                    <option>Mandiri</option>
-                                    <option>CIMB</option>
-                                </select>
+                                {{ Form::select('bank_name', Helpers::bankName(), null ,['class' => 'form-control','id'=>'bank_account_title']) }}
+                                
                             </div>
                         </div>
                         <div class="col-md-7">
