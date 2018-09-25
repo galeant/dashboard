@@ -47,24 +47,43 @@ class Employee extends Model implements AuthenticatableContract, CanResetPasswor
     );
 	use SoftDeletes;
 
-    // public function Roles()
-    // {
-    //     return $this->belongsToMany('App\Role', 'admin_roles', 'admin_id', 'role_id');
-    // }
+    public function Roles()
+    {
+        return $this->belongsToMany('App\Models\Roles', 'employee_roles', 'employee_id', 'role_id');
+    }
 
-    // public function Acl() {
-    // 	$effectivePermissions = array();
-    // 	foreach ($this->Roles()->get() as $role) {
-    // 		$permissionsViaRoles = $role->Permissions()->pluck('code')->toArray();
-    // 		$effectivePermissions = array_merge($effectivePermissions, $permissionsViaRoles);
-    // 	}
-    // 	$effectivePermissions = array_merge($effectivePermissions);
-    // 	return $effectivePermissions;
-    // }
+    public function Acl() {
+    	$effectivePermissions = array();
+    	foreach ($this->Roles()->get() as $role) {
+    		$permissionsViaRoles = $role->rolePermission()->pluck('code')->toArray();
+    		$effectivePermissions = array_merge($effectivePermissions, $permissionsViaRoles);
+    	}
+    	$effectivePermissions = array_merge($effectivePermissions);
+    	return $effectivePermissions;
+    }
     
-    // public function HasPermission($permission) {
-    // 	return in_array($permission, $this->Acl());
-    // }
+    public function HasPermission($permission) {
+    	return in_array($permission, $this->Acl());
+	}
+	
+	public function hasAnyRole($roles){
+		if(is_array($roles)){
+			foreach($roles as $role){
+				if($this->hasRole($role)){
+					return true;
+				}
+			}
+		}else{
+			if($this->hasRole($roles)){
+				return true;
+			}
+		}
+	}
 
+	public function hasRole($role){
+		if($this->role()->where('name',$role)->first()){
+			return true;
+		}
+	}
 }
 

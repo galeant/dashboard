@@ -20,7 +20,7 @@
                                 Member Details
                             </h2>
                             <ul class="header-dropdown m-r--5">
-                            <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/3') }}" class="btn bg-red waves-effect">Send Change Password Email</a>
+                            <!-- <a id="status" href="{{ url('product/tour-activity/'.$data->id.'/change/status/3') }}" class="btn bg-red waves-effect">Send Change Password Email</a> -->
                             </ul>
                         </div>
                         <div class="body">

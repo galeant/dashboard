@@ -8,6 +8,7 @@ class BookingTour extends Model
 {
     protected $table = 'booking_tours';
 
+
     public function booking_status()
     {
         return $this->hasOne('App\Models\BookingStatus','id','status');
@@ -19,5 +20,9 @@ class BookingTour extends Model
     public function tours()
     {
         return $this->belongsTo('App\Models\Tour', 'product_id','id');
+    }
+    public function settlements()
+    {
+        return $this->hasOne('App\Models\Settlement','booking_number','booking_number');
     }
 }

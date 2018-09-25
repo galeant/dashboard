@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingHotel;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
@@ -124,5 +125,26 @@ class BookingAccomodationUHotelController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function refund($kode){
+        $data = BookingHotel::where('booking_number', $kode)->firstOrFail();
+        DB::beginTransaction();
+        try{
+            Refund::create([
+                'transaction_id' => $data->transaction_id,
+                'booking_number'=> $data->booking_number,
+                'product_type'=> 'hotels',
+                'total_payment'=> 0
+            ]);
+            BookingHotel::where('booking_number',$kode)->update([
+                'status' => 6
+            ]);
+            DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 }

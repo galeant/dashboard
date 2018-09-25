@@ -3,6 +3,7 @@
 @parent
     <!-- JQuery DataTable Css -->
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('plugins/sweetalert/sweetalert.css') }}">
 @stop
 @section('main-content')
 <div class="card">
@@ -16,6 +17,13 @@
     <div class="card">
         <div class="header">
             <h4>Booking Detail</h4>
+            <ul class="header-dropdown m-r--5">
+                <li>
+                    @if($data->status == 3)
+                    <a location="{{ url('bookings/accomodation-tiket/'.$data->booking_number.'/refund')}}" class="btn btn-waves bg-red" id="refund" >Refund</a>
+                    @endif
+                </li>
+            </ul>
         </div>
         <div class="body">
             <div class="row">
@@ -36,7 +44,7 @@
                 <div class="col-md-6">
                     <div class="col-md-4">Booking Status</div>
                     <div class="col-md-8">: 
-                        <span class="badge" style="background-color:{{$data->booking_status->color}}">{{$data->booking_status->name}}</span>    
+                        <span class="badge" style="background-color:{{$data->booking_status->color}}">{{$data->booking_status->name}}</span>
                     </div>
                 </div>
             </div>
@@ -183,5 +191,24 @@
 @stop
 @section('head-js')
 @parent
+<script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}"></script>
+<script>
+    $(document).ready(function(){
+        $("#refund").click(function(){
+            var href = $(this).attr('location');
+            swal({
+                title: "Are you sure?",
+                text: "You will not be able to change this!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                closeOnConfirm: false
+            }, function(isConfirm){
+                window.location = href;
+            });
+        });
+    });
+</script>
 @stop
     

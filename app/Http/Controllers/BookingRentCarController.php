@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookingRentCar;
+use App\Models\Refund;
 use Illuminate\Http\Request;
 use DB;
 use Datatables;
@@ -23,12 +24,10 @@ class BookingRentCarController extends Controller
                 ->get();
             return Datatables::of($booking_rent_car)
             ->addColumn('status',function(BookingRentCar $booking_rent_car){
-                if($booking_rent_car->status == 0){
-                    return "status = 0";
-                }
-                else{
+
+                if(!empty($booking_rent_car->transactions)){
                     return '<span class="badge" style="background-color:'.$booking_rent_car->booking_status->color.'">'.$booking_rent_car->booking_status->name.'</span>';
-                }
+                } 
             })
             ->addColumn('booking_number', function(BookingRentCar $booking_rent_car){
                 return '<a href="'.url('bookings/rent-car/'.$booking_rent_car->booking_number).'" class="btn btn-primary">'.$booking_rent_car->booking_number.'</a>';
@@ -129,5 +128,26 @@ class BookingRentCarController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function refund($kode){
+        $data = BookingRentCar::where('booking_number', $kode)->firstOrFail();
+        DB::beginTransaction();
+        try{
+            Refund::create([
+                'transaction_id' => $data->transaction_id,
+                'booking_number'=> $data->booking_number,
+                'product_type'=> 'hotels',
+                'total_payment'=> 0
+            ]);
+            BookingRentCar::where('booking_number',$kode)->update([
+                'status' => 6
+            ]);
+            DB::commit();
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 }

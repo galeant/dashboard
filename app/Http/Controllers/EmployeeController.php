@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Auth;
+use App\Models\Employee;
+use App\Models\Roles;
+use Datatables;
+use DB;
+use Validator;
 
 class EmployeeController extends Controller
 {
@@ -27,6 +33,17 @@ class EmployeeController extends Controller
             ],
             $remember
         )){
+            // dd(Auth::user()->Roles);
+            $token = Auth::user()->remember_token;
+            // dd(Auth::user()->Roles[0]->rolePermission);
+            $permission = [];
+            foreach(Auth::user()->Roles as $ro){
+                foreach($ro->rolePermission as $index=>$per){
+                    $permission[$per->grouping][] = $per->method;
+                }
+            }
+            // dd($permission);
+            Cache::put('permission_'.$token,$permission,60);
             return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );
@@ -34,13 +51,29 @@ class EmployeeController extends Controller
 
     public function logout(Request $request)
     {
+        Cache::forget('permission_'.Auth::user()->remember_token);
         Auth::logout();
         return redirect('/login');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if($request->ajax())
+        {
+            $model = Employee::query();
+            return Datatables::eloquent($model)
+            ->addColumn('action', function(Employee $data) {
+                return '<a href="/autorization/employee/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </a>
+                    <a href="/autorization/employee/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/autorization/employee/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>';
+            })
+            ->editColumn('id', 'ID: {{$id}}')
+            ->make(true);        
+        }
+        return view('employee.index');
     }
 
     /**
@@ -50,7 +83,8 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        $role = Roles::all();
+        return view('employee.add',['role'=>$role]);
     }
 
     /**
@@ -61,7 +95,52 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $validation = Validator::make($request->all(), [
+            'fullname' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'username' => 'required',
+            'password' => 'required|min:8'
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        $role_id = [];
+        if($request->role_id != null){
+            foreach($request->role_id as $i=>$a){
+                $role_id[] = $i;
+            }
+        }
+        // $list_role = Roles::all();
+        // foreach($list_role as $k=>$lr){
+        //     $role_id[$lr->id] = $lr->description;
+        // }
+        // if($request->role_id != null){
+        //     foreach($request->role_id as $i=>$a){
+        //         unset($role_id[$i]);
+        //     }
+        // }
+        DB::beginTransaction();
+        try{
+            $employee = Employee::create([
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'username' => $request->username,
+                'password' => bcrypt($request->password)
+            ]);
+            $employee->Roles()->sync($role_id);
+            // $employee->Roles()->sync(array_keys($role_id));
+            DB::commit();
+            return redirect("autorization/employee")->with('message', 'Successfully saved Roles');
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect("autorization/employee/create")->with('message', $exception->getMessage());
+        }
     }
 
     /**
@@ -83,7 +162,10 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee  = Employee::where('id',$id)->with('Roles')->first();
+        // dd(array_pluck($employee->Roles, 'id'));
+        $role = Roles::all();
+        return view('employee.edit',['employee' => $employee, 'role' => $role]);
     }
 
     /**
@@ -95,7 +177,57 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // dd($request->all());
+        $validation = Validator::make($request->all(), [
+            'fullname' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'username' => 'required',
+            'password' => 'required|min:8'
+        ]);
+        // Check if it fails //
+        if( $validation->fails() ){
+            return redirect()->back()->withInput()
+            ->with('errors', $validation->errors() );
+        }
+        $role_id = [];
+        if($request->role_id != null){
+            foreach($request->role_id as $i=>$a){
+                $role_id[] = $i;
+            }
+        }
+        // $list_role = Roles::all();
+        // foreach($list_role as $k=>$lr){
+        //     $role_id[$lr->id] = $lr->description;
+        // }
+        // if($request->role_id != null){
+        //     foreach($request->role_id as $i=>$a){
+        //         unset($role_id[$i]);
+        //     }
+        // }
+        DB::beginTransaction();
+        try{
+            $employee = Employee::where('id',$id)->update([
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'username' => $request->username
+            ]);
+            $employee = Employee::where('id',$id)->first();
+            $employee->Roles()->sync($role_id);
+            // $employee->Roles()->sync(array_keys($role_id));
+            if($employee->password != $request->password){
+                $employee = Employee::where('id',$id)->update([
+                    'password' => bcrypt($request->password)
+                ]);
+            }
+            DB::commit();
+            return redirect()->back()->with('message', 'Role change success');
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return redirect()->back()->with('message', $exception->getMessage());
+        }
     }
 
     /**
@@ -106,6 +238,20 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::beginTransaction();
+        try{
+            $employee = Employee::where('id',$id)->first();
+            $employee->Roles()->detach();
+            if($employee->delete()){
+                DB::commit();
+                return $this->sendResponse($employee, "Delete Employee ".$employee->email." successfully", 200);
+            }else{
+                return $this->sendResponse($employee, "Error Database;", 200);
+            }
+        }catch (\Exception $exception){
+            DB::rollBack();
+            \Log::info($exception->getMessage());
+            return $this->sendResponse($employee, $exception->getMessage() , 200);
+        }
     }
 }

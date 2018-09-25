@@ -25,6 +25,7 @@ class CompanyProductTypeController extends Controller
         if($request->ajax())
         {
             $model = Company::with('product_types')->get();
+            dd($model);
             return Datatables::of($model)
             ->addColumn('action', function(Company $data) {
                 return '<a href="/partner-product-type/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">

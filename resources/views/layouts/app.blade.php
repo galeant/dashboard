@@ -75,107 +75,146 @@
         <!-- Left Sidebar -->
 		<aside id="leftsidebar" class="sidebar" style="width:250px">
 		    <!-- Menu -->
+			@php
+				$permission = Cache::get('permission_'.Auth::user()->remember_token);
+			@endphp
 		    <div class="menu" style="background-color: #676C56">
 		        <ul class="list">
-		            <li id="overview" class="active">
-		                <a href="{{ URL('/admin') }}">
+					
+		            <li id="overview" {{{ (Request::is('/') ? 'class=active' : '') }}}>
+		                <a href="{{ URL('/') }}">
 		                    <i class="material-icons">dashboard</i>
 		                    <span>Overview</span>
 		                </a>
 		            </li>
+					@if(array_key_exists("Members",$permission))
 		            <li {{{ (Request::is('members*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/members') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Members</span>
 		                </a>
 		            </li>
+					@endif
+					@if(
+						array_key_exists("Company",$permission) ||
+						array_key_exists("CompanyProductType",$permission)
+					)
 		            <li {{{ (Request::is('partner*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">people</i>
 		                    <span>Partners</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("Company",$permission))
 		                    <li {{{ (Request::is('partner') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('partner') }}" class=" waves-effect waves-block">
 		                            <span>Partner List</span>
 		                        </a>
 							</li>
+							@endif
+							@if(array_key_exists("CompanyProductType",$permission))
 							<li {{{ (Request::is('partner-product-type') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('partner-product-type') }}" class=" waves-effect waves-block">
 		                            <span>Partner Type List</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(array_key_exists("Company",$permission))
 		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
 		                            <span>Registration - Activity</span>
 		                        </a>
 		                    </li>
-		                   <!--  <li {{{ (Request::is('admin/partner/accomodation*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/partner/accomodation') }}" class=" waves-effect waves-block">
-		                            <span>Registration - Accomodation (0)</span>
-		                        </a>
-		                    </li>
-		                    <li {{{ (Request::is('admin/partner/carrental*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('/admin/partner/carrental') }}" class=" waves-effect waves-block">
-		                            <span>Registration - Car Rental (0)</span>
-		                        </a>
-		                    </li>
- -->
+							@endif
 		                </ul>
 		            </li>
+					@endif
+					@if(
+						array_key_exists("Tour",$permission) ||
+						array_key_exists("TourGuide",$permission)
+					)
 		            <li {{{ (Request::is('product*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">camera_enhance</i>
 		                    <span>Products</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("Tour",$permission))
 		                    <li {{{ (Request::is('product/tour-activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('product/tour-activity') }}" class=" waves-effect waves-block">
 		                            <span>Tour Activity</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(array_key_exists("TourGuide",$permission))
 		                    <li {{{ (Request::is('product/tour-guide*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/product/tour-guide') }}" class=" waves-effect waves-block">
 		                            <span>Tour Guide</span>
 		                        </a>
 		                    </li>
-
+							@endif
 		                </ul>
 					</li>
+					@endif
+					@if(
+						array_key_exists("Campaign",$permission) ||
+						array_key_exists("CampaignProduct",$permission)
+					)
 					<li {{{ (Request::is('campaign*') ? 'class=active' : '') }}}>
 						<a  class="menu-toggle waves-effect waves-block toggled">
 							<i class="material-icons">account_balance</i>
 		                    <span>Campaign</span>
 		                </a>
 						<ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("Campaign",$permission))
 		                    <li {{{ (Request::is('campaign/campaign-list*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('campaign/campaign-list') }}" class=" waves-effect waves-block">
 		                            <span>List</span>
 		                        </a>
 							</li>
+							@endif
+							@if(array_key_exists("CampaignProduct",$permission))
 							<li {{{ (Request::is('campaign/campaign-product*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('campaign/campaign-product') }}" class=" waves-effect waves-block">
 		                            <span>Product</span>
 		                        </a>
 		                    </li>
+							@endif
 		                </ul>
 		            </li>
+					@endif
+					@if(
+						array_key_exists("Transaction",$permission) ||
+						array_key_exists("BookingTour",$permission) ||
+						array_key_exists("BookingAccomodationUHotel",$permission) ||
+						array_key_exists("BookingAccomodationTiket",$permission) ||
+						array_key_exists("BookingRentCar",$permission)
+					)
 					<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">money</i>
 		                    <span>Transaction & Bookings</span>
 		                </a>
 						<ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("Transaction",$permission))
 		                    <li {{{ (Request::is('transaction*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/transaction') }}" class=" waves-effect waves-block">
 		                            <span>Transaction</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(
+								array_key_exists("BookingTour",$permission) ||
+								array_key_exists("BookingAccomodationUHotel",$permission) ||
+								array_key_exists("BookingAccomodationTiket",$permission) ||
+								array_key_exists("BookingRentCar",$permission)
+							)
 							<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 								<a  class="menu-toggle waves-effect waves-block toggled">
 									<span>Bookings</span>
 								</a>
 								<ul class="ml-menu" style="display: block;">
+									@if(array_key_exists("BookingTour",$permission))
 									<li {{{ (Request::is('bookings/tour*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/tour') }}" class=" waves-effect waves-block">
 											<span>Tour</span>
@@ -186,25 +225,35 @@
 											</span> --}}
 										</a>
 									</li>
+									@endif
+									@if(array_key_exists("BookingAccomodationUHotel",$permission))
 									<li {{{ (Request::is('bookings/accomodation-uhotel*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/accomodation-uhotel') }}" class=" waves-effect waves-block">
 											<span>Accomodation uHotel</span>
 										</a>
 									</li>
+									@endif
+									@if(array_key_exists("BookingAccomodationTiket",$permission))
 									<li {{{ (Request::is('bookings/accomodation-tiket*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/accomodation-tiket') }}" class=" waves-effect waves-block">
 											<span>Accomodation Tiket</span>
 										</a>
 									</li>
+									@endif
+									@if(array_key_exists("BookingRentCar",$permission))
 									<li {{{ (Request::is('bookings/rent-car*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/rent-car') }}" class=" waves-effect waves-block">
 											<span>Rent Car</span>
 										</a>
 									</li>
+									@endif
 								</ul>
 							</li>
+							@endif
 		                </ul>
 		            </li>
+					@endif
+					@if(array_key_exists("Settlement",$permission))
 					<li {{{ (Request::is('settlement*') ? 'class=active' : '') }}}>
 						<a  class="menu-toggle waves-effect waves-block toggled">
 							<i class="material-icons">account_balance</i>
@@ -223,6 +272,7 @@
 		                    </li>
 		                </ul>
 		            </li>
+					@endif
 		            {{-- <li>
 		                <a href="{{ URL('/admin/members') }}">
 		                    <i class="material-icons">money</i>
@@ -253,100 +303,181 @@
 		                    <span>Reporting</span>
 		                </a>
 		            </li> --}}
+					@if(
+						array_key_exists("Language",$permission) ||
+						array_key_exists("Coupon",$permission) ||
+						array_key_exists("Country",$permission) ||
+						array_key_exists("Province",$permission) ||
+						array_key_exists("City",$permission) ||
+						array_key_exists("District",$permission) ||
+						array_key_exists("Village",$permission) ||
+						array_key_exists("TourGuideService",$permission) ||
+						array_key_exists("Destination",$permission) ||
+						array_key_exists("DestinationTipsQuestion",$permission) ||
+						array_key_exists("ActivityTag",$permission) 
+					)
 		            <li {{{ (Request::is('master*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">library_books</i>
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
-							
+							@if(array_key_exists("Language",$permission))
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
 		                            <span>Language</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(array_key_exists("Coupon",$permission))
 							<li {{{ (Request::is('coupon*') ? 'class=active' : '') }}}>
 								<a href="{{ URL('coupon') }}" class=" waves-effect waves-block">
 										<span>Coupon</span>
 								</a>
 							</li>
+							@endif
+							@if(
+								array_key_exists("Country",$permission) ||
+								array_key_exists("Province",$permission) ||
+								array_key_exists("City",$permission) ||
+								array_key_exists("District",$permission) ||
+								array_key_exists("Village",$permission) 
+							)
 		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
 		                    {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
 			                    <a href="javascript:void(0);" class="menu-toggle">
 	                                <span>Location</span>
 	                            </a>
 	                            <ul class="ml-menu">
+									@if(array_key_exists("Country",$permission))
 	                            	<li {{{ (Request::is('master/country*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('master/country') }}" class=" waves-effect waves-block">
 				                            <span>Country</span>
 				                        </a>
 				                    </li>
+									@endif
+									@if(array_key_exists("Province",$permission))
 				                    <li {{{ (Request::is('master/province*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('master/province') }}" class=" waves-effect waves-block">
 				                            <span>Province</span>
 				                        </a>
 				                    </li>
+									@endif
+									@if(array_key_exists("City",$permission))
 				                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
 				                            <span>City</span>
 				                        </a>
 				                    </li>
+									@endif
+									@if(array_key_exists("District",$permission))
 				                    <li {{{ (Request::is('master/district*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('/master/district') }}" class=" waves-effect waves-block">
 				                            <span>District</span>
 				                        </a>
 				                    </li>
+									@endif
+									@if(array_key_exists("Village",$permission))
 				                    <li {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('master/village') }}" class=" waves-effect waves-block">
 				                            <span>Village</span>
 				                        </a>
 				                    </li>
+									@endif
 	                            </ul>
                             </li>
-
+							@endif
+							@if(array_key_exists("TourGuideService",$permission))
 		                    <li {{{ (Request::is('master/tour-guide-service*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/tour-guide-service') }}" class=" waves-effect waves-block">
 		                            <span>Tour Guide Service</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(array_key_exists("Destination",$permission))
 		                    <li {{{ (Request::is('master/destination/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/destination') }}" class=" waves-effect waves-block">
 		                            <span>Destination Management</span>
 		                        </a>
 		                    </li>
+							@endif
+							@if(array_key_exists("DestinationType",$permission))
 		                    <li {{{ (Request::is('master/destination-type/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/destination-type') }}" class=" waves-effect waves-block">
 		                            <span>Destination Type Management</span>
 		                        </a>
 							</li>
+							@endif
+							@if(array_key_exists("DestinationTipsQuestion",$permission))
 		                    <li {{{ (Request::is('master/tips-question/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/tips-question') }}" class=" waves-effect waves-block">
 		                            <span>Tips Question Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('admin/master/calender*') ? 'class=active' : '') }}}>
+							@endif
+		                    {{--<li {{{ (Request::is('admin/master/calender*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('admin/master/calender') }}" class=" waves-effect waves-block">
 		                            <span>Calender Management</span>
 		                        </a>
-		                    </li>
+		                    </li> --}}
+							@if(array_key_exists("ActivityTag",$permission))
 		                    <li {{{ (Request::is('master/activity-tag/*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/master/activity-tag') }}" class=" waves-effect waves-block">
 		                            <span>Activity Tag Management</span>
 		                        </a>
 		                    </li>
-		                    <li {{{ (Request::is('bookings/byactivityschedule*') ? 'class=active' : '') }}}>
+							@endif
+		                    {{--<li {{{ (Request::is('bookings/byactivityschedule*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/bookings/byactivityschedule') }}" class=" waves-effect waves-block">
 		                            <span>Pigijo Company Setting</span>
 		                        </a>
-		                    </li>
+		                    </li--}}>
 		                </ul>
 		            </li>
+					@endif
+					@if(array_key_exists("Supplier",$permission))
 		            <li {{{ (Request::is('supplier*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('supplier') }}">
 		                    <i class="material-icons">person</i>
 		                    <span>Supplier</span>
 		                </a>
 		            </li>
+					@endif
+					@if(
+						array_key_exists("Employee",$permission) ||
+						array_key_exists("Roles",$permission) ||
+						array_key_exists("Permission",$permission) 
+					)
+					<li {{{ (Request::is('autorization*') ? 'class=active' : '') }}}>
+		                <a  class="menu-toggle waves-effect waves-block toggled">
+		                    <i class="material-icons">developer_mode</i>
+		                    <span>Autorization</span>
+		                </a>
+		                <ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("Employee",$permission))
+		                    <li {{{ (Request::is('autorization/employee*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/employee') }}" class=" waves-effect waves-block">
+		                            <span>Employee</span>
+		                        </a>
+		                    </li>
+							@endif
+							@if(array_key_exists("Roles",$permission))
+		                    <li {{{ (Request::is('autorization/roles*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/roles') }}" class=" waves-effect waves-block">
+		                            <span>Roles</span>
+		                        </a>
+		                    </li>
+							@endif
+							@if(array_key_exists("Permission",$permission))
+							<li {{{ (Request::is('autorization/permission*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('autorization/permission') }}" class=" waves-effect waves-block">
+		                            <span>Permission</span>
+		                        </a>
+		                    </li>
+							@endif
+		                </ul>
+		            </li>
+					@endif
 		            <li>
 		                <a href="{{ URL('/logout') }}">
 		                    <i class="material-icons">exit_to_app</i>
@@ -395,6 +526,23 @@
 
 <!-- Demo Js -->
 <script src="{{asset('js/demo.js')}}"></script>
+<script>
+	$('.ml-menu').each(function(){
+        var parent = $(this).parent();
+        $(this).children('li').each(function(){
+            if($(this).hasClass('active'))
+            {
+                parent.addClass('active');
+            }
+        });
+    });
+	@if(Cache::get('permission_'.Auth::user()->remember_token) != null)
+		@foreach(Cache::get('permission_'.Auth::user()->remember_token) as $in=>$p)
+			var menu = "{{$in}}";
+			console.log(menu);
+		@endforeach
+	@endif
+</script>
 @show
 <!-- End Js -->
 </body>

@@ -739,6 +739,8 @@ class TourController extends Controller
                     $query->whereRaw(DB::raw("(`schedules`.`end_date` <= '".date('Y-m-d',strtotime($request->input('end')))."')"));
                 }
             }
+        }])->with(['schedules.bookings' => function($query){
+            $query->whereNotIn('status',[3,6]);
         }])->find($id);
         $event = [];
         $view = $request->input('view','calendar');
@@ -920,6 +922,9 @@ class TourController extends Controller
                 'product_id' =>$id
             ]);
             // dd($schedule);
+            $schedule = Schedule::where('id',$schedule->id)->with(['bookings' => function($query){
+                $query->whereNotIn('status',[3,6]);
+            }])->get();
             DB::Commit();
             if($request->ajax())
             {
@@ -964,7 +969,10 @@ class TourController extends Controller
         }
         
         $id = $request->id;
-        $schedule = Schedule::find($id);
+        // $schedule = Schedule::find($id);
+        $schedule = Schedule::where('id',$id)->with(['bookings' => function($query){
+            $query->whereNotIn('status',[3,6]);
+        }])->with('tour')->first();
         $product = $schedule->tour;
         if($product->schedule_type == 1 || $product->schedule_type == 3){
             if($request->start_hours == null ){

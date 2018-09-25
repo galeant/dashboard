@@ -11,24 +11,25 @@
 */
 
 Route::get('login', function () {
-	return view('login');
+	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web']], function () {
+Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
-	});
+	})->name('overview');
 
 	Route::resource('partner', 'CompanyController');
 	
 	Route::resource('partner-product-type', 'CompanyProductTypeController');
-	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete');
+	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete')->name('company.product_type');
 	Route::group(['prefix' => 'partner'], function(){
-		Route::get('registration/activity', 'CompanyController@registrationList');
-		Route::post('{id}/change/status', 'CompanyController@changeStatus');
+		Route::get('registration/activity', 'CompanyController@registrationList')->name('partner.activity');
+		Route::post('{id}/change/status', 'CompanyController@changeStatus')->name('partner.change_status');
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('language', 'LanguageController');
+		Route::resource('country', 'CountryController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');
 		Route::resource('district', 'DistrictController');
@@ -37,13 +38,13 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-guide', 'TourGuideServiceController');
 
 		//Delete Photo
-		Route::post('destination_photo/destroy','DestinationPhotoController@destroy');
-		Route::post('destination_tips/destroy','DestinationController@delTips');
+		Route::post('destination_photo/destroy','DestinationPhotoController@destroy')->name('destination.delete_photo');
+		Route::post('destination_tips/destroy','DestinationController@delTips')->name('destination.delete_tips');
 
 		Route::group(['prefix' => 'destination'],function($id){
-			Route::get('find', 'DestinationController@find');
-			Route::get('status/active/{id}', 'DestinationController@active');
-			Route::get('status/disabled/{id}', 'DestinationController@disabled');
+			Route::get('find', 'DestinationController@find')->name('destination.find');
+			Route::get('status/active/{id}', 'DestinationController@active')->name('destination.status');
+			Route::get('status/disabled/{id}', 'DestinationController@disabled')->name('destination.disabled');
 		});
 		//Destination
 		Route::resource('destination', 'DestinationController');
@@ -54,10 +55,10 @@ Route::group(['middleware' => ['auth:web']], function () {
 		//DestinationTipsQuestion
 		Route::resource('tips-question', 'DestinationTipsQuestionController');
 
-		//API
-		Route::get('/findCity/{id}','CityController@findCity');
-		Route::get('/findDistrict/{id}','DistrictController@findDistrict');
-		Route::get('/findVillage/{id}','VillageController@findVillage');
+		// //API
+		// Route::get('/findCity/{id}','CityController@findCity')->name('json.city');
+		// Route::get('/findDistrict/{id}','DistrictController@findDistrict')->name('json.district');
+		// Route::get('/findVillage/{id}','VillageController@findVillage')->name('json.village');
 
 		//Activity Tag
 		Route::resource('activity-tag', 'ActivityTagController');
@@ -70,66 +71,72 @@ Route::group(['middleware' => ['auth:web']], function () {
 	});
 	// 
 	Route::group(['prefix' => 'json'], function(){
-		Route::get('country','CountryController@json');
-		Route::get('language','LanguageController@json');
-		Route::get('province','ProvinceController@json');
+		Route::get('country','CountryController@json')->name('json.country');
+		Route::get('language','LanguageController@json')->name('json.language');
+		Route::get('province','ProvinceController@json')->name('json.province');
 		// 
-		Route::get('city','CityController@json');
-		Route::get('findCity','CityController@findCity');
+		Route::get('city','CityController@json')->name('json.city');
+		Route::get('findCity','CityController@findCity')->name('json.city');
 		// 
-		Route::get('district','DistrictController@json');
-		Route::get('village','VillageController@json');
-		Route::get('company','CompanyController@json');
-		Route::get('activity','ActivityTagController@activityList');
+		Route::get('district','DistrictController@json')->name('json.district');
+		Route::get('village','VillageController@json')->name('json.village');
+		Route::get('company','CompanyController@json')->name('json.company');
+		Route::get('activity','ActivityTagController@activityList')->name('json.activity');
 
-		Route::get('findDestination','DestinationController@findDestination');
-		Route::get('destination','DestinationController@json');
+		Route::get('findDestination','DestinationController@findDestination')->name('json.destination');
+		Route::get('destination','DestinationController@json')->name('json.destination');;
 
-		Route::get('tour','TourController@json');
+		Route::get('tour','TourController@json')->name('json.tour');
 		Route::get('campaign','CampaignController@json');
 
-		Route::post('changeStatus/{status}','TourController@changeStatus');
+		Route::post('changeStatus/{status}','TourController@changeStatus')->name('json.changeStatus');;
 	});
 	Route::group(['prefix' => 'product'],function(){
-		Route::get('tour-activity/{id}/schedule', 'TourController@schedule');
-		Route::get('tour-activity/{id}/off-day', 'TourController@offDay');
-		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck');
-		Route::post('tour-activity/{id}/off-day/save', 'TourController@offDayUpdate');
-		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave');
+		Route::get('tour-activity/{id}/schedule', 'TourController@schedule')->name('product.schedule');
+		Route::get('tour-activity/{id}/off-day', 'TourController@offDay')->name('product.schedule_off_day');
+		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck')->name('product.schedule_off_day_check');
+		Route::post('tour-activity/{id}/off-day/save', 'TourController@offDayUpdate')->name('product.schedule_off_day_update');
+		Route::post('tour-activity/{id}/{type}/schedule/save', 'TourController@scheduleSave')->name('product.schedule_update');
 		// change status
-		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus');
+		Route::get('tour-activity/{id}/change/status/{status}', 'TourController@changeStatus')->name('product.change_status');
 		// UPDATE SHCHEDULE
-		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate');
+		Route::post('tour-activity/schedule/update', 'TourController@scheduleUpdate')->name('product.schedule_update');
 		// DELETE SHCHEDULE
-		Route::post('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete');
+		Route::post('tour-activity/schedule/{id}/delete', 'TourController@scheduleDelete')->name('product.schedule_delete');
 		// UPDATE PRICE
-		Route::post('tour-activity/price/update', 'TourController@priceUpdate');
+		Route::post('tour-activity/price/update', 'TourController@priceUpdate')->name('product.price_update');
 		// DELETE PRICE
-		Route::get('tour-activity/{product_id}/price/{id}/delete', 'TourController@priceDelete');
+		Route::get('tour-activity/{product_id}/price/{id}/delete', 'TourController@priceDelete')->name('product.price_delete');
 
 		Route::resource('tour-guide', 'TourGuideController');
 		Route::resource('tour-activity', 'TourController');
-		Route::post('/upload/image', 'TourController@uploadImageAjax');
-		Route::post('/delete/image', 'TourController@deleteImageAjax');
+		Route::post('/upload/image', 'TourController@uploadImageAjax')->name('product.uploadImage');;
+		Route::post('/delete/image', 'TourController@deleteImageAjax')->name('product.deletImage');
 
 		//planning
-		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print');
+		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print')->name('product.planning');
 	});
 	Route::group(['prefix' => 'settlement'],function(){
-		Route::get('/all', 'SettlementController@index');
-		Route::get('/detail/{id}', 'SettlementController@detail');
-		Route::get('/generate', 'SettlementController@generate');
-		Route::post('/procced', 'SettlementController@poccedList');
-		Route::get('/excel/{id}', 'SettlementController@exportExcel');
-		Route::get('/pdf/{id}', 'SettlementController@exportPdf');
-		Route::post('/filter', 'SettlementController@filter');
-		Route::post('/paid', 'SettlementController@paid');
-		Route::post('/update-notes', 'SettlementController@notes');
-		Route::post('/update-bank', 'SettlementController@bank');
+		Route::get('/all', 'SettlementController@index')->name('settlement.view');
+		Route::get('/detail/{id}', 'SettlementController@detail')->name('settlement.find');
+		Route::get('/generate', 'SettlementController@generate')->name('settlement.generate');
+		Route::post('/procced', 'SettlementController@poccedList')->name('settlement.process_list');
+		Route::get('/excel/{id}', 'SettlementController@exportExcel')->name('settlement.export_excel');
+		Route::get('/pdf/{id}', 'SettlementController@exportPdf')->name('settlement.export_pdf');
+		Route::post('/filter', 'SettlementController@filter')->name('settlement.filter');
+		Route::post('/paid', 'SettlementController@paid')->name('settlement.paid');
+		Route::post('/update-notes', 'SettlementController@notes')->name('settlement.update_notes');
+		Route::post('/update-bank', 'SettlementController@bank')->name('settlement.update_bank');
 	});
 	Route::resource('members', 'MembersController');
 	Route::resource('products', 'ProductsController');
 	Route::resource('coupon', 'CouponController');
+
+	Route::group(['prefix' => 'autorization'],function(){
+		Route::resource('/employee', 'EmployeeController');	
+		Route::resource('/roles', 'RolesController');	
+		Route::resource('/permission', 'PermissionController');	
+	});
 
 	Route::group(['prefix' => 'campaign'],function(){
 		Route::resource('campaign-list', 'CampaignController');
@@ -143,16 +150,17 @@ Route::group(['middleware' => ['auth:web']], function () {
 	
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
+		Route::get('tour/{kode}/refund','BookingTourController@refund')->name('booking_tour.refund');
 		Route::resource('accomodation-uhotel', 'BookingAccomodationUHotelController');
+		Route::get('accomodation-uhotel/{kode}/refund','BookingAccomodationUHotelController@refund')->name('booking_uhotel.refund');
 		Route::resource('accomodation-tiket', 'BookingAccomodationTiketController');
+		Route::get('accomodation-tiket/{kode}/refund','BookingAccomodationTiketController@refund')->name('booking_tiket.refund');
 		Route::resource('rent-car', 'BookingRentCarController');
+		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund')->name('booking_rent_car.refund');
 	});
 	Route::resource('transaction', 'TransactionController');
-	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print');
-	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt');
-	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary');
-	
-	
+	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print')->name('transaction.print');
+	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt')->name('transaction.sendReceipt');
+	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
-	
 });
