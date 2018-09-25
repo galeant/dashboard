@@ -32,10 +32,10 @@ class checkPermission
                 // $permission = Cache::get('permission_'.Auth::user()->remember_token);
                 if($permission != null){
                     if(!array_key_exists($grouping, $permission)){
-                        abort(404);
+                        abort(401);
                     }else{
                         if(!in_array($current_method[0],$permission[$grouping])){
-                            abort(404);
+                            abort(401);
                         }
                     }
                     
@@ -52,10 +52,10 @@ class checkPermission
                     }
                     Cache::put('permission_'.$token,$permission,60);
                     if(!array_key_exists($grouping, $permission)){
-                        abort(404);
+                        abort(401);
                     }else{
                         if(!in_array($current_method[0],$permission[$grouping])){
-                            abort(404);
+                            abort(401);
                         }
                     }
                 }

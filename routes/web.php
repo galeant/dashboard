@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	});
 	Route::group(['prefix' => 'master'],function(){
 		Route::resource('language', 'LanguageController');
+		Route::resource('country', 'CountryController');
 		Route::resource('province', 'ProvinceController');
 		Route::resource('city', 'CityController');
 		Route::resource('district', 'DistrictController');

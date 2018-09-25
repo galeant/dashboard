@@ -81,8 +81,8 @@
 		    <div class="menu" style="background-color: #676C56">
 		        <ul class="list">
 					
-		            <li id="overview" class="active">
-		                <a href="{{ URL('/admin') }}">
+		            <li id="overview" {{{ (Request::is('/') ? 'class=active' : '') }}}>
+		                <a href="{{ URL('/') }}">
 		                    <i class="material-icons">dashboard</i>
 		                    <span>Overview</span>
 		                </a>
@@ -527,6 +527,15 @@
 <!-- Demo Js -->
 <script src="{{asset('js/demo.js')}}"></script>
 <script>
+	$('.ml-menu').each(function(){
+        var parent = $(this).parent();
+        $(this).children('li').each(function(){
+            if($(this).hasClass('active'))
+            {
+                parent.addClass('active');
+            }
+        });
+    });
 	@if(Cache::get('permission_'.Auth::user()->remember_token) != null)
 		@foreach(Cache::get('permission_'.Auth::user()->remember_token) as $in=>$p)
 			var menu = "{{$in}}";
