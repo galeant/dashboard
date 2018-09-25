@@ -415,7 +415,7 @@
                             <span>Total Amount to Pay :</span>
                         </div>
                         <div class="col-sm-6" style="margin-left:-1%;">
-                            <span>{{Helpers::idr(($data->total_price-$data->total_discount))}}</span>
+                            <span>{{Helpers::idr(($data->total_price))}}</span>
                         </div>
                     </div>
                 </div>
