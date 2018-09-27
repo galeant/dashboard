@@ -163,6 +163,7 @@ class CampaignProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $validation = Validator::make($request->all(), [
             // 'product_type' => 'required',
             // 'product_id' => 'required',
@@ -170,6 +171,10 @@ class CampaignProductController extends Controller
             // 'campaign_id' => 'required',
             'supplier_discount' => 'required|numeric|between:0,99.99',
         ]);
+        $campaign = Campaign::find($request->campaign_id);
+        if($request->input('supplier_discount') < $campaign->supplier_discount){
+            return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
+        }
         // Check if it fails //
         if( $validation->fails() ){
             return redirect()->back()->withInput()
@@ -186,14 +191,10 @@ class CampaignProductController extends Controller
                 //     return redirect()->back()->with('error_add_campaign', $data);
                 // }
             // }
-            $campaign = Campaign::find($request->campaign_id);
-            if($request->input('supplier_discount') < $campaign->supplier_discount){
-                return redirect()->back()->with('error', 'Supplier Discount More or Equal Pigijo Discount');
-            }
             $data = CampaignProduct::find($id);
-            $data->product_type = $request->input('product_type');
-            $data->product_id = $request->input('product_id');
-            $data->campaign_id = $request->input('campaign_id');
+            // $data->product_type = $request->input('product_type');
+            // $data->product_id = $request->input('product_id');
+            // $data->campaign_id = $request->input('campaign_id');
             $data->quantity = $request->input('quantity');
             $data->supplier_discount = $request->input('supplier_discount');
             if($data->save()){

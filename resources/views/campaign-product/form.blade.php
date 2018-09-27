@@ -50,7 +50,8 @@
 								@if(isset($data))
 								<div class="form-group m-b-20">
 									<label>Product Name</label>
-									<input type="text" class="form-control" id="product_name" value="{{$data->tours->product_name}}"  readonly />
+									<input type="hidden" name="product_id" value="{{$data->product_id}}" readonly />
+									<input type="text" class="form-control" id="product_id" value="{{$data->tours->product_name}}"  readonly />
 								</div>
 								@else
 								<div class="form-group m-b-20">
@@ -68,7 +69,8 @@
 								@if(isset($data))
 								<div class="form-group m-b-20">
 									<label>Campaign Name</label>
-									<input type="text" class="form-control" id="product_name" value="{{$data->campaigns->name}}"  readonly />
+									<input type="hidden" name="campaign_id" value="{{$data->campaign_id}}" readonly />
+									<input type="text" class="form-control" id="campaign_id" value="{{$data->campaigns->name}}"  readonly />
 								</div>
 								@else
 								<div class="form-group m-b-20">
