@@ -81,7 +81,7 @@
 		    <div class="menu" style="background-color: #676C56">
 		        <ul class="list">
 					
-		            <li id="overview" {{{ (Request::is('/') ? 'class=active' : '') }}}>
+		            <li id="overview" {{{ (Request::is('*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/') }}">
 		                    <i class="material-icons">dashboard</i>
 		                    <span>Overview</span>

@@ -14,7 +14,7 @@ Route::get('login', function () {
 	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web','permission']], function () {
+Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	})->name('overview');

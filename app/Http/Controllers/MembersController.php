@@ -271,18 +271,26 @@ class MembersController extends Controller
             $until_date = Carbon::now()->endOfMonth()->format('Y-m-d');
         }
         else if($option == 'this_year'){
-            $start_date = Carbon::now()->endOfYear();
-            $start_date = Carbon::now()->endOfYear();
+            $start_date = Carbon::now()->startOfYear();
+            $until_date = Carbon::now()->endOfYear();
+        }
+        else if(!empty($request->input('start_date')) && !empty($request->input('until_date'))){
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+            $until_date = Carbon::parse($request->until_date)->format('Y-m-d');
         }
         else{
-            $start_date = $request->start_date;
-            $until_date = $request->end_date;
+            $start_date = Carbon::now()->format('Y-m-d');
+            $until_date = Carbon::now()->format('Y-m-d');
         }
         $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
-            ->get()
+            ->select('id', 'created_at')->get()
             ->groupBy(function($date) {
                 return Carbon::parse($date->created_at)->format('Y-m-d'); 
             })->toArray();
-        return $member;
+        return view('members.report', [
+            'data'=> $member,
+            'start_date' => $start_date,
+            'until_date' => $until_date
+        ]);
     }
 }
