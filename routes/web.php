@@ -163,4 +163,8 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt')->name('transaction.sendReceipt');
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
+
+	Route::group(['prefix' => 'report'],function(){
+		Route::get('member','MembersController@report');
+	});
 });
