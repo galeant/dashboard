@@ -477,6 +477,10 @@
 							@endif
 		                </ul>
 		            </li>
+					@endif
+					@if(
+						array_key_exists("Report",$permission)
+					)
 					<li {{{ (Request::is('report*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
 		                    <i class="material-icons">assessment</i>

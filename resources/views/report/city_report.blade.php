@@ -5,6 +5,7 @@
     <link href="{{asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css')}}" rel="stylesheet">
 @stop
 @section('main-content')
+
 			<div class="block-header">
                 <h2>
                     City List
@@ -51,9 +52,7 @@
                     </div>
                     <div class="card">
                         <div class="header">
-                            <h2>
-                                All City
-                            </h2>
+                            <h2>City & Tour</h2>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -84,9 +83,7 @@
                     </div>
                     <div class="card">
                         <div class="header">
-                            <h2>
-                                All City
-                            </h2>
+                            <h2>City & Destinations</h2>
                         </div>
                         <div class="body">
                             <div class="table-responsive">

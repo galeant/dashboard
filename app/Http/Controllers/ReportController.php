@@ -11,6 +11,7 @@ use App\Models\Province;
 class ReportController extends Controller
 {
     public function company(Request $request){
+        return abort(404);
         // $date = Carbon::now()->format('Y-m-d');
         // $start = $request->input('start_date',$date);
         // $status = $request->status;
@@ -40,9 +41,12 @@ class ReportController extends Controller
         // // }));
         // return view('report.company_report',['data' =>$data]);
     }
+    public function member(){
+        return abort(404);
+    }
     public function city(){
         $p = Province::with('cities.tour','cities.destination')->get();
-        // dd($p[0]);
+        // dd($p[0]);)
         $ar = [];
         foreach($p as $i=>$p){
             // dd($p->cities);
@@ -73,5 +77,11 @@ class ReportController extends Controller
         //     }
         // }
         return view('report.city_report',['data' => $ar]);
+    }
+    public function tour(){
+        return abort(404);
+    }
+    public function destinations(){
+        return abort(404);
     }
 }
