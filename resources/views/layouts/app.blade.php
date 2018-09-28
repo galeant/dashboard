@@ -477,6 +477,39 @@
 							@endif
 		                </ul>
 		            </li>
+					<li {{{ (Request::is('report*') ? 'class=active' : '') }}}>
+		                <a  class="menu-toggle waves-effect waves-block toggled">
+		                    <i class="material-icons">assessment</i>
+		                    <span>Reporting</span>
+		                </a>
+		                <ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('report/company*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/company') }}" class=" waves-effect waves-block">
+		                            <span>Company</span>
+		                        </a>
+		                    </li>
+		                    <li {{{ (Request::is('report/member*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/member') }}" class=" waves-effect waves-block">
+		                            <span>Member</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/city*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/city') }}" class=" waves-effect waves-block">
+		                            <span>City</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/tour*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/tour') }}" class=" waves-effect waves-block">
+		                            <span>Tour</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/destinations*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/destinations') }}" class=" waves-effect waves-block">
+		                            <span>Destinations</span>
+		                        </a>
+		                    </li>
+		                </ul>
+		            </li>
 					@endif
 		            <li>
 		                <a href="{{ URL('/logout') }}">
@@ -539,7 +572,6 @@
 	@if(Cache::get('permission_'.Auth::user()->remember_token) != null)
 		@foreach(Cache::get('permission_'.Auth::user()->remember_token) as $in=>$p)
 			var menu = "{{$in}}";
-			console.log(menu);
 		@endforeach
 	@endif
 </script>
