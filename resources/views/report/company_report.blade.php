@@ -41,8 +41,16 @@
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane fade in active" id="home_only_icon_title">
                             @php
+                                use Carbon\Carbon;
+
                                 $ar = $data->groupBy('status');
+                                $ap = $data->groupBy(function($q){
+                                    return Carbon::parse($q->created_at)->format('d-m-Y');
+                                })->toArray();
                             @endphp
+                            <pre>
+                            {{print_r($ap)}}
+                            </pre>
                             <div class="card">
                                 <div class="body">
                                     <div class="row">
@@ -217,9 +225,26 @@
     <!-- Chart Plugins Js -->
     <script src="{{ asset('plugins/chartjs/Chart.bundle.js') }}"></script>
     <script>
-        @php
-            $list = $data->toArray();
-        @endphp
+        
+        var label = [];
+        @foreach($ap as $p=>$ko)
+            // if('{{$p}}' == 0){
+            //     label.push('NOT VERIFIED');
+            // }else if('{{$p}}' == 1){
+            //     label.push('AWAITING SUBMISSION');
+            // }else if('{{$p}}' == 2){
+            //     label.push('AWAITING MODERATION');
+            // }else if('{{$p}}' == 3){
+            //     label.push('INSUFFICIENT DATA'); 
+            // }else if('{{$p}}' == 4){
+            //     label.push('REJECTED');
+            // }else if('{{$p}}' == 5){
+            //     label.push('ACTIVE');
+            // }else if('{{$p}}' == 6){
+            //     label.push('DISABLED');
+            // }
+        @endforeach
+        console.log(label);
         $(function () {
             new Chart(document.getElementById("myChart1").getContext("2d"), getChartJs('bar'));
         });
@@ -229,7 +254,7 @@
                 config = {
                     type: 'bar',
                     data: {
-                        labels: ["January", "February", "March", "April", "May", "June", "July"],
+                        labels: label,
                         datasets: [{
                             label: "My First dataset",
                             data: [65, 59, 80, 81, 56, 55, 40],
