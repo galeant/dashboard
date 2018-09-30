@@ -61,7 +61,7 @@ class TransactionController extends Controller
     {
 
         $data = Transaction::list();
-        $sort = $request->input('sort','paid_at');
+        $sort = $request->input('sort','updated_at');
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
         if($request->input('start_date')){
             $start = $request->input('start_date').' 00:00:01';

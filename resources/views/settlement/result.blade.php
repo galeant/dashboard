@@ -21,7 +21,7 @@
 @section('main-content')
 			<div class="block-header">
                 <h2 id="head_card">
-                    Settlment {{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }}
+                    Settlment {{ date('d m Y',strtotime($data->start_date)) }} - {{ date('d m Y',strtotime($data->end_date)) }}
                     <small>Admin Data / Settlement</small>
                 </h2>
                 @if($data->status != 1)
@@ -35,7 +35,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Settlment {{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }} <span class="badge bg-orange">{{count($data->settlement)}}</span>
+                                Settlment {{ date('d m Y',strtotime($data->start_date)) }} - {{ date('d m Y',strtotime($data->end_date)) }} <span class="badge bg-orange">{{count($data->settlement)}}</span>
                             </h2>
                             <ul class="header-dropdown">
                                 <li>
@@ -52,7 +52,7 @@
                                     @else
                                         <a class="btn bg-deep-orange btn-block waves-effect">Settled</a>
                                     @endif
-                                    <p><span class="badge bg-cyan">{{ date('d m Y',strtotime($data->period_start)) }} - {{ date('d m Y',strtotime($data->period_end)) }}</span></p>
+                                    <p><span class="badge bg-cyan">{{ date('d m Y',strtotime($data->start_date)) }} - {{ date('d m Y',strtotime($data->end_date)) }}</span></p>
                                 </li>
                             </ul>
                         </div>
@@ -86,18 +86,18 @@
                                             
                                             <td>
                                             @if($data->status != 1)
-                                                <button type="button" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set->bank_name}} : {{$set->bank_account_number}}" data-original-title="{{$set->bank_account_name}}">
+                                                <a href="#" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set->bank_name}} : {{$set->bank_account_number}}" data-original-title="{{$set->bank_account_name}}">
                                                     {{$set->bank_account_number}}
-                                                </button>
+                                                </a>
                                             @else
                                                 @if($set->bank_account_number != null)
-                                                <button class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" data-toggle="modal" data-target="#myModal">
+                                                <a  href="#" class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" data-toggle="modal" data-target="#myModal">
                                                     {{$set->bank_account_number}}
-                                                </button>
+                                                </a>
                                                 @else
-                                                <button class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
+                                                <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
                                                     Add Account Bank
-                                                </button>
+                                                </a>
                                                 @endif     
                                             @endif
                                             </td>

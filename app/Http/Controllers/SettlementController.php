@@ -93,7 +93,6 @@ class SettlementController extends Controller
         //
     }
     public function generate(){
-        // dd(session()->get('request'));
         $data = null;
         if(session()->get('request') != null){
             $data = [
@@ -104,40 +103,40 @@ class SettlementController extends Controller
             $sellement = session()->pull('request');
             session()->put('settlement',$sellement);
         }
-        // dd($data);
         return view('settlement.generate',['data' => $data])    ;
     }
     public function filter(Request $request){
-        // dd($request->all());
         
-        $start = date("Y-m-d", strtotime($request->start));
+        $start = $request->input('start') == null ? date('Y-m-d') : date("Y-m-d",strtotime($request->input('start')));
         if($request->end != null){
-            $end = date("Y-m-d", strtotime($request->end));
+            $end = date("Y-m-d", strtotime($request->input('end',date('Y-m-d'))));
         }else{
-            $end = date("Y-m-d", strtotime($request->start.'+1 day'));
+            $end = date("Y-m-d", strtotime(date('Y-m-d').'+1 day'));
         }
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->get();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->get();
-        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->get();
+        $request->request->add(['start'=>$start,'end' => $end]);
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->get();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->with('transactions')->get();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->get();
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
             session()->put('request',[
                 'start' => $start,
-                'end' => $start,
+                'end' => $end,
                 'data' => [
                     'hotel' => $dataHotel,
                     'tour' =>$dataTour,
                     'car' =>$dataCar
                 ]
             ]);
-            return redirect('settlement/generate');
+            return redirect('settlement/generate')->withInput();
         }else{
             session()->forget('request')['data'];
-            return redirect()->back()->with('message', 'Nothing generate for '.date("d M Y", strtotime($start)).' - '.date("d M Y", strtotime($end)));
+            return redirect()->back()->withInput()->with('message', 'Nothing generate for '.date("d M Y", strtotime($start)).' - '.date("d M Y", strtotime($end)));
         }
     }
     public function poccedList(Request $request){
         // dd($request->all());
         $store = session()->pull('settlement');
+        // dd($store);
         $dataHotel = $store['data']['hotel'];
         $dataTour = $store['data']['tour'];
         $dataCar = $store['data']['car'];
@@ -165,8 +164,8 @@ class SettlementController extends Controller
                 'total_paid' => $totalPrice - $totalCommission,
                 'note' => $request->notes,
                 'status' => 1,
-                'period_start' => $store['start'],
-                'period_end' => $store['end']
+                'start_date' => $store['start'],
+                'end_date' => $store['end']
             ]);
             $hotel = $this->bookingListInsert($dataHotel,$group->id,'hotel');
             $tour = $this->bookingListInsert($dataTour,$group->id,'tour');

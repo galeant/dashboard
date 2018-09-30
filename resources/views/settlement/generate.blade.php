@@ -31,15 +31,15 @@
                         <div class="body settlement">
                             @include('errors.error_notification')
                             <div class="row">
-                                <form method="POST" action="{{url('settlement/filter')}}" id="search">
+                                {{ Form::open(['route'=>'settlement.filter', 'method'=>'POST','id'=>'search']) }}
                                     @csrf
                                     <div class="col-md-12">
                                         <label>Start Date</label>
-                                        <input type="text" class="form-control" id="start" name="start" value="{{date('d-m-Y')}}" required/>
+                                        {{ Form::text('start', null, ['class' => 'form-control','placeholder'=>'yyyy-mm-dd','id'=>'start']) }}
                                     </div>
                                     <div class="col-md-12">
                                         <label>End Date</label>
-                                        <input type="text" class="form-control" id="end" name="end" value="{{date('d-m-Y')}}"/>
+                                        {{ Form::text('end', null, ['class' => 'form-control','placeholder'=>'yyyy-mm-dd','id'=>'end']) }}
                                     </div>
                                     <div class="col-md-3">
                                         <button type="submit" class="btn bg-green waves-effect">
@@ -89,6 +89,7 @@
                                             <th>Total Commssion</th>
                                             <th>Total Payment</th>
                                             <th>Account Bank</th>
+                                            <th>Transaction Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -151,6 +152,9 @@
                                                         @endif
                                                     @endif 
                                                 </td>
+                                                <td>
+                                                    {{$set['transactions']['paid_at']}}
+                                                </td>
                                             </tr>
                                             @endforeach
                                         @endif
@@ -173,7 +177,7 @@
 <script>
     $(document).ready(function(){
         $('[data-toggle="popover"]').popover();
-        var dateFormat = 'DD-MM-YYYY';
+        var dateFormat = 'YYYY-MM-DD';
         var options = {
             autoUpdateInput: false,
             singleDatePicker: true,
@@ -185,9 +189,8 @@
             opens: "right"
         };
         $('input#start').daterangepicker(options).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY')); 
-            $(this).closest("form").find('input#end').val(null); 
-            $("#opener").attr('start',picker.startDate.format('DD-MM-YYYY'));
+            $(this).val(picker.startDate.format('YYYY-MM-DD')); 
+            $("#opener").attr('start',picker.startDate.format('YYYY-MM-DD'));
             $('input#end').daterangepicker({
             autoUpdateInput: false,
             singleDatePicker: true,
@@ -195,12 +198,12 @@
             locale: {
                 format: dateFormat,
             },
-            minDate: moment(picker.startDate.format('MM-DD-YYYY')),
+            minDate: moment(picker.startDate.format('YYYY-MM-DD')),
             maxDate: moment().add(359, 'days'),
                 opens: "right"
             }).on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('DD-MM-YYYY'));
-                $("#opener").attr('end',picker.startDate.format('DD-MM-YYYY'));
+                $(this).val(picker.startDate.format('YYYY-MM-DD'));
+                $("#opener").attr('end',picker.startDate.format('YYYY-MM-DD'));
             });
         })
         $('input[name="end"]').daterangepicker({
@@ -213,8 +216,8 @@
             maxDate: moment().add(359, 'days'),
             opens: "right"
         }).on('apply.daterangepicker', function(ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY'));
-            $("#opener").attr('end',picker.startDate.format('DD-MM-YYYY'));
+            $(this).val(picker.startDate.format('YYYY-MM-DD'));
+            $("#opener").attr('end',picker.startDate.format('YYYY-MM-DD'));
         });
         $('#myModal').on('show.bs.modal', function (e) {
 

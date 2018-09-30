@@ -15,8 +15,8 @@ class SettlementGroup extends Model
         'note',
         'paid_at',
         'status',
-        'period_start',
-        'period_end'
+        'start_date',
+        'end_date'
     ];
 
     public function settlement()

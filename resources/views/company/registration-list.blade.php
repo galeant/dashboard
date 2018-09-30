@@ -69,7 +69,8 @@
 	            {data: 'created_at'},
                 {data: 'status'},
 	            {data: 'action'}
-	        ]
+	        ],
+            order: [[ 4, "desc" ]]
 	    });
     </script>
 @stop
