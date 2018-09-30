@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <td colspan="8">Period: {{ date('d/m/Y',strtotime($data->period_start)) }} - {{ date('d/m/Y',strtotime($data->period_end)) }}</td>
+            <td colspan="8">Period: {{ date('d/m/Y',strtotime($data->start_date)) }} - {{ date('d/m/Y',strtotime($data->end_date)) }}</td>
         </tr>
         <tr></tr>
         <tr>
@@ -13,6 +13,7 @@
             <th>Total Paid</th>
             <th>Total Commssion</th>
             <th>Account Bank</th>
+            <th>Account Bank Name</th>
         </tr>
     </thead>
     <tbody>
@@ -24,15 +25,21 @@
             <td>{{$set->product_name}}</td>
             <td>{{$set->qty}}</td>
             <td>{{Helpers::idr($set->unit_price)}}</td>
-            <td>{{Helpers::idr($set->total_price - $set->commission)}}</td>
+            <td>{{Helpers::idr(($set->total_price - $set->total_commission))}}</td>
             <td>{{Helpers::idr($set->total_commission)}}</td>
-            
             <td>
                 @if($set->bank_account_number != null)
-                    {{$set->bank_account_number}}
+                    {{$set->bank_account_number}} ({{$set->bank_name}})
                 @else
-                    Bank account not inserted
+                    -
                 @endif     
+            </td>
+            <td>
+                @if($set->bank_account_number != null)
+                    {{$set->bank_account_name}}
+                @else
+                    -
+                @endif 
             </td>
         </tr>
         @endforeach
