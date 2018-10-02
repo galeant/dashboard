@@ -282,13 +282,47 @@ class MembersController extends Controller
             $start_date = Carbon::now()->format('Y-m-d');
             $until_date = Carbon::now()->format('Y-m-d');
         }
-        $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
+
+        $diff =  Carbon::parse($until_date)->diffInDays(Carbon::parse($start_date));
+        if($option == 'this_year'){
+            $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
+            ->select('id', 'created_at')->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->format('Y-m'); 
+            })->toArray();
+        }
+        else{
+            $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
             ->select('id', 'created_at')->get()
             ->groupBy(function($date) {
                 return Carbon::parse($date->created_at)->format('Y-m-d'); 
             })->toArray();
+        }
+        $data = [];
+        if($option != 'this_year'){
+            for($i=0; $i<=$diff; $i++){
+                if(isset($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')])){
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = count($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = 0;
+                }
+            }
+        }
+        else{
+            for($i=0; $i<12; $i++){
+                if(isset($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')])){
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = count($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = 0;
+                }
+            }
+        }
+        // dd($data);
+        // dd($diff);
         return view('members.report', [
-            'data'=> $member,
+            'data'=> $data,
             'start_date' => $start_date,
             'until_date' => $until_date
         ]);

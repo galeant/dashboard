@@ -76,8 +76,8 @@
         var i = 0;
         @foreach($data as $key => $d)
             var member = [];
-            member["date"] = "{{$key}}";
-            member["member"] = "{{count($d)}}";
+            member["date"] = "{{$key}}";         
+            member["member"] = "{{$d}}";
             list.push(member);
         @endforeach
         console.log(list);  
