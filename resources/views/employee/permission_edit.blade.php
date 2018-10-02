@@ -45,10 +45,10 @@
                                     <div class="col-md-12">
                                         <h5>Method</h5>
                                         <select class="form-control" name='method' required>
-                                            <option value="GET" @if($permission->grouping == 'GET') selected @endif>GET</option>
-                                            <option value="POST" @if($permission->grouping == 'POST') selected @endif>POST</option>
-                                            <option value="PUT" @if($permission->grouping == 'PUT') selected @endif>PUT</option>
-                                            <option value="DELETE" @if($permission->grouping == 'DELETE') selected @endif>DELETE</option>
+                                            <option value="GET" @if($permission->method == 'GET') selected @endif>GET</option>
+                                            <option value="POST" @if($permission->method == 'POST') selected @endif>POST</option>
+                                            <option value="PUT" @if($permission->method == 'PUT') selected @endif>PUT</option>
+                                            <option value="DELETE" @if($permission->method == 'DELETE') selected @endif>DELETE</option>
                                         </select>
                                     </div>
                                 </div>

@@ -1,6 +1,5 @@
 $(function () {
-    new Chart(document.getElementById("line_chart").getContext("2d"), getChartJs('line'));
-    new Chart(document.getElementById("bar_chart").getContext("2d"), getChartJs('bar'));
+    new Chart(document.getElementById("myChart1").getContext("2d"), getChartJs('bar'));
     new Chart(document.getElementById("radar_chart").getContext("2d"), getChartJs('radar'));
     new Chart(document.getElementById("pie_chart").getContext("2d"), getChartJs('pie'));
 });
@@ -22,14 +21,22 @@ function getChartJs(type) {
                     pointBackgroundColor: 'rgba(0, 188, 212, 0.9)',
                     pointBorderWidth: 1
                 }, {
-                        label: "My Second dataset",
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        borderColor: 'rgba(233, 30, 99, 0.75)',
-                        backgroundColor: 'rgba(233, 30, 99, 0.3)',
-                        pointBorderColor: 'rgba(233, 30, 99, 0)',
-                        pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
-                        pointBorderWidth: 1
-                    }]
+                    label: "My Second dataset",
+                    data: [28, 48, 40, 19, 86, 27, 90],
+                    borderColor: 'rgba(233, 30, 99, 0.75)',
+                    backgroundColor: 'rgba(233, 30, 99, 0.3)',
+                    pointBorderColor: 'rgba(233, 30, 99, 0)',
+                    pointBackgroundColor: 'rgba(233, 30, 99, 0.9)',
+                    pointBorderWidth: 1
+                },{
+                    label: "My third dataset",
+                    data: [12, 31, 34, 32, 55, 11, 241],
+                    borderColor: 'rgba(233, 30, 100, 0.75)',
+                    backgroundColor: 'rgba(233, 30, 121, 0.3)',
+                    pointBorderColor: 'rgba(233, 30, 151, 0)',
+                    pointBackgroundColor: 'rgba(233, 221, 99, 0.9)',
+                    pointBorderWidth: 1
+                }]
             },
             options: {
                 responsive: true,
@@ -47,10 +54,14 @@ function getChartJs(type) {
                     data: [65, 59, 80, 81, 56, 55, 40],
                     backgroundColor: 'rgba(0, 188, 212, 0.8)'
                 }, {
-                        label: "My Second dataset",
-                        data: [28, 48, 40, 19, 86, 27, 90],
-                        backgroundColor: 'rgba(233, 30, 99, 0.8)'
-                    }]
+                    label: "My Second dataset",
+                    data: [28, 48, 40, 19, 86, 27, 90],
+                    backgroundColor: 'rgba(233, 30, 99, 0.8)'
+                },{
+                    label: "My third dataset",
+                    data: [12, 31, 34, 32, 55, 11, 241],
+                    backgroundColor: 'rgba(233, 30, 121, 0.3)',
+                }]
             },
             options: {
                 responsive: true,

@@ -14,7 +14,7 @@ Route::get('login', function () {
 	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web']], function () {
+Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	})->name('overview');
@@ -138,6 +138,24 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('/permission', 'PermissionController');	
 	});
 
+	Route::group(['prefix' => 'report'],function(){
+		Route::group(['prefix' => 'company'],function(){
+			Route::get('/','ReportController@company');
+		});
+		Route::group(['prefix' => 'member'],function(){
+			Route::get('/','ReportController@member');
+		});
+		Route::group(['prefix' => 'city'],function(){
+			Route::get('/','ReportController@city');
+		});
+		Route::group(['prefix' => 'tour'],function(){
+			Route::get('/','ReportController@tour');
+		});
+		Route::group(['prefix' => 'destinations'],function(){
+			Route::get('/','ReportController@destinations');
+		});
+	});
+
 	Route::group(['prefix' => 'campaign'],function(){
 		Route::resource('campaign-list', 'CampaignController');
 		Route::resource('campaign-product', 'CampaignProductController');
@@ -164,7 +182,5 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 
-	Route::group(['prefix' => 'report'],function(){
-		Route::get('member','MembersController@report');
-	});
 });
+

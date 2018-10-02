@@ -21,4 +21,10 @@ class City extends Model {
     {
         return $this->hasOne('App\Models\Province','id','province_id');
     }
+    public function tour(){
+        return $this->belongsToMany('App\Models\Tour','product_destinations','city_id','product_id');
+    }
+    public function destination(){
+        return $this->hasMany('App\Models\Destination','city_id','id');
+    }
 }

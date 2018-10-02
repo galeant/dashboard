@@ -88,8 +88,7 @@
             ykeys: ['member'],
             labels: ['Member'],
             lineColors: ['rgb(233, 30, 99)', 'rgb(0, 188, 212)'],
-            lineWidth: 3,
-            parseTime: false,
+            lineWidth: 3
         });
     });
 </script>

@@ -29,26 +29,10 @@ class BookingTourController extends Controller
             ->get();
             return Datatables::of($booking_tour)
             ->addColumn('status',function(BookingTour $booking_tour){
-<<<<<<< HEAD
-                if($booking_tour->status == 1){
-                    return '<span  class="badge" style="background-color:#666699">Awaiting Payment</span>';
-                }elseif($booking_tour->status == 2){
-                    return '<span  class="badge" style="background-color:#006600">Payment Accepted</span>';    
-                }elseif($booking_tour->status == 3){
-                    return '<span  class="badge" style="background-color:#cc0000">Cancelled</span>';    
-                }elseif($booking_tour->status == 4){
-                    return '<span  class="badge" style="background-color:#3399ff">On Prosses Settlement</span>';
-                }elseif($booking_tour->status == 5){
-                    return '<span  class="badge" style="background-color:#3333ff">Settled</span>';
-                }else{
-                    return '<span  class="badge" style="background-color:#b30086">Refund</span>'; 
-                }
-=======
                 if(!empty($booking_tour->transactions)){
                     // return "ddd";
                     return '<span class="badge" style="background-color:'.$booking_tour->booking_status->color.'">'.$booking_tour->booking_status->name.'</span>';
                 } 
->>>>>>> dev
             })
             ->addColumn('booking_number', function(BookingTour $booking_tour){
                 return '<a href="'.url('bookings/tour/'.$booking_tour->booking_number).'" class="btn btn-primary">'.$booking_tour->booking_number.'</a>';
