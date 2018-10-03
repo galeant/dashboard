@@ -80,7 +80,6 @@
             member["member"] = "{{$d}}";
             list.push(member);
         @endforeach
-        console.log(list);  
         Morris.Line({
             element: line_chart,
             data: list,
@@ -88,7 +87,9 @@
             ykeys: ['member'],
             labels: ['Member'],
             lineColors: ['rgb(233, 30, 99)', 'rgb(0, 188, 212)'],
-            lineWidth: 3
+            lineWidth: 2,
+            resize: true,
+            parseTime: false
         });
     });
 </script>

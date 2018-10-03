@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Company;
+use App\Models\Members;
 use App\Models\Tour;
 use App\Models\Province;
 
@@ -41,8 +42,87 @@ class ReportController extends Controller
         // // }));
         // return view('report.company_report',['data' =>$data]);
     }
-    public function member(){
-        return abort(404);
+    public function member(Request $request){
+        $option = $request->option;
+        $status = $request->status;
+        $member = Members::all();
+        if($option=='day'){
+            $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+            $until_date = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        }
+        else if($option=='this_week'){
+            $start_date = Carbon::now()->startOfWeek()->startOfDay()->format('Y-m-d H:i:s');
+            $start_week = Carbon::now()->startOfWeek();
+            $until_date = $start_week->addDay(6)->endOfDay()->format('Y-m-d H:i:s');
+        }
+        else if($option=='this_month'){
+            $start_date = Carbon::now()->startOfMonth()->startOfDay()->format('Y-m-d H:i:s');
+            $until_date = Carbon::now()->endOfMonth()->endOfDay()->format('Y-m-d H:i:s');
+        }
+        else if($option == 'this_year'){
+            $start_date = Carbon::now()->startOfYear()->startOfDay()->format('Y-m-d H:i:s');
+            $until_date = Carbon::now()->endOfYear()->endOfDay()->format('Y-m-d H:i:s');
+        }
+        else if(!empty($request->input('start_date')) && !empty($request->input('until_date'))){
+            if($request->input('start_date')==$request->input('until_date')){
+                $start_date = Carbon::parse($request->start_date)->startOfDay()->format('Y-m-d H:i:s');
+                $until_date = Carbon::parse($request->until_date)->endOfDay()->format('Y-m-d H:i:s');
+            }
+            else{
+                $start_date = Carbon::parse($request->start_date)->startOfDay()->format('Y-m-d H:i:s');
+                $until_date = Carbon::parse($request->until_date)->endOfDay()->format('Y-m-d H:i:s');
+
+            }
+        }
+        else{
+            $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+            $until_date = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        }
+
+        $diff =  Carbon::parse($until_date)->diffInDays(Carbon::parse($start_date));
+        if($option == 'this_year'){
+            $member = Members::whereBetween('created_at', [$start_date, $until_date])
+            ->select('id', 'created_at')->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->format('Y-m'); 
+            })->toArray();
+        }
+        else{
+            $member = Members::whereBetween('created_at', [$start_date, $until_date])
+            ->select('id', 'created_at')->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->format('Y-m-d'); 
+            })->toArray();
+        }
+        $data = [];
+        if($option != 'this_year'){
+            for($i=0; $i<=$diff; $i++){
+                if(isset($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')])){
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = count($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = 0;
+                }
+            }
+        }
+        else{
+            for($i=0; $i<12; $i++){
+                if(isset($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')])){
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = count($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = 0;
+                }
+            }
+        }
+        // dd($data);
+        // dd($diff);
+        return view('members.report', [
+            'data'=> $data,
+            'start_date' => $start_date,
+            'until_date' => $until_date,
+            'option'     => $option
+        ]);
     }
     public function city(){
         $p = Province::with('cities.tour','cities.destination')->get();
