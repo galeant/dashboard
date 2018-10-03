@@ -375,7 +375,7 @@
                                     </td>
                                     <td>
                                         @if(count($rent_car->booking_status))
-                                        <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$tour->booking_status->name}}</span>
+                                        <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$rent_car->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
                                         @endif
