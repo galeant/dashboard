@@ -176,6 +176,7 @@ class CouponController extends Controller
               $data->max_discount = $request->input('max_discount');
               $data->minimum_order = $request->input('minimum_order');
               $data->description = $request->input('description');
+              $data->product_type = $request->input('product_type');
              if($data->save()){
                 DB::commit();
                 return redirect("coupon/".$data->id."/edit")->with('message', 'Successfully edit Coupon');

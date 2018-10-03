@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Validator;
 use Datatables;
 use DB;
+use Carbon\Carbon;
 
 class MembersController extends Controller
 {
@@ -251,5 +252,79 @@ class MembersController extends Controller
                 ->get();
         // dd($data);
         return view('members.index',['data'=>$data]);
+    }
+
+    public function report(Request $request){
+        $option = $request->option;
+        $member = Members::all();
+        if($option=='day'){
+            $start_date = Carbon::now()->format('Y-m-d');
+            $until_date = Carbon::now()->format('Y-m-d');
+        }
+        else if($option=='this_week'){
+            $start_date = Carbon::now()->startOfWeek()->format('Y-m-d');
+            $start_week = Carbon::now()->startOfWeek();
+            $until_date = $start_week->addDay(6)->format('Y-m-d');
+        }
+        else if($option=='this_month'){
+            $start_date = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $until_date = Carbon::now()->endOfMonth()->format('Y-m-d');
+        }
+        else if($option == 'this_year'){
+            $start_date = Carbon::now()->startOfYear();
+            $until_date = Carbon::now()->endOfYear();
+        }
+        else if(!empty($request->input('start_date')) && !empty($request->input('until_date'))){
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d');
+            $until_date = Carbon::parse($request->until_date)->format('Y-m-d');
+        }
+        else{
+            $start_date = Carbon::now()->format('Y-m-d');
+            $until_date = Carbon::now()->format('Y-m-d');
+        }
+
+        $diff =  Carbon::parse($until_date)->diffInDays(Carbon::parse($start_date));
+        if($option == 'this_year'){
+            $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
+            ->select('id', 'created_at')->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->format('Y-m'); 
+            })->toArray();
+        }
+        else{
+            $member = Members::where('created_at','>=', $start_date)->where('created_at','<=', $until_date)
+            ->select('id', 'created_at')->get()
+            ->groupBy(function($date) {
+                return Carbon::parse($date->created_at)->format('Y-m-d'); 
+            })->toArray();
+        }
+        $data = [];
+        if($option != 'this_year'){
+            for($i=0; $i<=$diff; $i++){
+                if(isset($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')])){
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = count($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = 0;
+                }
+            }
+        }
+        else{
+            for($i=0; $i<12; $i++){
+                if(isset($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')])){
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = count($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')]);
+                }
+                else{
+                    $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = 0;
+                }
+            }
+        }
+        // dd($data);
+        // dd($diff);
+        return view('members.report', [
+            'data'=> $data,
+            'start_date' => $start_date,
+            'until_date' => $until_date
+        ]);
     }
 }

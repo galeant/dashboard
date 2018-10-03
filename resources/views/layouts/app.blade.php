@@ -81,7 +81,7 @@
 		    <div class="menu" style="background-color: #676C56">
 		        <ul class="list">
 					
-		            <li id="overview" {{{ (Request::is('/') ? 'class=active' : '') }}}>
+		            <li id="overview" {{{ (Request::is('*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/') }}">
 		                    <i class="material-icons">dashboard</i>
 		                    <span>Overview</span>
@@ -478,6 +478,43 @@
 		                </ul>
 		            </li>
 					@endif
+					@if(
+						array_key_exists("Report",$permission)
+					)
+					<li {{{ (Request::is('report*') ? 'class=active' : '') }}}>
+		                <a  class="menu-toggle waves-effect waves-block toggled">
+		                    <i class="material-icons">assessment</i>
+		                    <span>Reporting</span>
+		                </a>
+		                <ul class="ml-menu" style="display: block;">
+		                    <li {{{ (Request::is('report/company*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/company') }}" class=" waves-effect waves-block">
+		                            <span>Company</span>
+		                        </a>
+		                    </li>
+		                    <li {{{ (Request::is('report/member*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/member') }}" class=" waves-effect waves-block">
+		                            <span>Member</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/city*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/city') }}" class=" waves-effect waves-block">
+		                            <span>City</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/tour*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/tour') }}" class=" waves-effect waves-block">
+		                            <span>Tour</span>
+		                        </a>
+		                    </li>
+							<li {{{ (Request::is('report/destinations*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('report/destinations') }}" class=" waves-effect waves-block">
+		                            <span>Destinations</span>
+		                        </a>
+		                    </li>
+		                </ul>
+		            </li>
+					@endif
 		            <li>
 		                <a href="{{ URL('/logout') }}">
 		                    <i class="material-icons">exit_to_app</i>
@@ -539,7 +576,6 @@
 	@if(Cache::get('permission_'.Auth::user()->remember_token) != null)
 		@foreach(Cache::get('permission_'.Auth::user()->remember_token) as $in=>$p)
 			var menu = "{{$in}}";
-			console.log(menu);
 		@endforeach
 	@endif
 </script>
