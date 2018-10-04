@@ -493,7 +493,7 @@
 		                        </a>
 		                    </li>
 		                    <li {{{ (Request::is('report/member*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('report/member') }}" class=" waves-effect waves-block">
+		                        <a href="{{ URL('report/member?option=today') }}" class=" waves-effect waves-block">
 		                            <span>Member</span>
 		                        </a>
 		                    </li>
@@ -503,12 +503,12 @@
 		                        </a>
 		                    </li>
 							<li {{{ (Request::is('report/tour*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('report/tour') }}" class=" waves-effect waves-block">
+		                        <a href="{{ URL('report/tour/total_sales') }}" class=" waves-effect waves-block">
 		                            <span>Tour</span>
 		                        </a>
 		                    </li>
 							<li {{{ (Request::is('report/destinations*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('report/destinations') }}" class=" waves-effect waves-block">
+		                        <a href="{{ URL('report/destinations?option=today') }}" class=" waves-effect waves-block">
 		                            <span>Destinations</span>
 		                        </a>
 		                    </li>
