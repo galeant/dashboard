@@ -10,8 +10,8 @@
 @section('main-content')
 			<div class="block-header">
                 <h2>
-                    Members
-                    <small>Report / Members</small>
+                    Destination Report
+                    <small>Report / Destination</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -21,7 +21,7 @@
                         <div class="header">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <h2>Member Growth</h2>
+                                    <h2>Destination Entry</h2>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="">
@@ -34,10 +34,10 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <a href="{{url('report/member?option=today')}}" class="btn">Day</a>
-                                        <a href="{{url('report/member?option=this_week')}}" class="btn">This Week</a>
-                                        <a href="{{url('report/member?option=this_month')}}" class="btn">This Month</a>
-                                        <a href="{{url('report/member?option=this_year')}}" class="btn">This Year</a>
+                                        <a href="{{url('report/destinations?option=today')}}" class="btn">Day</a>
+                                        <a href="{{url('report/destinations?option=this_week')}}" class="btn">This Week</a>
+                                        <a href="{{url('report/destinations?option=this_month')}}" class="btn">This Month</a>
+                                        <a href="{{url('report/destinations?option=this_year')}}" class="btn">This Year</a>
                                     </div>
                                 </div>
                             </div>
@@ -70,22 +70,22 @@
             },
         },
             function(start, end){
-                window.location = "{{url('report/member')}}?start_date="+start.format('YYYY-MM-DD')+"&until_date="+end.format('YYYY-MM-DD');
+                window.location = "{{url('report/destinations')}}?start_date="+start.format('YYYY-MM-DD')+"&until_date="+end.format('YYYY-MM-DD');
             });
         var list = [];
         var i = 0;
         @foreach($data as $key => $d)
             var member = [];
             member["date"] = "{{$key}}";         
-            member["member"] = "{{$d}}";
+            member["destination"] = "{{$d}}";
             list.push(member);
         @endforeach
         Morris.Line({
             element: line_chart,
             data: list,
             xkey: 'date',
-            ykeys: ['member'],
-            labels: ['Member'],
+            ykeys: ['destination'],
+            labels: ['Destination'],
             lineColors: ['rgb(233, 30, 99)', 'rgb(0, 188, 212)'],
             lineWidth: 2,
             resize: true,

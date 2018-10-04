@@ -34,7 +34,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="pull-right">
-                                        <a href="{{url('report/member?option=day')}}" class="btn">Day</a>
+                                        <a href="{{url('report/member?option=today')}}" class="btn">Day</a>
                                         <a href="{{url('report/member?option=this_week')}}" class="btn">This Week</a>
                                         <a href="{{url('report/member?option=this_month')}}" class="btn">This Month</a>
                                         <a href="{{url('report/member?option=this_year')}}" class="btn">This Year</a>
@@ -76,11 +76,10 @@
         var i = 0;
         @foreach($data as $key => $d)
             var member = [];
-            member["date"] = "{{$key}}";
-            member["member"] = "{{count($d)}}";
+            member["date"] = "{{$key}}";         
+            member["member"] = "{{$d}}";
             list.push(member);
         @endforeach
-        console.log(list);  
         Morris.Line({
             element: line_chart,
             data: list,
@@ -88,7 +87,9 @@
             ykeys: ['member'],
             labels: ['Member'],
             lineColors: ['rgb(233, 30, 99)', 'rgb(0, 188, 212)'],
-            lineWidth: 3
+            lineWidth: 2,
+            resize: true,
+            parseTime: false
         });
     });
 </script>
