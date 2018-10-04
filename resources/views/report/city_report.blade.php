@@ -9,7 +9,7 @@
 			<div class="block-header">
                 <h2>
                     City List
-                    <small>Master Data / City</small>
+                    <small>Report / City</small>
                 </h2>
             </div>
             <!-- Basic Examples -->
@@ -18,8 +18,13 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                All City
+                                Total Tour & Destinasi
                             </h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li >
+                                    <a href="{{ url('report/city/ext?type=sum&action=export') }}" class="btn bg-teal btn-block waves-effect">Export Excel</a>
+                                </li>
+                            </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -32,20 +37,7 @@
                                             <th>Jumlah Destinasi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach($data as $key=>$d)
-                                            @foreach($d as $k=>$c) 
-                                                @foreach($c as $i=>$n) 
-                                                <tr>
-                                                    <td>{{$key}}</td>
-                                                    <td>{{$i}}</td>
-                                                    <td>{{$n['tour']}}</td>
-                                                    <td>{{$n['destinations']}}</td>
-                                                </tr>
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach
-                                    </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
@@ -53,6 +45,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>City & Tour</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li >
+                                    <a href="{{ url('report/city/ext?type=tour&action=export') }}" class="btn bg-teal btn-block waves-effect">Export Excel</a>
+                                </li>
+                            </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
@@ -63,20 +60,7 @@
                                             <th>Tour</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach($data as $key=>$d)
-                                            @foreach($d as $k=>$c) 
-                                                @foreach($c as $i=>$n) 
-                                                    @foreach($n['list_tour'] as $t)
-                                                    <tr>
-                                                        <td>{{$i}}</td>
-                                                        <td>{{$t['product_name']}}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach
-                                    </tbody>
+                                   
                                 </table>
                             </div>
                         </div>
@@ -84,30 +68,22 @@
                     <div class="card">
                         <div class="header">
                             <h2>City & Destinations</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li >
+                                    <a href="{{ url('report/city/ext?type=dest&action=export') }}" class="btn bg-teal btn-block waves-effect">Export Excel</a>
+                                </li>
+                            </ul>
                         </div>
                         <div class="body">
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables1">
+                                <table class="table table-bordered table-striped table-hover dataTable js-exportable table-modif" id="data-tables2">
                                     <thead>
                                         <tr>
                                             <th>Kota</th>
                                             <th>Destinasi</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        @foreach($data as $key=>$d)
-                                            @foreach($d as $k=>$c) 
-                                                @foreach($c as $i=>$n) 
-                                                    @foreach($n['list_destinations'] as $dt)
-                                                    <tr>
-                                                        <td>{{$i}}</td>
-                                                        <td>{{$dt['destination_name']}}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
-                                        @endforeach
-                                    </tbody>
+                                    
                                 </table>
                             </div>
                         </div>
@@ -129,7 +105,48 @@
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
     <script>
     $(document).ready(function() {
-        $('#data-tables,#data-tables1,#data-tables2').DataTable();
-    } );
+        // $('#data-tables,#data-tables1,#data-tables2').DataTable();\ 
+        $('#data-tables').DataTable({
+            "ajax": {
+                "url" : "{{ url('report/city/ext') }}",
+                "type" : "GET",
+                "data" :{
+                    "type" : "sum",
+                    "action" : "ajax"
+                }
+            },"columns": [
+                { "data": "provinsi" },
+                { "data": "kota" },
+                { "data": "jumlah_tour" },
+                { "data": "jumlah_destinasi" }
+            ]
+        });
+        $('#data-tables1').DataTable({
+            "ajax": {
+                "url" : "{{ url('report/city/ext') }}",
+                "type" : "GET",
+                "data" :{
+                    "type" : "tour",
+                    "action" : "ajax"
+                }
+            },"columns": [
+                { "data": "kota" },
+                { "data": "tour" }
+            ]
+        });
+        $('#data-tables2').DataTable({
+            "ajax": {
+                "url" : "{{ url('report/city/ext') }}",
+                "type" : "GET",
+                "data" :{
+                    "type" : "dest",
+                    "action" : "ajax"
+                }
+            },"columns": [
+                { "data": "kota" },
+                { "data": "destinations" }
+            ]
+        });
+    });
     </script>
 @stop

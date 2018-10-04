@@ -143,10 +143,11 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 			Route::get('/','ReportController@company');
 		});
 		Route::group(['prefix' => 'member'],function(){
-			Route::get('/','ReportController@member');
+			Route::get('/','MembersController@report');
 		});
 		Route::group(['prefix' => 'city'],function(){
 			Route::get('/','ReportController@city');
+			Route::get('ext','ReportController@cityExt');
 		});
 		Route::group(['prefix' => 'tour'],function(){
 			Route::get('/','ReportController@tour');

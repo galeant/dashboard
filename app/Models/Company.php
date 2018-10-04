@@ -46,6 +46,9 @@ class Company extends Model {
     public function suppliers(){
         return $this->hasMany('App\Models\Supplier');
     }
+    // public function log_status(){
+    //     return $this->hasOne('App\Models\CompanyStatusLog','company_id','id');
+    // }
     public function log_statuses(){
         return $this->hasMany('App\Models\CompanyStatusLog','company_id','id');
     }
