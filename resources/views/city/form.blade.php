@@ -59,6 +59,18 @@
 					                <label>Name</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
 					            </div>
+						    	<div class="form-group m-b-20">
+					                <label>Longitude</label>
+					                 {{ Form::number('longitude', null, ['class' => 'form-control','placeholder'=>'Please Enter Longitude','id'=>'longitude','required'=>'required']) }}
+					            </div>
+						    	<div class="form-group m-b-20">
+					                <label>Latitude</label>
+					                 {{ Form::number('latitude', null, ['class' => 'form-control','placeholder'=>'Please Enter Latitude','id'=>'latitude','required'=>'required']) }}
+					            </div>
+						    	<div class="form-group m-b-20">
+					                <label>Radius</label>
+					                 {{ Form::number('radius', null, ['class' => 'form-control','placeholder'=>'Please Enter Radius','id'=>'radius','required'=>'required']) }}
+					            </div>
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-3 col-lg-offset-9">
 					            		<button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>

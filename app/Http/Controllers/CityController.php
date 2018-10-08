@@ -58,7 +58,9 @@ class CityController extends Controller
         $validation = Validator::make($request->all(), [
             'province_id' => 'required|numeric',
             'name' => 'required',
-            'type' => 'required'
+            'type' => 'required',
+            'longitude' => 'required',
+            'latitude' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -71,6 +73,9 @@ class CityController extends Controller
             $data->province_id = $request->input('province_id');
             $data->name = $request->input('name');
             $data->type = $request->input('type');
+            $data->longitude = $request->input('longitude');
+            $data->latitude = $request->input('latitude');
+            $data->radius = $request->input('radius');
             if($data->save()){
                 DB::commit();
                 return redirect("master/city/".$data->id."/edit")->with('message', 'Successfully saved City');
@@ -123,7 +128,9 @@ class CityController extends Controller
         $validation = Validator::make($request->all(), [
             'province_id' => 'required|numeric',
             'name' => 'required',
-            'type' => 'required'
+            'type' => 'required',
+            'longitude' => 'required',
+            'latitude' => 'required'
         ]);
         // Check if it fails //
         if( $validation->fails() ){
@@ -136,6 +143,9 @@ class CityController extends Controller
             $data->province_id = $request->input('province_id');
             $data->name = $request->input('name');
             $data->type = $request->input('type');
+            $data->longitude = $request->input('longitude');
+            $data->latitude = $request->input('latitude');
+            $data->radius = $request->input('radius');
             if($data->save()){
                 DB::commit();
                 return redirect("master/city/".$data->id."/edit")->with('message', 'Successfully saved City');
