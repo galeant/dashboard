@@ -208,6 +208,8 @@
                     ar = [100];
                     label = ['No Data'];
                 }
+                $("#myChart").clone().insertAfter("#myChart").last();
+                $("#myChart").first().remove();
                 var ctx = document.getElementById("myChart").getContext('2d');
                 var myChart = new Chart(ctx, {
                 type: 'pie',
@@ -259,12 +261,13 @@
                     backgroundColor : "#34495e",
                     data : di
                 }];
-                var ctx1 = document.getElementById("myChart1").getContext('2d');
+                $("#myChart1").clone().insertAfter("#myChart1").last();
+                $("#myChart1").first().remove();
                 var data = {
                     labels: label_bar,
                     datasets: dataSet
                 };
-
+                var ctx1 = document.getElementById("myChart1").getContext('2d');
                 var myBarChart = new Chart(ctx1, {
                 type: 'bar',
                 data: data,
