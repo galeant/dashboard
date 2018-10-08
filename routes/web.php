@@ -140,13 +140,16 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 
 	Route::group(['prefix' => 'report'],function(){
 		Route::group(['prefix' => 'company'],function(){
-			Route::get('/','ReportController@company');
+			Route::get('/','ReportController@companyTester');
+			Route::get('/grafik','ReportController@companyGrafik');
+			Route::get('/transaksi','ReportController@companyTransaksi');
 		});
 		Route::group(['prefix' => 'member'],function(){
-			Route::get('/','ReportController@member');
+			Route::get('/','MembersController@report');
 		});
 		Route::group(['prefix' => 'city'],function(){
 			Route::get('/','ReportController@city');
+			Route::get('ext','ReportController@cityExt');
 		});
 		Route::group(['prefix' => 'tour'],function(){
 			Route::get('/','ReportController@tour');

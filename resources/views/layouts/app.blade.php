@@ -503,7 +503,7 @@
 		                        </a>
 		                    </li>
 							<li {{{ (Request::is('report/tour*') ? 'class=active' : '') }}}>
-		                        <a href="{{ URL('report/tour/total_sales') }}" class=" waves-effect waves-block">
+		                        <a href="{{ URL('report/tour') }}" class=" waves-effect waves-block">
 		                            <span>Tour</span>
 		                        </a>
 		                    </li>
