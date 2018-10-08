@@ -140,9 +140,9 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 
 	Route::group(['prefix' => 'report'],function(){
 		Route::group(['prefix' => 'company'],function(){
-			Route::get('/','ReportController@company');
-			// Route::get('/grafik','ReportController@companyGrafik');
-			// Route::get('/transaksi','ReportController@companyTransaksi');
+			Route::get('/','ReportController@companyTester');
+			Route::get('/grafik','ReportController@companyGrafik');
+			Route::get('/transaksi','ReportController@companyTransaksi');
 		});
 		Route::group(['prefix' => 'member'],function(){
 			Route::get('/','MembersController@report');

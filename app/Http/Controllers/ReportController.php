@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use Carbon\Carbon;
 use App\Models\Company;
 use App\Models\CompanyStatusLog;
@@ -12,6 +13,7 @@ use App\Models\Members;
 use App\Models\BookingTour;
 use App\Models\Destination;
 use App\Exports\CityReportExport;
+
 use DatePeriod;
 use DateTime;
 use DateInterval;
@@ -498,63 +500,466 @@ class ReportController extends Controller
            'end_transaksi' => $end_transaksi
         ]);
     }
-    // public function companyTester(Request $request){
+    public function companyTester(Request $request){
         
-    //     $start =  $request->input('start',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
-    //     $end = $request->input('end',Carbon::now()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d'));
-    //     $start_transaksi =  $request->input('start_transaksi',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
-    //     $end_transaksi = $request->input('end_transaksi',Carbon::now()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d'));
-    //     return view('report.company_report_ajax',[
-    //         'start' =>$start,
-    //         'end' => $end,
-    //         'start_transaksi' => $start_transaksi,
-    //         'end_transaksi' => $end_transaksi
-    //     ]);
-    // }
-    // public function companyTransaksi(Request $request){
-    //     // Transaksi
-    //     $start_transaksi =  $request->input('start_transaksi',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
-    //     $end_transaksi = $request->input('end_transaksi',Carbon::now()->format('Y-m-d'));
-    //     $option_transaksi = $request->option_transaksi;
-    //     if($option_transaksi == 'today'){
-    //         $start_transaksi = Carbon::now()->format('Y-m-d');
-    //         $end_transaksi = Carbon::now()->format('Y-m-d');
-    //     }else if($option_transaksi == 'week'){
-    //         $start_transaksi = Carbon::now()->startOfWeek()->format('Y-m-d');
-    //         $end_transaksi = Carbon::now()->endOfWeek()->format('Y-m-d');
-    //     }else if($option_transaksi == 'month'){
-    //         $start_transaksi = Carbon::now()->startOfMonth()->format('Y-m-d');
-    //         $end_transaksi = Carbon::now()->endOfMonth()->format('Y-m-d');
-    //     }else if($option_transaksi == 'year'){
-    //         $start_transaksi = Carbon::now()->startOfYear()->format('Y-m-d');
-    //         $end_transaksi = Carbon::now()->endOfYear()->format('Y-m-d');
-    //     }
-    //     $transaksi = Company::with(['tours.booking_tours' => function($q) use($start_transaksi,$end_transaksi){
-    //         $q->whereBetween('created_at',[$start_transaksi,$end_transaksi]);     
-    //     }])->orderBy('id')->get();
-    //     // $transaksi = Company::with('tours.booking_tours')->orderBy('id')->get();
-    //     // dd($transaksi);
-    //     $dt = [];
-    //     foreach($transaksi  as $t){
-    //         $dt[$t->id]['company'] = $t->company_name;
-    //         $dt[$t->id]['book_success'] = [];
-    //         $dt[$t->id]['book_unsuccess'] = [];
-    //         foreach($t->tours as $tour){
-    //             foreach($tour->booking_tours as $bt){
-    //                 // dd($bt->status);
-    //                 if($bt->status == 2 || $bt->status == 5){
-    //                     $dt[$t->id]['book_success'][] = $bt->id;
-    //                     // dd($dt);
-    //                 }else{
-    //                     $dt[$t->id]['book_unsuccess'][] = $bt->id;
-    //                 }
-    //             }
-    //         }
-    //    }
-    // }
-    public function companyGrafik(){
-
+        $start =  $request->input('start',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
+        $end = $request->input('end',Carbon::now()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d'));
+        $start_transaksi =  $request->input('start_transaksi',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
+        $end_transaksi = $request->input('end_transaksi',Carbon::now()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d'));
+        return view('report.company_report_tester',[
+            'start' =>$start,
+            'end' => $end,
+            'start_transaksi' => $start_transaksi,
+            'end_transaksi' => $end_transaksi
+        ]);
     }
+    public function companyTransaksi(Request $request){
+        // Transaksi
+        // dd("dqwdqw");
+        $start_transaksi =  $request->input('start_transaksi',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
+        $end_transaksi = $request->input('end_transaksi',Carbon::now()->format('Y-m-d'));
+        $option_transaksi = $request->option_transaksi;
+        if($option_transaksi == 'today'){
+            $start_transaksi = Carbon::now()->format('Y-m-d');
+            $end_transaksi = Carbon::now()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d');
+        }else if($option_transaksi == 'week'){
+            $start_transaksi = Carbon::now()->startOfWeek()->format('Y-m-d');
+            $end_transaksi = Carbon::now()->endOfWeek()->format('Y-m-d');
+        }else if($option_transaksi == 'month'){
+            $start_transaksi = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $end_transaksi = Carbon::now()->endOfMonth()->format('Y-m-d');
+        }else if($option_transaksi == 'year'){
+            $start_transaksi = Carbon::now()->startOfYear()->format('Y-m-d');
+            $end_transaksi = Carbon::now()->endOfYear()->format('Y-m-d');
+        }
+        // dd($end_transaksi);
+        // $transaksi = Company::where('tours.booking_tours',function($q) use($start_transaksi,$end_transaksi){
+        //     $q->where('created_at','<=',$end_transaksi);     
+        // })->orderBy('id')->get();
+        $transaksi = Company::where('created_at','<=',$end_transaksi)->get();
+        // $transaksi = Company::with('tours.booking_tours')->orderBy('id')->get();
+        $tr_container = [];
+        foreach($transaksi as $trans){
+            $tr = Company::where('id',$trans->id)->with(['tours.booking_tours' => function($q)use($end_transaksi){
+                $q->where('created_at','<',$end_transaksi);
+            }])->first()->toArray();
+            // dd($tr->tours);
+            $booking_list = [];
+            $a = [
+                'company_name' => $trans->company_name,
+                'boooking' => array_pluck($tr['tours'],'booking_tours')
+            ];
+            array_push($tr_container,$a);
+        }
+        // dd($tr_container);
+        $dt = [];
+        foreach($tr_container  as $t){
+            $dt1['company'] = $t['company_name'];
+            $dt1['book_success'] = 0;
+            $dt1['book_unsuccess'] = 0;
+            foreach($t['boooking'] as $book){
+                foreach($book as $book){
+                    // dd($bt->status);
+                    if($book['status'] == 2 || $book['status'] == 5){
+                        $dt1['book_success'] += 1;
+                        // dd($dt);
+                    }else{
+                        $dt1['book_unsuccess']+= 1;
+                    }
+                }
+            }
+            array_push($dt,$dt1);
+       }
+    //    dd($dt);
+       $data = [
+           'data' => $dt
+       ];
+    //    dd($data);
+       return response()->json($data,200);
+    }
+    public function companyGrafik(Request $request){
+         // Status
+         $start =  $request->input('start',Carbon::now()->addWeeks(-1)->format('Y-m-d'));
+         $end = Carbon::parse($request->input('end',Carbon::now()->format('Y-m-d')))->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+         //    $end = Carbon::parse($end)->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+         $option = $request->option;
+         $tgl = [];
+         if($option == 'today'){
+             $start = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+             // dd($start);
+             $end = Carbon::now()->format('Y-m-d H:i:s');
+             // dd($end);
+             $dif = Carbon::parse($start)->diffInHours(Carbon::parse($end));
+             // dd($dif);
+             for($i=0;$i<=$dif;$i++){
+                 $start_range = Carbon::now()->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
+                 // dd($start_range);
+                 $end_range = Carbon::parse($start_range)->addHours(1)->format('Y-m-d H:i:s');
+                 // dd($end_range);
+                 $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                     $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                 })->get();
+                 $data_bar = [];
+                 foreach($raw_data_bar as $k=>$d){
+                     $index = [];
+                     $created_at = [];
+                     $status = [];
+                     foreach($d->log_statuses as $lg){
+                         $created_at[] = $lg->created_at;
+                         $status[] = $lg->status;
+                         $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                     }
+                     $min = min($index);
+                     $index = array_search($min,$index);
+                     $created_at = $created_at[$index];
+                     $status = $status[$index];
+                     $data_bar[] = [
+                         'id' => $d->id,
+                         'status' => $status,
+                         'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                     ];
+                 }
+                 $tgl[Carbon::now()->startOfDay()->addHours($i)->format('H:i:s')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+             }
+             // dd($tgl);
+         }else if($option == 'week'){
+             $start = Carbon::now()->startOfWeek()->format('Y-m-d');
+             $end = Carbon::now()->format('Y-m-d H:i:s');
+             $dif = Carbon::parse($start)->diffInDays(Carbon::parse($end));
+             // dd($dif);
+             for($i=0;$i<=$dif;$i++){
+                 $start_range = Carbon::now()->startOfWeek()->addDays($i)->format('d-m-Y');
+                 // dd($start_range);
+                 $end_range = Carbon::now()->startOfWeek()->addDays($i)->format('Y-m-d H:i:s');
+                 // dd($end_range);
+                 $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                     $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                 })->get();
+                 $data_bar = [];
+                 foreach($raw_data_bar as $k=>$d){
+                     $index = [];
+                     $created_at = [];
+                     $status = [];
+                     foreach($d->log_statuses as $lg){
+                         $created_at[] = $lg->created_at;
+                         $status[] = $lg->status;
+                         $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                     }
+                     $min = min($index);
+                     $index = array_search($min,$index);
+                     $created_at = $created_at[$index];
+                     $status = $status[$index];
+                     $data_bar[] = [
+                         'id' => $d->id,
+                         'status' => $status,
+                         'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                     ];
+                 }
+                 $tgl[Carbon::now()->startOfWeek()->addDays($i)->format('d-m-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+             }
+             // dd($tgl);
+         }else if($option == 'month'){
+             $start = Carbon::now()->startOfMonth()->format('Y-m-d');
+             $end = Carbon::now()->endOfWeek()->format('Y-m-d');
+             $dif = Carbon::parse($start)->diffInWeeks(Carbon::parse($end));
+             // dd($dif);
+             for($i=0;$i<=$dif;$i++){
+                 $start_range = Carbon::now()->startOfMonth()->addWeeks($i)->format('d-m-Y');
+                 // dd($start_range);
+                 $end_range = Carbon::parse($start_range)->endOfWeek()->format('Y-m-d H:i:s');
+                 // dd($end_range);
+                 $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                     $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                 })->get();
+                 // dd($raw_data_bar);
+                 $data_bar = [];
+                 foreach($raw_data_bar as $k=>$d){
+                     $index = [];
+                     $created_at = [];
+                     $status = [];
+                     foreach($d->log_statuses as $lg){
+                         $created_at[] = $lg->created_at;
+                         $status[] = $lg->status;
+                         $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                     }
+                     $min = min($index);
+                     $index = array_search($min,$index);
+                     $created_at = $created_at[$index];
+                     $status = $status[$index];
+                     $data_bar[] = [
+                         'id' => $d->id,
+                         'status' => $status,
+                         'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                     ];
+                 }
+                 $tgl[Carbon::now()->startOfMonth()->addWeeks($i)->format('d-m-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+             }
+             // dd($tgl);
+         }else if($option == 'year'){
+             $start = Carbon::now()->startOfYear()->format('Y-m-d');
+             $end = Carbon::now()->endOfMonth()->format('Y-m-d');
+             $dif = Carbon::parse($start)->diffInMonths(Carbon::parse($end));
+             // dd($dif);
+             for($i=0;$i<=$dif;$i++){
+                 $start_range = Carbon::now()->startOfYear()->addMonths($i)->format('d-m-Y');
+                 $end_range = Carbon::parse($start_range)->endOfMonth()->format('Y-m-d H:i:s');
+                 $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                     $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                 })->get();
+                 $data_bar = [];
+                 foreach($raw_data_bar as $k=>$d){
+                     $index = [];
+                     $created_at = [];
+                     $status = [];
+                     foreach($d->log_statuses as $lg){
+                         $created_at[] = $lg->created_at;
+                         $status[] = $lg->status;
+                         $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                     }
+                     $min = min($index);
+                     $index = array_search($min,$index);
+                     $created_at = $created_at[$index];
+                     $status = $status[$index];
+                     $data_bar[] = [
+                         'id' => $d->id,
+                         'status' => $status,
+                         'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                     ];
+                 }
+                 $tgl[Carbon::now()->startOfYear()->addMonths($i)->format('M-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+             }
+         }else{
+             $dif = Carbon::parse($start)->diffInDays(Carbon::parse($end));
+             // dd(Company::all());
+             // dd($dif);
+             if($dif > 28){
+                 $dif = Carbon::parse($start)->diffInMonths(Carbon::parse($end));
+                 // dd($dif);
+                 for($i=0;$i<=$dif;$i++){
+                     $start_range = Carbon::parse($start)->startOfMonth()->addMonths($i)->format('d-m-Y');
+                     $end_range = Carbon::parse($start_range)->endOfMonth()->format('Y-m-d H:i:s');
+                     $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                         $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                     })->get();
+                     $data_bar = [];
+                     foreach($raw_data_bar as $k=>$d){
+                         $index = [];
+                         $created_at = [];
+                         $status = [];
+                         foreach($d->log_statuses as $lg){
+                             $created_at[] = $lg->created_at;
+                             $status[] = $lg->status;
+                             $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                         }
+                         $min = min($index);
+                         $index = array_search($min,$index);
+                         $created_at = $created_at[$index];
+                         $status = $status[$index];
+                         $data_bar[] = [
+                             'id' => $d->id,
+                             'status' => $status,
+                             'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                         ];
+                     }
+                     $tgl[Carbon::parse($start)->startOfMonth()->addMonths($i)->format('M-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+                 }
+                 // dd($tgl);
+             }else if($dif > 15){
+                 $dif = Carbon::parse($start)->diffInWeeks(Carbon::parse($end));
+                 for($i=0;$i<=$dif;$i++){
+                     $start_range = Carbon::parse($start)->startOfWeek()->addWeeks($i)->format('d-m-Y');
+                     // dd($start_range);
+                     $end_range = Carbon::parse($start_range)->endOfWeek()->format('Y-m-d H:i:s');
+                     // dd($end_range);
+                     $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                         $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                     })->get();
+                     // dd($raw_data_bar);
+                     $data_bar = [];
+                     foreach($raw_data_bar as $k=>$d){
+                         $index = [];
+                         $created_at = [];
+                         $status = [];
+                         foreach($d->log_statuses as $lg){
+                             $created_at[] = $lg->created_at;
+                             $status[] = $lg->status;
+                             $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                         }
+                         $min = min($index);
+                         $index = array_search($min,$index);
+                         $created_at = $created_at[$index];
+                         $status = $status[$index];
+                         $data_bar[] = [
+                             'id' => $d->id,
+                             'status' => $status,
+                             'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                         ];
+                     }
+                     $tgl[Carbon::parse($start)->startOfMonth()->addWeeks($i)->format('d-m-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+                 }
+             }else if($dif > 0){
+                 $dif = Carbon::parse($start)->diffInDays(Carbon::parse($end));
+                 // dd($dif);
+                 for($i=0;$i<=$dif;$i++){
+                     $start_range = Carbon::parse($start)->addDays($i)->format('d-m-Y');
+                     // dd($start_range);
+                     $end_range = Carbon::parse($start_range)->addDays(1)->format('Y-m-d H:i:s');
+                     // dd($end_range);
+                     $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                         $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                     })->get();
+                     // dd($raw_data_bar);
+                     $data_bar = [];
+                     foreach($raw_data_bar as $k=>$d){
+                         $index = [];
+                         $created_at = [];
+                         $status = [];
+                         foreach($d->log_statuses as $lg){
+                             $created_at[] = $lg->created_at;
+                             $status[] = $lg->status;
+                             $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                         }
+                         // dd($index)
+                         $min = min($index);
+                         $index = array_search($min,$index);
+                         $created_at = $created_at[$index];
+                         $status = $status[$index];
+                         $data_bar[] = [
+                             'id' => $d->id,
+                             'status' => $status,
+                             'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                         ];
+                     }
+                     $tgl[Carbon::parse($start)->addDays($i)->format('d-m-Y')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+                 }
+             }else if($dif == 0){
+                 $dif = Carbon::parse($start)->diffInHours(Carbon::parse($start)->endOfDay());
+                 for($i=0;$i<=$dif;$i++){
+                     $start_range = Carbon::parse($start)->startOfDay()->addHours($i)->format('Y-m-d H:i:s');
+                     // dd($start_range);
+                     $end_range = Carbon::parse($start_range)->addHours(1)->format('Y-m-d H:i:s');
+                     // dd($end_range);
+                     $raw_data_bar = Company::select('id')->with('log_statuses')->whereHas('log_statuses',function($q) use ($end_range){
+                         $q->where('created_at','<=',$end_range)->orderBy('created_at','desc');
+                     })->get();
+                     // dd($raw_data_bar);
+                     $data_bar = [];
+                     foreach($raw_data_bar as $k=>$d){
+                         $index = [];
+                         $created_at = [];
+                         $status = [];
+                         foreach($d->log_statuses as $lg){
+                             $created_at[] = $lg->created_at;
+                             $status[] = $lg->status;
+                             $index[] = Carbon::parse($end_range)->diffInSeconds(Carbon::parse($lg->created_at));
+                         }
+                         $min = min($index);
+                         $index = array_search($min,$index);
+                         $created_at = $created_at[$index];
+                         $status = $status[$index];
+                         $data_bar[] = [
+                             'id' => $d->id,
+                             'status' => $status,
+                             'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+                         ];
+                     }
+                     $tgl[Carbon::now()->startOfDay()->addHours($i)->format('H:i:s')] = collect($data_bar)->sortBy('status')->groupBy('status')->toArray();
+                 }
+             }
+                 // dd($dif);
+                 // dd($tgl);
+         }
+        
+         // DATA PIE
+         // dd($end);
+         $data = Company::select('id')->whereHas('log_statuses',function($q) use ($end){
+             $q->where('created_at','<=',$end)->orderBy('created_at','desc');
+         })->get();
+         // dd($data);
+         $dataPie = [];
+         foreach($data as $k=>$d){
+             $index = [];
+             $created_at = [];
+             $status = [];
+             foreach($d->log_statuses as $lg){
+                 $created_at[] = $lg->created_at;
+                 $status[] = $lg->status;
+                 $index[] = Carbon::parse($end)->diffInSeconds(Carbon::parse($lg->created_at));
+             }
+             // dd($status);
+             $min = min($index);
+             $index = array_search($min,$index);
+             $created_at = $created_at[$index];
+             $status = $status[$index];
+             $dataPie[] = [
+                 'id' => $d->id,
+                 'status' => $status,
+                 'created_at' => Carbon::parse($created_at)->format('Y-m-d H:i:s')
+             ];
+         }
+         // dd($dataPie);
+         // PIE CHART
+         $pie = collect($dataPie)->groupBy('status');
+         // dd($pie);
+         // BAR CHART
+             // dd($tgl);
+             $bar = [];
+             foreach($tgl as $i=>$j){
+                 // dd($j);
+                 if(count($j) != 0){
+                     // dd($j);
+                     if(array_key_exists(0,$j)){
+                         $bar[$i]['Not_Active'] = count($j[0]);
+                     }else{
+                         $bar[$i]['Not_Active'] = 0;
+                     }
+                     if(array_key_exists(1,$j)){
+                         $bar[$i]['Awaiting_Submission'] = count($j[1]);
+                     }else{
+                         $bar[$i]['Awaiting_Submission'] = 0;
+                     }
+                     if(array_key_exists(2,$j)){
+                         $bar[$i]['Awaiting_Moderation'] = count($j[2]);
+                     }else{
+                         $bar[$i]['Awaiting_Moderation'] = 0;
+                     }
+                     if(array_key_exists(3,$j)){
+                         $bar[$i]['Insufficient_Data'] = count($j[3]);
+                     }else{
+                         $bar[$i]['Insufficient_Data'] = 0;
+                     }
+                     if (array_key_exists(4,$j)){
+                         $bar[$i]['Rejected'] = count($j[4]);
+                     }else{
+                         $bar[$i]['Rejected'] = 0;
+                     }
+                     if (array_key_exists(5,$j)){
+                         $bar[$i]['Active'] = count($j[5]);
+                     }else{
+                         $bar[$i]['Active'] = 0;
+                     }
+                     if (array_key_exists(6,$j)){
+                         $bar[$i]['Disabled'] = count($j[6]);
+                     }else{
+                         $bar[$i]['Disabled'] = 0;
+                     }
+                 }else{
+                     $bar[$i]['Not_Active'] = 0;
+                     $bar[$i]['Awaiting_Submission'] = 0;
+                     $bar[$i]['Awaiting_Moderation'] = 0;
+                     $bar[$i]['Insufficient_Data'] = 0;
+                     $bar[$i]['Rejected'] = 0;
+                     $bar[$i]['Active'] = 0;
+                     $bar[$i]['Disabled'] = 0;
+                 }
+             }
+        $response = [
+            'pie' =>$pie,
+            'bar' =>$bar
+        ];
+        return response()->json($response,200);
+    }
+    
     public function member(Request $request){
         $option = $request->option;
         $status = $request->status;
@@ -642,6 +1047,7 @@ class ReportController extends Controller
     }
     public function cityExt(Request $request){
         $p = Province::with('cities.tour','cities.destination')->get();
+        // dd($p);
         $ar = [];
         foreach($p as $i=>$p){
             // dd($p->cities);

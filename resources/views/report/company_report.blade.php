@@ -143,6 +143,7 @@
         },function(start, end){
             window.location = "{{url('report/company')}}?start_transaksi="+start.format('YYYY-MM-DD')+"&end_transaksi="+end.format('YYYY-MM-DD');
         });
+        // PIE
         var ar = [];
         var label = [];
         var bgColor = [];
@@ -172,7 +173,7 @@
                 bgColor.push("#34495e");
             }
         @endforeach
-        // console.log(ar);
+        console.log(ar);
         // console.log(label);
         if(ar.length == 0){
             ar = [100];
@@ -189,7 +190,7 @@
             }]
         }
         });
-        // TRANSAKSI
+        // BAR
         var label_bar = [];
         var na = [];
         var aws = [];
