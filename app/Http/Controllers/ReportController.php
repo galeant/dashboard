@@ -1042,6 +1042,155 @@ class ReportController extends Controller
             'option'     => $option
         ]);
     }
+    public function memberTest(){
+        // dd('dwqqw');
+        $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $until_date = Carbon::now()->startOfDay()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+        // dd($until_date);
+        return view('report.member_report_tester',[
+            'start_date' => $start_date,
+            'until_date' => $until_date
+        ]);
+    }
+    public function memberExt(Request $request){
+        $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        $until_date = Carbon::now()->startOfDay()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+        // $status = $request->status;
+        if($request->option != null){
+            if($request->option =='today'){
+                $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+                $until_date = Carbon::now()->startOfDay()->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+                $diff = Carbon::parse($start_date)->diffInHours(Carbon::parse($until_date));
+                $type = 'day';
+                // dd($diff);
+            }else if($request->option =='this_week'){
+                $start_date = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
+                $until_date = Carbon::now()->format('Y-m-d H:i:s');
+                $diff = Carbon::parse($start_date)->diffInDays(Carbon::parse($until_date));
+                $type = 'week';
+                // dd($);
+            }else if($request->option =='this_month'){
+                $start_date = Carbon::now()->startOfMonth()->format('Y-m-d H:i:s');
+                $until_date = Carbon::now()->format('Y-m-d H:i:s');
+                $diff = Carbon::parse($start_date)->diffInWeeks(Carbon::parse($until_date));
+                $type = 'month';
+                // dd($until_date);
+            }else{
+                $start_date = Carbon::now()->startOfYear()->format('Y-m-d H:i:s');
+                $until_date = Carbon::now()->format('Y-m-d H:i:s');
+                $diff = Carbon::parse($start_date)->diffInMonths(Carbon::parse($until_date));
+                $type = 'year';
+                // dd($diff);
+            }
+        }else{
+            $dif = Carbon::parse($start_date)->diffInDays(Carbon::parse($until_date));
+            if($dif > 28){
+                $dif = Carbon::parse($start_date)->diffInMonths(Carbon::parse($until_date));
+                $type = 'year';
+            }else if($dif > 15){
+                $dif = Carbon::parse($start_date)->diffInWeeks(Carbon::parse($until_date));
+                $type = 'month';
+            }else if($dif > 0){
+                $dif = Carbon::parse($start_date)->diffInDays(Carbon::parse($until_date));
+                $type = 'week';
+            }else if($dif == 0){
+                $dif = Carbon::parse($start_date)->diffInHours(Carbon::parse($until_date));
+                $type = 'day';
+            }
+        }
+        // $member = Members::select('id','created_at')
+        //             ->whereBetween('created_at',[$start_date,$until_date])
+        //             ->get()
+        //             ->groupBy(function($q){
+        //                 return Carbon::parse($q->created_at)->format('Y-M-d H:i:s');
+        //             })->toArray();
+        $params = [
+            'start_date' => $start_date,
+            'until_date' => $until_date,
+            'type' => $type,
+            'diff' => $diff
+        ];
+        $result = $this->memberListDate($params);
+        // dd($result);
+        // $data = [];
+        // for($i=0; $i<=$diff; $i++){
+
+        // }
+        // $member = Members::all();
+        // if($option=='today'){
+        //     $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        //     $until_date = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        // }
+        // else if($option=='this_week'){
+        //     $start_date = Carbon::now()->startOfWeek()->startOfDay()->format('Y-m-d H:i:s');
+        //     $start_week = Carbon::now()->startOfWeek();
+        //     $until_date = $start_week->addDay(6)->endOfDay()->format('Y-m-d H:i:s');
+        // }
+        // else if($option=='this_month'){
+        //     $start_date = Carbon::now()->startOfMonth()->startOfDay()->format('Y-m-d H:i:s');
+        //     $until_date = Carbon::now()->endOfMonth()->endOfDay()->format('Y-m-d H:i:s');
+        // }
+        // else if($option == 'this_year'){
+        //     $start_date = Carbon::now()->startOfYear()->startOfDay()->format('Y-m-d H:i:s');
+        //     $until_date = Carbon::now()->endOfYear()->endOfDay()->format('Y-m-d H:i:s');
+        // }
+        // else if(!empty($request->input('start_date')) && !empty($request->input('until_date'))){
+        //     if($request->input('start_date')==$request->input('until_date')){
+        //         $start_date = Carbon::parse($request->start_date)->startOfDay()->format('Y-m-d H:i:s');
+        //         $until_date = Carbon::parse($request->until_date)->addHours(23)->addMinutes(59)->addSecond(59)->format('Y-m-d H:i:s');
+        //     }
+        //     else{
+        //         $start_date = Carbon::parse($request->start_date)->startOfDay()->format('Y-m-d H:i:s');
+        //         $until_date = Carbon::parse($request->until_date)->endOfDay()->format('Y-m-d H:i:s');
+
+        //     }
+        // }
+        // else{
+        //     $start_date = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+        //     $until_date = Carbon::now()->endOfDay()->format('Y-m-d H:i:s');
+        // }
+
+        // $diff =  Carbon::parse($until_date)->diffInDays(Carbon::parse($start_date));
+        // if($request->option == 'this_year'){
+        //     $member = Members::whereBetween('created_at', [$start_date, $until_date])
+        //     ->select('id', 'created_at')->get()
+        //     ->groupBy(function($date) {
+        //         return Carbon::parse($date->created_at)->format('Y-m'); 
+        //     })->toArray();
+        // }
+        // else{
+        //     $member = Members::whereBetween('created_at', [$start_date, $until_date])
+        //     ->select('id', 'created_at')->get()
+        //     ->groupBy(function($date) {
+        //         return Carbon::parse($date->created_at)->format('Y-m-d'); 
+        //     })->toArray();
+        // }
+        // // dd($member);
+        // $data = [];
+        // if($request->option != 'this_year'){
+        //     for($i=0; $i<=$diff; $i++){
+        //         if(isset($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')])){
+        //             $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = count($member[Carbon::parse($start_date)->addDays($i)->format('Y-m-d')]);
+        //             dd($data);
+        //         }
+        //         else{
+        //             $data[Carbon::parse($start_date)->addDays($i)->format('d/m')] = 0;
+        //         }
+        //     }
+        // }
+        // else{
+        //     for($i=0; $i<12; $i++){
+        //         if(isset($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')])){
+        //             $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = count($member[Carbon::parse($start_date)->addMonths($i)->format('Y-m')]);
+        //         }
+        //         else{
+        //             $data[Carbon::parse($start_date)->addMonths($i)->format('m')] = 0;
+        //         }
+        //     }
+        // }
+        // dd($data);
+        return response()->json($result, 200);
+    }
     public function city(){
         return view('report.city_report');
     }
@@ -1404,5 +1553,47 @@ class ReportController extends Controller
             'until_date' => $until_date,
             'option'     => $option
         ]);
+    }
+    // 
+    function companyListDate(){
+
+    }
+    function memberListDate($params){
+        // dd($until_date);
+        $result = [];
+        for($i=0; $i<=$params['diff']; $i++){
+            if($params['type'] == 'day'){
+                $start = Carbon::parse($params['start_date'])->addHours($i)->format('Y-m-d H:i:s');
+                $end = Carbon::parse($start)->addHours(1)->format('Y-m-d H:i:s');
+                // dd($end);
+                $member = Members::select('id','created_at')
+                        ->whereBetween('created_at',[$params['start_date'],Carbon::parse($params['start_date'])->addDays($i)->format('Y-m-d H:i:s')])
+                        ->count();
+                $result[Carbon::parse($params['start_date'])->addHours($i)->format('H:i:s')] = $member;
+            }else if($params['type']  == 'week'){
+                $start = Carbon::parse($params['start_date'])->addDays($i)->format('Y-m-d H:i:s');
+                $end = Carbon::parse($start)->endOfDay()->format('Y-m-d H:i:s');
+                // dd($end);
+                $member = Members::select('id','created_at')
+                        ->whereBetween('created_at',[$params['start_date'],Carbon::parse($params['start_date'])->addDays($i)->format('Y-m-d H:i:s')])
+                        ->count();
+                $result[Carbon::parse($params['start_date'])->addDays($i)->format('d-m-Y')] = $member;
+            }else if($params['type']  == 'month'){
+                $start = Carbon::parse($params['start_date'])->addWeeks($i)->format('Y-m-d H:i:s');
+                $end = Carbon::parse($start)->endOfWeek()->format('Y-m-d H:i:s');
+                // dd($end);
+                $member = Members::whereBetween('created_at',[$start,$end])
+                        ->count();
+                $result[Carbon::parse($params['start_date'])->addWeeks($i)->format('d-m-Y')] = $member;
+            }else if($params['type']  == 'year'){
+                $start = Carbon::parse($params['start_date'])->addMonth($i)->format('Y-m-d H:i:s');
+                $end = Carbon::parse($start)->endOfMonth()->format('Y-m-d H:i:s');
+                $member = Members::whereBetween('created_at',[$start,$end])
+                        ->count();
+                $result[Carbon::parse($params['start_date'])->addMonth($i)->format('M-Y')] = $member;
+            }
+            
+        }
+        return $result;
     }
 }
