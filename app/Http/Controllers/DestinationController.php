@@ -364,8 +364,13 @@ class DestinationController extends Controller
         }
         $destination = $destination->get();
         return Datatables::of($destination)
-        ->addColumn('action', function ($destination) {
-            return '<a href="/master/destination/'.$destination->id.'/edit"> View Detail</a>';
+        ->addColumn('action', function($destination) {
+            return '<a href="/master/destination/'.$destination->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                    <i class="glyphicon glyphicon-edit"></i>
+                </a>
+                <a href="/master/destination/'.$destination->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination/'.$destination->id.'" data-id="'.$destination->id.'" id="data-'.$destination->id.'">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </a>';
         })
         ->make(true);
     }
