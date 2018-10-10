@@ -145,7 +145,9 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 			Route::get('/transaksi','ReportController@companyTransaksi');
 		});
 		Route::group(['prefix' => 'member'],function(){
-			Route::get('/','MembersController@report');
+			Route::get('/','ReportController@member');
+			// Route::get('/','ReportController@memberTest');
+			// Route::get('/ext','ReportController@memberExt');
 		});
 		Route::group(['prefix' => 'city'],function(){
 			Route::get('/','ReportController@city');
