@@ -114,24 +114,28 @@ class SettlementController extends Controller
             $end = date("Y-m-d", strtotime(date('Y-m-d').'+1 day'));
         }
         $request->request->add(['start'=>$start,'end' => $end]);
+        // dd($request->all());
         $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->get();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->with('transactions')->get();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->with('transactions')->get()->groupBy('start_date');
         $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->get();
-        if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
-            session()->put('request',[
-                'start' => $start,
-                'end' => $end,
-                'data' => [
-                    'hotel' => $dataHotel,
-                    'tour' =>$dataTour,
-                    'car' =>$dataCar
-                ]
-            ]);
-            return redirect('settlement/generate')->withInput();
-        }else{
-            session()->forget('request')['data'];
-            return redirect()->back()->withInput()->with('message', 'Nothing generate for '.date("d M Y", strtotime($start)).' - '.date("d M Y", strtotime($end)));
-        }
+        dd($dataHotel);
+        dd($dataTour);
+        dd($dataCar);
+        // if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
+        //     session()->put('request',[
+        //         'start' => $start,
+        //         'end' => $end,
+        //         'data' => [
+        //             'hotel' => $dataHotel,
+        //             'tour' =>$dataTour,
+        //             'car' =>$dataCar
+        //         ]
+        //     ]);
+        //     return redirect('settlement/generate')->withInput();
+        // }else{
+        //     session()->forget('request')['data'];
+        //     return redirect()->back()->withInput()->with('message', 'Nothing generate for '.date("d M Y", strtotime($start)).' - '.date("d M Y", strtotime($end)));
+        // }
     }
     public function poccedList(Request $request){
         // dd($request->all());

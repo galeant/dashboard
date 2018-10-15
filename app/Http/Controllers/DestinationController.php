@@ -137,7 +137,7 @@ class DestinationController extends Controller
                 $dp->save();
             }
         }
-        if($data['destination_schedule']=="1"){
+        if($data['schedule_type']=="1"){
             foreach($data['destination_schedule'] as $dds){
                 $ds = new DestinationSchedule;
                 $ds->destination_id = $destination->id;
