@@ -59,7 +59,7 @@
                                             Notes : <textarea rows="5" class="form-control no-resize" name="notes"></textarea>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" class="btn btn-link waves-effect">Proced</button>
+                                            <button type="submit" class="btn btn-link waves-effect">PROCESS</button>
                                             <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                                         </div>
                                     </div>
@@ -76,93 +76,102 @@
                         <div class="header">
                             <a class="btn bg-deep-orange waves-effect" data-toggle="modal" data-target="#myModal" id="opener">Process</a>
                         </div>
+                        @foreach($data as $key=>$d)
                         <div class="body">
-                            <div class="table-responsive">
-                                <table class="table table-modif table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
-                                    <thead>
-                                        <tr>
-                                            <th>Booking Number</th>
-                                            <th>Product Type</th>
-                                            <th>Product Name</th>
-                                            <th>Qty</th>
-                                            <th>Unit Price</th>
-                                            <th>Total Commssion</th>
-                                            <th>Total Payment</th>
-                                            <th>Account Bank</th>
-                                            <th>Transaction Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if(count($data) > 0)
-                                            @foreach(array_collapse($data) as $set)
-                                            <tr>
-                                                <td>{{$set['booking_number']}}</td>
-                                                <td>
-                                                    @if(array_key_exists('hotel_name',$set))
-                                                        Hotel
-                                                    @elseif(array_key_exists('tour_name',$set))
-                                                        Tour
-                                                    @else
-                                                        Car Rental
-                                                    @endif
+                            <div class="card">
+                                <div class="header">
+                                    <a class="btn bg-green waves-effect">Product will start at : {{$key}}</a>
+                                </div>
+                                <div class="body">
+                                    <div class="table-responsive">
+                                        <table class="table table-modif table-bordered table-striped table-hover dataTable js-exportable" id="data-tables">
+                                            <thead>
+                                                <tr>
+                                                    <th>Booking Number</th>
+                                                    <th>Product Type</th>
+                                                    <th>Product Name</th>
+                                                    <th>Qty</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Total Commssion</th>
+                                                    <th>Total Payment</th>
+                                                    <th>Account Bank</th>
+                                                    <th>Transaction Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @if(count($d) > 0)
+                                                    @foreach(array_collapse($d) as $set)
+                                                    <tr>
+                                                        <td>{{$set['booking_number']}}</td>
+                                                        <td>
+                                                            @if(array_key_exists('hotel_name',$set))
+                                                                Hotel
+                                                            @elseif(array_key_exists('tour_name',$set))
+                                                                Tour
+                                                            @else
+                                                                Car Rental
+                                                            @endif
 
-                                                </td>
-                                                <td>
-                                                    @if(array_key_exists('hotel_name',$set))
-                                                        {{$set['hotel_name']}} - {{$set['room_name']}}
-                                                    @elseif(array_key_exists('tour_name',$set))
-                                                        {{$set['tour_name']}}
-                                                    @else
-                                                        {{$set['vehicle_name']}} - {{$set['vehicle_type']}} - {{$set['vehicle_brand']}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if(array_key_exists('hotel_name',$set))
-                                                        {{$set['number_of_rooms']}}
-                                                    @elseif(array_key_exists('tour_name',$set))
-                                                        {{$set['number_of_person']}}
-                                                    @else
-                                                        {{$set['number_of_day']}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if(array_key_exists('hotel_name',$set))
-                                                        {{Helpers::idr($set['price_per_night'])}}
-                                                    @elseif(array_key_exists('tour_name',$set))
-                                                        {{Helpers::idr($set['price_per_person'])}}
-                                                    @else
-                                                        {{Helpers::idr($set['price_per_day'])}}
-                                                    @endif
-                                                <td>
-                                                    @if(array_key_exists('commission',$set))
-                                                        {{Helpers::idr($set['commission'])}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if(array_key_exists('net_price',$set))
-                                                        {{Helpers::idr($set['net_price'])}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if(array_key_exists('tours',$set))
-                                                        @if($set['tours']['company']['bank_account_number'] != null)
-                                                        <button type="button" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set['tours']['company']['bank_name']}} : {{$set['tours']['company']['bank_account_number']}}" data-original-title="{{$set['tours']['company']['bank_account_name']}}">
-                                                            {{$set['tours']['company']['bank_account_number']}}
-                                                        </button>
-                                                        @endif
-                                                    @endif 
-                                                </td>
-                                                <td>
-                                                    {{$set['transactions']['paid_at']}}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        @endif
-                                    
-                                    </tbody>
-                                </table>
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('hotel_name',$set))
+                                                                {{$set['hotel_name']}} - {{$set['room_name']}}
+                                                            @elseif(array_key_exists('tour_name',$set))
+                                                                {{$set['tour_name']}}
+                                                            @else
+                                                                {{$set['vehicle_name']}} - {{$set['vehicle_type']}} - {{$set['vehicle_brand']}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('hotel_name',$set))
+                                                                {{$set['number_of_rooms']}}
+                                                            @elseif(array_key_exists('tour_name',$set))
+                                                                {{$set['number_of_person']}}
+                                                            @else
+                                                                {{$set['number_of_day']}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('hotel_name',$set))
+                                                                {{Helpers::idr($set['price_per_night'])}}
+                                                            @elseif(array_key_exists('tour_name',$set))
+                                                                {{Helpers::idr($set['price_per_person'])}}
+                                                            @else
+                                                                {{Helpers::idr($set['price_per_day'])}}
+                                                            @endif
+                                                        <td>
+                                                            @if(array_key_exists('commission',$set))
+                                                                {{Helpers::idr($set['commission'])}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('net_price',$set))
+                                                                {{Helpers::idr($set['net_price'])}}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('tours',$set))
+                                                                @if($set['tours']['company']['bank_account_number'] != null)
+                                                                <button type="button" class="btn btn-primary btn-block waves-effect" data-trigger="focus" data-container="body" data-toggle="popover" data-placement="left" title="" data-content="{{$set['tours']['company']['bank_name']}} : {{$set['tours']['company']['bank_account_number']}}" data-original-title="{{$set['tours']['company']['bank_account_name']}}">
+                                                                    {{$set['tours']['company']['bank_account_number']}}
+                                                                </button>
+                                                                @endif
+                                                            @endif 
+                                                        </td>
+                                                        <td>
+                                                            {{$set['transactions']['paid_at']}}
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                @endif
+                                            
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        @endforeach
                     </div>
                 </div>
             </div>
