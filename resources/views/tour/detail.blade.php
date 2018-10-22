@@ -172,7 +172,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group m-b-20">
                                             <label>Term & Condition(*)</label>
-                                            {{ Form::textArea('term_condition', null, ['class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
+                                            {{ Form::textArea('term_condition', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
                                         </div>
                                     </div>
                                 </div>
@@ -778,6 +778,8 @@
     <!-- Bootstrap date range picker -->
     <script src="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
+    <!-- TinyMCE -->
+    <script src="{{ asset('plugins/tinymce/tinymce.js') }}"></script>
     <script type="text/javascript">
         $( window ).on( "load", function() {
             $(".file-input-ajax-new").find(".btn-file").remove();
@@ -1245,12 +1247,16 @@
                     priceL.push(pi); 
                 });
                 console.log(priceL);
+                var max_person = "{{$data->max_person}}";
+                if(max_person == null){
+                    max_person = 0;
+                }
                 console.log({{$data->max_person}});
                 if(priceL.indexOf($(this).val()) != -1){
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
-                }else if($(this).val() > {{$data->max_person}}){
+                }else if($(this).val() > max_person){
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
@@ -1321,7 +1327,7 @@
                     }else{
                         me.closest("tr#price_value").find("td#price_usd p").text(parseInt(response.data.price.price_usd));
                     }
-                    var max_pep = {{$data->max_person}};
+                    var max_pep = "{{$data->max_person}}";
                     if(response.data.max_pep == max_pep){
                         $("#price_list").hide();
                     }else{
@@ -1537,6 +1543,23 @@
         $("input[name='max_booking_day']").change(function(){
             $("p.form-note").find("b").text($(this).val());
         });
+    </script>
+    <script>
+        //TinyMCE
+        tinymce.init({
+                selector: "#tinymce",
+                height: 300,
+                plugins: [
+                    'advlist autolink lists link image charmap preview anchor textcolor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table contextmenu paste code'
+                ],
+                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
+                image_advtab: true
+            });
+            tinymce.suffix = ".min";
+            tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
+            // tinyMCE.get('tinymce').setMode('readonly');
     </script>
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop

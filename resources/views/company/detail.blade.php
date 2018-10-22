@@ -576,7 +576,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group m-b-20">
                                                 <label>Term & Condition(*)</label>
-                                                {{ Form::textArea('term_condition', null, ['class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
+                                                {{ Form::textArea('term_condition', null, ['id' => 'tinymce','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
                                             </div>
                                         </div>
                                     </div>
@@ -1261,7 +1261,9 @@
     <!-- Light Gallery Plugin Js -->
     <script src="{{asset('plugins/light-gallery/js/lightgallery-all.js')}}"></script>
     <!-- Jquery Validation Plugin Css -->
-	<script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-validation/jquery.validate.js') }}"></script>
+    <!-- TinyMCE -->
+    <script src="{{ asset('plugins/tinymce/tinymce.js') }}"></script>
     <!-- Custom Js -->
     <script src="{{asset('js/pages/medias/image-gallery.js')}}"></script>
     <script>
@@ -2077,7 +2079,21 @@
                 });
             }
         @endif
-        
+        //TinyMCE
+        tinymce.init({
+                selector: "#tinymce",
+                height: 300,
+                plugins: [
+                    'advlist autolink lists link image charmap preview anchor textcolor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table contextmenu paste code'
+                ],
+                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
+                image_advtab: true
+            });
+            tinymce.suffix = ".min";
+            tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
+            // tinyMCE.get('tinymce').setMode('readonly');
     </script>
 
 @stop

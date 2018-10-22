@@ -146,7 +146,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group ">
                                             <label>Term & Condition(*)</label>
-                                            {{ Form::textArea('term_condition', null, ['class' => 'form-control no-resize','rows'=>"4","required"=>"required"]) }}
+                                            {{ Form::textArea('term_condition', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required"=>"required"]) }}
                                         </div>
                                     </div>
                                 </div>
@@ -229,6 +229,8 @@
     <!-- Bootstrap date range picker -->
     <script src="{{ asset('plugins/boostrap-daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
+    <!-- TinyMCE -->
+    <script src="{{ asset('plugins/tinymce/tinymce.js') }}"></script>
     <script type="text/javascript">
         function initMap()
         {
@@ -543,6 +545,20 @@
             function formatRepoSelection (repo) {
               return repo.name || repo.text;
             }
+            //TinyMCE
+            tinymce.init({
+                selector: "textarea#tinymce",
+                height: 300,
+                plugins: [
+                    'advlist autolink lists link image charmap preview anchor textcolor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table contextmenu paste code'
+                ],
+                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
+                image_advtab: true
+            });
+            tinymce.suffix = ".min";
+            tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
 
         });
     </script>
