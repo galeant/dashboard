@@ -67,6 +67,7 @@
                                             <th>Total Commssion</th>
                                             <th>Total Payment</th>
                                             <th>Account Bank</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -88,22 +89,27 @@
                                             <td>{{Helpers::idr($set->total_paid)}}</td>
                                             
                                             <td>
-                                            @if($set->bank_account_number != null)
-                                            <a  href="#" class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" stat="{{$set->status}}" data-toggle="modal" data-target="#myModal">
-                                                {{$set->bank_account_number}}
-                                            </a>
-                                            @else
-                                            <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
-                                                Add Account Bank
-                                            </a>
-                                            @endif     
+                                                @if($set->bank_account_number != null)
+                                                <a  href="#" class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" stat="{{$set->status}}" data-toggle="modal" data-target="#myModal">
+                                                    {{$set->bank_account_number}}
+                                                </a>
+                                                @else
+                                                <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
+                                                    Add Account Bank
+                                                </a>
+                                                @endif     
+                                            </td>
+                                            <td>
+                                                @if($set->status == 1)
+                                                    <span class="label bg-deep-purple">No Settled</a>
+                                                @else
+                                                    <span class="label bg-green">Settled</a>
+                                                @endif
                                             </td>
                                             <td>
                                             @if($set->bank_account_number != null)
                                                 @if($set->status == 1)
                                                 <a id="paid" class="btn bg-deep-purple btn-block waves-effect" state="status_pay" data-id="{{$set->id}}">Pay</a>
-                                                @else
-                                                <a href="#" class="btn bg-green btn-block waves-effect" state="status_proceed">Proceed</a>
                                                 @endif
                                             @else
                                                 <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">

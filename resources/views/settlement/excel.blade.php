@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <td colspan="8">Period: {{ date('d/m/Y',strtotime($data->start_date)) }} - {{ date('d/m/Y',strtotime($data->end_date)) }}</td>
+            <td colspan="8">Settlement untuk product yang jalan pada {{ date('d/m/Y',strtotime($data->start_date)) }}</td>
         </tr>
         <tr></tr>
         <tr>

@@ -239,13 +239,13 @@ class SettlementController extends Controller
             try{
                 $settelement = Settlement::where('id',$request->id)->first();
                 switch ($settelement->product_type) {
-                    case "hotel":
+                    case "Hotel":
                         $book = BookingHotel::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "tour":
+                    case "Activity":
                         $book = BookingTour::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "car":
+                    case "Car Rental":
                         $book = BookingRentCar::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
                     default:
@@ -313,15 +313,15 @@ class SettlementController extends Controller
         }])->first();
         $hotel = count(Settlement::where([
             'settlement_group_id' =>  $id,
-            'product_type' => 'hotel'
+            'product_type' => 'Hotel'
         ])->get());
         $tour = count(Settlement::where([
             'settlement_group_id' =>  $id,
-            'product_type' => 'tour'
+            'product_type' => 'Activity'
         ])->get());
         $car = count(Settlement::where([
             'settlement_group_id' =>  $id,
-            'product_type' => 'car'
+            'product_type' => 'Car Rental'
         ])->get());
         $data = [
             'data' => $settlement,
