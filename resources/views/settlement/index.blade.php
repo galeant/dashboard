@@ -37,9 +37,8 @@
                                             <th>Total Commission</th>
                                             <th>Total Paid</th>
                                             <th class="note">Note</th>
-                                            <th>Paid At</th>
                                             <th>Status</th>
-                                            <th>Created At</th>
+                                            <th>Product Start</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -55,7 +54,6 @@
                                                     See Notes
                                                 </button>
                                             </td>
-                                            <td>{{$set->paid_at}}</td>
                                             <td>
                                                 @if($set->status == 1)
                                                     <span class="label bg-blue-grey">In Progress</span>
@@ -63,7 +61,7 @@
                                                     <span class="label bg-green">Paid</span>
                                                 @endif
                                             </td>
-                                            <td>{{$set->created_at}}</td>
+                                            <td>{{$set->start_date}}</td>
                                             <td>
                                                 <a href="{{ url('settlement/detail/'.$set->id)}}" class="btn-xs bg-green  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-eye-open"></i></a>
                                             </td>
