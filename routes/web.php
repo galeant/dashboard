@@ -27,7 +27,16 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('registration/activity', 'CompanyController@registrationList')->name('partner.activity');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus')->name('partner.change_status');
 	});
+	
 	Route::group(['prefix' => 'master'],function(){
+		Route::group(['prefix'=> 'partner-level'], function(){
+			Route::get('/', 'CompanyLevelController@index')->name('partner-level.index');
+			Route::get('create', 'CompanyLevelController@create')->name('partner-level.create');
+			Route::post('store', 'CompanyLevelController@store')->name('partner-level.store');
+			Route::get('{id}/edit', 'CompanyLevelController@edit')->name('partner-level.edit');
+			Route::put('{id}/update', 'CompanyLevelController@update')->name('partner-level.update');
+			Route::delete('{id}', 'CompanyLevelController@destroy')->name('partner-level.delete');
+		});
 		Route::resource('language', 'LanguageController');
 		Route::resource('country', 'CountryController');
 		Route::resource('province', 'ProvinceController');

@@ -314,7 +314,8 @@
 						array_key_exists("TourGuideService",$permission) ||
 						array_key_exists("Destination",$permission) ||
 						array_key_exists("DestinationTipsQuestion",$permission) ||
-						array_key_exists("ActivityTag",$permission) 
+						array_key_exists("ActivityTag",$permission) ||
+						array_key_exists("CompanyLevel",$permission) 
 					)
 		            <li {{{ (Request::is('master*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
@@ -322,6 +323,13 @@
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("CompanyLevel",$permission))
+		                	<li {{{ (Request::is('master/partner-level*') ? 'class=active' : '') }}}>
+		                        <a href="{{ URL('master/partner-level') }}" class=" waves-effect waves-block">
+		                            <span>Partner Level</span>
+		                        </a>
+		                    </li>
+							@endif
 							@if(array_key_exists("Language",$permission))
 		                	<li {{{ (Request::is('master/language*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/language') }}" class=" waves-effect waves-block">
