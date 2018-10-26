@@ -67,6 +67,7 @@
                                             <th>Total Commssion</th>
                                             <th>Total Payment</th>
                                             <th>Account Bank</th>
+                                            <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -97,6 +98,13 @@
                                                 Add Account Bank
                                             </a>
                                             @endif     
+                                            </td>
+                                            <td>
+                                                @if($set->status == 1)
+                                                    <span class="badge bg-cyan">On Progress</span>
+                                                @else
+                                                    <span class="badge bg-green">Settled</span>
+                                                @endif
                                             </td>
                                             <td>
                                             @if($set->bank_account_number != null)
