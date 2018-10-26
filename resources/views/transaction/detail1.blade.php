@@ -387,6 +387,52 @@
                 </div>
             </div>
             @endif
+
+            @if(count($data->booking_transports) > 0)
+            <div class="card">
+                <div class="body">
+                    <h4>
+                        Booking Transport
+                    </h4>
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Booking Number</th>
+                                <th>Flight Name</th>
+                                <th>Departure Time</th>
+                                <th>Arrival Time</th>
+                                <th>Passanger</th>
+                                <th>Price per Person</th>
+                                <th>Total Price</th>
+                                <th>Booking Status</th>
+                            </tr>
+                            @foreach($data->booking_transports as $transport)
+                                <tr>
+                                    <td>{{$transport->booking_number}}</td>
+                                    <td>{{$transport->provider_name}}</td>
+                                    <td>{{date('d M Y, h:m', strtotime($transport->departure_name))}}</td>
+                                    <td>{{date('d M Y, h:m', strtotime($transport->arrival_time))}}</td>
+                                    <td>
+                                        <span>Adult: <b>{{$transport->adult}} person(s)</b></span><br>
+                                        <span>Child: <b>{{$transport->child}} person(s)</b></span>
+                                    </td>
+                                    <td>
+                                        {{Helpers::idr($transport->price_per_quantity)}}
+                                    </td>
+                                    <td>
+                                        {{Helpers::idr($transport->total_price)}}
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color:{{$data->transaction_status->color}}">{{$data->transaction_status->name}}</span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @endif
+
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h6>Total Transaction</h6>
