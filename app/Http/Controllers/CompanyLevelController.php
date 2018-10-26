@@ -35,7 +35,7 @@ class CompanyLevelController extends Controller
     }
     public function create(){
         $product_type = ProductType::all();
-        return view('company_level.form',['type' =>$product_type]);
+        return view('company_level.form',['type' =>$product_type,'data' => null]);
     }
     public function store(Request $request){
         $validation = Validator::make($request->all(), [
@@ -67,7 +67,7 @@ class CompanyLevelController extends Controller
             if($companyLevelCommission == true){
                 DB::commit();
                 // return redirect('master/partner-level');
-                return redirect("master/partner-level/".$data->id."/edit")->with('message', 'Successfully saved Partner Level');
+                return redirect("master/partner-level/")->with('message', 'Successfully saved Partner Level');
             }else{
                 return redirect("master/partner-level/create")->with('message', 'Error Database;');
             }

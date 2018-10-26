@@ -35,14 +35,18 @@
                             </div>
                         </div>
                         <div class='col-md-8 m-l-30'>
-                            @php
-                                $ar = array_pluck($data->companyLevelCommission->toArray(),'percentage','product_type_code');
-                            @endphp
+                            @if(isset($data))
+                                @php
+                                    $ar = array_pluck($data->companyLevelCommission->toArray(),'percentage','product_type_code');
+                                @endphp
+                            @endif
                             @foreach($type as $type)
                                 <div class="row">
                                     <div class="col-md-3">
                                         <input type="checkbox" id="{{$type->code}}" name="commission[{{$type->code}},{{$type->id}}]" class="filled-in chk-col-red type" 
+                                        @if(isset($data))
                                             @if(array_key_exists($type->code,$ar)) checked @endif 
+                                        @endif
                                         >
                                         <label for="{{$type->code}}">{{$type->name}}</label>
                                     </div>
