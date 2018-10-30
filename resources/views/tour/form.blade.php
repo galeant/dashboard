@@ -80,7 +80,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group">
+                                                    <div class="form-group" id="div_product_type">
                                                         <label>Product Type(*)</label>
                                                         <div class="input-group dd-group">
                                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control']) !!}
@@ -288,6 +288,17 @@
             });
         }
         $( window ).on( "load", function() {
+
+            $("select[name='product_category']").change(function(){
+                if($(this).val().toLowerCase() == "event"){
+                    $("select[name='product_type']").prop("disabled", "disabled")
+                    $("#div_product_type").hide()
+                }
+                else{
+                    $("select[name='product_type']").removeProp("disabled")
+                    $("#div_product_type").show()
+                }
+            })
             var hash = location.hash;
             if(hash != ""){
                 $('#step').steps('setStep',location.hash.substring(location.hash.length-1));
