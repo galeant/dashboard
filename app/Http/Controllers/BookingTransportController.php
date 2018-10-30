@@ -28,6 +28,7 @@ class BookingTransportController extends Controller
                 'transactions',
                 'transactions.transaction_status')
             ->where('transaction_id','!=', 0)
+            ->orderBy('created_at', 'desc')
             ->get();
             return Datatables::of($booking_transport)
             ->addColumn('status',function(BookingTransport $booking_transport){

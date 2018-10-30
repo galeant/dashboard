@@ -53,13 +53,30 @@
                 <div class="panel-heading">
                     <h6>Booked Item</h6>
                 </div>
+                @foreach($data->detail as $detail)
                 <div class="panel-body">
                     <div class="row form-group">
                         <div class="col-md-6">
                             <span>Flight Name</span>
                         </div>
                         <div class="col-md-6">
-                            : <span><b>{{$data->provider_name}}</b></span>
+                            : <span><b>{{$detail->provider_name}}</b></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span>Origin</span>
+                        </div>
+                        <div class="col-md-6">
+                            : <span><b>{{$detail->origins->airport_name}} ({{$detail->origins->airport_code}})</b></span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <span>Destination</span>
+                        </div>
+                        <div class="col-md-6">
+                            : <span><b>{{$detail->destinations->airport_name}} ({{$detail->destinations->airport_code}})</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -67,7 +84,7 @@
                             <span>Departure Time</span>
                         </div>
                         <div class="col-md-6">
-                            : <span><b>{{$data->departure_time}}</b></span>
+                            : <span><b>{{$detail->departure_time}}</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -75,7 +92,7 @@
                             <span>Arrival Time</span>
                         </div>
                         <div class="col-md-6">
-                            : <span><b>{{$data->arrival_time}}</b></span>
+                            : <span><b>{{$detail->arrival_time}}</b></span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -87,6 +104,14 @@
                             : <span>Child: <b>{{$data->child}} person(s)</b></span>
                         </div>
                     </div>
+                </div>
+                @endforeach
+            </div>
+            <div class="panel panel-default" style="margin-left: 30px;margin-right: 30px;">
+                <div class="panel-heading">
+                    <h6>Pricing</h6>
+                </div>
+                <div class="panel-body">
                     <div class="row form-group">
                         <div class="col-md-6">
                             <span>Item Price</span>

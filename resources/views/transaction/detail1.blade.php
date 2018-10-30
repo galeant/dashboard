@@ -408,10 +408,17 @@
                             </tr>
                             @foreach($data->booking_transports as $transport)
                                 <tr>
-                                    <td>{{$transport->booking_number}}</td>
-                                    <td>{{$transport->provider_name}}</td>
-                                    <td>{{date('d M Y, h:m', strtotime($transport->departure_name))}}</td>
-                                    <td>{{date('d M Y, h:m', strtotime($transport->arrival_time))}}</td>
+                                    <td rowspan="{{count($transport->detail)}}" class="align-middle">{{$transport->booking_number}}</td>
+                                    @foreach($transport->detail as $detail)
+                                    <td>
+                                        {{$detail->provider_name}} ({{$detail->origins->airport_code}} - {{$detail->destinations->airport_code}}) <br><br>
+                                    </td>
+                                    <td>
+                                        {{date('d M Y, h:m', strtotime($detail->departure_time))}} <br>
+                                    </td>
+                                    <td>
+                                        {{date('d M Y, h:m', strtotime($detail->arrival_time))}} <br>
+                                    </td>
                                     <td>
                                         <span>Adult: <b>{{$transport->adult}} person(s)</b></span><br>
                                         <span>Child: <b>{{$transport->child}} person(s)</b></span>
@@ -426,6 +433,7 @@
                                         <span class="badge" style="background-color:{{$data->transaction_status->color}}">{{$data->transaction_status->name}}</span>
                                     </td>
                                 </tr>
+                                @endforeach
                             @endforeach
                         </tbody>
                     </table>
