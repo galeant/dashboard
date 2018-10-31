@@ -175,6 +175,13 @@
                                             {{ Form::textArea('term_condition', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group m-b-20">
+                                            <label>Buyer Remaks</label>
+                                            {{ Form::textArea('buyer_remaks', null, ['id'=>'tinymce1','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         {{Form::close()}}
@@ -781,6 +788,33 @@
     <!-- TinyMCE -->
     <script src="{{ asset('plugins/tinymce/tinymce.js') }}"></script>
     <script type="text/javascript">
+        $(document).ready(function(){
+            tinymce.init({
+                selector: "#tinymce",
+                height: 300,
+                plugins: [
+                    'advlist autolink lists link image charmap preview anchor textcolor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table contextmenu paste code'
+                ],
+                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
+                image_advtab: true
+            });
+            tinymce.init({
+                selector: "#tinymce1",
+                height: 300,
+                plugins: [
+                    'advlist autolink lists link image charmap preview anchor textcolor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table contextmenu paste code'
+                ],
+                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
+                image_advtab: true
+            });
+            tinymce.suffix = ".min";
+            tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
+            // tinyMCE.get('tinymce').setMode('readonly');
+        });
         $( window ).on( "load", function() {
             $(".file-input-ajax-new").find(".btn-file").remove();
             $(".kv-file-zoom").removeAttr('disabled');
@@ -1544,22 +1578,6 @@
             $("p.form-note").find("b").text($(this).val());
         });
     </script>
-    <script>
-        //TinyMCE
-        tinymce.init({
-                selector: "#tinymce",
-                height: 300,
-                plugins: [
-                    'advlist autolink lists link image charmap preview anchor textcolor',
-                    'searchreplace visualblocks code fullscreen',
-                    'insertdatetime media table contextmenu paste code'
-                ],
-                toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | forecolor backcolor',
-                image_advtab: true
-            });
-            tinymce.suffix = ".min";
-            tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
-            // tinyMCE.get('tinymce').setMode('readonly');
-    </script>
+    
     <!-- <script src="{{asset('js/pages/forms/form-wizard.js')}}"></script> -->
 @stop

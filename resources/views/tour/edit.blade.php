@@ -202,6 +202,11 @@
                                             <label>Term & Condition(*)</label>
                                             {{ Form::textArea('term_condition', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
                                         </div>
+
+                                        <div class="form-group m-b-20">
+                                            <label>Buyer Remaks</label>
+                                            {{ Form::textArea('buyer_remaks', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class=" col-md-4">

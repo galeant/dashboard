@@ -149,6 +149,13 @@
                                             {{ Form::textArea('term_condition', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required"=>"required"]) }}
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                        <div class="form-group ">
+                                            <label>Buyer Remaks</label>
+                                            {{ Form::textArea('buyer_remaks', null, ['id'=>'tinymce','class' => 'form-control no-resize','rows'=>"4","required"=>"required"]) }}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class=" col-md-4">
                                     <div class="row clearfix">
