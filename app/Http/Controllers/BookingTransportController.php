@@ -17,14 +17,17 @@ class BookingTransportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        // dd($booking_transport = BookingTransport::with(
+        // $booking_transport = BookingTransport::with(
+        //     'detail',
         //     'transactions',
         //     'transactions.transaction_status')
         // ->where('transaction_id','!=', 0)
-        // ->get());
+        // ->get();
+        // dd($booking_transport[10]);
         if($request->ajax())
         {
             $booking_transport = BookingTransport::with(
+                'detail',
                 'transactions',
                 'transactions.transaction_status')
             ->where('transaction_id','!=', 0)
@@ -43,10 +46,20 @@ class BookingTransportController extends Controller
                 return '<a href="'.url('transaction/'.$booking_transport->transactions->transaction_number).'" class="btn btn-primary">'.$booking_transport->transactions->transaction_number.'</a>';
             })
             ->addColumn('departure_time',function(BookingTransport $booking_transport){
-                return $booking_transport->departure_time;
+                if(isset($booking_transport->detail[0])){
+                    return $booking_transport->detail[0]->departure_time;
+                }
+                else{
+                    return "-";
+                }
             })
             ->addColumn('arrival_time',function(BookingTransport $booking_transport){
-                return $booking_transport->arrival_time;
+                if(isset($booking_transport->detail[0])){
+                    return $booking_transport->detail[0]->arrival_time;
+                }
+                else{
+                    return "-";
+                }
             })
             ->editColumn('price_per_quantity', function(BookingTransport $booking_transport){
                 return Helpers::idr($booking_transport->price_per_quantity);

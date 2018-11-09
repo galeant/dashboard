@@ -9,7 +9,7 @@
 <div class="card">
     <div class="body">
         <div class="col-md-10 font-20">
-            <span>Booking Tour > {{$data->booking_number}}</span>
+            <span>Booking Transport > {{$data->booking_number}}</span>
         </div>
     </div>
 </div>
@@ -20,7 +20,7 @@
             <ul class="header-dropdown m-r--5">
                 <li>
                     @if($data->status == 3)
-                    <a location="{{ url('bookings/tour/'.$data->booking_number.'/refund')}}" class="btn btn-waves bg-red" id="refund" >Refund</a>
+                    <a location="{{ url('bookings/transport/'.$data->booking_number.'/refund')}}" class="btn btn-waves bg-red" id="refund" >Refund</a>
                     @endif
                 </li>
             </ul>
@@ -134,6 +134,16 @@
                         </div>
                         <div class="col-md-6">
                             : <span>{{Helpers::idr($data->total_discount)}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span>Total Price :</span>
+                        </div>
+                        <div class="col-sm-6" style="margin-left:-1%;">
+                            <span>: {{Helpers::idr(($data->total_price - $data->total_discount))}}</span>
                         </div>
                     </div>
                 </div>

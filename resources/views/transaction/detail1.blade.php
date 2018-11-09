@@ -411,7 +411,7 @@
                                     <td rowspan="{{count($transport->detail)}}" class="align-middle">{{$transport->booking_number}}</td>
                                     @foreach($transport->detail as $detail)
                                     <td>
-                                        {{$detail->provider_name}} ({{$detail->origins->airport_code}} - {{$detail->destinations->airport_code}}) <br><br>
+                                        {{$detail->provider_trip_name}} ({{$detail->origins->airport_code}} - {{$detail->destinations->airport_code}}) <br><br>
                                     </td>
                                     <td>
                                         {{date('d M Y, h:m', strtotime($detail->departure_time))}} <br>
