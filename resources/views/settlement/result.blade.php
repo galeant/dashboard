@@ -89,15 +89,22 @@
                                             <td>{{Helpers::idr($set->total_paid)}}</td>
                                             
                                             <td>
-                                            @if($set->bank_account_number != null)
-                                            <a  href="#" class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" stat="{{$set->status}}" data-toggle="modal" data-target="#myModal">
-                                                {{$set->bank_account_number}}
-                                            </a>
-                                            @else
-                                            <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
-                                                Add Account Bank
-                                            </a>
-                                            @endif     
+                                                @if($set->bank_account_number != null)
+                                                <a  href="#" class="btn btn-primary" data-id="{{$set->id}}" bank-name="{{$set->bank_name}}" bank-account-name="{{$set->bank_account_name}}" bank-number="{{$set->bank_account_number}}" stat="{{$set->status}}" data-toggle="modal" data-target="#myModal">
+                                                    {{$set->bank_account_number}}
+                                                </a>
+                                                @else
+                                                <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
+                                                    Add Account Bank
+                                                </a>
+                                                @endif     
+                                            </td>
+                                            <td>
+                                                @if($set->status == 1)
+                                                    <span class="label bg-deep-purple">No Settled</a>
+                                                @else
+                                                    <span class="label bg-green">Settled</a>
+                                                @endif
                                             </td>
                                             <td>
                                                 @if($set->status == 1)
