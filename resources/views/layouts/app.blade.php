@@ -247,6 +247,13 @@
 										</a>
 									</li>
 									@endif
+									{{-- @if(array_key_exists("BookingTransport",$permission)) --}}
+									<li {{{ (Request::is('bookings/transport*') ? 'class=active' : '') }}}>
+										<a href="{{ URL('/bookings/transport') }}" class=" waves-effect waves-block">
+											<span>Transport</span>
+										</a>
+									</li>
+									{{-- @endif --}}
 								</ul>
 							</li>
 							@endif

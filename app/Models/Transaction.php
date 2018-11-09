@@ -48,6 +48,10 @@ class Transaction extends Model
     {
         return $this->hasMany('App\Models\BookingRentCar', 'transaction_id','id');
     }
+    public function booking_transports()
+    {
+        return $this->hasMany('App\Models\BookingTransport', 'transaction_id','id');
+    }
     // TRAVELLER
     public function contact_list()
     {

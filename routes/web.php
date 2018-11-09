@@ -14,7 +14,7 @@ Route::get('login', function () {
 	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web','permission']], function () {
+Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	})->name('overview');
@@ -180,6 +180,8 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::get('accomodation-tiket/{kode}/refund','BookingAccomodationTiketController@refund')->name('booking_tiket.refund');
 		Route::resource('rent-car', 'BookingRentCarController');
 		Route::get('rent-car/{kode}/refund','BookingRentCarController@refund')->name('booking_rent_car.refund');
+		Route::resource('transport', 'BookingTransportController');
+		Route::get('transport/{kode}/refund','BookingTransportController@refund')->name('booking_transport.refund');
 	});
 	Route::resource('transaction', 'TransactionController');
 	Route::get('transaction/{transaction_number}/print/{type}', 'TransactionController@print')->name('transaction.print');
