@@ -43,7 +43,7 @@ class EmployeeController extends Controller
                 }
             }
             // dd($permission);
-            Cache::put('permission_'.$token,$permission,60);
+            Cache::forever('permission_'.$token,$permission);
             return redirect()->intended('/');
         }
         return redirect('/')->with('error', 'Please check your email/username or password.' );

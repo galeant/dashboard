@@ -50,7 +50,7 @@ class checkPermission
                             $permission[$per->grouping][] = $per->method;
                         }
                     }
-                    Cache::put('permission_'.$token,$permission,60);
+                    Cache::forever('permission_'.$token,$permission);
                     if(!array_key_exists($grouping, $permission)){
                         abort(401);
                     }else{
@@ -70,7 +70,7 @@ class checkPermission
                         $permission[$per->grouping][] = $per->method;
                     }
                 }
-                Cache::put('permission_'.$token,$permission,60);
+                Cache::forever('permission_'.$token,$permission);
             }
         }   
         return $next($request);
