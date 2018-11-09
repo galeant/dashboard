@@ -32,8 +32,7 @@
                                 <tr>
                                     <th>Booking Number</th>
                                     <th>Transaction Number</th>
-                                    <th>Departure Time</th>
-                                    <th>Arrival Time</th>
+                                    <th>Schedule</th>
                                     <th>Passanger</th>
                                     <th>Price per Person</th>
                                     <th>Total Price</th>
@@ -67,8 +66,7 @@
                 columns: [
                     {data: 'booking_number'},
                     {data: 'transaction_number'},
-                    {data: 'departure_time'},
-                    {data: 'arrival_time'},
+                    {data: 'schedules'},
                     {data: 'passangers'},
                     {data: 'price_per_quantity'},
                     {data: 'total_price'},

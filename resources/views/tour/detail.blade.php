@@ -105,14 +105,14 @@
                                                 </select>
                                             </div>
                                             <div class="row clearfix">
-                                                <div class="col-md-6">
+                                                <div class="col-md-6" >
                                                     <div class="form-group m-b-20">
                                                         <label>Product Category(*)</label>
                                                          {!! Form::select('product_category',Helpers::productCategory(),null,['class' => 'form-control show-tick']) !!}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group">
+                                                    <div class="form-group" id="div_product_type">
                                                         <label>Product Type(*)</label>
                                                         <div class="input-group dd-group">
                                                                 {!! Form::select('product_type',Helpers::productType(),null,['class' => 'form-control']) !!}
@@ -816,6 +816,11 @@
             // tinyMCE.get('tinymce').setMode('readonly');
         });
         $( window ).on( "load", function() {
+            
+            @if($data->product_category == "Event" )
+                $("select[name='product_type']").prop("readonly", "readonly")
+                $("#div_product_type").hide()
+            @endif
             $(".file-input-ajax-new").find(".btn-file").remove();
             $(".kv-file-zoom").removeAttr('disabled');
             if($('#3d').prop('checked')){

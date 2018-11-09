@@ -19,6 +19,6 @@ class BookingTransport extends Model
     }
     public function detail()
     {
-        return $this->hasMany('App\Models\BookingTransportDetail', 'booking_number','booking_number');
+        return $this->hasMany('App\Models\BookingTransportDetail','booking_tranport_id', 'id');
     }
 }
