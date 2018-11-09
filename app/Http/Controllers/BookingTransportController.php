@@ -23,7 +23,7 @@ class BookingTransportController extends Controller
         //     'transactions.transaction_status')
         // ->where('transaction_id','!=', 0)
         // ->get();
-        // dd($booking_transport[10]);
+        // dd($booking_transport[20]);
         if($request->ajax())
         {
             $booking_transport = BookingTransport::with(
@@ -45,21 +45,16 @@ class BookingTransportController extends Controller
             ->addColumn('transaction_number', function(BookingTransport $booking_transport){
                 return '<a href="'.url('transaction/'.$booking_transport->transactions->transaction_number).'" class="btn btn-primary">'.$booking_transport->transactions->transaction_number.'</a>';
             })
-            ->addColumn('departure_time',function(BookingTransport $booking_transport){
-                if(isset($booking_transport->detail[0])){
-                    return $booking_transport->detail[0]->departure_time;
+            ->addColumn('schedules',function(BookingTransport $booking_transport){
+                $schedule = '';
+                
+                foreach($booking_transport->detail as $key => $detail){
+                    $schedule = $schedule . $detail->departure_time.' - '.$detail->arrival_time;
+                    if($key<count($booking_transport->detail)){
+                        $schedule = $schedule. "<br><br>";
+                    }
                 }
-                else{
-                    return "-";
-                }
-            })
-            ->addColumn('arrival_time',function(BookingTransport $booking_transport){
-                if(isset($booking_transport->detail[0])){
-                    return $booking_transport->detail[0]->arrival_time;
-                }
-                else{
-                    return "-";
-                }
+                return $schedule;
             })
             ->editColumn('price_per_quantity', function(BookingTransport $booking_transport){
                 return Helpers::idr($booking_transport->price_per_quantity);
@@ -70,7 +65,7 @@ class BookingTransportController extends Controller
             ->addColumn('passangers',function(BookingTransport $booking_transport){
                 return 'Adult:'.$booking_transport->adult.' Child:'.$booking_transport->child;
             })
-            ->rawColumns(['status', 'booking_number', 'transaction_number', 'passangers'])
+            ->rawColumns(['status', 'booking_number', 'transaction_number', 'passangers', 'schedules'])
             ->make(true);        
         }
         return view('bookings.transport.index');

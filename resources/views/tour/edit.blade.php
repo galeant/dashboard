@@ -963,6 +963,10 @@
             });
         }
         $( window ).on( "load", function() {
+            @if($data->product_category == "Event" )
+                $("select[name='product_type']").prop("readonly", "readonly")
+                $("#div_product_type").hide()
+            @endif
             $("select[name='product_category']").change(function(){
                 if($(this).val().toLowerCase() == "event"){
                     $("select[name='product_type']").prop("readonly", "readonly")
