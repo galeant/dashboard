@@ -44,7 +44,7 @@ class Tour extends Model
         'price_usd',
         'status',
         'company_id',
-        'buyer_remaks'
+        'buyer_remarks'
     ];
 
     public function company()

@@ -178,8 +178,8 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group m-b-20">
-                                            <label>Buyer Remaks</label>
-                                            {{ Form::textArea('buyer_remaks', null, ['id'=>'tinymce1','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
+                                            <label>Buyer Remarks</label>
+                                            {{ Form::textArea('buyer_remarks', null, ['id'=>'tinymce1','class' => 'form-control no-resize','rows'=>"4","required" => "required"]) }}
                                         </div>
                                     </div>
                                 </div>
