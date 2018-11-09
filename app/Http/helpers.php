@@ -47,10 +47,10 @@ class helpers{
 		return $temp;
 	}
 	public static function productCategory(){
-		return ['Activity'=> 'Activity'];
+		return ['Activity'=> 'Activity', 'Event'=> 'Event'];
 	}
 	public static function productType(){
-		return ['private'=>'Private Group','open'=> 'Open Group'];
+		return ['open'=> 'Open Group', 'private'=>'Private Group'];
 	}
 	public static function bankName(){
 		return ['BRI'=> 'BRI','BCA'=>'BCA','BNI'=>'BNI','Mandiri'=>'Mandiri','CIMB'=>'CIMB','BPD DIY' => 'BPD DIY','BPD BALI' => 'BPD BALI'];
