@@ -965,11 +965,11 @@
         $( window ).on( "load", function() {
             $("select[name='product_category']").change(function(){
                 if($(this).val().toLowerCase() == "event"){
-                    $("select[name='product_type']").prop("disabled", "disabled")
+                    $("select[name='product_type']").prop("readonly", "readonly")
                     $("#div_product_type").hide()
                 }
                 else{
-                    $("select[name='product_type']").removeProp("disabled")
+                    $("select[name='product_type']").removeProp("readonly")
                     $("#div_product_type").show()
                 }
             })
