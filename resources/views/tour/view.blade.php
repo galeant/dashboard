@@ -140,6 +140,8 @@
                                                 </a>
                                             @endif
                                         </th>
+                                        <th>Min Price</th>
+                                        <th>Max Price</th>
                                         <th>Schedule</th>
                                         <th>Status</th>
                                         <th width="110">
@@ -179,6 +181,16 @@
                                        </td>
                                        <td>{{$dt->min_person}}</td>
                                        <td>{{$dt->max_person}}</td>
+                                       <td>
+                                            @if(count($dt->prices) > 0)
+                                               {{ Helpers::idr($dt->prices->min('price_idr'))}}
+                                            @endif
+                                        </td>
+                                       <td>
+                                            @if(count($dt->prices) > 0)
+                                                {{  Helpers::idr($dt->prices->max('price_idr'))}}
+                                            @endif
+                                       </td>
                                        <td>
                                             @if($dt->always_available_for_sale == 1)
                                                 <span class="badge bg-green badge-freesale"><i class="material-icons font-12">done</i></span>
