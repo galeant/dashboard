@@ -924,7 +924,7 @@ class TourController extends Controller
             // dd($schedule);
             $schedule = Schedule::where('id',$schedule->id)->with(['bookings' => function($query){
                 $query->whereNotIn('status',[3,6]);
-            }])->get();
+            }])->first();
             DB::Commit();
             if($request->ajax())
             {
