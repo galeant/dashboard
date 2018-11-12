@@ -1410,14 +1410,12 @@
                     var pi = $(this).find("td#numberOfPerson #price_list_field1").attr("late-data");
                     priceL.push(pi); 
                 });
-                console.log(priceL);
-                var max_person = "{{$data->mas_person}}";
                 if(priceL.indexOf($(this).val()) != -1){
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
-                }else if(max_person != ""){
-                    if($(this).val() > parseInt(max_person)){
+                }else if({{ !empty($data->max_person) ? $data->max_person : 0}} !== 0){
+                    if($(this).val() > {{!empty($data->max_person )? $data->max_person : 0}}){
                         $(this).closest("td#numberOfPerson").find("small").remove();
                         $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
                         $(this).closest("tr#price_value").find("a#price_update").hide();
