@@ -105,6 +105,16 @@
                     </div>
                     <div class="row container">
                         <div class="col-md-12">
+                            <h5>Is Promote ?</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="switch">
+                                <label><input type="checkbox" name="is_promote" @if($destination->is_promote == 1) checked="" @endif><span class="lever switch-col-orange"></span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row container">
+                        <div class="col-md-12">
                             <input type="hidden" name="format">	
                             <h5>Phone Number if any:</h5>
                         </div>
