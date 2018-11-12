@@ -1411,13 +1411,13 @@
                     priceL.push(pi); 
                 });
                 console.log(priceL);
-                console.log({{$data->max_person}});
+                var max_person = "{{$data->mas_person}}";
                 if(priceL.indexOf($(this).val()) != -1){
                     $(this).closest("td#numberOfPerson").find("small").remove();
                     $(this).closest("td#numberOfPerson").append("<small>Already have number of person</small>");
                     $(this).closest("tr#price_value").find("a#price_update").hide();
-                }else if({{$data->max_person}} != "" || {{$data->max_person}} != null){
-                    if($(this).val() > {{$data->max_person}}){
+                }else if(max_person != ""){
+                    if($(this).val() > parseInt(max_person)){
                         $(this).closest("td#numberOfPerson").find("small").remove();
                         $(this).closest("td#numberOfPerson").append("<small>Please insert less number</small>");
                         $(this).closest("tr#price_value").find("a#price_update").hide();
