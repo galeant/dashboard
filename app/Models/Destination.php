@@ -21,6 +21,7 @@ class Destination extends Model
         'description',
         'latitude',
         'longitude',
+        'is_promote',
         'visit_hours',
         'visit_minutes',
         'schedule_type',
