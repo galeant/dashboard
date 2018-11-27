@@ -79,9 +79,7 @@ class DestinationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        // dd($request->all());
-       
+    {  
         if(!empty($request->image_resize)){
             $destinationPath = public_path('img/temp/');
             if( ! \File::isDirectory($destinationPath) ) 
@@ -105,6 +103,12 @@ class DestinationController extends Controller
         $data = $request->all();
         if($data['visit_hours']=="" || $data['visit_hours']==null){
             $data['visit_hours']=0;
+        }
+        if($request->has('is_promote')){
+            $data['is_promote'] = 1;
+        }
+        else{
+            $data['is_promote'] = 0;
         }
         
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
@@ -247,6 +251,12 @@ class DestinationController extends Controller
         $data =$request->all();
         if($data['visit_hours']=="" || $data['visit_hours']==null){
             $data['visit_hours']=0;
+        }
+        if($request->has('is_promote')){
+            $data['is_promote'] = 1;
+        }
+        else{
+            $data['is_promote'] = 0;
         }
         $data['phone_number'] = $data['format'].'-'.$data['phone_number'];
         $destination = Destination::find($id);
