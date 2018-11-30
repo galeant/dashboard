@@ -140,8 +140,30 @@
                                                 </a>
                                             @endif
                                         </th>
-                                        <th>Min Price</th>
-                                        <th>Max Price</th>
+                                        
+                                        <th width="70">
+                                            @if (Request::input('sort') == 'min_price')
+                                                <a href="{!! Request::input('sort_min_price') !!}" >
+                                                    Min Price @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
+                                                </a>
+                                            @else
+                                                <a href="{!! Request::input('sort_min_price') !!}">
+                                                    Min Price <i class="fa fa-fw fa-sort"></i>
+                                                </a>
+                                            @endif
+                                        </th>
+                                        
+                                        <th width="70">
+                                            @if (Request::input('sort') == 'max_price')
+                                                <a href="{!! Request::input('sort_max_price') !!}" >
+                                                    Max Price @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
+                                                </a>
+                                            @else
+                                                <a href="{!! Request::input('sort_max_price') !!}">
+                                                    Max Price <i class="fa fa-fw fa-sort"></i>
+                                                </a>
+                                            @endif
+                                        </th>
                                         <th>Schedule</th>
                                         <th>Status</th>
                                         <th width="110">

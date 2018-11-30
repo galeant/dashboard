@@ -46,6 +46,15 @@ class Tour extends Model
         'company_id',
         'buyer_remarks'
     ];
+    protected $attributes = array(
+        'MinPrice' => '',
+        'MaxPrice' => ''
+    );
+    
+    protected $originals = array(
+        'MinPrice' => '',
+        'MaxPrice' => ''
+    );
 
     public function company()
     {
@@ -86,6 +95,23 @@ class Tour extends Model
     {
         return $this->hasMany('App\Models\Price', 'product_id','id');
     }
+    public function getMinPriceAttribute()
+    {
+        return $this->prices->min('price_idr');
+    }
+    public function getMaxPriceAttribute()
+    {
+        return $this->prices->max('price_idr');
+    }
+    public function min_price()
+    {
+        return $this->prices->min('price_idr');
+    }
+    public function max_price()
+    {
+        return $this->prices->max('price_idr');
+    }
+
     public function off_date()
     {
         return $this->hasMany('App\Models\CloseDate', 'product_id','id');

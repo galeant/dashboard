@@ -74,14 +74,21 @@ class TourController extends Controller
         if(!empty($request->input('product'))){
             $data = $data->whereRaw('(`products`.`product_name` LIKE "%'.$request->input('product').'%" OR `products`.`product_code` LIKE "%'.$request->input('product').'%")');
         }
+        $data = $data->select('products.*', DB::raw('MIN(prices.price_idr) as min_price'), DB::raw('MAX(prices.price_idr) as max_price'))
+            ->join('prices', 'products.id', '=', 'prices.product_id' )
+            ->groupBy('products.id');
         $request->request->add([
                 'sort_created' => request()->fullUrlWithQuery(["sort"=>"created_at","order"=>$orderby]),
                 'sort_min_person' => request()->fullUrlWithQuery(["sort"=>"min_person","order"=>$orderby]),
                 'sort_max_person' => request()->fullUrlWithQuery(["sort"=>"max_person","order"=>$orderby]),
+                'sort_min_price' => request()->fullUrlWithQuery(["sort"=>"min_price","order"=>$orderby]),
+                'sort_max_price' => request()->fullUrlWithQuery(["sort"=>"max_price","order"=>$orderby]),
                 'sort_code' => request()->fullUrlWithQuery(["sort"=>"product_code","order"=>$orderby]),
                 'sort_product_name' => request()->fullUrlWithQuery(["sort"=>"product_name","order"=>$orderby])
                 ]);
+        // dd($data->paginate(10));
         $data = $data->paginate(10);
+        // dd($data[0]);
         return view('tour.view',['data' => $data]);
     }
 
