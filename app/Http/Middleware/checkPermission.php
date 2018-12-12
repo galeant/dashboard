@@ -18,18 +18,13 @@ class checkPermission
      */
     public function handle($request, Closure $next)
     {
-        
-        // Cache::forget('permission_'.Auth::user()->remember_token);
-        // dd(Auth::user());
         $permission = Cache::get('permission_'.Auth::user()->remember_token);
         if($request->path() != '/'){
             if($request->path() != 'logout'){
-                // dd(Cache::get('permission_'.Auth::user()->remember_token));
                 $current_method = Route::current()->methods();
                 $ex = explode('\\',Route::current()->action['controller']);
                 $ex1 = explode('@',$ex[3]);
                 $grouping = str_replace('Controller','',$ex1[0]);
-                // $permission = Cache::get('permission_'.Auth::user()->remember_token);
                 if($permission != null){
                     if(!array_key_exists($grouping, $permission)){
                         abort(401);
@@ -38,39 +33,42 @@ class checkPermission
                             abort(401);
                         }
                     }
-                    
-                    // if(!array_search(Route::currentRouteName(),$permission)){
-                    //     abort(404);
-                    // }
                 }else{
-                    $token = Auth::user()->remember_token;
-                    $permission = [];
-                    foreach(Auth::user()->Roles as $ro){
-                        foreach($ro->rolePermission as $index=>$per){
-                            $permission[$per->grouping][] = $per->method;
-                        }
-                    }
-                    Cache::forever('permission_'.$token,$permission);
-                    if(!array_key_exists($grouping, $permission)){
-                        abort(401);
-                    }else{
-                        if(!in_array($current_method[0],$permission[$grouping])){
-                            abort(401);
-                        }
-                    }
+                    Auth::logout();
+                    return redirect('/login');
+                    // $token = Auth::user()->remember_token;
+                    // $permission = [];
+                    // foreach(Auth::user()->Roles as $ro){
+                    //     foreach($ro->rolePermission as $index=>$per){
+                    //         $permission[$per->grouping][] = $per->method;
+                    //     }
+                    // }
+                    // Cache::forever('permission_'.$token,$permission);
+                    // if(!array_key_exists($grouping, $permission)){
+                    //     abort(401);
+                    // }else{
+                    //     if(!in_array($current_method[0],$permission[$grouping])){
+                    //         abort(401);
+                    //     }
+                    // }
                 }
             }   
-            return $next($request);
+            if($permission == null){
+                Auth::logout();
+                return redirect('/login');
+            }
         }else{
             if($permission == null){
-                $token = Auth::user()->remember_token;
-                $permission = [];
-                foreach(Auth::user()->Roles as $ro){
-                    foreach($ro->rolePermission as $index=>$per){
-                        $permission[$per->grouping][] = $per->method;
-                    }
-                }
-                Cache::forever('permission_'.$token,$permission);
+                Auth::logout();
+                return redirect('/login');
+                // $token = Auth::user()->remember_token;
+                // $permission = [];
+                // foreach(Auth::user()->Roles as $ro){
+                //     foreach($ro->rolePermission as $index=>$per){
+                //         $permission[$per->grouping][] = $per->method;
+                //     }
+                // }
+                // Cache::forever('permission_'.$token,$permission);
             }
         }   
         return $next($request);
