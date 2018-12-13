@@ -67,6 +67,65 @@
 					                <label>Name*</label>
 					                 {{ Form::text('name', null, ['class' => 'form-control','placeholder'=>'Please Enter Full Name','id'=>'name','required'=>'required']) }}
 					            </div>
+								<div class="form-group m-b-20">
+									<div class="demo-switch-title">Have Airport</div>
+									<div class="switch">
+										<label><input id="have_airport" type="checkbox"><span class="lever switch-col-green"></span></label>
+									</div>
+								</div>
+								@if(isset($data))
+									@if(count($data->airport) != 0)
+										@foreach($data->airport as $index=>$air)
+										<div id="container_airport">
+											<div class="row airport" id="airport-{{$index}}">
+												<div class="col-md-8">
+													<div class="form-group m-b-20">
+														<label>Airport</label>
+														<select name="airport_id[]" class="form-control airport_id" id="airport_id-{{$index}}">
+															<option value="{{$air->id}}">{{$air->airport_name}}</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-md-4 m-t-20">
+													<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect">Delete</button>
+												</div>
+											</div>
+										</div>
+										@endforeach
+									@else
+									<div id="container_airport">
+										<div class="row airport" id="airport-0">
+											<div class="col-md-8">
+												<div class="form-group m-b-20" id="airport-0">
+													<label>Airport</label>
+													<select name="airport_id[]" class="form-control airport_id" id="airport_id-0">
+														<option value="">--Select Airport--</option>
+													</select>
+												</div>
+											</div>
+											<div class="col-md-4 m-t-20">
+												<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect">Delete</button>
+											</div>
+										</div>
+									</div>
+									@endif
+								@else
+								<div id="container_airport">
+									<div class="row airport" id="airport-0">
+										<div class="col-md-8">
+											<div class="form-group m-b-20" id="airport-0">
+												<label>Airport</label>
+												<select name="airport_id[]" class="form-control airport_id" id="airport_id-0">
+													<option value="">--Select Country--</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-md-4 m-t-20">
+											<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect">Delete</button>
+										</div>
+									</div>
+								</div>
+								@endif
 					            <div class="form-group m-b-20">
 					            	<div class="col-md-3 col-lg-offset-9">
 					            		<button type="submit" class="btn btn-block btn-lg btn-success waves-effect">Save</button>
@@ -108,8 +167,115 @@
 <script src="{{asset('js/pages/forms/form-validation.js')}}"></script>
 <script src="{{ asset('plugins/cropper/cropper.min.js') }}"></script>
     <script type="text/javascript">
-		$(function(){
-		    $("#country_id").select2({
+		$(document).ready(function(){
+			// MATIIN NYALAIN INPUTAN AIRPORT
+			@if(isset($data))
+				@if(count($data->airport) == 0)
+					$("#container_airport *").attr('disabled','disabled');
+				@else
+					$('#have_airport').attr('checked','')
+				@endif
+			@else
+				$("#container_airport *").attr('disabled','disabled');
+			@endif
+			
+			$('#have_airport').change(function() {
+				if(this.checked) {
+					$("#container_airport *").removeAttr('disabled','disabled');
+					// var returnVal = confirm("Are you sure?");
+					// $(this).prop("checked", returnVal);
+				}else{
+					$("#container_airport *").attr('disabled','disabled');
+				}
+			});
+			// KALO ADA DATA
+			var c;
+			var length = $("select.airport_id").length
+			for(c=0;c<length;c++){
+				$("#airport_id-"+c+"").select2({
+					ajax: {
+						url: "{{ url('master/airport/json') }}",
+						dataType: 'json',
+						delay: 250,
+						data: function (params) {
+						return {
+							name: params.term, // search term
+							page: params.page,
+						};
+						},
+						processResults: function (data, params) {
+						// parse the results into the format expected by Select2
+						// since we are using custom formatting functions we do not need to
+						// alter the remote JSON data, except to indicate that infinite
+						// scrolling can be used
+						params.page = params.page || 1;
+						return {
+							results: data.data,
+							pagination: {
+							more: (params.page * 30) < data.total_count
+							}
+						};
+						},
+						cache: true
+					},
+					escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+					minimumInputLength: 1,
+					templateResult: formatRepo, // omitted for brevity, see the source of this page
+					templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+				});
+			}
+		    // GANTI TOMBOL HAPUS JADI ADD PADA ELEMENT PERTAMA
+			$("#airport-0").find('.col-md-4').empty().append('<button type="button" id="add_airport" class="btn btn-lg btn-primary waves-effect">ADD</button>');
+
+			// ADD ACTION
+			$("#add_airport").click(function(){
+				var urut = $("select.airport_id").length
+				console.log(urut);
+				var el = $(this).closest("div.airport").clone().insertAfter($("div.airport").last());
+				el.attr('id',"airport-"+urut+"");
+				// CARA RIBET GA DAPET IDE GMN LAGI
+				el.find('select#airport_id-0').remove();
+				el.find("span.select2").remove();
+
+				el.find('.form-group').append('<select name="airport_id[]" class="form-control airport_id" id="airport_id-'+(length+1)+'"><option value="">--Select Airport--</option></select>');
+				el.find("select#airport_id-"+(length+1)+"").select2({
+					ajax: {
+						url: "{{ url('master/airport/json') }}",
+						dataType: 'json',
+						delay: 250,
+						data: function (params) {
+						return {
+							name: params.term, // search term
+							page: params.page,
+						};
+						},
+						processResults: function (data, params) {
+						// parse the results into the format expected by Select2
+						// since we are using custom formatting functions we do not need to
+						// alter the remote JSON data, except to indicate that infinite
+						// scrolling can be used
+						params.page = params.page || 1;
+						return {
+							results: data.data,
+							pagination: {
+							more: (params.page * 30) < data.total_count
+							}
+						};
+						},
+						cache: true
+					},
+					escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+					minimumInputLength: 1,
+					templateResult: formatRepo, // omitted for brevity, see the source of this page
+					templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
+				});
+				el.find('.col-md-4').empty().append('<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect">Delete</button>');
+				length+=1;
+			});
+			$(document).on('click', '#delete_airport', function(){ 
+				$(this).closest("div.airport").remove();
+			});
+			$("#country_id").select2({
 	            ajax: {
 	                url: "/json/country",
 	                dataType: 'json',

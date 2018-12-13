@@ -91,6 +91,9 @@ class ProvinceController extends Controller
             }
             $data->name = $request->input('name');
             if($data->save()){
+                if ($request->has('airport_id')) {
+                    $data->airport()->sync($request->input('airport_id'));
+                }
                 DB::commit();
                 return redirect("master/province/".$data->id."/edit")->with('message', 'Successfully saved Province');
             }else{
@@ -124,6 +127,7 @@ class ProvinceController extends Controller
     {
         //
         $data = Province::find($id);
+        // dd($data->airport[0]);
         return view('province.form')->with([
             'data'=> $data
         ]);
@@ -138,7 +142,6 @@ class ProvinceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         // Validation //
         $validation = Validator::make($request->all(), [
             'country_id' => 'required',
@@ -174,6 +177,11 @@ class ProvinceController extends Controller
             }
             $data->country_id = $request->input('country_id');
             $data->name = $request->input('name');
+            if ($request->has('airport_id')) {
+                $data->airport()->sync($request->input('airport_id'));
+            }else{
+                $data->airport()->detach();
+            }
             if($data->save()){
                 DB::commit();
                 return redirect("master/province/".$data->id."/edit")->with('message', 'Successfully saved Province');

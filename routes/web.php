@@ -10,6 +10,8 @@
 |
 */
 
+Route::get('master/airport/json','AirportController@json');
+
 Route::get('login', function () {
 	return view('login1');
 })->name('login');
@@ -121,7 +123,6 @@ Route::group(['middleware' => ['auth:web']], function () {
 		Route::resource('tour-activity', 'TourController');
 		Route::post('/upload/image', 'TourController@uploadImageAjax')->name('product.uploadImage');;
 		Route::post('/delete/image', 'TourController@deleteImageAjax')->name('product.deletImage');
-
 		//planning
 		Route::get('planning/{transaction_id}/{planning_id}/print/{type}', 'PlanningController@print')->name('product.planning');
 	});
@@ -197,6 +198,5 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('transaction/{transaction_number}/send_receipt', 'TransactionController@send_receipt')->name('transaction.sendReceipt');
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
-
 });
 

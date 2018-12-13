@@ -29,5 +29,8 @@ class Province extends Model {
     public function cities(){
         return $this->hasMany('App\Models\City','province_id','id');
     }
+    public function airport(){
+        return $this->belongsToMany('App\Models\Airport','airport_pivot','province_id','airport_id');
+    }
 }
 
