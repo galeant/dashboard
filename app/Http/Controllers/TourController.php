@@ -969,6 +969,7 @@ class TourController extends Controller
         
     }
     public function scheduleUpdate(Request $request){
+        // return $request->all();
         if($request->end_date == null){
             $request->end_date = date("Y-m-d",strtotime($request->start_date));
         }else{
@@ -991,19 +992,19 @@ class TourController extends Controller
         }
         // if(count($schedule->bookings) != 0){
             if($schedule->tour->product_type == 'open'){
-                if($request->max_booking > $schedule->tour->max_person){
+                if($request->maximum_booking > $schedule->tour->max_person){
                     $response = [
                         'message' => 'Max booking cant more than max people',
                         'data' => $schedule
                     ];
                     return response()->json($response,400);
-                }else if($request->max_booking < count($schedule->bookings)){
+                }else if($request->maximum_booking < count($schedule->bookings)){
                     $response = [
                         'message' => 'Max booking cant less than sum of bookings',
                         'data' => $schedule
                     ];
                     return response()->json($response,400);
-                }else if($request->max_booking < $schedule->tour->min_person){
+                }else if($request->maximum_booking < $schedule->tour->min_person){
                     $response = [
                         'message' => 'Max booking cant less than min people',
                         'data' => $schedule

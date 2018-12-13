@@ -46,10 +46,10 @@ class Tour extends Model
         'company_id',
         'buyer_remarks'
     ];
-    protected $attributes = array(
-        'MinPrice' => '',
-        'MaxPrice' => ''
-    );
+    // protected $attributes = array(
+    //     'MinPrice' => '',
+    //     'MaxPrice' => ''
+    // );
     
     protected $originals = array(
         'MinPrice' => '',

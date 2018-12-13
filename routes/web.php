@@ -16,7 +16,7 @@ Route::get('login', function () {
 	return view('login1');
 })->name('login');
 Route::post('/authenticate', ['as' => 'auth', 'uses' => 'EmployeeController@authenticate']);
-Route::group(['middleware' => ['auth:web']], function () {
+Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('/', function () {
 	    return view('layouts.app');
 	})->name('overview');
@@ -199,4 +199,3 @@ Route::group(['middleware' => ['auth:web']], function () {
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
-
