@@ -235,8 +235,23 @@ class AreaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+     public function destroy($id)
+     {
+         //
+         DB::beginTransaction();
+         try{
+             $data = Area::find($id);
+             if($data->delete()){
+                 DB::commit();
+                 return $this->sendResponse($data, "Delete Area ".$data->name." successfully", 200);
+             }else{
+                 return $this->sendResponse($data, "Error Database;", 200);
+             }
+         }catch (\Exception $exception){
+             DB::rollBack();
+             \Log::info($exception->getMessage());
+             return $this->sendResponse($data, $exception->getMessage() , 200);
+         }
 
-    }
+     }
 }

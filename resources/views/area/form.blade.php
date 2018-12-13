@@ -70,7 +70,11 @@
                             @else
                                <option value="">--Select city--</option>
                             @endif
-                            
+                            @if(!empty(old('city')) && empty($data))
+                              @foreach(old('city') as $cov)
+                                <option value="{{$cov->id}}" selected="selected">{{$cov->name}}</option>
+                              @endforeach
+                            @endif
                           </select>
                         </div>
       						    	<div class="form-group m-b-20">

@@ -47,10 +47,12 @@
                                         <tr class="form-filter">
                                             <td class="text-center">--</td>
                                             <td><input class="input-filter full" type="text" id="area_name"></td>
-                                            <td><select class="input-filter full" id="country">
+                                            <td>
+                                              <select class="input-filter full" id="country">
                                                 <option value="">{{__("All")}}</option>
-                                            </select></td>
-                                            <td><select class="input-filter full" id="province">
+                                              </select></td>
+                                            <td>
+                                              <select class="input-filter full" id="province">
                                                 <option value="">{{__("All")}}</option>
                                             </select></td>
                                             <td><input class="input-filter full" type="text" id="latitude"></td>
@@ -179,7 +181,7 @@
                 "render": function (data, type, row, meta) {
                         html = '';
                         html = html+'<a href="/master/area/'+row.id+'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float"><i class="glyphicon glyphicon-edit"></i></a>';
-                        html = html + '<a href="/master/area/'+row.id+'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/product/tour-activity/'+row.id+'" data-id="'+row.id+'" id="data-'+row.id+'"><i class="glyphicon glyphicon-trash"></i></a>'
+                        html = html + '<a href="/master/area/'+row.id+'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/area/'+row.id+'" data-id="'+row.id+'" id="data-'+row.id+'"><i class="glyphicon glyphicon-trash"></i></a>'
                         return html;
                 },
                 "name": "action", "sortable": false, "searchable" : false

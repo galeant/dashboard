@@ -568,7 +568,7 @@
 <script src="{{asset('plugins/bootstrap/js/bootstrap.js')}}"></script>
 
 <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
+<script src="{{asset('plugins/momentjs/moment.js')}}"></script>
 <!-- Select Plugin Js -->
 <!-- <script src="{{asset('plugins/bootstrap-select/js/bootstrap-select.js')}}"></script> -->
 
@@ -586,6 +586,8 @@
 
 <!-- Demo Js -->
 <script src="{{asset('js/demo.js')}}"></script>
+
+<script src="{!! asset('plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js') !!}"></script>
 <script>
 	$('.ml-menu').each(function(){
         var parent = $(this).parent();
