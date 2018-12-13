@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 			Route::put('{id}/update', 'AreaController@update')->name('area.update');
 			Route::delete('{id}', 'AreaController@destroy')->name('area.delete');
 		});
-		
+
 		Route::resource('language', 'LanguageController');
 		Route::resource('country', 'CountryController');
 		Route::resource('province', 'ProvinceController');
@@ -210,11 +210,3 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('transaction/{transaction_number}/print/{planning_id}/itinerary/{type}', 'TransactionController@print_itinerary')->name('transaction.printItitnerary');
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 });
-<<<<<<< HEAD
-=======
-
-Route::get('bebek',function(){
-	$token = Auth::user()->remember_token;
-	Cache::forget('permission_'.$token);
-});
->>>>>>> area_crud
