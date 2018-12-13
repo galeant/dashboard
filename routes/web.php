@@ -199,8 +199,3 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('/logout', ['as' => 'auth.logout', 'uses' => 'EmployeeController@logout']);
 
 });
-
-Route::get('bebek',function(){
-	$token = Auth::user()->remember_token;
-	Cache::forget('permission_'.$token);
-});
