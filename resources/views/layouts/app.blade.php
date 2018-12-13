@@ -80,7 +80,7 @@
 			@endphp
 		    <div class="menu" style="background-color: #676C56">
 		        <ul class="list">
-					
+
 		            <li id="overview" {{{ (Request::is('*') ? 'class=active' : '') }}}>
 		                <a href="{{ URL('/') }}">
 		                    <i class="material-icons">dashboard</i>
@@ -322,7 +322,7 @@
 						array_key_exists("Destination",$permission) ||
 						array_key_exists("DestinationTipsQuestion",$permission) ||
 						array_key_exists("ActivityTag",$permission) ||
-						array_key_exists("CompanyLevel",$permission) 
+						array_key_exists("CompanyLevel",$permission)
 					)
 		            <li {{{ (Request::is('master*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
@@ -356,7 +356,8 @@
 								array_key_exists("Province",$permission) ||
 								array_key_exists("City",$permission) ||
 								array_key_exists("District",$permission) ||
-								array_key_exists("Village",$permission) 
+								array_key_exists("Village",$permission) ||
+								array_key_exists("Area",$permission)
 							)
 		                    <li {{{ (Request::is('master/country*') ? 'class=active' : '') }}} {{{ (Request::is('master/province*') ? 'class=active' : '') }}} {{{ (Request::is('master/city*') ? 'class=active' : '') }}} {{{ (Request::is('master/district*') ? 'class=active' : '') }}}
 		                    {{{ (Request::is('master/village*') ? 'class=active' : '') }}}>
@@ -382,6 +383,13 @@
 				                	<li {{{ (Request::is('master/city*') ? 'class=active' : '') }}}>
 				                        <a href="{{ URL('/master/city') }}" class=" waves-effect waves-block">
 				                            <span>City</span>
+				                        </a>
+				                    </li>
+									@endif
+									@if(array_key_exists("Area",$permission))
+				                	<li {{{ (Request::is('master/area*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('/master/area') }}" class=" waves-effect waves-block">
+				                            <span>Area</span>
 				                        </a>
 				                    </li>
 									@endif
@@ -461,7 +469,7 @@
 					@if(
 						array_key_exists("Employee",$permission) ||
 						array_key_exists("Roles",$permission) ||
-						array_key_exists("Permission",$permission) 
+						array_key_exists("Permission",$permission)
 					)
 					<li {{{ (Request::is('autorization*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
@@ -593,6 +601,64 @@
 			var menu = "{{$in}}";
 		@endforeach
 	@endif
+	$('.date2').bootstrapMaterialDatePicker({
+        format: 'YYYY-MM-DD',
+        clearButton: true,
+        weekStart: 1,
+        time: false
+    });
+    function getFormattedDateTime(date) {
+    	date = date.replace(" ","T");
+    	date = new Date(date);
+        var year = date.getFullYear();
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+        var minutes = date.getMinutes();
+        minutes = minutes > 9 ? minutes : '0' + minutes;
+        var hour = date.getHours();
+        hour = hour > 9 ? hour : '0' + hour;
+        return day + '/' + month + '/' + year + ' '+hour+':'+minutes;
+    }
+    function formatNumber(n) {
+        var number = parseInt(n, 10).toString().split('').reverse().join('');
+        var formattedNumber = '';
+        for(var i = 0; i < number.length; i++){
+            formattedNumber  += number[i];
+            if((i + 1) % 3 === 0 && i !== (number.length - 1)){
+                formattedNumber += '.';
+            }
+        }
+        return formattedNumber.split('').reverse().join('');
+    }
+    function getFormattedDate(date) {
+    	date = date.replace(" ","T");
+    	date = new Date(date);
+    	var year = date.getFullYear();
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+        return day + '/' + month + '/' + year
+    }
+    function getStatusBooking(n){
+   		if(n == 1){
+    		return '<span class="badge" style="background-color:#066dd6">{{__("Awaiting Payment")}}</span>';
+    	}
+    	else if(n == 2){
+    		return '<span class="badge" style="background-color:#06d663">{{__("Payment Accepted")}}</span>';
+    	}
+    	else if(n == 3){
+    		return '<span class="badge" style="background-color:#d60606">{{__("Cancelled")}}</span>';
+    	}
+    	else if(n == 4){
+    		return '<span class="badge" style="background-color:#e0b000">{{__("On Progress Settlement")}}</span>';
+    	}
+    	else if(n == 5){
+    		return '<span class="badge" style="background-color:#c73de0">{{__("Settled")}}</span>';
+    	}
+    }
 </script>
 @show
 <!-- End Js -->
