@@ -20,15 +20,16 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	})->name('overview');
 
 	Route::resource('partner', 'CompanyController');
-	
+
 	Route::resource('partner-product-type', 'CompanyProductTypeController');
 	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete')->name('company.product_type');
 	Route::group(['prefix' => 'partner'], function(){
 		Route::get('registration/activity', 'CompanyController@registrationList')->name('partner.activity');
 		Route::post('{id}/change/status', 'CompanyController@changeStatus')->name('partner.change_status');
 	});
-	
+
 	Route::group(['prefix' => 'master'],function(){
+
 		Route::group(['prefix'=> 'partner-level'], function(){
 			Route::get('/', 'CompanyLevelController@index')->name('partner-level.index');
 			Route::get('create', 'CompanyLevelController@create')->name('partner-level.create');
@@ -37,6 +38,16 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 			Route::put('{id}/update', 'CompanyLevelController@update')->name('partner-level.update');
 			Route::delete('{id}', 'CompanyLevelController@destroy')->name('partner-level.delete');
 		});
+
+		Route::group(['prefix'=> 'area'], function(){
+			Route::get('/', 'AreaController@index')->name('area.index');
+			Route::get('create', 'AreaController@create')->name('area.create');
+			Route::post('store', 'AreaController@store')->name('area.store');
+			Route::get('{id}/edit', 'AreaController@edit')->name('area.edit');
+			Route::put('{id}/update', 'AreaController@update')->name('area.update');
+			Route::delete('{id}', 'AreaController@destroy')->name('area.delete');
+		});
+		
 		Route::resource('language', 'LanguageController');
 		Route::resource('country', 'CountryController');
 		Route::resource('province', 'ProvinceController');
@@ -78,15 +89,15 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::group(['prefix' => 'supplier'],function($id){
 		Route::get('password_reset/{id}','SupplierController@password_reset')->name('supplier.password_reset');
 	});
-	// 
+	//
 	Route::group(['prefix' => 'json'], function(){
 		Route::get('country','CountryController@json')->name('json.country');
 		Route::get('language','LanguageController@json')->name('json.language');
 		Route::get('province','ProvinceController@json')->name('json.province');
-		// 
+		//
 		Route::get('city','CityController@json')->name('json.city');
 		Route::get('findCity','CityController@findCity')->name('json.city');
-		// 
+		//
 		Route::get('district','DistrictController@json')->name('json.district');
 		Route::get('village','VillageController@json')->name('json.village');
 		Route::get('company','CompanyController@json')->name('json.company');
@@ -142,9 +153,9 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::resource('coupon', 'CouponController');
 
 	Route::group(['prefix' => 'autorization'],function(){
-		Route::resource('/employee', 'EmployeeController');	
-		Route::resource('/roles', 'RolesController');	
-		Route::resource('/permission', 'PermissionController');	
+		Route::resource('/employee', 'EmployeeController');
+		Route::resource('/roles', 'RolesController');
+		Route::resource('/permission', 'PermissionController');
 	});
 
 	Route::group(['prefix' => 'report'],function(){
@@ -179,7 +190,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	Route::get('e-tiket/hotel/{booking_number}', 'TransactionController@e_tiket_hotel');
 	Route::get('e-tiket/activity/{booking_number}', 'TransactionController@e_tiket_activity');
 	Route::get('e-tiket/rent-car/{booking_number}', 'TransactionController@e_tiket_rent_car');
-	
+
 	Route::group(['prefix' => 'bookings'],function(){
 		Route::resource('tour', 'BookingTourController');
 		Route::get('tour/{kode}/refund','BookingTourController@refund')->name('booking_tour.refund');

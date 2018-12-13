@@ -21,6 +21,7 @@ class EmployeeController extends Controller
 
     public function authenticate(Request $request)
     {
+      // dd($request->all());
         $remember = $request->remember_me;
         if(Auth::guard('web')->attempt([
                 'email' => $request->email,
@@ -71,7 +72,7 @@ class EmployeeController extends Controller
                     </a>';
             })
             ->editColumn('id', 'ID: {{$id}}')
-            ->make(true);        
+            ->make(true);
         }
         return view('employee.index');
     }
