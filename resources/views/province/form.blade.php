@@ -121,7 +121,7 @@
 											</div>
 										</div>
 										<div class="col-md-4 m-t-20">
-											<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect">Delete</button>
+											<button type="button" id="delete_airport" class="btn btn-lg btn-danger waves-effect" disabled>Delete</button>
 										</div>
 									</div>
 								</div>
@@ -172,10 +172,13 @@
 			@if(isset($data))
 				@if(count($data->airport) == 0)
 					$("#container_airport *").attr('disabled','disabled');
+					$("#airport-0").find('.col-md-4').empty().append('<button type="button" id="add_airport" class="btn btn-lg btn-primary waves-effect" disabled="disabled">ADD</button>');
 				@else
 					$('#have_airport').attr('checked','')
+					$("#airport-0").find('.col-md-4').empty().append('<button type="button" id="add_airport" class="btn btn-lg btn-primary waves-effect">ADD</button>');
 				@endif
 			@else
+			$("#airport-0").find('.col-md-4').empty().append('<button type="button" id="add_airport" class="btn btn-lg btn-primary waves-effect" disabled="disabled">ADD</button>');
 				$("#container_airport *").attr('disabled','disabled');
 			@endif
 			
@@ -224,8 +227,7 @@
 					templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
 				});
 			}
-		    // GANTI TOMBOL HAPUS JADI ADD PADA ELEMENT PERTAMA
-			$("#airport-0").find('.col-md-4').empty().append('<button type="button" id="add_airport" class="btn btn-lg btn-primary waves-effect">ADD</button>');
+		    
 
 			// ADD ACTION
 			$("#add_airport").click(function(){
@@ -320,11 +322,13 @@
 	            }
 
 	        function formatRepoSelection (repo) {
-	          if(typeof repo.name !== "undefined"){
-	            $('#country_id').val(repo.id);
-	          }
+	        //   if(typeof repo.name !== "undefined"){
+	        //     $('#country_id').val(repo.id);
+	        //   }
 	          return repo.name || repo.text;
 	        }
+
+			
 	        window.addEventListener('DOMContentLoaded', function () {
                 var image = document.getElementById('crop-image');
                 var cropBoxData;
