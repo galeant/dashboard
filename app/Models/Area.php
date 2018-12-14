@@ -19,7 +19,7 @@ class Area extends Model {
      * @var stringA
      */
     protected $table = 'areas';
-    protected $fillable = ['country_id','province_id','area_name','slug','latitude','longitude'];
+    protected $fillable = ['country_id','province_id','area_name','slug','latitude','longitude','status'];
 
     public function city()
     {
