@@ -24,7 +24,7 @@
 	text-align: right;
 }
 .label-desc label{
-	margin-top: 0px !important; 
+	margin-top: 0px !important;
 	margin-bottom: 0px;
 	text-align: right;
 }
@@ -59,7 +59,7 @@
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 .dd-group{
-	
+
     color: #555;
     background-color: #fff;
     background-image: none;
@@ -87,7 +87,7 @@
 .steps > ul > li > a:hover
 {
     background-color: rgba(102, 108, 86, 0.8);
-    
+
 }
 .wizard .steps .done a {
     background-color: rgba(102, 108, 86, 0.6) !important;
@@ -206,4 +206,17 @@ ul.p-info li {
     position: absolute;
     top: 30px;
     left: -4px;
+}
+.table-filter{
+  display: table-header-group;
+}
+
+.form-filter td{
+  background: #fff7f0;
+  /*border-bottom:solid 1px #a0d0eb !important;*/
+}
+
+.form-filter td .input-filter.full{
+  width:100%;
+  /*border-color:#a0d0eb;*/
 }

@@ -34,6 +34,98 @@ class helpers{
 		}
 		return $temp;
 	}
+	public static function getDataTableParamsRequest($request)
+	{
+	    $params['per_page'] = $request->get('length') == null ? 10 : $request->get('length');
+	    $page = $request->get('start') == null ? 0 : ($request->get('start') + $request->get('length')) / $request->get('length');
+	    $params['page'] = $page;
+	    $params2 = array_merge(self::getParamsRequest($request), $params);
+	    return $params2;
+	}
+	public static function getParamsRequest($request)
+	{
+	    $order = array();
+	    $filter = array();
+	    /**
+	     * if 'search' param exists -> use 'or'' for each fields (used for datatables search)
+	     * elseif 'custom_filter' param exists -> use 'and' for each fields (used for custom filter)
+	     *
+	     * comparison = '!=', '=', '==', '<=', '>=', '<>', '<', '>', 'like'(default)
+	     */
+	    $logical = ($request->has('logical'))? $request->get('logical') : 'and';
+
+	    if ($request) {
+	        if ($request->get('search') && $request->get('draw') && $request->get('columns')) {
+	            $logical = 'or';
+	            $columns_dt = $request->get('columns');
+	            if (is_array($columns_dt)) {
+	                $temp_columns = array();
+	                foreach ($columns_dt as $col) {
+	                    if (is_array($col)) {
+	                        if (array_key_exists('searchable', $col)) {
+	                            if ($col['searchable'] == 'true' && $request->get('search')['value']) {
+	                                array_push($temp_columns, $col['name']);
+	                            }
+	                        }
+	                    }
+	                }
+
+	                if (count($temp_columns) > 0) {
+	                    $list_fields = implode(',', $temp_columns);
+	                    $keyword = urlencode($request->get('search')['value']);
+	                    $filter[$logical][$list_fields] = $keyword . ',like,' . $logical;
+	                }
+	            }
+	        }
+
+	        if ($request->get('custom_filter')) {
+	            $logical = ($request->has('logical')) ? $request->get('logical') : 'and';
+	            $custom_filter = $request->get('custom_filter');
+	            if (is_array($custom_filter)) {
+	                if (count($custom_filter) > 0) {
+	                    $idx = 0;
+	                    foreach ($custom_filter as $key => $val) {
+	                        $split_key = explode('|', $key);
+	                        $keyword = '';
+	                        if ($split_key[1] == 'in' AND is_array($val)) {
+	                            $i = 1;
+	                            foreach ($val as $item) {
+	                                $separator = $i > 1 ? '|' : '';
+	                                $keyword .= $separator . $item;
+	                                $i++;
+	                            }
+	                        } else {
+	                            $keyword = urldecode($val);
+	                        }
+	                        if ($keyword != null) {
+	                            $filter[$logical . $idx][$split_key[0]] = $keyword . ',' . $split_key[1];
+	                        }
+	                        $idx++;
+	                    }
+	                }
+	            }
+	        }
+
+	        $sort = '';
+	        if ($request->get('order') && $request->get('draw') && $request->get('columns')) {
+	            $columns = $request->get('columns');
+	            $order = $request->get('order')[0];
+	            $column = $order['column'];
+	            if (array_key_exists($column, $columns)) {
+	                if ($columns[$column]['searchable'] == true) {
+	                    $sort = array(
+	                        $columns[$column]['name'] => $order['dir']
+	                    );
+	                }
+	            }
+	        }
+	        $params = [
+	            'filter'   => $filter,
+	            'sort'    => $sort
+	        ];
+	        return $params;
+	    }
+	}
 	public static function destinations($city_id = null){
 		$data = DB::table('destinations');
 		if(!empty($province_id)){
@@ -65,7 +157,7 @@ class helpers{
 		return [0 => 'Draft',1 =>'Awaiting Moderation',2 => 'Active',3 => 'Disable'];
 	}
 	public static function statusTransaction(){
-		return [2 => 'Payment Accepted',5 =>'Cancelled',6 => 'Refunded'];	
+		return [2 => 'Payment Accepted',5 =>'Cancelled',6 => 'Refunded'];
 	}
 	public static function encodeSpecialChar($string)
 	{
@@ -123,10 +215,10 @@ class helpers{
         $sizeimg        = filesize($image);
         $mime           = $originalSize['mime'];
         $bag = new MessageBag();
-		
+
 		try {
 	        if($thumbnail == true){
-	        	
+
 				$width = $originalSize[0];
 				$height = $originalSize[1];
 	        	try {
@@ -134,9 +226,9 @@ class helpers{
 			        $thumbnail = self::autoRatio($width,$height,$ratio);
 			        $tempPath = 'tmp';
 			        $deleteTemp = [];
-			        
+
 			        foreach ($thumbnail as $key => $size) {
-			        	if( ! \File::isDirectory($tempPath.'/'.$key) ) 
+			        	if( ! \File::isDirectory($tempPath.'/'.$key) )
 				        {
 				            File::makeDirectory($tempPath.'/'.$key, 0777, true , true);
 				        }
@@ -154,11 +246,11 @@ class helpers{
 	                        }
 	                        unlink($value);
 	                    }
-	                    catch(Exception $e) { 
+	                    catch(Exception $e) {
 				            $bag->add('delete', 'Permission denied delete file!');
 				            return $bag;
 				        }
-	                        
+
 	                }
                 }catch(Exception $e) {
                 	// dd($e);
@@ -186,7 +278,7 @@ class helpers{
 		}
 	}
 	public static function autoRatio($width,$height,$ratio=null,$autoResize=false)
-	{	
+	{
 		$perbandingan=['xsmall'=>2,'small'=>5,'medium' => 10,'large'=>15,'xlarge'=>20];
 		if($width <= 175){
 			$value = 'xsmall';
@@ -312,7 +404,7 @@ class helpers{
 
 				return $data;
 		}
-	
+
 		public static function diff_in_hours($start_time, $end_time){
 			$start_time = Carbon::parse($start_time);
 			$end_time = Carbon::parse($end_time);
