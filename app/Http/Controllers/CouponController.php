@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Coupons;
+use App\Models\Transaction;
 use App\Models\ProductType;
 use Validator;
 use Datatables;
@@ -30,6 +31,9 @@ class CouponController extends Controller
                     <a href="coupon/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/coupon/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
                         <i class="glyphicon glyphicon-trash"></i>
                     </a>';
+            })
+            ->addColumn('used',function(coupons $data){
+                return Transaction::where('coupon_code','=',$data->code)->count();
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);

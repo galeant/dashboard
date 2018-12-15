@@ -35,6 +35,7 @@
                                             <th>Code</th>
                                             <th>Type</th>
                                             <th>Value</th>
+                                            <th>Used</th>
                                             <th>Start Date</th>
                                             <th>End Date</th>
                                             <th>Action</th>
@@ -73,6 +74,7 @@
               {data: 'code'},
               {data: 'type'},
               {data: 'discount_value'},
+              {data: 'used'},
               {data: 'start_date'},
               {data: 'end_date'},
               {data: 'action'}
