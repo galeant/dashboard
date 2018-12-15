@@ -106,6 +106,12 @@
                                               <textarea required type="text" name="description" class="form-control" placeholder="Enter Description" />{{$data->description}}</textarea>
                                           </div>
                                       </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Only For Itinerary</h2>
+                                        <div class="switch">
+                                            <label><input @if($data->is_itinerary_only == 1){ checked } @endif type="checkbox" name="is_itinerary_only"><span class="lever switch-col-orange"></span></label>
+                                        </div>
+                                      </div>
                                   </div>
                               </div>
                               <br>
