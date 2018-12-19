@@ -48,6 +48,12 @@
                                             {!! Form::text('q',Request::input('q',null),['class' => 'form-control','placeholder' =>'Start Typing Here']) !!}
                                         </div>
                                     </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label>Transaction from</label>
+                                            {{ Form::select('from', $applist,Request::input('from',null),['class' => 'form-control']) }}
+                                        </div>
+                                    </div>
                                 </div>    
                             </div>
                             <div class="col-sm-2 col-xs-6">
@@ -73,6 +79,17 @@
                                         @else
                                             <a href="{!! Request::input('sort_tr_number') !!}">
                                                 Transaction Number <i class="fa fa-fw fa-sort"></i>
+                                            </a>
+                                        @endif
+                                    </th>
+                                    <th>
+                                        @if (Request::input('sort') == 'app')
+                                            <a href="{!! Request::input('sort_tr_app') !!}" >
+                                                App @if(Request::input('order') == 'ASC') <i class="fa fa-sort-asc"></i> @else <i class="fa fa-sort-desc"></i>@endif
+                                            </a>
+                                        @else
+                                            <a href="{!! Request::input('sort_tr_app') !!}">
+                                                App <i class="fa fa-fw fa-sort"></i>
                                             </a>
                                         @endif
                                     </th>
@@ -152,6 +169,13 @@
                                 @foreach($data as $dt)
                                 <tr>
                                     <td><a href="/transaction/{{$dt->transaction_number}}" class="btn btn-primary">{{$dt->transaction_number}}</a></td>
+                                    <td>
+                                    @if(!empty($dt->app))
+                                        {{$dt->app}}
+                                    @else
+                                        -
+                                    @endif
+                                    </td>
                                     <td>
                                     @if(!empty($dt->paid_at))
                                         {{date('d M Y H:i:s',strtotime($dt->paid_at))}}

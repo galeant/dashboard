@@ -43,6 +43,7 @@
                                         @foreach($data->transaction_log_status as $log)
                                             <tr>
                                                 <td><span class="badge" style="background-color: {{$log->status->color}}">{{$log->status->name}}</span></td>
+                                                <td><span class="badge" style="background-color: green">From : {{$data->from->application}}</span></td>
                                                 <td>{{$log->created_at}}</td>
                                             </tr>
                                         @endforeach
@@ -76,7 +77,7 @@
                             <div class="col-md-4">
                                 <h5 class="font-thin">Transaction Date</h5>
                                 <p>
-                                @if(count($data->paid_at))
+                                @if($data->paid_at != null)
                                     {{date('d M Y H:i',strtotime($data->paid_at))}}
                                 @else
                                     -

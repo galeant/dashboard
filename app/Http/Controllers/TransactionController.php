@@ -59,7 +59,6 @@ class TransactionController extends Controller
 
     public function index(Request $request)
     {
-
         $data = Transaction::list();
         $sort = $request->input('sort','updated_at');
         $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
@@ -79,7 +78,8 @@ class TransactionController extends Controller
                 'sort_ct_email' => request()->fullUrlWithQuery(["sort"=>"contact_email","order"=>$orderby]),
                 'sort_total_discount' => request()->fullUrlWithQuery(["sort"=>"total_discount","order"=>$orderby]),
                 'sort_total_payment' => request()->fullUrlWithQuery(["sort"=>"total_paid","order"=>$orderby]),
-                'sort_updated_at' => request()->fullUrlWithQuery(["sort"=>"updated_at","order"=>$orderby])
+                'sort_updated_at' => request()->fullUrlWithQuery(["sort"=>"updated_at","order"=>$orderby]),
+                'sort_tr_app' => request()->fullUrlWithQuery(["sort"=>"app","order"=>$orderby]),
                 ]);
         if($sort != 'contact_name' && $sort != 'contact_email'){
             $data = $data->orderBy($sort,$orderby);
@@ -93,9 +93,20 @@ class TransactionController extends Controller
         if($request->input('q')){
             $data->whereRaw(DB::raw("(a.transaction_number LIKE '%".$request->input('q')."%' OR a.paid_at LIKE '%".$request->input('q')."%' OR CONCAT(`b`.`firstname`,' ',`b`.`lastname`) LIKE '%".$request->input('q')."%') OR c.name LIKE '%".$request->input('q')."%' OR b.email LIKE '%".$request->input('q')."%'"));
         }
+
+        if($request->input('from')){
+            $data->where('d.application','=',$request->input('from'));
+        }
         $data = $data->paginate($request->input('per_page',10));
         // dd($data);
-        return view('transaction.index',['data' => $data]);
+        $app_list = DB::table('applications as a')->select('a.application as name')->join('transactions as b','a.app_key','=','b.app_key')->get();
+        $applist = [];
+        
+        foreach($app_list as $al){
+            $applist[null] = null;
+            $applist[$al->name] = str_replace('_',' ',ucfirst($al->name));
+        }
+        return view('transaction.index',['data' => $data,'applist' => $applist]);
 
     }
 
