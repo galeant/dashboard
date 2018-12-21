@@ -14,6 +14,7 @@ class City extends Model {
      *
      * @var stringA
      */
+    protected $connection = 'mysql';
     protected $table = 'cities';
     protected $fillable = ['province_id','name','type'];
 
