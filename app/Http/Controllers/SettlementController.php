@@ -24,7 +24,7 @@ class SettlementController extends Controller
      */
     public function index()
     {
-        $data = SettlementGroup::all();
+        $data = SettlementGroup::orderBy('start_date','asc')->get();
         return view('settlement.index',['data' => $data]);
     }
 
@@ -114,40 +114,68 @@ class SettlementController extends Controller
         }
         $request->request->add(['start'=>$start,'end' => $end]);
         // dd($request->all());
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->get()->groupBy('start_date')->toArray();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->with('transactions')->get()->groupBy('start_date')->toArray();
-        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->get()->groupBy('start_date')->toArray();
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])
+                                ->where(['status'=> 2,'booking_from' => 'uhotel'])
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->with('transactions')
+                                ->orderBy('start_date','asc')
+                                ->get()->groupBy('start_date')->toArray();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])
+                                ->where('status',2)
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->with('tours.company','transactions')
+                                ->orderBy('start_date','asc')
+                                ->get()->groupBy('start_date')->toArray();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])
+                                ->where('status',2)
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->orderBy('start_date','asc')
+                                ->with('transactions')
+                                ->get()->groupBy('start_date')->toArray();
         
         $ar = [];
         foreach($dataHotel as $key=>$dh){
-            if(array_key_exists($key,$ar)){
-                array_push($ar[$key],$dh);
-            }else{
+            // if(array_key_exists($key,$ar)){
+            //     array_push($ar[$key],$dh);
+            // }else{
+                // $ar[$key]['date'] = $key;
                 $ar[$key][] = $dh;
-            }
+            // }
         }
         // 
         // dd($ar);
         foreach($dataTour as $key=>$dt){
-            if(array_key_exists($key,$ar)){
-                array_push($ar[$key],$dt);
-            }else{
+            // if(array_key_exists($key,$ar)){
+            //     array_push($ar[$key],$dt);
+            // }else{
+                // $ar[$key]['date'] = $key;
                 $ar[$key][] = $dt;
-            }
+            // }
         }
         // 
         foreach($dataCar as $key=>$dc){
-            if(array_key_exists($key,$ar)){
-                array_push($ar[$key],$dc);
-            }else{
+            // if(array_key_exists($key,$ar)){
+            //     array_push($ar[$key],$dc);
+            // // }else{
+            //     $ar[$key]['date'] = $key;
                 $ar[$key][] = $dc;
-            }
+            // }
         }
+        // dd(collect($ar)->sortKeys());
         if((count($dataHotel) || count($dataTour) || count($dataCar)) != 0 ){
             session()->put('request',[
                 'start' => $start,
                 'end' => $end,
-                'data' => $ar
+                'data' => collect($ar)->sortKeys()
             ]);
             return redirect('settlement/generate')->withInput();
         }else{
@@ -177,28 +205,40 @@ class SettlementController extends Controller
         DB::beginTransaction();
         try{
             foreach($ar as $setGroup){
-                $group = SettlementGroup::create($setGroup);
+                $gp = [];
                 foreach($setGroup['list_book'] as $bookList){
                     $reform = $this->bookingListInsert($bookList);
                     // dd($reform);
-                    $settlement = Settlement::firstOrCreate(
-                        ['booking_number' => $bookList['booking_number']],
-                        ['settlement_group_id' => $group->id,
-                        'product_type' => $reform['product_type'],
-                        'product_name' => $reform['product_name'],
-                        'qty' => $reform['qty'],
-                        'unit_price' => $reform['unit_price'],
-                        // 'total_discount' =>$d->total_discount,
-                        'total_price' => $bookList['total_price'],
-                        'total_commission' => $bookList['commission'],
-                        'bank_name' => $reform['bank_name'],
-                        'bank_account_name' => $reform['bank_account_name'],
-                        'bank_account_number' => $reform['bank_account_number'],
-                        'total_paid' => $bookList['net_price']
-                    ]);
+                    $valid1 = Settlement::where('booking_number',$bookList['booking_number'])->count();
+                    if($valid1 == 0){
+                        $settlement = Settlement::create([
+                            'booking_number' => $bookList['booking_number'],
+                            // ['settlement_group_id' => $group->id,
+                            'product_type' => $reform['product_type'],
+                            'product_name' => $reform['product_name'],
+                            'qty' => $reform['qty'],
+                            'unit_price' => $reform['unit_price'],
+                            // 'total_discount' =>$d->total_discount,
+                            'total_price' => $bookList['total_price'],
+                            'total_commission' => $bookList['commission'],
+                            'bank_name' => $reform['bank_name'],
+                            'bank_account_name' => $reform['bank_account_name'],
+                            'bank_account_number' => $reform['bank_account_number'],
+                            'total_paid' => $bookList['net_price']
+                        ]);
+                        $gp[] = $settlement->id;
+                    }
+                    
                     $reform['booking']->update([
                         'status' => 4
                     ]);
+                    // $gp[] = $settlement->id;
+                
+                }
+                // dd($gp);
+                if($gp != null || count($gp) != 0){
+                    $group = SettlementGroup::create($setGroup);
+                    $update = Settlement::whereIn('id',$gp)->update(['settlement_group_id'=>$group->id]);
                 }
             }
             // dd($bebek);
