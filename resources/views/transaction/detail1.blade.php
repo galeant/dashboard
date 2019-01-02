@@ -66,6 +66,19 @@
                                 </form>
                             </div>
                             @endif
+                            <div class="col-md-6">
+                                {{ Form::model($data, ['route' => ['transaction.update', $data->id], 'method'=>'PUT']) }}
+                                    <div class="input-group">
+                                    <label>Payment from midtrans</label>
+                                        <div class="form-line">
+                                            <input type="text" value="{{str_replace('Rp. ','',Helpers::idr($data->midtrans_payment))}}" class="form-control"/>
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <button id="midtrans" type="submit" class="btn btn-success waves-effect">Save</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
                     </div>
                     <div class="row">
 
