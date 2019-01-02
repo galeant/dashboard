@@ -340,7 +340,7 @@ class TransactionController extends Controller
         }else if($request->has('midtrans_payment')){
             DB::beginTransaction();
             try{
-                $update = Transaction::where('id',$id)->update(['midtrans_payment'=>$request->midtrans_payment]);
+                $update = Transaction::where('id',$id)->update(['midtrans_payment'=>str_replace('.','',$request->midtrans_payment)]);
                 
                 DB::commit();
                 return redirect('transaction/'.$data->transaction_number)->with('message','Value of midtrans payment has updated');

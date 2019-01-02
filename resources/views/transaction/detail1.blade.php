@@ -71,7 +71,7 @@
                                     <div class="input-group">
                                     <label>Payment from midtrans</label>
                                         <div class="form-line">
-                                            <input type="text" value="{{str_replace('Rp. ','',Helpers::idr($data->midtrans_payment))}}" class="form-control"/>
+                                            <input type="text" name="midtrans_payment" value="{{str_replace('Rp. ','',Helpers::idr($data->midtrans_payment))}}" class="form-control"/>
                                         </div>
                                         <span class="input-group-addon">
                                             <button id="midtrans" type="submit" class="btn btn-success waves-effect">Save</button>
