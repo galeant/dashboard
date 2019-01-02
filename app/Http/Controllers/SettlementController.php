@@ -215,37 +215,40 @@ class SettlementController extends Controller
         }
     }
     public function detail($id){
-        $data = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
-            $query->where('settlement_group_id',$id);
-        }])->first();
-        $u1 = array_pluck($data->settlement,'status');
-        $u2 = array_pluck($data->settlement,'bank_account_number');
-        $data['complete'] = 1;
-        $data['status'] = 2;
+        // $group = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
+        //     $query->where('settlement_group_id',$id);
+        // }])->first();
+        $data = Settlement::with('settlementGroup')->where('settlement_group_id',$id);
+        $u1 = array_pluck($data->get(),'status');
+        $u2 = array_pluck($data->get(),'bank_account_number');
+        
+        $complete = 1;
+        $status = 2;
 
         // status
         if(in_array(1,$u1))
-            $data['status'] = 1;
+           $status = 1;
         // complete bank akun
         if(in_array(null,$u2))
-            $data['complete'] = 0;
+           $complete = 0;
         
-        return view('settlement.result',['data'=>$data]);
+        $result = $data->paginate(10);
+        // dd($result[0]->settlementGroup->id);
+        return view('settlement.result',['data'=>$result,'status' =>$status, 'complete' => $complete]);
     }
     public function paid(Request $request){
-        // dd($request->id);
         if(Settlement::find($request->id) != null){
             DB::beginTransaction();
             try{
                 $settelement = Settlement::where('id',$request->id)->first();
                 switch ($settelement->product_type) {
-                    case "Hotel":
+                    case "hotel":
                         $book = BookingHotel::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "Activity":
+                    case "tour":
                         $book = BookingTour::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "Car Rental":
+                    case "car":
                         $book = BookingRentCar::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
                     default:

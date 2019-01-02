@@ -21,12 +21,12 @@
 @section('main-content')
 			<div class="block-header">
                 <h2 id="head_card">
-                    Settlement {{ date('d/m/Y',strtotime($data->start_date)) }}
+                    Settlement {{ date('d/m/Y',strtotime($data[0]->settlementGroup->start_date)) }}
                     <small>Admin Data / Settlement</small>
                 </h2>
-                @if($data->status != 1)
-                    <a id="export" href="{{ url('settlement/excel/'.$data->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
-                    <!-- <a id="export" href="{{ url('settlement/pdf/'.$data->id) }}" class="btn bg-orange waves-effect">Generate PDF</a> -->
+                @if($data[0]->settlementGroup->status != 1)
+                    <a id="export" href="{{ url('settlement/excel/'.$data[0]->settlementGroup->id) }}" class="btn bg-deep-orange waves-effect">Generate Excel</a>
+                    <!-- <a id="export" href="{{ url('settlement/pdf/'.$data[0]->settlementGroup->id) }}" class="btn bg-orange waves-effect">Generate PDF</a> -->
                 @endif
             </div>
             <!-- Basic Examples -->
@@ -35,12 +35,12 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Settlment {{ date('d/m/Y',strtotime($data->start_date)) }}<span class="badge bg-orange">{{count($data->settlement)}}</span>
+                                Settlment {{ date('d/m/Y',strtotime($data[0]->settlementGroup->start_date)) }}<span class="badge bg-orange">{{count($data)}}</span>
                             </h2>
                             <ul class="header-dropdown">
                                 <li>
-                                    @if($data['status'] == 1)
-                                        @if($data['complete'] == 1)
+                                    @if($status == 1)
+                                        @if($complete == 1)
                                             <a class="btn bg-orange btn-block waves-effect">Some Data not has been proceed</a>
                                         @else
                                             <a class="btn bg-red btn-block waves-effect">Data Not Complete</a>
@@ -48,7 +48,7 @@
                                     @else
                                         <a class="btn bg-deep-orange btn-block waves-effect">Settled</a>
                                     @endif
-                                    <p><span class="badge bg-cyan">{{ date('d/m/Y',strtotime($data->start_date)) }}</span></p>
+                                    <p><span class="badge bg-cyan">{{ date('d/m/Y',strtotime($data[0]->settlementGroup->start_date)) }}</span></p>
                                 </li>
                             </ul>
                         </div>
@@ -72,8 +72,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    @if(count($data->settlement) > 0)
-                                        @foreach($data->settlement as $set)
+                                    @if(count($data) > 0)
+                                        @foreach($data as $set)
                                         <tr>
                                             <td>{{$set->booking_number}}</td>
                                             <td>{{$set->product_type}}</td>
@@ -99,13 +99,7 @@
                                                 </a>
                                                 @endif     
                                             </td>
-                                            <td>
-                                                @if($set->status == 1)
-                                                    <span class="label bg-deep-purple">No Settled</a>
-                                                @else
-                                                    <span class="label bg-green">Settled</a>
-                                                @endif
-                                            </td>
+                                            
                                             <td>
                                                 @if($set->status == 1)
                                                     <span class="badge bg-cyan">On Progress</span>
@@ -128,7 +122,9 @@
                                         @endforeach
                                     @endif
                                     </tbody>
+                                    
                                 </table>
+                                {{ $data->links() }}
                                  <!-- Modal -->
                                 <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
                                     <div class="modal-dialog" role="document">

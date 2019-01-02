@@ -47,8 +47,8 @@
                                         @foreach($data as $set)
                                         <tr>
                                             <td>{{$set->id}}</td>
-                                            <td>{{$set->total_commission}}</td>
-                                            <td>{{$set->total_paid}}</td>
+                                            <td>{{Helpers::idr($set->total_commission)}}</td>
+                                            <td>{{Helpers::idr($set->total_paid)}}</td>
                                             <td class="note" style="width:20px">
                                                 <button class="btn btn-primary" data-id="{{$set->id}}" notes="{{$set->note}}" data-toggle="modal" data-target="#myModal">
                                                     See Notes
