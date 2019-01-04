@@ -37,6 +37,7 @@ use Validator;
 use Helpers;
 use DB;
 use File;
+use Carbon\Carbon;
 
 class TourController extends Controller
 {
@@ -1147,5 +1148,48 @@ class TourController extends Controller
         }
         $data = $data->select('id','product_name as name')->get()->toArray();
         return $this->sendResponse($data, "Tour retrieved successfully", 200);
+    }
+
+    public function schedule_bulk($id,Request $request){
+        $data = Tour::where('id',$id)->first();
+        if($data->schedule_type != 1){
+            return redirect()->back();
+        }
+        // dd($request->all());
+        $range = explode(' - ',$request->range);
+        $start = Carbon::parse($range[0]);
+        $end = Carbon::parse($range[1]);
+        if($request->has('day')){
+            $day = [];
+            if($request->has('day')){
+                foreach($request->day as $index=>$d){
+                    $day[] = $index;
+                }
+            }
+            dd($day);
+            // untuk hari tertentu
+        }else{
+            $diff = $start->diffInDays($end);
+            $mod = ($diff%$data->schedule_interval);
+            if($mod != 0){
+                $end = Carbon::parse($range[1])->addDays($mod);
+                $diff = $start->diffInDays($end);
+            }
+            // untuk ga hari tertentu
+            $date_list =[];
+            for($i = 0;$i<$diff;$i+=3){
+                $a = Carbon::parse($range[0])->addDays($i)->format('Y-m-d');
+                $b = Carbon::parse($a)->addDays($data->schedule_interval - 1)->format('Y-m-d');
+                if($a < Cabon::now()->format('Y-m-d')){
+                    return redirect()->route('product.schedule', ['id' => $id]);
+                }
+                Schedule::updateOrCreate(
+                    ['product_id' => $data->id,'start_date'=>$a,'end_date'=>$b],
+                    ['start_hours'=>'00:00:00','end_hours'=>'23:59:00','maximum_booking'=>$request->max_book]
+                );
+                $date_list[] = [$a,$b];
+            }
+            return redirect()->route('product.schedule', ['id' => $id]);
+        }
     }
 }

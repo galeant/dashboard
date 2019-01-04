@@ -114,6 +114,9 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::post('changeStatus/{status}','TourController@changeStatus')->name('json.changeStatus');;
 	});
 	Route::group(['prefix' => 'product'],function(){
+		// BULK SCHEDULE
+		Route::put('tour-activity/schedule/bulk/{id}', 'TourController@schedule_bulk')->name('schedule.bulk');
+		// 
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule')->name('product.schedule');
 		Route::get('tour-activity/{id}/off-day', 'TourController@offDay')->name('product.schedule_off_day');
 		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck')->name('product.schedule_off_day_check');
