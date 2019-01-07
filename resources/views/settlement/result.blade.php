@@ -61,7 +61,8 @@
                                             <th>Booking Number</th>
                                             <th>Product Type</th>
                                             <th>Product Name</th>
-                                            <th>Qty</th>
+                                            <th>Transaction Date</th>
+                                            <!-- <th>Qty</th> -->
                                             <!-- <th>Unit Price</th> -->
                                             <th>Paid At</th>
                                             <th>Total Commssion</th>
@@ -75,10 +76,23 @@
                                     @if(count($data->settlement) > 0)
                                         @foreach($data->settlement as $set)
                                         <tr>
-                                            <td>{{$set->booking_number}}</td>
-                                            <td>{{$set->product_type}}</td>
+                                            <td>
+                                                <a href="{{ url('bookings/tour/'.$set->booking_number)}}" class="btn bg-green" >{{$set->booking_number}}</a>
+                                            </td>
+                                            <!-- <td>{{$set->product_type}}</td> -->
                                             <td>{{$set->product_name}}</td>
-                                            <td>{{$set->qty}}</td>
+                                            <td>
+                                            @if($set->bookingTour != null)
+                                                <a href="{{ url('transaction/'.$set->bookingTour->transactions->transaction_number)}}" class="btn bg-blue" >{{$set->bookingTour->transactions->paid_at}}</a>
+                                            @elseif($set->bookingHotel != null)
+                                                <a href="{{ url('transaction/'.$set->bookingHotel->transactions->transaction_number)}}" class="btn bg-blue" >{{$set->bookingHotel->transactions->paid_at}}</a>
+                                            @else
+                                                <a href="{{ url('transaction/'.$set->bookingCarRental->transactions->transaction_number)}}" class="btn bg-blue" >{{$set->bookingCarRental->transactions->paid_at}}</a>
+                                            @endif
+                                            
+                                                
+                                            </td>
+                                            <!-- <td>{{$set->qty}}</td> -->
                                             <!-- <td>{{Helpers::idr($set->unit_price)}}</td> -->
                                             <td>
                                                 @if($set->paid_at != null)
@@ -101,13 +115,6 @@
                                             </td>
                                             <td>
                                                 @if($set->status == 1)
-                                                    <span class="label bg-deep-purple">No Settled</a>
-                                                @else
-                                                    <span class="label bg-green">Settled</a>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if($set->status == 1)
                                                     <span class="badge bg-cyan">On Progress</span>
                                                 @else
                                                     <span class="badge bg-green">Settled</span>
@@ -116,7 +123,7 @@
                                             <td>
                                             @if($set->bank_account_number != null)
                                                 @if($set->status == 1)
-                                                <a id="paid" class="btn bg-deep-purple btn-block waves-effect" state="status_pay" data-id="{{$set->id}}">Pay</a>
+                                                <a class="btn bg-deep-purple btn-block waves-effect paid" state="status_pay" data-id="{{$set->id}}">Pay</a>
                                                 @endif
                                             @else
                                                 <a  href="#" class="btn bg-red" data-id="{{$set->id}}" data-toggle="modal" data-target="#myModal">
@@ -169,7 +176,8 @@
     <script src="{{ asset('plugins/mask-js/jquery.mask.min.js') }}"></script> 
     <script>
     $(document).ready(function(){
-        $("#paid").click(function(){
+        $(".paid").click(function(){
+            console.log('qwdqwdqwfqwgq');
             var form = $("form#paid");
             var data_id = $(this).attr("data-id");
             swal({

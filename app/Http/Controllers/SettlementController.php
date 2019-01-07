@@ -114,9 +114,9 @@ class SettlementController extends Controller
         }
         $request->request->add(['start'=>$start,'end' => $end]);
         // dd($request->all());
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->get()->groupBy('start_date')->toArray();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company')->with('transactions')->get()->groupBy('start_date')->toArray();
-        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->get()->groupBy('start_date')->toArray();
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company','transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
         
         $ar = [];
         foreach($dataHotel as $key=>$dh){
@@ -215,9 +215,14 @@ class SettlementController extends Controller
         }
     }
     public function detail($id){
-        $data = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
-            $query->where('settlement_group_id',$id);
-        }])->first();
+        $data = SettlementGroup::where('id',$id)->
+                with(
+                    'settlement.bookingTour.transactions',
+                    'settlement.bookingHotel.transactions',
+                    'settlement.bookingCarRental.transactions'
+                    )
+                ->first();
+        
         $u1 = array_pluck($data->settlement,'status');
         $u2 = array_pluck($data->settlement,'bank_account_number');
         $data['complete'] = 1;
@@ -239,13 +244,13 @@ class SettlementController extends Controller
             try{
                 $settelement = Settlement::where('id',$request->id)->first();
                 switch ($settelement->product_type) {
-                    case "Hotel":
+                    case "hotel":
                         $book = BookingHotel::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "Activity":
+                    case "tour":
                         $book = BookingTour::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
-                    case "Car Rental":
+                    case "car":
                         $book = BookingRentCar::where('booking_number',$settelement->booking_number)->update(['status' => 5]);
                         break;
                     default:

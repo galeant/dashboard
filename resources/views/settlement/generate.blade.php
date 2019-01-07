@@ -166,7 +166,7 @@
                                                             @endif 
                                                         </td>
                                                         <td>
-                                                            {{$set['transactions']['created_at']}}
+                                                            {{$set['transactions']['paid_at']}}
                                                         </td>
                                                     </tr>
                                                     @endforeach

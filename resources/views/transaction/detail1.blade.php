@@ -341,7 +341,7 @@
                                     <td>{{Helpers::idr($hotel->price_per_night)}}</td>
                                     <td>{{Helpers::idr($hotel->total_price)}}</td>
                                     <td>
-                                        @if(count($hotel->booking_status))
+                                        @if($hotel->booking_status != null)
                                         <span class="badge" style="background-color:{{$hotel->booking_status->color}}">{{$hotel->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
@@ -390,7 +390,7 @@
                                         {{Helpers::idr($rent_car->total_price)}}
                                     </td>
                                     <td>
-                                        @if(count($rent_car->booking_status))
+                                        @if($rent_car->booking_status != null)
                                         <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$rent_car->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
