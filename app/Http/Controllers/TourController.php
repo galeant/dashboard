@@ -1151,22 +1151,96 @@ class TourController extends Controller
     }
 
     public function schedule_bulk($id,Request $request){
+        $validated = $request->validate([
+            'range' => 'required',
+            'max_book' => 'required|numeric|min:2',
+        ]);
         $data = Tour::where('id',$id)->first();
         if($data->schedule_type != 1){
-            return redirect()->back();
+            return redirect()->back()->withErrors(['Schedule type not multiple days']);
         }
-        // dd($request->all());
         $range = explode(' - ',$request->range);
         $start = Carbon::parse($range[0]);
         $end = Carbon::parse($range[1]);
         if($request->has('day')){
+            if(count($request->day) > 3){
+                return redirect()->back()->withErrors(['Selected day more than 3']);
+            }
             $day = [];
-            if($request->has('day')){
-                foreach($request->day as $index=>$d){
-                    $day[] = $index;
+            foreach($request->day as $index=>$d){
+                $ar = [];
+                $sum = $data->schedule_interval+$index;
+                if($sum > 7){
+                    $sel = $sum - 6;
+                    for($ids = $index;$ids<=6;$ids++){
+                        $ar[] = $ids;
+                    }
+                    $count = count($ar)-1;
+                    for($ij = 0;$ij<$count;$ij++){
+                        $ar[] = $ij;
+                    }
+                }else{
+                    for($ids = $index;$ids<$sum;$ids++){
+                        $ar[] = $ids;
+                    }
+                }
+                array_push($day,$ar);
+            }
+            $cd = count($day);
+            $insek = [];
+            // dd($day);
+            if($cd > 1 ){
+                for($ic = 0;$ic<$cd;$ic++){
+                    if(($ic+1) < $cd){
+                        foreach($day[$ic+1] as $dy){
+                            if(in_array($dy,$day[$ic])){
+                                $insek[] = $dy;
+                            }
+                        }
+                    }
                 }
             }
-            dd($day);
+            if(count($insek) != 0){
+                return redirect()->back()->withErrors(['Some Schedule has intersect with other, only select day the schedule start']);
+            }
+            $diff = Carbon::parse($range[0])->startOfWeek()->addDays(-1)->diffInWeeks($end);
+            $date_list = [];
+            foreach($request->day as $idat=>$vl){
+                for($i = 0;$i<$diff;$i++){
+                    $sw =  Carbon::parse($range[0])->startOfWeek();  
+                    $awal = $sw->addWeeks($i);
+                        $start = $awal->addDays($idat)->format('Y-m-d');
+                        $end = Carbon::parse($start)->addDays(($data->schedule_interval-1))->format('Y-m-d');
+                        $ar = [
+                            'start' => $start,
+                            'end' => $end
+                        ];
+                        array_push($date_list,$ar);
+                    }
+            }
+            $lf = [];
+            foreach($date_list as $dl){
+                if(Carbon::parse($dl['start']) > Carbon::parse($range[0])){
+                    if(count($lf) > 0){
+                        if(!in_array($dl['start'],array_pluck($lf, 'start'))){
+                            array_push($lf,$dl);
+                        }
+                    }else{
+                        array_push($lf,$dl);
+                    }
+                }
+                
+            }
+            foreach($lf as $ls){
+                $validate = Schedule::where('product_id',$data->id)->whereBetween('start_date',[$ls['start'],$ls['end']])->first();
+                if($validate == null){
+                    Schedule::updateOrCreate(
+                        ['product_id' => $data->id,'start_date'=>$ls['start'],'end_date'=>$ls['end']],
+                        ['start_hours'=>'00:00:00','end_hours'=>'23:59:00','maximum_booking'=>$request->max_book]
+                    );
+                };
+            }
+            return redirect()->route('product.schedule', ['id' => $id]);
             // untuk hari tertentu
         }else{
             $diff = $start->diffInDays($end);
@@ -1177,16 +1251,18 @@ class TourController extends Controller
             }
             // untuk ga hari tertentu
             $date_list =[];
-            for($i = 0;$i<$diff;$i+=3){
+            for($i = 0;$i<$diff;$i+=$data->schedule_interval){
                 $a = Carbon::parse($range[0])->addDays($i)->format('Y-m-d');
                 $b = Carbon::parse($a)->addDays($data->schedule_interval - 1)->format('Y-m-d');
-                if($a < Cabon::now()->format('Y-m-d')){
-                    return redirect()->route('product.schedule', ['id' => $id]);
+                if($a >= Carbon::now()->format('Y-m-d')){
+                    $validate = Schedule::where('product_id',$data->id)->whereBetween('start_date',[$a,$b])->first();
+                    if($validate == null){
+                        Schedule::updateOrCreate(
+                            ['product_id' => $data->id,'start_date'=>$a,'end_date'=>$b],
+                            ['start_hours'=>'00:00:00','end_hours'=>'23:59:00','maximum_booking'=>$request->max_book]
+                        );
+                    }
                 }
-                Schedule::updateOrCreate(
-                    ['product_id' => $data->id,'start_date'=>$a,'end_date'=>$b],
-                    ['start_hours'=>'00:00:00','end_hours'=>'23:59:00','maximum_booking'=>$request->max_book]
-                );
                 $date_list[] = [$a,$b];
             }
             return redirect()->route('product.schedule', ['id' => $id]);

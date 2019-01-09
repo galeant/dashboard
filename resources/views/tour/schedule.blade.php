@@ -44,6 +44,7 @@
                         <a href="/product/tour-activity/{{$data->id}}/edit" class="btn btn-default btn-sm btn-waves">Back</a>
                     </li>
                 </ul>
+                @if($data->schedule_type == 1)
                 <div class="row clearfix">
                     <div class="col-md-12">
                         {{ Form::model($data, ['route' => ['schedule.bulk', $data->id], 'method'=>'PUT', 'class'=>'form-horizontal','id'=>'form_advanced_validation']) }}
@@ -67,29 +68,30 @@
                                 <div class="col-sm-2 col-xs-6" style="margin-top:20px">
                                     <button type="submit" class="btn btn-success waves-effect"><i class="material-icons">save</i></button>
                                 </div>                                 
-                                <!-- <div class="col-sm-6">
+                                <div class="col-sm-6">
                                     <label>Day</label>
                                     <div class="form-group">    
-                                        <input type="checkbox" id="md_checkbox_1" name="day[0]" class="filled-in chk-col-blue">
-                                        <label for="md_checkbox_1">Mon</label>
-                                        <input type="checkbox" id="md_checkbox_2" name="day[1]" class="filled-in chk-col-green">
-                                        <label for="md_checkbox_2">Tue</label>
-                                        <input type="checkbox" id="md_checkbox_3" name="day[2]" class="filled-in chk-col-purple">
-                                        <label for="md_checkbox_3">Wed</label>
-                                        <input type="checkbox" id="md_checkbox_4" name="day[3]" class="filled-in chk-col-lime">
-                                        <label for="md_checkbox_4">Thu</label>
-                                        <input type="checkbox" id="md_checkbox_5" name="day[4]" class="filled-in chk-col-amber">
-                                        <label for="md_checkbox_5">Fri</label>
-                                        <input type="checkbox" id="md_checkbox_6" name="day[5]" class="filled-in chk-col-deep-orange">
-                                        <label for="md_checkbox_6">Sat</label>
-                                        <input type="checkbox" id="md_checkbox_7" name="day[6]" class="filled-in chk-col-red">
-                                        <label for="md_checkbox_7">Sun</label>
+                                        <input type="checkbox" id="md_checkbox_0" mask="0" name="day[0]" class="filled-in chk-col-blue day">
+                                        <label for="md_checkbox_0">Mon</label>
+                                        <input type="checkbox" id="md_checkbox_1" mask="1"name="day[1]" class="filled-in chk-col-green day">
+                                        <label for="md_checkbox_1">Tue</label>
+                                        <input type="checkbox" id="md_checkbox_2" mask="2" name="day[2]" class="filled-in chk-col-purple day">
+                                        <label for="md_checkbox_2">Wed</label>
+                                        <input type="checkbox" id="md_checkbox_3" mask="3" name="day[3]" class="filled-in chk-col-lime day">
+                                        <label for="md_checkbox_3">Thu</label>
+                                        <input type="checkbox" id="md_checkbox_4" mask="4" name="day[4]" class="filled-in chk-col-amber day">
+                                        <label for="md_checkbox_4">Fri</label>
+                                        <input type="checkbox" id="md_checkbox_5" mask="5" name="day[5]" class="filled-in chk-col-deep-orange day">
+                                        <label for="md_checkbox_5">Sat</label>
+                                        <input type="checkbox" id="md_checkbox_6" mask="6" name="day[6]" class="filled-in chk-col-red day">
+                                        <label for="md_checkbox_6">Sun</label>
                                     </div>
                                 </div>
-                            </div>     -->
+                            </div>    
                         </div>
                     </form>
                 </div>
+                @endif
             </div>
             </div>
             <div class="body">
@@ -512,14 +514,20 @@
     @endif
     });
 </script>
+@if($data->schedule_type == 1 && ($data->schedule_interval != null || $data->schedule_interval < 7))
+@php
+    $int_val = null;
+    if($data->schedule_interval != null){
+        $int_val = $data->schedule_interval;
+    }
+@endphp
 <script>
     $(document).ready(function(){
         $('#filter').daterangepicker({
             "autoApply": true,
-            "startDate": "1215/2018",
-            "endDate": "12/21/2018",
-            "minDate": "12/21/2018"
+            "minDate": "{{date('m/d//Y')}}"
         });
     })
 </script>
+@endif
 @stop
