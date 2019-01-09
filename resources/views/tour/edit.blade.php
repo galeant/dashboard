@@ -365,12 +365,13 @@
                                         
                                         <div class="col-md-4 col-destination">
                                             <h5>Destination</h5>
-                                            <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%">
+                                            <select class="form-control destination-sel" id="0-destination" name="place[0][destination]" style="width: 100%"
                                                 @if(count($data->destinations) !=0)
-                                                <option value="{{$data->destinations[0]->destination_id}}" selected="">@if(!empty($data->destinations[0]->destination_id)) {{$data->destinations[0]->dest->destination_name}} @endif</option>
+                                                    destid = "{{$data->destinations[0]->destination_id}}"
                                                 @else
-                                                <option value="" selected>-- Select Destination --</option>
+                                                    destid = ""
                                                 @endif
+                                            >
                                             </select>
                                             <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                         </div>
@@ -411,12 +412,13 @@
                                         </div>
                                         <div class="col-md-4 col-destination">
                                             <h5>Destination</h5>
-                                            <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%">
+                                            <select class="form-control destination-sel" id="{{$index}}-destination" name="place[{{$index}}][destination]" style="width: 100%"
                                                 @if(!empty($destination))
-                                                <option value="{{$destination->destination_id}}" selected="">@if(!empty($destination->destination_id)) {{$destination->dest->destination_name}} @endif</option>
+                                                    destid = "{{$destination->destination_id}}"
                                                 @else
-                                                <option value="" selected>-- Select Destination --</option>
+                                                    destid = ""
                                                 @endif
+                                            >
                                             </select>
                                             <b style="font-size:10px">Leave empty if you can't find the destination</b>
                                         </div>
@@ -1725,6 +1727,37 @@
         });
         tinymce.suffix = ".min";
         tinyMCE.baseURL = "{{ asset('plugins/tinymce') }}";
+
+
+        // UNTUK SELECT DETINATION SAAT UDAH KEPILIH
+        $('.city-sel').each(function(){
+            var id = $(this).attr('data-id');
+            var c = $(this)
+            $.ajax({
+                method: "GET",
+                url: "{{ url('json/findDestination') }}",
+                data: {
+                city_id: $(this).val()
+                }
+            }).done(function(response) {
+                
+                var d = c.closest(".col-city").siblings(".col-destination").find(".destination-sel").attr("destid");
+                // $('#'+id+'-destination option').remove();
+                // $('#'+id+'-destination option').empty();
+                $('#'+id+'-destination').append('<option value="" selected="">-- Select Destination --</option>');
+                $.each(response, function (index, value) {  
+                    if(d == value.id){
+                        $('#'+id+'-destination').append(
+                            "<option value="+value.id+" selected>"+value.destination_name+"</option>"
+                        );
+                    }else{
+                        $('#'+id+'-destination').append(
+                            "<option value="+value.id+">"+value.destination_name+"</option>"
+                        );
+                    }
+                });
+            });
+        })
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key={{env('API_GOOGLE_MAPS','AIzaSyCs3DPAN9pcNR6CBFXolpNNrE7PIxpbiGA')}}&libraries=places&callback=initMap"
         async defer></script>
