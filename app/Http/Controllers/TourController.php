@@ -892,11 +892,7 @@ class TourController extends Controller
                 'end_hours' => 'date_format:H:i',
                 // 'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
             ]);
-            if($request->end_hours != "00:00"){
-                if(Carbon::parse($request->start_hours)->format('H:i') > Carbon::parse($request->end_hours)->format('H:i')){
-                    return response()->json(['error' => 'end hours cant less than start hours'],400);
-                }    
-            }
+            
             
             $start = date("Y-m-d ".$request->start_hours,strtotime($request->start_date));
             $interval = explode(':',$product->schedule_interval);
@@ -925,17 +921,27 @@ class TourController extends Controller
             return redirect()->back()
             ->with('errors', $validation->errors() );
         }
-        // dd($request->end_hours);
+        
         // dd([
         //     'start' => $request->start_date,
         //     'end_date' => $request['end_date'],
         //     'start_hours' => $request['start_hours'],
         //     'end_hours' => $request['end_hours']
         // ]);
-        if($request->end_hours == "00:00"){
+        // if($request->end_hours != "00:00"){
+        //     if(Carbon::parse($request->start_hours)->format('H:i') > Carbon::parse($request->end_hours)->format('H:i')){
+        //         return response()->json(['error' => 'end hours cant less than start hours'],400);
+        //     }    
+        // }
+        // dd($request->end_hours);
+        if($request['end_hours'] == "00:00"){
             $request['end_date'] = $request->start_date;
             $request['end_hours'] = "23:59";
-        }
+        }else if(($request->start_date == $request['end_date']) && (Carbon::parse($request['start_hours'])->format('H:i') > Carbon::parse($request['end_hours'])->format('H:i')) ){
+            return response()->json(['error' => 'end hours cant less than start hours'],400);
+        }/*else if($request->start_date != $request['end_date']){
+            return response()->json(['error' => 'cant input until change day'],400);
+        }*/
         
         DB::beginTransaction();
         try{
