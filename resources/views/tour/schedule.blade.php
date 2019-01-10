@@ -93,7 +93,6 @@
                 </div>
                 @endif
             </div>
-            </div>
             <div class="body">
                 @include('errors.error_notification')
                 <div id='calendar' data-interval="{{$data->schedule_interval}}" data-type="{{$data->schedule_type}}" data-id="{{$data->id}}"></div>
