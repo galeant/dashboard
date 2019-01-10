@@ -889,14 +889,14 @@ class TourController extends Controller
             $validation = Validator::make($request->all(), [
                 'start_date' => 'date_format:Y-m-d',
                 'start_hours' => 'date_format:H:i',
-                // 'end_hours' => 'date_format:H:i',
-                'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
+                'end_hours' => 'date_format:H:i',
+                // 'end_hours' => 'date_format:H:i|after_or_equal:start_hours',
             ]);
-            // if($request->end_hours != "00:00"){
-            //     if(Carbon::parse($request->start_hours)->format('H:i') > Carbon::parse($request->end_hours)->format('H:i')){
-            //         return response()->json(['error' => 'end hours cant less than start hours'],400);
-            //     }    
-            // }
+            if($request->end_hours != "00:00"){
+                if(Carbon::parse($request->start_hours)->format('H:i') > Carbon::parse($request->end_hours)->format('H:i')){
+                    return response()->json(['error' => 'end hours cant less than start hours'],400);
+                }    
+            }
             
             $start = date("Y-m-d ".$request->start_hours,strtotime($request->start_date));
             $interval = explode(':',$product->schedule_interval);
