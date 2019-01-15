@@ -324,7 +324,8 @@
 						array_key_exists("Destination",$permission) ||
 						array_key_exists("DestinationTipsQuestion",$permission) ||
 						array_key_exists("ActivityTag",$permission) ||
-						array_key_exists("CompanyLevel",$permission)
+						array_key_exists("CompanyLevel",$permission) ||
+						array_key_exists("uHotel",$permission) 
 					)
 		            <li {{{ (Request::is('master*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
@@ -332,6 +333,25 @@
 		                    <span>Master Data</span>
 		                </a>
 		                <ul class="ml-menu" style="display: block;">
+							@if(array_key_exists("uHotel",$permission))
+		                    <li {{{ (Request::is('master/assign*') ? 'class=active' : '') }}} >
+			                    <a href="javascript:void(0);" class="menu-toggle">
+	                                <span>Assign</span>
+	                            </a>
+	                            <ul class="ml-menu">
+	                            	<li {{{ (Request::is('master/assign/uhotel*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/assign/uhotel') }}" class=" waves-effect waves-block">
+				                            <span>Hotel</span>
+				                        </a>
+				                    </li>
+									<li {{{ (Request::is('master/assign/ucar*') ? 'class=active' : '') }}}>
+				                        <a href="{{ URL('master/assign/ucar') }}" class=" waves-effect waves-block">
+				                            <span>Car Rental</span>
+				                        </a>
+				                    </li>
+	                            </ul>
+                            </li>
+							@endif
 							@if(array_key_exists("CompanyLevel",$permission))
 		                	<li {{{ (Request::is('master/partner-level*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('master/partner-level') }}" class=" waves-effect waves-block">
