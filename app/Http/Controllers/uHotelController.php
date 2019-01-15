@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\uHotel;
-use App\Models\uCar;
+use App\Models\uCar\uCar;
 use App\Models\Province;
 use App\Models\City;
 use Datatables;
