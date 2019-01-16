@@ -305,15 +305,18 @@ class TourController extends Controller
                     if($request->schedule_type == 1){
                         $changeInterval = ($data->schedule_interval == $request->day ? false : true);
                         $data->schedule_interval = $request->day;
+                        $data->convert_schedule_interval = ($request->day*24*60*60);
                         $data->always_available_for_sale = 0;
                     }elseif($request->schedule_type == 2){
                         $data->always_available_for_sale = 0;
                         $changeInterval = (((int)substr($data->schedule_interval,0,2) == $request->hours && (int)substr($data->schedule_interval,3) == $request->minutes) ? false : true);
                         $data->schedule_interval = ($request->hours < 10 ? '0'.$request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes) : $request->hours.':'.($request->minutes < 10 ? '0'.$request->minutes : $request->minutes));
+                        $data->convert_schedule_interval = ($request->hours*60*60)+($request->minutes*60);
                         $data->always_available_for_sale = 0;
                     }else{
                         $changeInterval = false;
                         $data->schedule_interval = 1;
+                        $data->convert_schedule_interval = (1*24*60*60);
                     }
                 }
                 $data->always_available_for_sale = (!empty($request->input('always_available_for_sale')) ? 1 : 0);
