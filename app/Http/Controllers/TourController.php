@@ -407,7 +407,7 @@ class TourController extends Controller
                 $data->save();
                 // dd($request->price);
                 // PRICE TYPE
-                if($data->product_category == 'Activity'){
+                // if($data->product_category == 'Activity'){
                     if(($request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null) && $request->price[count($data->prices)]['people'] != null){   
                         foreach($request->price as $price){
                             $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
@@ -426,24 +426,26 @@ class TourController extends Controller
                             }
                         }
                     }
-                }else{
-                    foreach($request->price as $price){
-                        $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
-                        // dd($validate);
-                        if($validate == null){
-                            if(!empty($price['USD'])){
-                                $price['USD'] = str_replace(".", "", $price['USD']);    
-                            }
-                            $price['IDR'] = str_replace(".", "", $price['IDR']);    
-                            $priceList = Price::create([
-                                    'number_of_person'=> $price['people'],
-                                    'price_idr'=> $price['IDR'],
-                                    'price_usd'=> $price['USD'],
-                                    'product_id'=> $data->id
-                                ]);
-                        }
-                    }
-                }
+                // }else{
+                //     if(($request->price[count($data->prices)]['IDR'] != null || $request->price[count($data->prices)]['USD'] != null) && $request->price[count($data->prices)]['people'] != null){   
+                //         foreach($request->price as $price){
+                //             $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
+                //             // dd($validate);
+                //             if($validate == null){
+                //                 if(!empty($price['USD'])){
+                //                     $price['USD'] = str_replace(".", "", $price['USD']);    
+                //                 }
+                //                 $price['IDR'] = str_replace(".", "", $price['IDR']);    
+                //                 $priceList = Price::create([
+                //                         'number_of_person'=> $price['people'],
+                //                         'price_idr'=> $price['IDR'],
+                //                         'price_usd'=> $price['USD'],
+                //                         'product_id'=> $data->id
+                //                     ]);
+                //             }
+                //         }
+                //     }
+                // }
                 
                 if($request->price_type == 1){
                     $minPerson = Price::where('product_id',$data->id)->orderBy('number_of_person','asc')->first();
