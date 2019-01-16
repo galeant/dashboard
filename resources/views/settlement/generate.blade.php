@@ -92,6 +92,7 @@
                                                     <th>Product Name</th>
                                                     <th>Qty</th>
                                                     <th>Unit Price</th>
+                                                    <th>Total Price</th>
                                                     <th>Total Commssion</th>
                                                     <th>Total Payment</th>
                                                     <th>Account Bank</th>
@@ -139,6 +140,12 @@
                                                             @else
                                                                 {{Helpers::idr($set['price_per_day'])}}
                                                             @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(array_key_exists('total_price',$set))
+                                                                {{Helpers::idr($set['total_price'])}}
+                                                            @endif
+                                                        </td>
                                                         <td>
                                                             @if(array_key_exists('commission',$set))
                                                                 {{Helpers::idr($set['commission'])}}
@@ -159,7 +166,7 @@
                                                             @endif 
                                                         </td>
                                                         <td>
-                                                            {{$set['transactions']['paid_at']}}
+                                                            {{$set['transactions']['created_at']}}
                                                         </td>
                                                     </tr>
                                                     @endforeach

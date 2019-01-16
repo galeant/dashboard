@@ -31,7 +31,18 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	});
 
 	Route::group(['prefix' => 'master'],function(){
-
+		Route::group(['prefix' => 'assign'],function(){
+			Route::group(['prefix' => 'uhotel'],function(){
+				Route::get('/', 'uHotelController@index');
+				Route::get('/{id}/edit', 'uHotelController@edit');
+				Route::put('/{id}', 'uHotelController@update')->name('uhotel.update');
+			});
+			Route::group(['prefix' => 'ucar'],function(){
+				Route::get('/', 'uHotelController@indexCar');
+				Route::get('/{id}/edit', 'uHotelController@editCar');
+				Route::put('/{id}', 'uHotelController@updateCar')->name('ucar.update');
+			});
+		});
 		Route::group(['prefix'=> 'partner-level'], function(){
 			Route::get('/', 'CompanyLevelController@index')->name('partner-level.index');
 			Route::get('create', 'CompanyLevelController@create')->name('partner-level.create');
