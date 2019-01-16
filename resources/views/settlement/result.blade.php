@@ -79,7 +79,7 @@
                                             <td>
                                                 <a href="{{ url('bookings/tour/'.$set->booking_number)}}" class="btn bg-green" >{{$set->booking_number}}</a>
                                             </td>
-                                            <!-- <td>{{$set->product_type}}</td> -->
+                                            <td>{{$set->product_type}}</td>
                                             <td>{{$set->product_name}}</td>
                                             <td>
                                             @if($set->bookingTour != null)
