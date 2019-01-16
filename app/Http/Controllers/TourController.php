@@ -428,10 +428,7 @@ class TourController extends Controller
                     }
                 }else{
                     foreach($request->price as $price){
-                        if($price['people'] == null){
-                            $p = 1;
-                        }
-                        $validate = Price::where(['product_id' => $id,'number_of_person' => $p])->first();
+                        $validate = Price::where(['product_id' => $id,'number_of_person' => $price['people']])->first();
                         // dd($validate);
                         if($validate == null){
                             if(!empty($price['USD'])){
