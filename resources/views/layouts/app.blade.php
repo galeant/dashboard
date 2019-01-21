@@ -112,13 +112,13 @@
 		                        </a>
 							</li>
 							@endif
-							@if(array_key_exists("CompanyProductType",$permission))
+							{{-- @if(array_key_exists("CompanyProductType",$permission))
 							<li {{{ (Request::is('partner-product-type') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('partner-product-type') }}" class=" waves-effect waves-block">
 		                            <span>Partner Type List</span>
 		                        </a>
 		                    </li>
-							@endif
+							@endif --}}
 							@if(array_key_exists("Company",$permission))
 		                    <li {{{ (Request::is('partner/registration/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
