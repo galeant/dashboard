@@ -42,11 +42,13 @@
                                     <tbody>
                                         @foreach($data->transaction_log_status as $log)
                                             <tr>
-                                                <td><span class="badge" style="background-color: {{$log->status->color}}">{{$log->status->name}}</span></td>
-                                                <td><span class="badge" style="background-color: green">From : {{$data->from->application}}</span></td>
+                                                <td><span class="badge" style="background-color: {{$log->status->color}}">{{$log->status->name}}</span></td>    
                                                 <td>{{$log->created_at}}</td>
                                             </tr>
                                         @endforeach
+                                        <tr>
+                                            <td><h5>Booking From : @if($data->from != null) {{$data->from->application}} @else - @endif</h5></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -64,6 +66,19 @@
                                 </form>
                             </div>
                             @endif
+                            <div class="col-md-6">
+                                {{ Form::model($data, ['route' => ['transaction.update', $data->id], 'method'=>'PUT']) }}
+                                    <div class="input-group">
+                                    <label>Payment from midtrans</label>
+                                        <div class="form-line">
+                                            <input type="text" name="midtrans_payment" value="{{str_replace('Rp. ','',Helpers::idr($data->midtrans_payment))}}" class="form-control"/>
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <button id="midtrans" type="submit" class="btn btn-success waves-effect">Save</button>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
                     </div>
                     <div class="row">
 
@@ -326,7 +341,7 @@
                                     <td>{{Helpers::idr($hotel->price_per_night)}}</td>
                                     <td>{{Helpers::idr($hotel->total_price)}}</td>
                                     <td>
-                                        @if(count($hotel->booking_status))
+                                        @if($hotel->booking_status != null)
                                         <span class="badge" style="background-color:{{$hotel->booking_status->color}}">{{$hotel->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>
@@ -375,7 +390,7 @@
                                         {{Helpers::idr($rent_car->total_price)}}
                                     </td>
                                     <td>
-                                        @if(count($rent_car->booking_status))
+                                        @if($rent_car->booking_status != null)
                                         <span class="badge" style="background-color:{{$rent_car->booking_status->color}}">{{$rent_car->booking_status->name}}</span>
                                         @else
                                         <span class="badge" style="background-color:#066dd6">Awaiting Payment</span>

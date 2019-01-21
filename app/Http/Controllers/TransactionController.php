@@ -253,88 +253,102 @@ class TransactionController extends Controller
     public function update(Request $request,  $id)
     {
         $data = Transaction::find($id);
-        $listStat = array_pluck($data->transaction_log_status, 'transaction_status_id');
-        if(!in_array($request->status, $listStat)){
-            if($request->status == 2){
-                if(in_array(1, $listStat)){
-                    DB::beginTransaction();
-                    try{
-                        if(empty($data->planning)){
-                            return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
+        if($request->has('status')){
+            $listStat = array_pluck($data->transaction_log_status, 'transaction_status_id');
+            if(!in_array($request->status, $listStat)){
+                if($request->status == 2){
+                    if(in_array(1, $listStat)){
+                        DB::beginTransaction();
+                        try{
+                            if(empty($data->planning)){
+                                return redirect('transaction/'.$data->transaction_number)->with('error','This transaction isn`t complete !');
+                            }
+                            Transaction::where('id',$id)->update([
+                                'status_id' => $request->status,
+                                'paid_at' => date('Y-m-d H:i:s'),
+                                'total_paid' => $request->input('gross_amount',($data->total_price-$data->total_discount))
+                            ]);
+                            TransactionLogStatus::create([
+                                'transaction_status_id' => $request->status,
+                                'transaction_id' => $id
+                            ]);
+                            //save pdf path pdf/transaction_number.pdf
+                            if (!is_dir(base_path('public/pdf'))) {
+                                mkdir(base_path('public/pdf'),0777,true);         
+                            }
+                            $pdf = $this->print($request,$data->transaction_number,'PDF',1);
+                            $pdf2 = $this->print_itinerary($request,1, $data->planning->id,'PDF',1);
+                            Mail::to($data->customer->email)->send(new TransactionMail($data));
+                            DB::commit();
+                            return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                        }catch (\Exception $exception){
+                            DB::rollBack();
+                            \Log::info($exception->getMessage());
+                            return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
                         }
-                        Transaction::where('id',$id)->update([
-                            'status_id' => $request->status,
-                            'paid_at' => date('Y-m-d H:i:s'),
-                            'total_paid' => $request->input('gross_amount',($data->total_price-$data->total_discount))
-                        ]);
-                        TransactionLogStatus::create([
-                            'transaction_status_id' => $request->status,
-                            'transaction_id' => $id
-                        ]);
-                        //save pdf path pdf/transaction_number.pdf
-                        if (!is_dir(base_path('public/pdf'))) {
-                            mkdir(base_path('public/pdf'),0777,true);         
+                    }else{
+                        return redirect()->back()->with('error','Can`t change status because status not right ordered' );
+                    }
+                }else if($request->status == 5){ //cancelled
+                    if(in_array(2, $listStat) || in_array(1, $listStat)){
+                        
+                        DB::beginTransaction();
+                        try{
+                            $this->cancelledAction($data->transaction_number,$data);
+                            Transaction::where('id',$id)->update([
+                                'status_id' => $request->status
+                            ]);
+                            TransactionLogStatus::create([
+                                'transaction_status_id' => $request->status,
+                                'transaction_id' => $data->id
+                            ]);
+                            DB::commit();
+                            return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                        }catch (\Exception $exception){
+                            DB::rollBack();
+                            \Log::info($exception->getMessage());
+                            return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
                         }
-                        $pdf = $this->print($request,$data->transaction_number,'PDF',1);
-                        $pdf2 = $this->print_itinerary($request,1, $data->planning->id,'PDF',1);
-                        Mail::to($data->customer->email)->send(new TransactionMail($data));
-                        DB::commit();
-                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
-                    }catch (\Exception $exception){
-                        DB::rollBack();
-                        \Log::info($exception->getMessage());
-                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                    }else{
+                        return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                     }
-                }else{
-                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
-                }
-            }else if($request->status == 5){ //cancelled
-                if(in_array(2, $listStat) || in_array(1, $listStat)){
-                    
-                    DB::beginTransaction();
-                    try{
-                        $this->cancelledAction($data->transaction_number,$data);
-                        Transaction::where('id',$id)->update([
-                            'status_id' => $request->status
-                        ]);
-                        TransactionLogStatus::create([
-                            'transaction_status_id' => $request->status,
-                            'transaction_id' => $data->id
-                        ]);
-                        DB::commit();
-                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
-                    }catch (\Exception $exception){
-                        DB::rollBack();
-                        \Log::info($exception->getMessage());
-                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                }else if($request->status == 6){ //refunded
+                    if(in_array(5, $listStat)){
+                        DB::beginTransaction();
+                        try{
+                            Transaction::where('id',$id)->update([
+                                'status_id' => $request->status
+                            ]);
+                            TransactionLogStatus::create([
+                                'transaction_status_id' => $request->status,
+                                'transaction_id' => $id
+                            ]);
+                            DB::commit();
+                            return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
+                        }catch (\Exception $exception){
+                            DB::rollBack();
+                            \Log::info($exception->getMessage());
+                            return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+                        }
+                    }else{
+                        return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                     }
-                }else{
-                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
                 }
-            }else if($request->status == 6){ //refunded
-                if(in_array(5, $listStat)){
-                    DB::beginTransaction();
-                    try{
-                        Transaction::where('id',$id)->update([
-                            'status_id' => $request->status
-                        ]);
-                        TransactionLogStatus::create([
-                            'transaction_status_id' => $request->status,
-                            'transaction_id' => $id
-                        ]);
-                        DB::commit();
-                        return redirect('transaction/'.$data->transaction_number)->with('message','Change Status Successfully');
-                    }catch (\Exception $exception){
-                        DB::rollBack();
-                        \Log::info($exception->getMessage());
-                        return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
-                    }
-                }else{
-                    return redirect()->back()->with('error','Can`t change status because status not right ordered' );
-                }
+            }else{
+                return redirect()->back()->with('error','Can`t change status because status is duplicated' );
             }
-        }else{
-            return redirect()->back()->with('error','Can`t change status because status is duplicated' );
+        }else if($request->has('midtrans_payment')){
+            DB::beginTransaction();
+            try{
+                $update = Transaction::where('id',$id)->update(['midtrans_payment'=>str_replace('.','',$request->midtrans_payment)]);
+                
+                DB::commit();
+                return redirect('transaction/'.$data->transaction_number)->with('message','Value of midtrans payment has updated');
+            }catch (\Exception $exception){
+                DB::rollBack();
+                \Log::info($exception->getMessage());
+                return redirect('transaction/'.$data->transaction_number)->with('error',$exception->getMessage());
+            }
         }
     }
 

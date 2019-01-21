@@ -17,6 +17,7 @@ use Mail;
 use DB;
 // use Auth;
 // use Illuminate\Support\Facades\Cache;
+    
 
 class CompanyController extends Controller
 {
@@ -27,78 +28,84 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax())
-        {
-            $model = Company::with(['suppliers' => function($query){
-                $query->orderBy('created_at','desc');
-            }])
-            ->where('status',[5,6]);
-            return Datatables::of($model)
-            ->addColumn('action', function(Company $data) {
-                // $permission = Cache::get('permission_'.Auth::user()->remember_token);
-                // if(array_key_exists("Company",$permission)){
-                //     // dd($permission['Company']);
-                //     if(in_array('PUT', $permission['Company']) && in_array('DELETE', $permission['Company'])){
-                        return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
-                            <i class="glyphicon glyphicon-edit"></i>
-                        </a>
-                        <a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </a>';
-                //     }else if(in_array('PUT', $permission['Company'])){
-                //         return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
-                //             <i class="glyphicon glyphicon-edit"></i>
-                //         </a>';
-                //     }else if(in_array('DELETE', $permission['Company'])){
-                //         return '<a href="/partner/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="partner/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
-                //             <i class="glyphicon glyphicon-trash"></i>
-                //         </a>';
-                //     }
-                // }
-            })
-            ->addColumn('pic_email', function(Company $data) {
-                return $data->suppliers[0]->email;
-            })
-            ->addColumn('pic_name', function(Company $data) {
-                return $data->suppliers[0]->fullname;
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->editColumn('status', function (Company $data){
-                return view('company.status',['data' => $data]);
-            })
-            ->rawColumns(['status','action'])
-            ->make(true);        
+        $sort = $request->input('sort_by','id');
+        $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
+        $name = $request->input('name',null);
+
+        $per_page = $request->input('per_page',10);
+        
+        
+        $data = Company::has('suppliers')->with(['suppliers' => function($query){
+            $query->orderBy('created_at','desc');
+        }])->whereIn('status',[5,6]);
+
+        if(!empty($name)){
+            $data = $data->where('company_name','like','%'.$name.'%')
+                        ->orWhere(function($q)use($name){
+                            $q->whereHas('suppliers',function($q)use($name){
+                                $q->where('fullname','like','%'.$name.'%')
+                                    ->orWhere('email','like','%'.$name.'%');
+                            });
+                        });
         }
-        return view('company.index');
+
+        if($sort != null){
+            switch($sort){
+                case 'id':
+                    $data = $data->orderBy('id',$orderby);
+                    break;
+                case 'created_at':
+                    $data = $data->orderBy('created_at',$orderby);
+                    break;
+                case 'status':
+                    $data = $data->orderBy('status',$orderby);
+                    break;
+            }
+        }
+        $request->request->add([
+            'sort_id' => request()->fullUrlWithQuery(["sort_by"=>"id","order"=>$orderby]),
+            'sort_create' => request()->fullUrlWithQuery(["sort_by"=>"created_at","order"=>$orderby]),
+            'sort_status' => request()->fullUrlWithQuery(["sort_by"=>"status","order"=>$orderby])
+        ]);
+        $data = $data->paginate($per_page);
+        $data->setPath($request->fullUrl());
+        
+        return view('company.index',['datas' => $data]);
     }
 
     public function registrationList(Request $request){
-        if($request->ajax())
-        {
-            $model = Company::with(['suppliers' => function($query){
-                $query->orderBy('created_at','desc');
-            }])
-            ->where('status','!=',[5,6]);
-            return Datatables::of($model)
-            ->addColumn('action', function(Company $data) {
-                return '<a href="/partner/'.$data->id.'/edit" class="btn-xs btn-success  waves-effect waves-circle waves-float">
-                        <i class="glyphicon glyphicon-eye-open"></i>
-                    </a>';
-            })
-            ->addColumn('pic_email', function(Company $data) {
-                return $data->suppliers[0]->email;
-            })
-            ->addColumn('pic_name', function(Company $data) {
-                return $data->suppliers[0]->fullname;
-            })
-            ->editColumn('id', 'ID: {{$id}}')
-            ->editColumn('status', function (Company $data){
-                return view('company.status',['data' => $data]);
-            })
-            ->rawColumns(['status','action'])
-            ->make(true);        
+        $sort = $request->input('sort_by','id');
+        $orderby = ($request->input('order','ASC') == 'ASC' ? 'DESC':'ASC');
+
+        $per_page = $request->input('per_page',10);
+        
+        
+        $data = Company::has('suppliers')->with(['suppliers' => function($query){
+            $query->orderBy('created_at','desc');
+        }])->whereNotIn('status',[5,6]);
+
+        if($sort != null){
+            switch($sort){
+                case 'id':
+                    $data = $data->orderBy('id',$orderby);
+                    break;
+                case 'created_at':
+                    $data = $data->orderBy('created_at',$orderby);
+                    break;
+                case 'status':
+                    $data = $data->orderBy('status',$orderby);
+                    break;
+            }
         }
-        return view('company.registration-list');
+        $request->request->add([
+            'sort_id' => request()->fullUrlWithQuery(["sort_by"=>"id","order"=>$orderby]),
+            'sort_create' => request()->fullUrlWithQuery(["sort_by"=>"created_at","order"=>$orderby]),
+            'sort_status' => request()->fullUrlWithQuery(["sort_by"=>"status","order"=>$orderby])
+        ]);
+        $data = $data->paginate($per_page);
+        $data->setPath($request->fullUrl());
+        
+        return view('company.registration-list',['datas' => $data]);
     }
 
     /**
@@ -413,14 +420,15 @@ class CompanyController extends Controller
              $data = Company::find($id);
              if($data->delete()){
                  DB::commit();
-                 return $this->sendResponse($data, "Delete Company ".$data->name." successfully", 200);
+                 return redirect()->back()->withErrors([$data->company_name.' successfull delete']);
              }else{
-                 return $this->sendResponse($data, "Error Database;", 200);
+                return redirect()->back()->withErrors(['error on delete']);
              }
          }catch (\Exception $exception){
              DB::rollBack();
              \Log::info($exception->getMessage());
-             return $this->sendResponse($data, $exception->getMessage() , 200);
+             return redirect()->back()->withErrors([$exception->getMessage()]);
+            //  return $this->sendResponse($data, $exception->getMessage() , 200);
          }
     }
 

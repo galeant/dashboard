@@ -114,33 +114,9 @@ class SettlementController extends Controller
         }
         $request->request->add(['start'=>$start,'end' => $end]);
         // dd($request->all());
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])
-                                ->where(['status'=> 2,'booking_from' => 'uhotel'])
-                                ->whereHas('transactions', function($query){
-                                    $query->where('transaction_id','!=',0)
-                                            ->orWhere('transaction_id','!=',null);
-                                })
-                                ->with('transactions')
-                                ->orderBy('start_date','asc')
-                                ->get()->groupBy('start_date')->toArray();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])
-                                ->where('status',2)
-                                ->whereHas('transactions', function($query){
-                                    $query->where('transaction_id','!=',0)
-                                            ->orWhere('transaction_id','!=',null);
-                                })
-                                ->with('tours.company','transactions')
-                                ->orderBy('start_date','asc')
-                                ->get()->groupBy('start_date')->toArray();
-        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])
-                                ->where('status',2)
-                                ->whereHas('transactions', function($query){
-                                    $query->where('transaction_id','!=',0)
-                                            ->orWhere('transaction_id','!=',null);
-                                })
-                                ->orderBy('start_date','asc')
-                                ->with('transactions')
-                                ->get()->groupBy('start_date')->toArray();
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company','transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
         
         $ar = [];
         foreach($dataHotel as $key=>$dh){
@@ -255,15 +231,18 @@ class SettlementController extends Controller
         }
     }
     public function detail($id){
-        // $group = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
-        //     $query->where('settlement_group_id',$id);
-        // }])->first();
-        $data = Settlement::with('settlementGroup')->where('settlement_group_id',$id);
-        $u1 = array_pluck($data->get(),'status');
-        $u2 = array_pluck($data->get(),'bank_account_number');
+        $data = SettlementGroup::where('id',$id)->
+                with(
+                    'settlement.bookingTour.transactions',
+                    'settlement.bookingHotel.transactions',
+                    'settlement.bookingCarRental.transactions'
+                    )
+                ->first();
         
-        $complete = 1;
-        $status = 2;
+        $u1 = array_pluck($data->settlement,'status');
+        $u2 = array_pluck($data->settlement,'bank_account_number');
+        $data['complete'] = 1;
+        $data['status'] = 2;
 
         // status
         if(in_array(1,$u1))

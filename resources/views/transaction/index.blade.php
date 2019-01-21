@@ -210,7 +210,7 @@
                                 <p>Displaying {{$data->perPage()}} of {{$data->total()}} transactions</p>
                             </div>
                             <div class="col-md-4 col-md-offset-2">
-                                <div>{{$data->appends(['start_date' => Request::input('start_date'),'end_date' => Request::input('end_date'),'q' => Request::input('q'),'sort' => Request::input('sort'),'order' => Request::input('order')])->links('vendor.pagination.default-material')}}
+                                <div>{{$data->appends(['start_date' => Request::input('start_date'),'end_date' => Request::input('end_date'),'q' => Request::input('q'),'sort' => Request::input('sort'),'order' => Request::input('order'),'from' => Request::input('from')])->links('vendor.pagination.default-material')}}
                                 </div>
                             </div>
                         </div>

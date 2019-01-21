@@ -120,7 +120,7 @@
 		                    </li>
 							@endif
 							@if(array_key_exists("Company",$permission))
-		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
+		                    <li {{{ (Request::is('partner/registration/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
 		                            <span>Registration - Activity</span>
 		                        </a>
@@ -188,7 +188,8 @@
 						array_key_exists("BookingTour",$permission) ||
 						array_key_exists("BookingAccomodationUHotel",$permission) ||
 						array_key_exists("BookingAccomodationTiket",$permission) ||
-						array_key_exists("BookingRentCar",$permission)
+						array_key_exists("BookingRentCar",$permission) ||
+						array_key_exists("BookingTransport",$permission)
 					)
 					<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 		                <a  class="menu-toggle waves-effect waves-block toggled">
@@ -207,7 +208,8 @@
 								array_key_exists("BookingTour",$permission) ||
 								array_key_exists("BookingAccomodationUHotel",$permission) ||
 								array_key_exists("BookingAccomodationTiket",$permission) ||
-								array_key_exists("BookingRentCar",$permission)
+								array_key_exists("BookingRentCar",$permission) ||
+								array_key_exists("BookingTransport",$permission)
 							)
 							<li {{{ (Request::is('bookings*') ? 'class=active' : '') }}}>
 								<a  class="menu-toggle waves-effect waves-block toggled">
@@ -247,13 +249,13 @@
 										</a>
 									</li>
 									@endif
-									{{-- @if(array_key_exists("BookingTransport",$permission)) --}}
+									@if(array_key_exists("BookingTransport",$permission))
 									<li {{{ (Request::is('bookings/transport*') ? 'class=active' : '') }}}>
 										<a href="{{ URL('/bookings/transport') }}" class=" waves-effect waves-block">
 											<span>Transport</span>
 										</a>
 									</li>
-									{{-- @endif --}}
+									@endif
 								</ul>
 							</li>
 							@endif
@@ -474,7 +476,7 @@
 		                        <a href="{{ URL('/bookings/byactivityschedule') }}" class=" waves-effect waves-block">
 		                            <span>Pigijo Company Setting</span>
 		                        </a>
-		                    </li--}}>
+		                    </li>--}}
 		                </ul>
 		            </li>
 					@endif

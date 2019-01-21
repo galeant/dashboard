@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	})->name('overview');
 
 	Route::resource('partner', 'CompanyController');
+	Route::get('partner/{id}/delete', 'CompanyController@destroy');
 
 	Route::resource('partner-product-type', 'CompanyProductTypeController');
 	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete')->name('company.product_type');
@@ -125,6 +126,9 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		Route::post('changeStatus/{status}','TourController@changeStatus')->name('json.changeStatus');;
 	});
 	Route::group(['prefix' => 'product'],function(){
+		// BULK SCHEDULE
+		Route::put('tour-activity/schedule/bulk/{id}', 'TourController@schedule_bulk')->name('schedule.bulk');
+		// 
 		Route::get('tour-activity/{id}/schedule', 'TourController@schedule')->name('product.schedule');
 		Route::get('tour-activity/{id}/off-day', 'TourController@offDay')->name('product.schedule_off_day');
 		Route::get('tour-activity/{id}/off-day/check', 'TourController@offDayCheck')->name('product.schedule_off_day_check');
