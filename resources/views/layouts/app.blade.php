@@ -120,7 +120,7 @@
 		                    </li>
 							@endif
 							@if(array_key_exists("Company",$permission))
-		                    <li {{{ (Request::is('/partner/activity*') ? 'class=active' : '') }}}>
+		                    <li {{{ (Request::is('partner/registration/activity*') ? 'class=active' : '') }}}>
 		                        <a href="{{ URL('/partner/registration/activity') }}" class=" waves-effect waves-block">
 		                            <span>Registration - Activity</span>
 		                        </a>
