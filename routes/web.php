@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 	})->name('overview');
 
 	Route::resource('partner', 'CompanyController');
+	Route::get('partner/{id}/delete', 'CompanyController@destroy');
 
 	Route::resource('partner-product-type', 'CompanyProductTypeController');
 	Route::get('partner-product-type/delete/{company_id}/{product_type_id}', 'CompanyProductTypeController@delete')->name('company.product_type');

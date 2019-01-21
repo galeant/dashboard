@@ -89,7 +89,6 @@ class TourController extends Controller
                 ]);
         // dd($data->paginate(10));
         $data = $data->paginate(10);
-        // dd($data[0]);
         return view('tour.view',['data' => $data]);
     }
 
