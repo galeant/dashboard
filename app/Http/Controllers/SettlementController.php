@@ -105,7 +105,7 @@ class SettlementController extends Controller
         return view('settlement.generate',['data' => $data])    ;
     }
     public function filter(Request $request){
-        
+
         $start = $request->input('start') == null ? date('Y-m-d') : date("Y-m-d",strtotime($request->input('start')));
         if($request->end != null){
             $end = date("Y-m-d", strtotime($request->input('end',date('Y-m-d'))));
@@ -114,10 +114,34 @@ class SettlementController extends Controller
         }
         $request->request->add(['start'=>$start,'end' => $end]);
         // dd($request->all());
-        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])->where(['status'=> 2,'booking_from' => 'uhotel'])->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
-        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])->where('status',2)->with('tours.company','transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
-        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])->where('status',2)->with('transactions')->has('transactions')->get()->groupBy('start_date')->toArray();
-        
+        $dataHotel = BookingHotel::whereBetween('start_date', [$start, $end])
+                                ->where(['status'=> 2,'booking_from' => 'uhotel'])
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->with('transactions')
+                                ->orderBy('start_date','asc')
+                                ->get()->groupBy('start_date')->toArray();
+        $dataTour = BookingTour::whereBetween('start_date', [$start, $end])
+                                ->where('status',2)
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->with('tours.company','transactions')
+                                ->orderBy('start_date','asc')
+                                ->get()->groupBy('start_date')->toArray();
+        $dataCar = BookingRentCar::whereBetween('start_date', [$start, $end])
+                                ->where('status',2)
+                                ->whereHas('transactions', function($query){
+                                    $query->where('transaction_id','!=',0)
+                                            ->orWhere('transaction_id','!=',null);
+                                })
+                                ->orderBy('start_date','asc')
+                                ->with('transactions')
+                                ->get()->groupBy('start_date')->toArray();
+
         $ar = [];
         foreach($dataHotel as $key=>$dh){
             // if(array_key_exists($key,$ar)){
@@ -127,7 +151,7 @@ class SettlementController extends Controller
                 $ar[$key][] = $dh;
             // }
         }
-        // 
+        //
         // dd($ar);
         foreach($dataTour as $key=>$dt){
             // if(array_key_exists($key,$ar)){
@@ -137,7 +161,7 @@ class SettlementController extends Controller
                 $ar[$key][] = $dt;
             // }
         }
-        // 
+        //
         foreach($dataCar as $key=>$dc){
             // if(array_key_exists($key,$ar)){
             //     array_push($ar[$key],$dc);
@@ -204,12 +228,12 @@ class SettlementController extends Controller
                         ]);
                         $gp[] = $settlement->id;
                     }
-                    
+
                     $reform['booking']->update([
                         'status' => 4
                     ]);
                     // $gp[] = $settlement->id;
-                
+
                 }
                 // dd($gp);
                 if($gp != null || count($gp) != 0){
@@ -231,29 +255,34 @@ class SettlementController extends Controller
         }
     }
     public function detail($id){
-        $data = SettlementGroup::where('id',$id)->
-                with(
-                    'settlement.bookingTour.transactions',
-                    'settlement.bookingHotel.transactions',
-                    'settlement.bookingCarRental.transactions'
-                    )
-                ->first();
-        
-        $u1 = array_pluck($data->settlement,'status');
-        $u2 = array_pluck($data->settlement,'bank_account_number');
-        $data['complete'] = 1;
-        $data['status'] = 2;
+        // $data = SettlementGroup::where('id',$id)->
+        //         with(
+        //             'settlement.bookingTour.transactions',
+        //             'settlement.bookingHotel.transactions',
+        //             'settlement.bookingCarRental.transactions'
+        //             )
+        //         ->first();
+
+        $data = Settlement::where('settlement_group_id',$id)->paginate(10);
+        if(count($data) == 0){
+            return abort(404);
+        };
+        $u1 = array_pluck($data,'status');
+        $u2 = array_pluck($data,'bank_account_number');
+
+        $complete = 1;//1 = all bank account already input  || 0 = some data dont have bank account
+        $status = 2;//2 for all complete || 1 for on progress
 
         // status
-        if(in_array(1,$u1))
-           $status = 1;
+        if(in_array(1,$u1)){
+            $status = 1;
+        }
         // complete bank akun
-        if(in_array(null,$u2))
-           $complete = 0;
-        
-        $result = $data->paginate(10);
-        // dd($result[0]->settlementGroup->id);
-        return view('settlement.result',['data'=>$result,'status' =>$status, 'complete' => $complete]);
+        if(in_array(null,$u2)){
+            $complete = 0;
+        }
+           
+        return view('settlement.result',['data'=>$data,'status' =>$status, 'complete' => $complete]);
     }
     public function paid(Request $request){
         if(Settlement::find($request->id) != null){
@@ -274,7 +303,7 @@ class SettlementController extends Controller
                         return response()->json('Product type not found',400);
                 }
                 Settlement::where('id',$request->id)->update(['status' => 2,'paid_at'=>Carbon::now()->format('Y-m-d H:i:s')]);
-                
+
                 $listBook = Settlement::where('settlement_group_id',$settelement->settlement_group_id)->get()->toArray();
                 $status_list = array_pluck($listBook,'status');
                 if(!in_array(1,$status_list)){
@@ -356,7 +385,7 @@ class SettlementController extends Controller
         return $pdf->stream('invoice.pdf');
         // return (new SettlementExport($id))->download('settlement.xlsx');
     }
-    // 
+    //
     public function bookingListInsert($d){
         if(array_key_exists('hotel_name',$d)){
             $type = 'hotel';
@@ -389,7 +418,7 @@ class SettlementController extends Controller
             $book = BookingRentCar::where('booking_number',$d['booking_number']);
             // $bookList['car'][] = $p;
         }
-        
+
         $return = [
             'product_type' => $type,
             'product_name' => $product_name,
