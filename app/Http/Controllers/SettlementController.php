@@ -255,7 +255,6 @@ class SettlementController extends Controller
         }
     }
     public function detail($id){
-<<<<<<< HEAD
         $data = SettlementGroup::where('id',$id)->
                 with(
                     'settlement.bookingTour.transactions',
@@ -268,17 +267,6 @@ class SettlementController extends Controller
         $u2 = array_pluck($data->settlement,'bank_account_number');
         $data['complete'] = 1;
         $data['status'] = 2;
-=======
-        // $group = SettlementGroup::where('id',$id)->with(['settlement' => function($query) use($id){
-        //     $query->where('settlement_group_id',$id);
-        // }])->first();
-        $data = Settlement::with('settlementGroup')->where('settlement_group_id',$id);
-        $u1 = array_pluck($data->get(),'status');
-        $u2 = array_pluck($data->get(),'bank_account_number');
-
-        $complete = 1;
-        $status = 2;
->>>>>>> origin
 
         // status
         if(in_array(1,$u1))
