@@ -179,7 +179,7 @@
     <script>
     $(document).ready(function(){
         $(".paid").click(function(){
-            console.log('qwdqwdqwfqwgq');
+            // console.log('qwdqwdqwfqwgq');
             var form = $("form#paid");
             var data_id = $(this).attr("data-id");
             swal({
@@ -219,11 +219,11 @@
             var bank_account_name=$(opener).attr('bank-account-name');
             var bank_number=$(opener).attr('bank-number');
             var stat = $(opener).attr('stat');
-            console.log(id);
-            console.log(bank_name);
-            console.log(bank_account_name);
-            console.log(bank_number);
-            console.log(stat)
+            // console.log(id);
+            // console.log(bank_name);
+            // console.log(bank_account_name);
+            // console.log(bank_number);
+            // console.log(stat)
             // //set what we got to our form
             $('#notesForm').find('[name="id"]').val(id);
             $('#notesForm').find('[name="bank_name"]').val(bank_name);
