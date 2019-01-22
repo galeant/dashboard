@@ -76,7 +76,7 @@ class TourController extends Controller
             $data = $data->whereRaw('(`products`.`product_name` LIKE "%'.$request->input('product').'%" OR `products`.`product_code` LIKE "%'.$request->input('product').'%")');
         }
         $data = $data->select('products.*', DB::raw('MIN(prices.price_idr) as min_price'), DB::raw('MAX(prices.price_idr) as max_price'))
-            ->join('prices', 'products.id', '=', 'prices.product_id' )
+            ->leftjoin('prices', 'products.id', '=', 'prices.product_id' )
             ->groupBy('products.id');
         $request->request->add([
                 'sort_created' => request()->fullUrlWithQuery(["sort"=>"created_at","order"=>$orderby]),
