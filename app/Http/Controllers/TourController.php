@@ -149,7 +149,7 @@ class TourController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
-        $id = Tour::OrderBy('created_at','DESC')->select('id')->first();
+        $id = Tour::withTrashed()->OrderBy('created_at','DESC')->select('id')->first();
         $code = ($request->input('product_type') == 'private' ? '102' : '101'); 
         $request->request->add(['pic_phone'=> $request->format_pic_phone.'-'.$request->pic_phone,'product_code' => (!empty($id) ? $code.($id->id+1) : $code.'1')]);
         // dd($request->all());
