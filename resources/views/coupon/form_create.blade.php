@@ -122,6 +122,24 @@
                                             <label><input type="checkbox" name="is_itinerary_only"><span class="lever switch-col-orange"></span></label>
                                         </div>
                                       </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Only For Gacha</h2>
+                                        <div class="switch">
+                                            <label><input type="checkbox" id="check_gacha" name="is_gacha"><span class="lever switch-col-purple"></span></label>
+                                        </div>
+                                      </div>
+                                      <div class="form-group gacha_date" style="display:none">
+                                        <h2 class="card-inside-title">Gache Start Date</h2>
+                                          <div class="form-line">
+                                            <input required name="gacha_start_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                          </div>
+                                      </div>
+                                      <div class="form-group gacha_date" style="display:none">
+                                        <h2 class="card-inside-title">Gache End Date</h2>
+                                          <div class="form-line">
+                                            <input required name="gacha_end_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                          </div>
+                                      </div>
                                   </div>
                               </div>
                               <br>
@@ -166,6 +184,14 @@
             {
               $('.discount_value_form').removeAttr('max');
             }
+        });
+        
+        $('#check_gacha').change(function() {
+            if(this.checked) {
+               $('.gacha_date').show();
+            }else{
+              $('.gacha_date').hide();
+            }    
         });
       })
     </script>
