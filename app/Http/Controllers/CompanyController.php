@@ -68,7 +68,7 @@ class CompanyController extends Controller
             'sort_status' => request()->fullUrlWithQuery(["sort_by"=>"status","order"=>$orderby])
         ]);
         $data = $data->paginate($per_page);
-        $data->setPath($request->fullUrl());
+        $data->appends($request->all());
         
         return view('company.index',['datas' => $data]);
     }
@@ -103,7 +103,7 @@ class CompanyController extends Controller
             'sort_status' => request()->fullUrlWithQuery(["sort_by"=>"status","order"=>$orderby])
         ]);
         $data = $data->paginate($per_page);
-        $data->setPath($request->fullUrl());
+        $data->appends($request->all());
         
         return view('company.registration-list',['datas' => $data]);
     }

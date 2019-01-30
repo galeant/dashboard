@@ -20,6 +20,7 @@
                 <div class="header">
                     <h2>All Place / Destination</h2>
                 </div>
+                <form method="get" action="{{ route('destination.index')}}" >
                 <div class="body" style="padding-left:20px">
                     <div class="row">
                         <div class="col-md-3">
@@ -42,7 +43,7 @@
                         </div>
                         <div class="col-md-3">
                             <label for="destination_type_id">City *</label>
-                            <select name="city_id" id="city_id"  class="form-control" required>
+                            <select name="city_id" id="city_id"  class="form-control">
                                 <option value="">--Select City--</option>
                             </select>
                         </div>
@@ -60,7 +61,14 @@
                             <label for="">Search a place*</label>
                             <input type="text" name="keyword" id="keyword" class="form-control">
                         </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn bg-green waves-effect">
+                                <i class="material-icons">search</i>
+                                <span>Search</span>
+                            </button>
+                        </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -72,7 +80,7 @@
             <h2>All Place / Destination</h2>
         </div>
         <div class="body table-responsive">
-            <table class="table table-bordered table-striped table-hover dataTable table-modif" id="data-tables">
+            <table class="table table-bordered table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Destination Type</th>
@@ -84,16 +92,42 @@
                         <th>Action</th>
                     </tr>
                 </thead> 
-            </tbody>
+                <tbody>
+                    @foreach($datas as $data)
+                    <tr>
+                        <td>{{$data->destination_types->name}}</td>
+                        <td>{{$data->destination_name}}</td>
+                        <td>{{$data->provinces->name}}</td>
+                        <td>{{$data->cities->name}}</td>
+                        <td>{{$data->updated_at}}</td>
+                        <td>
+                            <div class="switch">
+                                <label>
+                                    <input type="checkbox" id="status{{$data->id}}" onchange="updatestatus({{$data->id}})" @if($data->status == 'active')checked @endif>
+                                    <span class="lever"></span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                        <a href="{{ url('master/destination/'.$data->id.'/edit') }}" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+                            <i class="glyphicon glyphicon-edit"></i>
+                        </a>
+                        <a href="{{ url('master/destination/'.$data->id.'/delete') }}" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
-            
+            {{ $datas->links() }}
         </div>
     </div>  
 @endsection
 
 @section('head-js')
 @parent
-    <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
+    <!-- <script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js')}}"></script>
@@ -102,9 +136,9 @@
     <script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js')}}"></script>
     <script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js')}}"></script>
-    <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
+    <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
 
-    <script>
+    <!-- <script>
         $(document).ready(function(){
             $(document).ready(function(){ 
             $('#data-tables').DataTable({
@@ -162,6 +196,7 @@
                             name: 'status',
                             "render": function ( data, type, full, meta ) {
                                 var statusPlace = "status"+data.destinationId;
+                                con
                                 if(data.status=="active"){
                                     return '<div class="switch"><label><input type="checkbox" id="status'+data.id+'" onchange="updatestatus('+data.id+')" checked><span class="lever"></span></label></div>';
                                 }
@@ -279,7 +314,7 @@
             });
             
         });
-    </script>
+    </script> -->
     <script>
         function updatestatus(id){
             if($("#status"+id).prop("checked")){
