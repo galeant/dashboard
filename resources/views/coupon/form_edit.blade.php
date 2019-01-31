@@ -112,6 +112,24 @@
                                             <label><input @if($data->is_itinerary_only == 1){ checked } @endif type="checkbox" name="is_itinerary_only"><span class="lever switch-col-orange"></span></label>
                                         </div>
                                       </div>
+                                      <div class="form-group">
+                                        <h2 class="card-inside-title">Only For Gacha</h2>
+                                        <div class="switch">
+                                            <label><input type="checkbox" id="check_gacha" name="is_gacha" @if($data->is_gacha == 1){ checked } @endif><span class="lever switch-col-purple"></span></label>
+                                        </div>
+                                      </div>
+                                      <div class="form-group gacha_date" @if($data->is_gacha == 1){ style="display:show" } @else style="display:none" @endif>
+                                        <h2 class="card-inside-title">Gache Start Date</h2>
+                                          <div class="form-line">
+                                            <input required name="gacha_start_date" type="text" class="datepicker form-control" value="{{$data->gacha_start_date}}">
+                                          </div>
+                                      </div>
+                                      <div class="form-group gacha_date" @if($data->is_gacha == 1){ style="display:show" } @else style="display:none" @endif>
+                                        <h2 class="card-inside-title">Gache End Date</h2>
+                                          <div class="form-line">
+                                            <input required name="gacha_end_date" type="text" class="datepicker form-control" value="{{$data->gacha_end_date}}">
+                                          </div>
+                                      </div>
                                   </div>
                               </div>
                               <br>
@@ -156,6 +174,13 @@
             {
               $('.discount_value').removeAttr('max');
             }
+        });
+        $('#check_gacha').change(function() {
+            if(this.checked) {
+               $('.gacha_date').show();
+            }else{
+              $('.gacha_date').hide();
+            }    
         });
       })
     </script>

@@ -9,6 +9,7 @@ use App\Models\ProductType;
 use Validator;
 use Datatables;
 use DB;
+use Carbon\Carbon;
 
 class CouponController extends Controller
 {
@@ -61,6 +62,7 @@ class CouponController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         // Validation //
         $validation = Validator::make($request->all(), [
           "quantity" => "required",
@@ -79,6 +81,18 @@ class CouponController extends Controller
         if( $validation->fails() ){
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
+        }
+        if($request->has('is_gacha')){
+            if($request->has('is_gacha')){
+                $validation2 = Validator::make($request->all(), [
+                    "gacha_start_date" => "required|date",
+                    "gacha_end_date" => "required|date|after:gacha_start_date"
+                  ]);
+                if($validation2->fails() ){
+                    return redirect()->back()->withInput()
+                    ->with('errors', $validation2->errors() );
+                }
+            }
         }
         DB::beginTransaction();
         try{
@@ -99,6 +113,11 @@ class CouponController extends Controller
               $data->description = $request->input('description');
               $data->product_type = $request->input('product_type');
               $data->is_itinerary_only = ($request->input('is_itinerary_only') == 'on') ? 1 : 0;
+              if($request->has('is_gacha')){
+                $data->is_gacha = 1;
+                $data->gacha_start_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+                $data->gacha_end_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+              }
               $data->save();
             }
 
@@ -136,6 +155,7 @@ class CouponController extends Controller
     {
       $data['data'] = Coupons::find($id);
       $data['product_type'] = ProductType::all();
+    //   dd($data['data']);
       return view('coupon.form_edit')->with($data);
     }
 
@@ -148,6 +168,7 @@ class CouponController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         // Validation //
         $validation = Validator::make($request->all(), [
           "quantity" => "required",
@@ -166,6 +187,16 @@ class CouponController extends Controller
             return redirect()->back()->withInput()
             ->with('errors', $validation->errors() );
         }
+        if($request->has('is_gacha')){
+            $validation2 = Validator::make($request->all(), [
+                "gacha_start_date" => "required|date",
+                "gacha_end_date" => "required|date|after:gacha_start_date"
+              ]);
+            if($validation2->fails() ){
+                return redirect()->back()->withInput()
+                ->with('errors', $validation2->errors() );
+            }
+        }
         DB::beginTransaction();
         try{
               $data = Coupons::find($id);
@@ -183,6 +214,15 @@ class CouponController extends Controller
               $data->description = $request->input('description');
               $data->product_type = $request->input('product_type');
               $data->is_itinerary_only = ($request->input('is_itinerary_only') == 'on') ? 1 : 0;
+              if($request->has('is_gacha')){
+                $data->is_gacha = 1;
+                $data->gacha_start_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+                $data->gacha_end_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+              }else{
+                $data->is_gacha = 0;
+                $data->gacha_start_date = null;
+                $data->gacha_end_date = null;
+              }
              if($data->save()){
                 DB::commit();
                 return redirect("coupon/".$data->id."/edit")->with('message', 'Successfully edit Coupon');

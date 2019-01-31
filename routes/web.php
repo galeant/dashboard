@@ -82,6 +82,7 @@ Route::group(['middleware' => ['auth:web','permission']], function () {
 		});
 		//Destination
 		Route::resource('destination', 'DestinationController');
+		Route::get('destination/{id}/delete  ','DestinationController@destroy');
 
 		//DestinationType
 		Route::resource('destination-type', 'DestinationTypeController');

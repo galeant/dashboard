@@ -17,6 +17,7 @@ use Datatables;
 use Helpers;
 use File;
 
+
 class DestinationController extends Controller
 {
     /**
@@ -26,30 +27,58 @@ class DestinationController extends Controller
      */
     public function index(Request $request)
     {
+        $destination_type_id = $request->input('destination_type_id',null);
+        $city_id = $request->input('city_id',null);
+        $province_id = $request->input('province_id',null);
+        $keyword = $request->input('keyword',null);
+        $per_page = $request->input('per_page',10);
+        $page = $request->input('page',1);
+        
+
         $destination_type = DestinationType::all();
         $province = Province::all();
-        
-        $data = Destination::with('provinces', 'cities','destination_types')->get();
-        if($request->ajax())
-        {
-            return Datatables::of($data)
-                // ->addColumn('status', function(Destination $data) {
-                //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
-                // })
-                ->addColumn('action', function(Destination $data) {
-                return '<a href="/master/destination/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
-                        <i class="glyphicon glyphicon-edit"></i>
-                    </a>
-                    <a href="/master/destination/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
-                        <i class="glyphicon glyphicon-trash"></i>
-                    </a>';
-                })
-            ->make(true);        
+
+        $data = Destination::with('provinces', 'cities','destination_types');
+
+        if($destination_type_id != null || $destination_type_id != ''){
+            $data = $data->where('destination_type_id',$destination_type_id);
         }
+
+        if($city_id != null || $city_id != ''){
+            $data = $data->where('city_id',$city_id);
+        }
+        
+        if($province_id != null || $province_id != ''){
+            $data = $data->where('province_id',$province_id);
+        }
+
+        if($keyword != null || $keyword != ''){
+            $data = $data->where('destination_name','like','%'.$keyword.'%');
+        }
+
+        $data = $data->paginate($per_page);
+        $data->appends($request->all());
+        // if($request->ajax())
+        // {
+        //     return Datatables::of($data)
+        //         // ->addColumn('status', function(Destination $data) {
+        //         //     return '<div class="switch"><label><input type="checkbox" id="status'.$data->id.'" onchange="updatestatus('.$data->id.')" checked><span class="lever"></span></label></div>';
+        //         // })
+        //         ->addColumn('action', function(Destination $data) {
+        //         return '<a href="/master/destination/'.$data->id.'/edit" class="btn-xs btn-info  waves-effect waves-circle waves-float">
+        //                 <i class="glyphicon glyphicon-edit"></i>
+        //             </a>
+        //             <a href="/master/destination/'.$data->id.'" class="btn-xs btn-danger waves-effect waves-circle waves-float btn-delete" data-action="/master/destination/'.$data->id.'" data-id="'.$data->id.'" id="data-'.$data->id.'">
+        //                 <i class="glyphicon glyphicon-trash"></i>
+        //             </a>';
+        //         })
+        //     ->make(true);        
+        // }
         
         return view('destination.index', [
             'province' => $province,
-            'destination_type' => $destination_type
+            'destination_type' => $destination_type,
+            'datas' => $data
         ]);
     }
 
@@ -336,14 +365,16 @@ class DestinationController extends Controller
             $data = Destination::find($id);
             if($data->delete()){
                 DB::commit();
-                return $this->sendResponse($data, "Delete Destination ".$data->name." successfully", 200);
+                return redirect()->back();
+                // return $this->sendResponse($data, "Delete Destination ".$data->name." successfully", 200);
             }else{
-                return $this->sendResponse($data, "Error Database;", 200);
+                return redirect()->back();
+                // return $this->sendResponse($data, "Error Database;", 200);
             }
         }catch (\Exception $exception){
             DB::rollBack();
             \Log::info($exception->getMessage());
-            return $this->sendResponse($data, $exception->getMessage() , 200);
+            return redirect()->back();
         }
     }
     public function find(Request $request){
