@@ -116,7 +116,7 @@ class CouponController extends Controller
               if($request->has('is_gacha')){
                 $data->is_gacha = 1;
                 $data->gacha_start_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
-                $data->gacha_end_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+                $data->gacha_end_date = $request->input('gacha_end_date',Carbon::now()->format('Y-m-d H:i:s'));
               }
               $data->save();
             }
@@ -217,7 +217,7 @@ class CouponController extends Controller
               if($request->has('is_gacha')){
                 $data->is_gacha = 1;
                 $data->gacha_start_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
-                $data->gacha_end_date = $request->input('gacha_start_date',Carbon::now()->format('Y-m-d H:i:s'));
+                $data->gacha_end_date = $request->input('gacha_end_date',Carbon::now()->format('Y-m-d H:i:s'));
               }else{
                 $data->is_gacha = 0;
                 $data->gacha_start_date = null;
