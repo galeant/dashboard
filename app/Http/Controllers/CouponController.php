@@ -85,8 +85,8 @@ class CouponController extends Controller
         if($request->has('is_gacha')){
             if($request->has('is_gacha')){
                 $validation2 = Validator::make($request->all(), [
-                    "gacha_start_date" => "required|date",
-                    "gacha_end_date" => "required|date|after:gacha_start_date"
+                    "gacha_start_date" => "required|date_format:Y-m-d H:i:s",
+                    "gacha_end_date" => "required|date_format:Y-m-d H:i:s|after:gacha_start_date"
                   ]);
                 if($validation2->fails() ){
                     return redirect()->back()->withInput()
@@ -189,12 +189,12 @@ class CouponController extends Controller
         }
         if($request->has('is_gacha')){
             $validation2 = Validator::make($request->all(), [
-                "gacha_start_date" => "required|date",
-                "gacha_end_date" => "required|date|after:gacha_start_date"
+                "gacha_start_date" => "required|date_format:Y-m-d H:i:s",
+                "gacha_end_date" => "required|date_format:Y-m-d H:i:s|after:gacha_start_date"
               ]);
             if($validation2->fails() ){
                 return redirect()->back()->withInput()
-                ->with('errors', $validation2->errors() );
+                ->with('errors', $validation2->errors());
             }
         }
         DB::beginTransaction();

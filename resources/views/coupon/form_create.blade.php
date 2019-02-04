@@ -128,17 +128,67 @@
                                             <label><input type="checkbox" id="check_gacha" name="is_gacha"><span class="lever switch-col-purple"></span></label>
                                         </div>
                                       </div>
-                                      <div class="form-group gacha_date" style="display:none">
-                                        <h2 class="card-inside-title">Gache Start Date</h2>
-                                          <div class="form-line">
-                                            <input required name="gacha_start_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                      <div class="row">
+                                        <div class="col-md-6">
+                                          <div class="form-group gacha_date" style="display:none">
+                                            <h2 class="card-inside-title">Gacha Start Date</h2>
+                                              <div class="form-line">
+                                                <input required name="gacha_start_date" type="text" class="datetimepicker form-control" placeholder="Please choose a date...">
+                                              </div>
                                           </div>
+                                        </div>
+                                        <!-- <div class="col-md-6">
+                                          <div class="form-group gacha_date" style="display:none">
+                                            <h2 class="card-inside-title">Gacha Start Hours</h2>
+                                              <div class="col-md-6" style="padding-left: 0px">
+                                                <select class="form-control" name="gacha_start_hours">
+                                                  <option value="">--Hours--</option>
+                                                  @for($hi= 1;$hi<= 23;$hi++)
+                                                    <option value="{{$hi}}">{{$hi}}</option>
+                                                  @endfor
+                                                </select>
+                                              </div>
+                                              <div class="col-md-6" style="padding-left: 0px">
+                                                <select class="form-control" name="gacha_start_minutes">
+                                                  <option value="">--Minutes--</option>
+                                                  @for($mi= 1;$mi<= 59;$mi++)
+                                                    <option value="{{$mi}}">{{$mi}}</option>
+                                                  @endfor
+                                                </select>
+                                              </div>
+                                          </div>
+                                        </div> -->
                                       </div>
-                                      <div class="form-group gacha_date" style="display:none">
-                                        <h2 class="card-inside-title">Gache End Date</h2>
-                                          <div class="form-line">
-                                            <input required name="gacha_end_date" type="text" class="datepicker form-control" placeholder="Please choose a date...">
+                                      <div class="row">
+                                        <div class="col-md-6">
+                                          <div class="form-group gacha_date" style="display:none">
+                                            <h2 class="card-inside-title">Gache End Date</h2>
+                                              <div class="form-line">
+                                                <input required name="gacha_end_date" type="text" class="datetimepicker form-control" placeholder="Please choose a date...">
+                                              </div>
                                           </div>
+                                        </div>
+                                        <!-- <div class="col-md-6">
+                                          <div class="form-group gacha_date" style="display:none">
+                                            <h2 class="card-inside-title">Gacha End Hours</h2>
+                                            <div class="col-md-6" style="padding-left: 0px">
+                                                <select class="form-control" name="gacha_end_hours">
+                                                  <option value="">--Hours--</option>
+                                                  @for($hj= 1;$hj<= 23;$hj++)
+                                                    <option value="{{$hj}}">{{$hj}}</option>
+                                                  @endfor
+                                                </select>
+                                              </div>
+                                              <div class="col-md-6" style="padding-left: 0px">
+                                                <select class="form-control" name="gacha_end_minutes">
+                                                  <option value="">--Minutes--</option>
+                                                  @for($mj= 1;$mj<= 59;$mj++)
+                                                    <option value="{{$mj}}">{{$mj}}</option>
+                                                  @endfor
+                                                </select>
+                                              </div>
+                                          </div>
+                                        </div> -->
                                       </div>
                                   </div>
                               </div>
@@ -168,7 +218,7 @@
     <!--  for date and time picker -->
     <script src="{{asset('plugins/momentjs/moment.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
-    <script src="{{asset('plugins/js/custom.js')}}"></script>
+    <!-- <script src="{{asset('plugins/js/custom.js')}}"></script> -->
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
     <script>
       $(document).ready(function(){
@@ -185,7 +235,14 @@
               $('.discount_value_form').removeAttr('max');
             }
         });
-        
+
+        $('.datetimepicker').bootstrapMaterialDatePicker({
+          format:'YYYY-MM-DD HH:mm:ss'
+        });
+        $('.datepicker').bootstrapMaterialDatePicker({
+          format:'YYYY-MM-DD',
+          time:false
+        });
         $('#check_gacha').change(function() {
             if(this.checked) {
                $('.gacha_date').show();
