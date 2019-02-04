@@ -121,13 +121,13 @@
                                       <div class="form-group gacha_date" @if($data->is_gacha == 1){ style="display:show" } @else style="display:none" @endif>
                                         <h2 class="card-inside-title">Gache Start Date</h2>
                                           <div class="form-line">
-                                            <input required name="gacha_start_date" type="text" class="datepicker form-control" value="{{$data->gacha_start_date}}">
+                                            <input required name="gacha_start_date" type="text" class="datetimepicker form-control" value="{{$data->gacha_start_date}}">
                                           </div>
                                       </div>
                                       <div class="form-group gacha_date" @if($data->is_gacha == 1){ style="display:show" } @else style="display:none" @endif>
                                         <h2 class="card-inside-title">Gache End Date</h2>
                                           <div class="form-line">
-                                            <input required name="gacha_end_date" type="text" class="datepicker form-control" value="{{$data->gacha_end_date}}">
+                                            <input required name="gacha_end_date" type="text" class="datetimepicker form-control" value="{{$data->gacha_end_date}}">
                                           </div>
                                       </div>
                                   </div>
@@ -158,7 +158,7 @@
     <!--  for date and time picker -->
     <script src="{{asset('plugins/momentjs/moment.js')}}"></script>
     <script src="{{asset('plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js')}}"></script>
-    <script src="{{asset('plugins/js/custom.js')}}"></script>
+    <!-- <script src="{{asset('plugins/js/custom.js')}}"></script> -->
     <!-- <script src="{{asset('js/pages/tables/jquery-datatable.js')}}"></script> -->
     <script>
       $(document).ready(function(){
@@ -174,6 +174,13 @@
             {
               $('.discount_value').removeAttr('max');
             }
+        });
+        $('.datetimepicker').bootstrapMaterialDatePicker({
+          format:'YYYY-MM-DD HH:mm:ss'
+        });
+        $('.datepicker').bootstrapMaterialDatePicker({
+          format:'YYYY-MM-DD',
+          time:false
         });
         $('#check_gacha').change(function() {
             if(this.checked) {
