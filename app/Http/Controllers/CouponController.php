@@ -36,7 +36,29 @@ class CouponController extends Controller
             ->addColumn('used',function(coupons $data){
                 return Transaction::where('coupon_code','=',$data->code)->count();
             })
+            ->addColumn('gacha_status',function(coupons $data){
+                if($data->is_gacha == 1){
+                    if($data->status == 1){
+                        return 'Date: '.Carbon::parse($data->gacha_start_date)->format('y-m-d').
+                                '<br>Hours: '.Carbon::parse($data->gacha_start_date)->format('H:i'). 
+                                '<br><span class="label bg-green">Active</span>';
+                    }else{
+                        return 'Date: '.Carbon::parse($data->gacha_start_date)->format('y-m-d').
+                                '<br>Hours: '.Carbon::parse($data->gacha_start_date)->format('H:i'). 
+                                '<br><span class="label bg-orange">Out</span>';
+                    }
+                }else{
+                    return '<span class="label bg-red">No Gacha</span>';
+                }
+            })
+            ->editColumn('start_date',function(coupons $data){
+                return Carbon::parse($data->start_date)->format('Y-m-d');
+            })
+            ->editColumn('end_date',function(coupons $data){
+                return Carbon::parse($data->end_date)->format('Y-m-d');
+            })
             ->editColumn('id', 'ID: {{$id}}')
+            ->rawColumns(['action', 'gacha_status'])
             ->make(true);
         }
         return view('coupon.index');
