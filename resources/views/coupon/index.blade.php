@@ -36,8 +36,9 @@
                                             <th>Type</th>
                                             <th>Value</th>
                                             <th>Used</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
+                                            <!-- <th>Start Date</th> -->
+                                            <!-- <th>End Date</th> -->
+                                            <th>Gacha Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -75,8 +76,9 @@
               {data: 'type'},
               {data: 'discount_value'},
               {data: 'used'},
-              {data: 'start_date'},
-              {data: 'end_date'},
+            //   {data: 'start_date'},
+            //   {data: 'end_date'},
+              {data: 'gacha_status'},
               {data: 'action'}
 	        ]
 	    });
