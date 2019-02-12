@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1bdfb22d05a9b755f043c69217f390ef",
+    "content-hash": "ebe0cf1325863c5ae559e547a0535cfd",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -447,48 +447,6 @@
                 "trusted proxy"
             ],
             "time": "2019-01-10T14:06:47+00:00"
-        },
-        {
-            "name": "fpdf/fpdf",
-            "version": "1.81.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/coreydoughty/Fpdf.git",
-                "reference": "6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/coreydoughty/Fpdf/zipball/6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185",
-                "reference": "6be5dd7dd0b3077b565ecadb28e7f01f7d2f2185",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Fpdf\\": "src/Fpdf"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Corey Doughty",
-                    "email": "corey@doughty.ca"
-                }
-            ],
-            "description": "FPDF Composer Wrapper",
-            "homepage": "https://github.com/coreydoughty/Fpdf",
-            "keywords": [
-                "fpdf",
-                "pdf",
-                "wrapper"
-            ],
-            "time": "2018-10-25T10:38:10+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1899,12 +1857,14 @@
                 "mpdf/mpdf": "^7.0.0",
                 "phpcompatibility/php-compatibility": "^8.0",
                 "phpunit/phpunit": "^5.7",
-                "squizlabs/php_codesniffer": "^3.3"
+                "squizlabs/php_codesniffer": "^3.3",
+                "tecnickcom/tcpdf": "^6.2"
             },
             "suggest": {
                 "dompdf/dompdf": "Option for rendering PDF with PDF Writer",
                 "jpgraph/jpgraph": "Option for rendering charts, or including charts with PDF or HTML Writers",
-                "mpdf/mpdf": "Option for rendering PDF with PDF Writer"
+                "mpdf/mpdf": "Option for rendering PDF with PDF Writer",
+                "tecnickcom/tcpdf": "Option for rendering PDF with PDF Writer"
             },
             "type": "library",
             "autoload": {
